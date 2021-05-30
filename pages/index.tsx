@@ -1,6 +1,7 @@
 import { DisplayCharts } from '../components/DisplayCharts'
 import { ChartResponse } from './api/charts/[region]'
 import { GetServerSideProps } from 'next'
+import { config } from '../config'
 interface HomeProps {
   charts: ChartResponse[]
 }
@@ -9,7 +10,8 @@ export default function Home(props: HomeProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const response = await fetch('http://localhost:3000/api/charts/nz')
+  const apiURl = new URL('api/charts/nz', config.baseUrl)
+  const response = await fetch(apiURl.href)
   const charts = await response.json()
   return {
     props: {
