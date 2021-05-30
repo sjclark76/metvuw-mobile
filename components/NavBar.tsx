@@ -3,21 +3,6 @@ import { useState } from "react";
 import { DropDown, DropDownLink } from "./DropDown";
 import { SideNav } from "./SideNav";
 
-/*
-i>@Html.ActionLink("Victoria & Tasmania", "VictoriaTasmania", "Home", null, null)</li>
-            <li class="divider"></li>
-            <li>@Html.ActionLink("New South Wales", "NewSouthWales", "Home", null, null)</li>
-            <li class="divider"></li>
-            <li>@Html.ActionLink("Western Australia", "WesternAustralia", "Home", null, null)</li>
-            <li class="divider"></li>
-            <li>@Html.ActionLink("Perth", "Perth", "Home", null, null)</li>
-            <li class="divider"></li>
-            <li>@Html.ActionLink("Queensland", "Queensland", "Home", null, null)</li>
-            <li class="divider"></li>
-            <li>@Html.ActionLink("South Australia", "SouthAustralia", "Home", null, null)</li>
-            <li class="divider"></li>
-            <li>@Html.ActionLink("South East Australia
- */
 const nzLinks: DropDownLink[] = [
   { name: "All" },
   { name: "North Island" },

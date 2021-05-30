@@ -7,17 +7,20 @@ interface DisplayChartsProps {
 
 export const DisplayCharts = (props: DisplayChartsProps) => {
   return (
-    <>
-      {props.charts.map((value, index) => (
-        <Image
-          key={index}
-          src={value.url}
-          alt="Picture of the author"
-          layout="responsive"
-          width={500}
-          height={500}
-        />
+    <div className="pt-2">
+      {props.charts.map((chart, index) => (
+        <div className="flex justify-center py-3 ">
+          <Image
+            key={index}
+            src={chart.url}
+            alt="Picture of the author"
+            layout="intrinsic"
+            width={711}
+            height={600}
+          />
+        </div>
       ))}
-    </>
+      s
+    </div>
   );
 };
