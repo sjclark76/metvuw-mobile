@@ -1,4 +1,4 @@
-import { ChartResponse } from "../pages/api/charts";
+import { ChartResponse } from "../pages/api/charts/[region]";
 import Image from "next/image";
 
 interface DisplayChartsProps {

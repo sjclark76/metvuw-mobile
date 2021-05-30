@@ -1,12 +1,13 @@
-import { DropDownItem } from "./DropDownItem";
+import { DropDownItem } from './DropDownItem'
 
 export interface DropDownLink {
-  name: string;
+  name: string
+  code: string
 }
 
 interface DropDownProps {
-  heading: string;
-  links: DropDownLink[];
+  heading: string
+  links: DropDownLink[]
 }
 
 export const DropDown = (props: DropDownProps) => {
@@ -25,10 +26,10 @@ export const DropDown = (props: DropDownProps) => {
         </button>
         <ul className="absolute hidden rounded text-white font-bold bg-purple-300 pt-1 group-hover:block z-50">
           {props.links.map((link) => (
-            <DropDownItem name={link.name} />
+            <DropDownItem region={link} />
           ))}
         </ul>
       </div>
     </>
-  );
-};
+  )
+}

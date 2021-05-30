@@ -1,43 +1,47 @@
-import Link from "next/Link";
-import { useState } from "react";
-import { DropDown, DropDownLink } from "./DropDown";
-import { SideNav } from "./SideNav";
+import Link from 'next/Link'
+import { useState } from 'react'
+import { DropDown, DropDownLink } from './DropDown'
 
 const nzLinks: DropDownLink[] = [
-  { name: "All" },
-  { name: "North Island" },
-  { name: "South Island" },
-];
+  { name: 'All', code: 'nz' },
+  { name: 'North Island', code: 'nzni' },
+  { name: 'South Island', code: 'nzsi' },
+]
 const australiaLinks: DropDownLink[] = [
-  { name: "Victoria & Tasmania" },
-  { name: "New South Wales" },
-  { name: "Western Australia" },
-  { name: "Perth" },
-  { name: "Queensland" },
-  { name: "South Australia" },
-  { name: "South East Australia" },
-];
+  { name: 'Victoria & Tasmania', code: 'victoria' },
+  { name: 'New South Wales', code: 'nsw' },
+  { name: 'Western Australia', code: 'waussie' },
+  { name: 'Perth', code: 'swaussie' },
+  { name: 'Queensland', code: 'queensland' },
+  { name: 'South Australia', code: 'saussie' },
+  { name: 'South East Australia', code: 'seaussie' },
+]
 const pacificLinks: DropDownLink[] = [
-  { name: "All" },
-  { name: "North Island" },
-  { name: "South Island" },
-];
+  { name: 'New Caledonia', code: 'newcaledonia' },
+  { name: 'Fiji', code: 'fiji' },
+  { name: 'South West Pacific', code: 'swp' },
+  { name: 'Fiji - NZ', code: 'ocean' },
+]
 const europeLinks: DropDownLink[] = [
-  { name: "All" },
-  { name: "North Island" },
-  { name: "South Island" },
-];
+  { name: 'Europe', code: 'europe' },
+  { name: 'United Kingdom', code: 'uk' },
+  { name: 'Estonia', code: 'estonia' },
+  { name: 'Turkey', code: 'turkey' },
+]
 const worldLinks: DropDownLink[] = [
-  { name: "All" },
-  { name: "North Island" },
-  { name: "South Island" },
-];
+  { name: 'World', code: 'world' },
+  { name: 'South Atlantic', code: 'satlantic' },
+  { name: 'North Atlantic', code: 'natlantic' },
+  { name: 'USA', code: 'usa' },
+  { name: 'Japan', code: 'japan' },
+  { name: 'South Africa', code: 'safrica' },
+]
 
 export const Navbar = () => {
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(false)
   const handleClick = () => {
-    setActive(!active);
-  };
+    setActive(!active)
+  }
   return (
     <>
       <nav className="flex items-center flex-wrap bg-purple-500 p-3 ">
@@ -76,20 +80,19 @@ export const Navbar = () => {
         </button>
         <div
           className={`${
-            active ? "" : "hidden"
+            active ? '' : 'hidden'
           }   w-full lg:inline-flex lg:flex-grow lg:w-auto`}
         >
           <div className="lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start  flex flex-col lg:h-auto">
-            <DropDown heading="New Zealand" links={nzLinks}></DropDown>
-            <DropDown heading="Australia" links={australiaLinks}></DropDown>
-            <DropDown heading="Pacific" links={pacificLinks}></DropDown>
-            <DropDown heading="Europe" links={europeLinks}></DropDown>
-            <DropDown heading="Rest Of World" links={worldLinks}></DropDown>
-            <DropDown heading="Contact" links={nzLinks}></DropDown>
+            <DropDown heading="New Zealand" links={nzLinks} />
+            <DropDown heading="Australia" links={australiaLinks} />
+            <DropDown heading="Pacific" links={pacificLinks} />
+            <DropDown heading="Europe" links={europeLinks} />
+            <DropDown heading="Rest Of World" links={worldLinks} />
+            <DropDown heading="Contact" links={nzLinks} />
           </div>
         </div>
       </nav>
-      <SideNav></SideNav>
     </>
-  );
-};
+  )
+}

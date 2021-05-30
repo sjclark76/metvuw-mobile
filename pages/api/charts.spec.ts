@@ -1,4 +1,4 @@
-import { getImageUrls } from "./charts";
+import { getImageUrls } from "./charts/[region]";
 
 describe("", () => {
   it("blh", async () => {
