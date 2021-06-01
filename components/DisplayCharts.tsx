@@ -1,26 +1,15 @@
-import { ChartResponse } from "../pages/api/charts/[region]";
-import Image from "next/image";
-
+import { ChartResponse } from '../pages/api/charts/[region]'
+import { Chart } from './Chart'
 interface DisplayChartsProps {
-  charts: ChartResponse[];
+  charts: ChartResponse[]
 }
 
 export const DisplayCharts = (props: DisplayChartsProps) => {
   return (
     <div className="pt-2">
-      {props.charts.map((chart, index) => (
-        <div className="flex justify-center py-3 ">
-          <Image
-            key={index}
-            src={chart.url}
-            alt="Picture of the author"
-            layout="intrinsic"
-            width={711}
-            height={600}
-          />
-        </div>
+      {props.charts.map((chart) => (
+        <Chart chart={chart} />
       ))}
-      s
     </div>
-  );
-};
+  )
+}
