@@ -30,7 +30,7 @@ export default function Animation(props: HomeProps) {
       <div className="flex justify-center py-3 filter drop-shadow-2xl ">
         <div>
           <Image
-            src={props.charts[0].url}
+            src={props.charts[activeChartIndex].url}
             alt="SET ME"
             layout="intrinsic"
             objectFit="cover"
