@@ -28,15 +28,17 @@ export default function Animation(props: HomeProps) {
   return (
     <div className="pt-2  ">
       <div className="flex justify-center py-3 filter drop-shadow-2xl ">
-        <Image
-          src={props.charts[0].url}
-          alt="SET ME"
-          layout="intrinsic"
-          objectFit="cover"
-          objectPosition="0% 70%"
-          width={711}
-          height={492}
-        />
+        <div>
+          <Image
+            src={props.charts[0].url}
+            alt="SET ME"
+            layout="intrinsic"
+            objectFit="cover"
+            objectPosition="0% 70%"
+            width={711}
+            height={492}
+          />
+        </div>
       </div>
     </div>
   )

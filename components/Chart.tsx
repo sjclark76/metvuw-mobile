@@ -7,7 +7,7 @@ interface ChartsProps {
 
 export const Chart = (props: ChartsProps) => {
   return (
-    <div className="flex justify-center py-3 filter drop-shadow-2xl ">
+    <div className=" py-3 filter drop-shadow-2xl ">
       <Image
         //key={index}
         src={props.chart.url}
