@@ -44,7 +44,7 @@ export const Navbar = () => {
   }
   return (
     <>
-      <nav className="flex items-center flex-wrap bg-gradient-to-r from-purple-300  to-purple-500 p-3 ">
+      <nav className="flex items-center flex-wrap bg-gradient-to-r from-blue-200  to-blue-500 p-3 ">
         <Link href="/">
           <a className="inline-flex items-center p-2 mr-4 ">
             <svg
@@ -60,7 +60,7 @@ export const Navbar = () => {
           </a>
         </Link>
         <button
-          className=" inline-flex p-3 hover:bg-purple-600 rounded lg:hidden text-white ml-auto hover:text-white outline-none"
+          className=" inline-flex p-3 hover:bg-blue-600 rounded lg:hidden text-white ml-auto hover:text-white outline-none"
           onClick={handleClick}
         >
           <svg
