@@ -44,7 +44,7 @@ export const Navbar = () => {
     setActive(!active)
   }
   return (
-    <>
+    <div className="sticky top-0 z-50">
       <nav className="flex items-center flex-wrap bg-gradient-to-r from-blue-200  to-blue-500 p-3 ">
         <Link href="/">
           <a className="inline-flex items-center p-2 mr-4 ">
@@ -94,6 +94,6 @@ export const Navbar = () => {
           </div>
         </div>
       </nav>
-    </>
+    </div>
   )
 }
