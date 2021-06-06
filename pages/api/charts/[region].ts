@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio'
 
 export interface ChartResponse {
   url: string
+  original: string
   width: number
   height: number
   issueDate: string
@@ -60,6 +61,7 @@ export async function getImageUrls(region: string): Promise<ChartResponse[]> {
       )
       return {
         url: url.href,
+        original: relativeUrl,
         width: element.attribs.width,
         height: element.attribs.height,
         ...decodedSrc,
