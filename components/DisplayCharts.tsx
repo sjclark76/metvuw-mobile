@@ -6,10 +6,12 @@ interface DisplayChartsProps {
 
 export const DisplayCharts = (props: DisplayChartsProps) => {
   return (
-    <div className="flex flex-col items-center">
-      {props.charts.map((chart) => (
-        <Chart chart={chart} />
-      ))}
-    </div>
+    <>
+      <div className="flex flex-col items-center">
+        {props.charts.map((chart) => (
+          <Chart chart={chart} />
+        ))}
+      </div>
+    </>
   )
 }

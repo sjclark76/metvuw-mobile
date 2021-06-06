@@ -1,13 +1,14 @@
 import Link from 'next/link'
 import { useState } from 'react'
-import { DropDown, DropDownLink } from './DropDown'
+import { DropDown } from './DropDown'
+import { RegionType } from '../shared/region'
 
-const nzLinks: DropDownLink[] = [
+const nzLinks: RegionType[] = [
   { name: 'All', code: 'nz' },
   { name: 'North Island', code: 'nzni' },
   { name: 'South Island', code: 'nzsi' },
 ]
-const australiaLinks: DropDownLink[] = [
+const australiaLinks: RegionType[] = [
   { name: 'Victoria & Tasmania', code: 'victoria' },
   { name: 'New South Wales', code: 'nsw' },
   { name: 'Western Australia', code: 'waussie' },
@@ -16,19 +17,19 @@ const australiaLinks: DropDownLink[] = [
   { name: 'South Australia', code: 'saussie' },
   { name: 'South East Australia', code: 'seaussie' },
 ]
-const pacificLinks: DropDownLink[] = [
+const pacificLinks: RegionType[] = [
   { name: 'New Caledonia', code: 'newcaledonia' },
   { name: 'Fiji', code: 'fiji' },
   { name: 'South West Pacific', code: 'swp' },
   { name: 'Fiji - NZ', code: 'ocean' },
 ]
-const europeLinks: DropDownLink[] = [
+const europeLinks: RegionType[] = [
   { name: 'Europe', code: 'europe' },
   { name: 'United Kingdom', code: 'uk' },
   { name: 'Estonia', code: 'estonia' },
   { name: 'Turkey', code: 'turkey' },
 ]
-const worldLinks: DropDownLink[] = [
+const worldLinks: RegionType[] = [
   { name: 'World', code: 'world' },
   { name: 'South Atlantic', code: 'satlantic' },
   { name: 'North Atlantic', code: 'natlantic' },

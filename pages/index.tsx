@@ -16,6 +16,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       charts: charts,
-    }, // will be passed to the page component as props
+    },
   }
 }
