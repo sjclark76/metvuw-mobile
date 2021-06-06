@@ -23,6 +23,7 @@ export const Chart = (props: ChartsProps) => {
         height={492}
       />
       <div className="flex justify-center">
+        <p>{JSON.stringify(props.chart)}</p>
         <p className="text-base text-center text-gray-800 my-4">
           {new Date(props.chart.forecastDate).toISOString()}
         </p>
