@@ -23,9 +23,7 @@ export const Chart = (props: ChartsProps) => {
         height={492}
       />
       <div className="flex justify-center">
-        <p className="text-base text-center text-gray-800 my-4">
-          {format(new Date(props.chart.forecastDate), 'PPPPp')}
-        </p>
+        <p className="text-base text-center text-gray-800 my-4"></p>
       </div>
     </div>
   )
