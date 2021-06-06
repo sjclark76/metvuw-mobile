@@ -19,18 +19,22 @@ export interface chartData {
 export function decodeSrc(relativeUrl: string): chartData {
   // ./2021060500/rain-nz-2021060500-006.gif
 
-  const substring = relativeUrl.substr(21, 14) //2021060418-006
-  const year = +substring.substr(0, 4)
-  const month = +substring.substr(4, 2) - 1
-  const day = +substring.substr(6, 2)
-  const hour = +substring.substr(8, 2)
-  const offset = +substring.substr(11, 3)
+  const regex =
+    /(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})(?<hour>\d{2})-(?<offset>\d{3}).gif/gm
+
+  const { groups } = regex.exec(relativeUrl)
+
+  const year = +groups.year
+  const month = +groups.month - 1
+  const day = +groups.day
+  const hour = +groups.hour
+  const offset = +groups.offset
 
   return {
-    issueDate: new Date(Date.UTC(year, month, day, hour)).toUTCString(),
+    issueDate: new Date(Date.UTC(year, month, day, hour)).toISOString(),
     forecastDate: new Date(
       Date.UTC(year, month, day, hour + offset)
-    ).toUTCString(),
+    ).toISOString(),
     offset: offset,
   }
 }
