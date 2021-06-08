@@ -7,14 +7,14 @@ export interface ChartResponse {
   original: string
   width: number
   height: number
-  issueDate: number
-  forecastDate: number
+  issueDate: string
+  forecastDate: string
   offset: number
 }
 
 export interface chartData {
-  issueDate: number
-  forecastDate: number
+  issueDate: string
+  forecastDate: string
   offset: number
 }
 export function decodeSrc(relativeUrl: string): chartData {
@@ -32,8 +32,10 @@ export function decodeSrc(relativeUrl: string): chartData {
   const offset = +groups.offset
 
   return {
-    issueDate: new Date(Date.UTC(year, month, day, hour)).getTime(),
-    forecastDate: new Date(Date.UTC(year, month, day, hour + offset)).getTime(),
+    issueDate: new Date(Date.UTC(year, month, day, hour)).toISOString(),
+    forecastDate: new Date(
+      Date.UTC(year, month, day, hour + offset)
+    ).toISOString(),
     offset: offset,
   }
 }
