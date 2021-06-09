@@ -6,10 +6,6 @@ interface ChartsProps {
 }
 
 export const Chart = (props: ChartsProps) => {
-  if (props.chart.forecastDate !== undefined) {
-    let foo = props.chart.forecastDate
-  }
-
   return (
     <div className="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white">
       <Image

@@ -18,6 +18,8 @@ export interface chartData {
   offset: number
 }
 export function decodeSrc(relativeUrl: string): chartData {
+  console.log(relativeUrl)
+
   // ./2021060500/rain-nz-2021060500-006.gif
 
   const regex =
@@ -31,6 +33,7 @@ export function decodeSrc(relativeUrl: string): chartData {
   const hour = +groups.hour
   const offset = +groups.offset
 
+  console.log(year, month, day, hour)
   return {
     issueDate: new Date(Date.UTC(year, month, day, hour)).toISOString(),
     forecastDate: new Date(

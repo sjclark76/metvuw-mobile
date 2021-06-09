@@ -40,4 +40,15 @@ describe('decode url', () => {
     expect(result.forecastDate).toStrictEqual('2021-06-06T06:00:00.000Z')
     expect(result.offset).toBe(6)
   })
+
+  it('rain-usa ssssshould be correct', () => {
+    // Given
+    const url = './2021060900/rain-nzni-2021060900-006.gif'
+
+    const result = decodeSrc(url)
+
+    expect(result.issueDate).toStrictEqual('2021-06-06T00:00:00.000Z')
+    expect(result.forecastDate).toStrictEqual('2021-06-06T06:00:00.000Z')
+    expect(result.offset).toBe(6)
+  })
 })
