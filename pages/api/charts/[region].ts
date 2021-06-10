@@ -64,14 +64,14 @@ export async function getImageUrls(region: string): Promise<ChartResponse[]> {
       )
       return {
         url: url.href,
-        original: relativeUrl,
+        original: 'relativeUrl',
         width: element.attribs.width,
         height: element.attribs.height,
         ...decodedSrc,
       }
     })
   } catch (e) {
-    console.log(e)
+    console.error(e)
   }
 }
 export default async (req: NextApiRequest, res: NextApiResponse) => {
