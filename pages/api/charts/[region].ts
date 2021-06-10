@@ -12,12 +12,13 @@ export interface ChartResponse {
   offset: number
 }
 
-export interface chartData {
+export interface ChartData {
+  relativeUrl: string
   issueDate: string
   forecastDate: string
   offset: number
 }
-export function decodeSrc(relativeUrl: string): chartData {
+export function decodeSrc(relativeUrl: string): ChartData {
   console.log(relativeUrl)
 
   // ./2021060500/rain-nz-2021060500-006.gif
@@ -35,6 +36,7 @@ export function decodeSrc(relativeUrl: string): chartData {
 
   console.log(year, month, day, hour)
   return {
+    relativeUrl: relativeUrl as string,
     issueDate: new Date(Date.UTC(year, month, day, hour)).toISOString(),
     forecastDate: new Date(
       Date.UTC(year, month, day, hour + offset)
@@ -67,7 +69,7 @@ export async function getImageUrls(region: string): Promise<ChartResponse[]> {
         forecastDate: decodedSrc.forecastDate,
         offset: decodedSrc.offset,
         url: url.href,
-        originalUrl: relativeUrl,
+        originalUrl: decodedSrc.relativeUrl,
         width: element.attribs.width,
         height: element.attribs.height,
       }
