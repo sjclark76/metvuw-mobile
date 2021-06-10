@@ -4,7 +4,10 @@ import * as cheerio from 'cheerio'
 
 export interface ChartResponse {
   url: string
-  originalUrl: string
+  year: number
+  month: number
+  day: number
+  hour: number
   width: number
   height: number
   issueDate: string
@@ -13,7 +16,10 @@ export interface ChartResponse {
 }
 
 export interface ChartData {
-  relativeUrl: string
+  year: number
+  month: number
+  day: number
+  hour: number
   issueDate: string
   forecastDate: string
   offset: number
@@ -36,7 +42,10 @@ export function decodeSrc(relativeUrl: string): ChartData {
 
   console.log(year, month, day, hour)
   return {
-    relativeUrl: relativeUrl as string,
+    year: year,
+    month: month,
+    day: day,
+    hour: hour,
     issueDate: new Date(Date.UTC(year, month, day, hour)).toISOString(),
     forecastDate: new Date(
       Date.UTC(year, month, day, hour + offset)
@@ -65,11 +74,8 @@ export async function getImageUrls(region: string): Promise<ChartResponse[]> {
         'https://dpucyvo9dklo9.cloudfront.net'
       )
       const foo = {
-        issueDate: decodedSrc.issueDate,
-        forecastDate: decodedSrc.forecastDate,
-        offset: decodedSrc.offset,
+        ...decodedSrc,
         url: url.href,
-        originalUrl: decodedSrc.relativeUrl,
         width: element.attribs.width,
         height: element.attribs.height,
       }
