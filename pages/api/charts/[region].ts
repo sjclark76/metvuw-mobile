@@ -63,11 +63,11 @@ export async function getImageUrls(region: string): Promise<ChartResponse[]> {
         'https://dpucyvo9dklo9.cloudfront.net'
       )
       return {
+        ...decodedSrc,
         url: url.href,
         original: 'relativeUrl',
         width: element.attribs.width,
         height: element.attribs.height,
-        ...decodedSrc,
       }
     })
   } catch (e) {
