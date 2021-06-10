@@ -24,7 +24,7 @@ export const Chart = (props: ChartsProps) => {
           <li>offset {props.chart.offset}</li>
           <li>forecastDate {props.chart.forecastDate}</li>
           <li>issueDate {props.chart.issueDate}</li>
-          <li>original {props.chart.original}</li>
+          <li>original {props.chart.originalUrl}</li>
         </ul>
         <p className="text-base text-center text-gray-800 my-4">
           {/*{new Date(props.chart.forecastDate).toISOString()}*/}
