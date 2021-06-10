@@ -67,7 +67,7 @@ export async function getImageUrls(region: string): Promise<ChartResponse[]> {
         forecastDate: decodedSrc.forecastDate,
         offset: decodedSrc.offset,
         url: url.href,
-        original: 'relativeUrl',
+        original: relativeUrl,
         width: element.attribs.width,
         height: element.attribs.height,
       }
