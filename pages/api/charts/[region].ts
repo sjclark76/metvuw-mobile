@@ -44,7 +44,6 @@ export function decodeSrc(relativeUrl: string): chartData {
 }
 
 export async function getImageUrls(region: string): Promise<ChartResponse[]> {
-  throw new Error('bllll')
   try {
     const response = await axios.get(
       `http://www.metvuw.com/forecast/forecast.php?type=rain&region=${region}&noofdays=10`
@@ -63,13 +62,17 @@ export async function getImageUrls(region: string): Promise<ChartResponse[]> {
         `forecast/${relativeUrl.substr(2)}`,
         'https://dpucyvo9dklo9.cloudfront.net'
       )
-      return {
-        ...decodedSrc,
+      const foo = {
+        issueDate: decodedSrc.issueDate,
+        forecastDate: decodedSrc.forecastDate,
+        offset: decodedSrc.offset,
         url: url.href,
         original: 'relativeUrl',
         width: element.attribs.width,
         height: element.attribs.height,
       }
+      console.log(foo)
+      return foo
     })
   } catch (e) {
     console.error(e)

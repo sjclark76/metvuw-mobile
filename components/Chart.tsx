@@ -8,7 +8,7 @@ interface ChartsProps {
 export const Chart = (props: ChartsProps) => {
   return (
     <div className="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white">
-      {/*  <Image
+      <Image
         //key={index}
         src={props.chart.url}
         alt="SET ME"
@@ -17,7 +17,7 @@ export const Chart = (props: ChartsProps) => {
         objectPosition="0% 70%"
         width={711}
         height={492}
-      />*/}
+      />
       <div className="flex justify-center">
         <p>{JSON.stringify(props.chart, null, 2)}</p>
         <p className="text-base text-center text-gray-800 my-4">
