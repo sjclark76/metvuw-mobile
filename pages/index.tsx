@@ -10,7 +10,7 @@ export default function Home(props: HomeProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const apiURl = new URL('api/charts/nz', config.baseUrl)
+  const apiURl = new URL('api/charts/victoria', config.baseUrl)
   const response = await fetch(apiURl.href)
   const charts = await response.json()
   return {
