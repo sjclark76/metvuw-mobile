@@ -44,6 +44,7 @@ export function decodeSrc(relativeUrl: string): chartData {
 }
 
 export async function getImageUrls(region: string): Promise<ChartResponse[]> {
+  throw new Error('bllll')
   try {
     const response = await axios.get(
       `http://www.metvuw.com/forecast/forecast.php?type=rain&region=${region}&noofdays=10`

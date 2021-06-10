@@ -42,8 +42,8 @@ describe('decode url', () => {
   })
 
   it('rain-usa ssssshould be correct', () => {
-    // Given
-    const url = './2021060900/rain-nzni-2021060900-006.gif'
+    // Given https://dpucyvo9dklo9.cloudfront.net/forecast/2021061000/rain-waussie-2021061000-006.gif
+    const url = './2021061000/rain-waussie-2021061000-006.gif'
 
     const result = decodeSrc(url)
 
