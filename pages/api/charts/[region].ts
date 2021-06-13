@@ -3,19 +3,20 @@ import axios from 'axios'
 import * as cheerio from 'cheerio'
 
 export interface ChartResponse {
-  url: string
-  year: number
-  month: number
-  day: number
-  hour: number
-  width: number
-  height: number
-  issueDate: string
-  forecastDate: string
-  offset: number
+  url?: string
+  year?: number
+  month?: number
+  day?: number
+  hour?: number
+  width?: number
+  height?: number
+  utcDate?: number
+  issueDate?: string
+  forecastDate?: string
+  offset?: number
 }
 
-export interface ChartData {
+/*export interface ChartData {
   year: number
   month: number
   day: number
@@ -24,8 +25,8 @@ export interface ChartData {
   issueDate: string
   forecastDate: string
   offset: number
-}
-export function decodeSrc(relativeUrl: string): ChartData {
+}*/
+export function decodeSrc(relativeUrl: string): ChartResponse {
   console.log(relativeUrl)
 
   // ./2021060500/rain-nz-2021060500-006.gif
@@ -46,7 +47,7 @@ export function decodeSrc(relativeUrl: string): ChartData {
     month: month,
     day: day,
     hour: hour,
-    utcDate : Date.UTC(year, month, day, hour),
+    utcDate: Date.UTC(year, month, day, hour),
     issueDate: new Date(Date.UTC(year, month, day, hour)).toISOString(),
     forecastDate: new Date(
       Date.UTC(year, month, day, hour + offset)

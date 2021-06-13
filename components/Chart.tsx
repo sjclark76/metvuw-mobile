@@ -24,6 +24,7 @@ export const Chart = (props: ChartsProps) => {
           <li>offset {props.chart.offset}</li>
           <li>forecastDate {props.chart.forecastDate}</li>
           <li>issueDate {props.chart.issueDate}</li>
+          <li>utcDate {props.chart.utcDate}</li>
           <li>year {props.chart.year}</li>
           <li>month {props.chart.month}</li>
           <li>day {props.chart.day}</li>
