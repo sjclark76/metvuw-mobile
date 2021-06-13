@@ -36,12 +36,19 @@ export function decodeSrc(relativeUrl: string): ChartResponse {
 
   const { groups } = regex.exec(relativeUrl)
 
-  const year = +groups.year
-  const month = +groups.month - 1
-  const day = +groups.day
-  const hour = +groups.hour
-  const offset = +groups.offset
+  // const year = +groups.year
+  // const month = +groups.month - 1
+  // const day = +groups.day
+  // const hour = +groups.hour
+  // const offset = +groups.offset
 
+  const slice = relativeUrl.slice(-18).slice(0, 14)
+
+  const year = +slice.slice(0, 4) // +groups.year
+  const month = +slice.slice(4, 6) - 1 //+groups.month - 1
+  const day = +slice.slice(6, 8) // +groups.day
+  const hour = +slice.slice(8, 10) //+groups.hour
+  const offset = +slice.slice(11, 14) //+ groups.offset
   return {
     year: year,
     month: month,
