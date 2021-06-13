@@ -20,6 +20,7 @@ export interface ChartData {
   month: number
   day: number
   hour: number
+  utcDate: number
   issueDate: string
   forecastDate: string
   offset: number
@@ -41,10 +42,11 @@ export function decodeSrc(relativeUrl: string): ChartData {
   const offset = +groups.offset
 
   return {
-    year: 1234,
+    year: year,
     month: month,
     day: day,
     hour: hour,
+    utcDate : Date.UTC(year, month, day, hour),
     issueDate: new Date(Date.UTC(year, month, day, hour)).toISOString(),
     forecastDate: new Date(
       Date.UTC(year, month, day, hour + offset)
