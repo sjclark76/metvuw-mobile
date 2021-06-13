@@ -40,9 +40,8 @@ export function decodeSrc(relativeUrl: string): ChartData {
   const hour = +groups.hour
   const offset = +groups.offset
 
-  console.log(year, month, day, hour)
   return {
-    year: year,
+    year: 1234,
     month: month,
     day: day,
     hour: hour,
@@ -73,14 +72,12 @@ export async function getImageUrls(region: string): Promise<ChartResponse[]> {
         `forecast/${relativeUrl.substr(2)}`,
         'https://dpucyvo9dklo9.cloudfront.net'
       )
-      const foo = {
+      return {
         ...decodedSrc,
         url: url.href,
         width: element.attribs.width,
         height: element.attribs.height,
       }
-      console.log(foo)
-      return foo
     })
   } catch (e) {
     console.error(e)
