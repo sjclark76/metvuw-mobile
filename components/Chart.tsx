@@ -6,10 +6,6 @@ interface ChartsProps {
 }
 
 export const Chart = (props: ChartsProps) => {
-  if (props.chart.forecastDate !== undefined) {
-    let foo = props.chart.forecastDate
-  }
-
   return (
     <div className="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white">
       <Image
@@ -23,8 +19,19 @@ export const Chart = (props: ChartsProps) => {
         height={492}
       />
       <div className="flex justify-center">
+        <ul>
+          <li>url {props.chart.url}</li>
+          <li>offset {props.chart.offset}</li>
+          <li>forecastDate {props.chart.forecastDate}</li>
+          <li>issueDate {props.chart.issueDate}</li>
+          <li>utcDate {props.chart.utcDate}</li>
+          <li>year {props.chart.year}</li>
+          <li>month {props.chart.month}</li>
+          <li>day {props.chart.day}</li>
+          <li>hour {props.chart.hour}</li>
+        </ul>
         <p className="text-base text-center text-gray-800 my-4">
-          {format(new Date(props.chart.forecastDate), 'PPPPp')}
+          {new Date(props.chart.forecastDate).toISOString()}
         </p>
       </div>
     </div>

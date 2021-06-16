@@ -3,34 +3,62 @@ import axios from 'axios'
 import * as cheerio from 'cheerio'
 
 export interface ChartResponse {
-  url: string
-  width: number
-  height: number
-  issueDate: string
-  forecastDate: string
-  offset: number
+  url?: string
+  year?: number
+  month?: number
+  day?: number
+  hour?: number
+  width?: number
+  height?: number
+  utcDate?: number
+  issueDate?: string
+  forecastDate?: string
+  offset?: number
 }
 
-export interface chartData {
+/*export interface ChartData {
+  year: number
+  month: number
+  day: number
+  hour: number
+  utcDate: number
   issueDate: string
   forecastDate: string
   offset: number
-}
-export function decodeSrc(relativeUrl: string): chartData {
+}*/
+export function decodeSrc(relativeUrl: string): ChartResponse {
+  console.log(relativeUrl)
+
   // ./2021060500/rain-nz-2021060500-006.gif
 
-  const substring = relativeUrl.substr(21, 14) //2021060418-006
-  const year = +substring.substr(0, 4)
-  const month = +substring.substr(4, 2) - 1
-  const day = +substring.substr(6, 2)
-  const hour = +substring.substr(8, 2)
-  const offset = +substring.substr(11, 3)
+  const regex =
+    /(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})(?<hour>\d{2})-(?<offset>\d{3}).gif/gm
 
+  const { groups } = regex.exec(relativeUrl)
+
+  // const year = +groups.year
+  // const month = +groups.month - 1
+  // const day = +groups.day
+  // const hour = +groups.hour
+  // const offset = +groups.offset
+
+  const slice = relativeUrl.slice(-18).slice(0, 14)
+
+  const year = +slice.slice(0, 4) // +groups.year
+  const month = +slice.slice(4, 6) - 1 //+groups.month - 1
+  const day = +slice.slice(6, 8) // +groups.day
+  const hour = +slice.slice(8, 10) //+groups.hour
+  const offset = +slice.slice(11, 14) //+ groups.offset
   return {
-    issueDate: new Date(Date.UTC(year, month, day, hour)).toUTCString(),
+    year: year,
+    month: month,
+    day: day,
+    hour: hour,
+    utcDate: Date.UTC(year, month, day, hour),
+    issueDate: new Date(Date.UTC(year, month, day, hour)).toISOString(),
     forecastDate: new Date(
       Date.UTC(year, month, day, hour + offset)
-    ).toUTCString(),
+    ).toISOString(),
     offset: offset,
   }
 }
@@ -55,14 +83,14 @@ export async function getImageUrls(region: string): Promise<ChartResponse[]> {
         'https://dpucyvo9dklo9.cloudfront.net'
       )
       return {
+        ...decodedSrc,
         url: url.href,
         width: element.attribs.width,
         height: element.attribs.height,
-        ...decodedSrc,
       }
     })
   } catch (e) {
-    console.log(e)
+    console.error(e)
   }
 }
 export default async (req: NextApiRequest, res: NextApiResponse) => {
