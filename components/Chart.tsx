@@ -19,7 +19,7 @@ export const Chart = (props: ChartsProps) => {
         height={492}
       />
       <div className="flex justify-center">
-        <ul>
+        {/*<ul>
           <li>url {props.chart.url}</li>
           <li>offset {props.chart.offset}</li>
           <li>forecastDate {props.chart.forecastDate}</li>
@@ -29,9 +29,9 @@ export const Chart = (props: ChartsProps) => {
           <li>month {props.chart.month}</li>
           <li>day {props.chart.day}</li>
           <li>hour {props.chart.hour}</li>
-        </ul>
+        </ul>*/}
         <p className="text-base text-center text-gray-800 my-4">
-          {new Date(props.chart.forecastDate).toISOString()}
+          {format(new Date(props.chart.forecastDate), 'PPPPp')}
         </p>
       </div>
     </div>
