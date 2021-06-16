@@ -90,7 +90,11 @@ export const Navbar = () => {
             <DropDown heading="Pacific" links={pacificLinks} />
             <DropDown heading="Europe" links={europeLinks} />
             <DropDown heading="Rest Of World" links={worldLinks} />
-            <DropDown heading="Contact" links={nzLinks} />
+            <div className="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex">
+              <a className="mr-1" href="mailto:metvuwmobile@gmail.com">
+                Contact
+              </a>
+            </div>
           </div>
         </div>
       </nav>
