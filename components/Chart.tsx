@@ -31,7 +31,7 @@ export const Chart = (props: ChartsProps) => {
           <li>hour {props.chart.hour}</li>
         </ul>
         <p className="text-base text-center text-gray-800 my-4">
-          {/*{new Date(props.chart.forecastDate).toISOString()}*/}
+          {new Date(props.chart.forecastDate).toISOString()}
         </p>
       </div>
     </div>
