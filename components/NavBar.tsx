@@ -1,7 +1,8 @@
 import Link from 'next/link'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { DropDown } from './DropDown'
 import { RegionType } from '../shared/region'
+import { GlobalContext } from './GlobalProvider'
 
 const nzLinks: RegionType[] = [
   { name: 'All', code: 'nz' },
@@ -43,9 +44,11 @@ export const Navbar = () => {
   const handleClick = () => {
     setActive(!active)
   }
+
+  const { submenuText } = useContext(GlobalContext)
   return (
     <div className="sticky top-0 z-50">
-      <nav className="flex items-center flex-wrap bg-gradient-to-r from-blue-200  to-blue-500 p-3 ">
+      <nav className="flex items-center flex-wrap bg-gradient-to-r from-purple-400  to-blue-600 p-2 ">
         <Link href="/">
           <a className="inline-flex items-center p-2 mr-4 ">
             <svg
@@ -90,10 +93,21 @@ export const Navbar = () => {
             <DropDown heading="Pacific" links={pacificLinks} />
             <DropDown heading="Europe" links={europeLinks} />
             <DropDown heading="Rest Of World" links={worldLinks} />
-            <DropDown heading="Contact" links={nzLinks} />
+            <div className="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex">
+              <a className="mr-1" href="mailto:metvuwmobile@gmail.com">
+                Contact
+              </a>
+            </div>
           </div>
         </div>
       </nav>
+      <div className="flex flex-row justify-center">
+        <div className="px-2 filter  bg-gray-50 w-full ">
+          <p className="text-base text-center  text-gray-800 my-4 ">
+            {submenuText}
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
