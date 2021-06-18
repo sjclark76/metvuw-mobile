@@ -1,5 +1,5 @@
 export const regions = [
-  { name: 'All', code: 'nz' },
+  { name: 'New Zealand', code: 'nz' },
   { name: 'North Island', code: 'nzni' },
   { name: 'South Island', code: 'nzsi' },
   { name: 'Victoria & Tasmania', code: 'victoria' },
