@@ -40,7 +40,7 @@ export const SeoMeta = (props: SeoMetaProps) => {
       <link rel="icon" type="image/png" href="/favicon.ico" />
       <link rel="apple-touch-icon" href="/favicon.ico" />
       <meta property="og:image" content={props.imageUrl} />
-      <link rel="canonical" href="" />
+      <link rel="canonical" href={props.url} />
     </Head>
   )
 }
