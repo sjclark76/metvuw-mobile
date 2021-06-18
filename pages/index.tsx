@@ -7,8 +7,9 @@ import {
   SeoMeta,
   SeoMetaProps,
 } from '../components/SeoMeta'
-import { regions } from '../shared/region'
+import { Region, regions } from '../shared/region'
 interface HomeProps {
+  region: Region
   charts: ChartResponse[]
   meta: SeoMetaProps
 }
@@ -21,7 +22,7 @@ export default function Home(props: HomeProps) {
         url={props.meta.url}
         imageUrl={props.meta.imageUrl}
       />
-      <DisplayCharts charts={props.charts} />
+      <DisplayCharts charts={props.charts} region={props.region} />
     </>
   )
 }
@@ -40,6 +41,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   )
   return {
     props: {
+      region: matchedRegion,
       charts: charts,
       meta: meta,
     },
