@@ -1,9 +1,9 @@
 import { DropDownItem } from './DropDownItem'
-import { RegionType } from '../shared/region'
+import { Region } from '../shared/region'
 
 interface DropDownProps {
   heading: string
-  links: RegionType[]
+  links: Region[]
 }
 
 export const DropDown = (props: DropDownProps) => {

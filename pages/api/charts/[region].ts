@@ -16,31 +16,10 @@ export interface ChartResponse {
   offset?: number
 }
 
-/*export interface ChartData {
-  year: number
-  month: number
-  day: number
-  hour: number
-  utcDate: number
-  issueDate: string
-  forecastDate: string
-  offset: number
-}*/
 export function decodeSrc(relativeUrl: string): ChartResponse {
   console.log(relativeUrl)
 
   // ./2021060500/rain-nz-2021060500-006.gif
-
-  const regex =
-    /(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})(?<hour>\d{2})-(?<offset>\d{3}).gif/gm
-
-  const { groups } = regex.exec(relativeUrl)
-
-  // const year = +groups.year
-  // const month = +groups.month - 1
-  // const day = +groups.day
-  // const hour = +groups.hour
-  // const offset = +groups.offset
 
   const slice = relativeUrl.slice(-18).slice(0, 14)
 

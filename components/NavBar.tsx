@@ -1,15 +1,15 @@
 import Link from 'next/link'
 import { useContext, useState } from 'react'
 import { DropDown } from './DropDown'
-import { RegionType } from '../shared/region'
+import { Region } from '../shared/region'
 import { GlobalContext } from './GlobalProvider'
 
-const nzLinks: RegionType[] = [
-  { name: 'All', code: 'nz' },
+const nzLinks: Region[] = [
+  { name: 'New Zealand', code: 'nz' },
   { name: 'North Island', code: 'nzni' },
   { name: 'South Island', code: 'nzsi' },
 ]
-const australiaLinks: RegionType[] = [
+const australiaLinks: Region[] = [
   { name: 'Victoria & Tasmania', code: 'victoria' },
   { name: 'New South Wales', code: 'nsw' },
   { name: 'Western Australia', code: 'waussie' },
@@ -18,19 +18,19 @@ const australiaLinks: RegionType[] = [
   { name: 'South Australia', code: 'saussie' },
   { name: 'South East Australia', code: 'seaussie' },
 ]
-const pacificLinks: RegionType[] = [
+const pacificLinks: Region[] = [
   { name: 'New Caledonia', code: 'newcaledonia' },
   { name: 'Fiji', code: 'fiji' },
   { name: 'South West Pacific', code: 'swp' },
   { name: 'Fiji - NZ', code: 'ocean' },
 ]
-const europeLinks: RegionType[] = [
+const europeLinks: Region[] = [
   { name: 'Europe', code: 'europe' },
   { name: 'United Kingdom', code: 'uk' },
   { name: 'Estonia', code: 'estonia' },
   { name: 'Turkey', code: 'turkey' },
 ]
-const worldLinks: RegionType[] = [
+const worldLinks: Region[] = [
   { name: 'World', code: 'world' },
   { name: 'South Atlantic', code: 'satlantic' },
   { name: 'North Atlantic', code: 'natlantic' },
@@ -103,9 +103,9 @@ export const Navbar = () => {
       </nav>
       <div className="flex flex-row justify-center">
         <div className="px-2 filter  bg-gray-50 w-full ">
-          <p className="text-base text-center  text-gray-800 my-4 ">
+          <h1 className="text-base text-center  text-gray-800 my-4 ">
             {submenuText}
-          </p>
+          </h1>
         </div>
       </div>
     </div>
