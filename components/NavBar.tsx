@@ -5,7 +5,7 @@ import { Region } from '../shared/region'
 import { GlobalContext } from './GlobalProvider'
 
 const nzLinks: Region[] = [
-  { name: 'All', code: 'nz' },
+  { name: 'New Zealand', code: 'nz' },
   { name: 'North Island', code: 'nzni' },
   { name: 'South Island', code: 'nzsi' },
 ]
