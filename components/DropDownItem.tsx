@@ -1,7 +1,7 @@
-import { RegionType } from '../shared/region'
+import { Region } from '../shared/region'
 
 interface DropDownItemProps {
-  region: RegionType
+  region: Region
 }
 
 export const DropDownItem = (props: DropDownItemProps) => {
