@@ -103,7 +103,7 @@ export const Navbar = () => {
       </nav>
       <div className="flex flex-row justify-center">
         <div className="px-2 filter  bg-gray-50 w-full ">
-          <h1 className="text-base text-center  text-gray-800 my-4 ">
+          <h1 className="text-base text-center font-medium text-sm text-gray-800 my-4 ">
             {submenuText}
           </h1>
         </div>
