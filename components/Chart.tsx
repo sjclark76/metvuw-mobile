@@ -26,7 +26,7 @@ export const Chart = (props: ChartsProps) => {
         height={492}
       />
       <div className="flex items-center rounded-b-lg justify-between px-12 py-3 bg-white">
-        <span className="text-lg font-bold text-gray-700">
+        <span className="text-base font-semibold text-gray-700">
           {format(forecastDate, 'PPPP')}
         </span>
         <span className="text-right px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none">
