@@ -59,7 +59,8 @@ export async function getImageUrls(region: string): Promise<ChartResponse[]> {
       const decodedSrc = decodeSrc(relativeUrl)
       const url = new URL(
         `forecast/${relativeUrl.substr(2)}`,
-        'https://dpucyvo9dklo9.cloudfront.net'
+        //'https://dpucyvo9dklo9.cloudfront.net'
+        'http://www.metvuw.com'
       )
       return {
         ...decodedSrc,
