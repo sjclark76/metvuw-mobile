@@ -1,0 +1,13 @@
+{
+  "headers": [
+    {
+      "source": "/(.*).(avif|jpg|jpeg|png|webp)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=185, s-maxage=185, stale-while-revalidate=185"
+        }
+      ]
+    }
+  ]
+}
