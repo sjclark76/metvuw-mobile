@@ -129,6 +129,7 @@ export const Navbar = () => {
           </a>
         </Link>
         <button
+          aria-label="Open Menu"
           className=" inline-flex p-3 hover:bg-blue-600 rounded lg:hidden text-white ml-auto hover:text-white outline-none"
           onClick={handleClick}
         >
