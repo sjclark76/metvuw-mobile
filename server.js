@@ -14,7 +14,7 @@ app
     // requests to /service-worker.js
     server.get(
       '/service-worker.js',
-      express.static(path.join(__dirname, '.next'))
+      express.static(path.join(__dirname, '_next'))
     )
 
     // all other requests
