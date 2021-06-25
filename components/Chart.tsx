@@ -16,7 +16,6 @@ export const Chart = (props: ChartsProps) => {
   return (
     <div className="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white">
       <Image
-        //key={index}
         src={props.chart.url}
         alt={altTag}
         layout="intrinsic"

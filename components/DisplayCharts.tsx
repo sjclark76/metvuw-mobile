@@ -20,7 +20,7 @@ export const DisplayCharts = (props: DisplayChartsProps) => {
     <>
       <div className="flex flex-col items-center">
         {props.charts.map((chart) => (
-          <Chart chart={chart} region={props.region} />
+          <Chart key={chart.forecastDate} chart={chart} region={props.region} />
         ))}
       </div>
     </>
