@@ -2,7 +2,7 @@
   "name": "metvuwmobile",
   "theme_color": "#9c87f8",
   "background_color": "#496dee",
-  "display": "browser",
+  "display": "fullscreen",
   "orientation": "portrait",
   "scope": "/",
   "start_url": "https://www.metvuwmobile.com",
