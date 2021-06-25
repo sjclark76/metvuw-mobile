@@ -22,7 +22,7 @@ export const DropDown = (props: DropDownProps) => {
         </button>
         <ul className="absolute w-full	hidden rounded-b text-white font-bold bg-blue-400  group-hover:block z-50">
           {props.links.map((link) => (
-            <DropDownItem region={link} />
+            <DropDownItem key={link.code} region={link} />
           ))}
         </ul>
       </div>
