@@ -16,7 +16,7 @@ export const createSeoMetaProps = (
   context: GetServerSidePropsContext
 ): SeoMetaProps => {
   return {
-    title: `metvuw-mobile | ${region.name}`,
+    title: `metvuw mobile | ${region.name}`,
     desc: `${region.name} wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
     imageUrl: imageUrl,
     url: new URL(context.resolvedUrl, config.baseUrl).href,
