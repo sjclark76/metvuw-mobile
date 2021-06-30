@@ -6,7 +6,7 @@ const nextConfig = {
     swDest: '../public/service-worker.js',
     runtimeCaching: [
       {
-        urlPattern: /.gif$/,
+        urlPattern: /.gif.*/,
         handler: 'CacheFirst',
         options: {
           cacheName: 'images',
