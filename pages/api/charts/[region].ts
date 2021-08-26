@@ -45,7 +45,7 @@ export function decodeSrc(relativeUrl: string): ChartResponse {
 export async function getImageUrls(region: string): Promise<ChartResponse[]> {
   try {
     const response = await axios.get(
-      `http://www.metvuw.com/forecast/forecast.php?type=rain&region=${region}&noofdays=10`
+      `https://www.metvuw.com/forecast/forecast.php?type=rain&region=${region}&noofdays=10`
     )
 
     let rawHtml = response.data
@@ -60,7 +60,7 @@ export async function getImageUrls(region: string): Promise<ChartResponse[]> {
       const url = new URL(
         `forecast/${relativeUrl.substr(2)}`,
         //'https://dpucyvo9dklo9.cloudfront.net'
-        'http://www.metvuw.com'
+        'https://www.metvuw.com'
       )
       return {
         ...decodedSrc,

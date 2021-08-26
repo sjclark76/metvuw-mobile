@@ -1,7 +1,8 @@
 import { ChartResponse } from '../pages/api/charts/[region]'
-import Image from 'next/image'
 import { format } from 'date-fns'
 import { Region } from '../shared/region'
+import { WeatherImage } from './WeatherImage'
+
 interface ChartsProps {
   chart: ChartResponse
   region: Region
@@ -13,17 +14,10 @@ export const Chart = (props: ChartsProps) => {
     'PPPPp'
   )}`
   const forecastDate = new Date(props.chart.forecastDate)
+
   return (
     <div className="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white">
-      <Image
-        src={props.chart.url}
-        alt={altTag}
-        layout="intrinsic"
-        objectFit="cover"
-        objectPosition="0% 70%"
-        width={711}
-        height={492}
-      />
+      <WeatherImage imageSrc={props.chart.url} imageAlt={altTag} />
       <div className="flex items-center rounded-b-lg justify-around py-3 bg-white">
         <span className="text-base font-semibold text-gray-700">
           {format(forecastDate, 'PPPP')}
