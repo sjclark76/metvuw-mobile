@@ -8,6 +8,7 @@ const app = next({ dev })
 const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
+  
   createServer((req, res) => {
     const parsedUrl = parse(req.url, true)
     const { pathname } = parsedUrl
