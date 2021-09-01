@@ -1,7 +1,7 @@
 import { ChartResponse } from '../pages/api/charts/[region]'
 import { Chart } from './Chart'
 import { format } from 'date-fns'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { GlobalContext } from './GlobalProvider'
 import { Region } from '../shared/region'
 interface DisplayChartsProps {
@@ -15,7 +15,11 @@ export const DisplayCharts = (props: DisplayChartsProps) => {
     new Date(props.charts[0].issueDate),
     'PPPPp'
   )} for ${props.region.name}`
-  setSubmenuText(submenuText)
+
+  useEffect(() => {
+    setSubmenuText(submenuText)
+  })
+
   return (
     <>
       <div className="flex flex-col items-center">
