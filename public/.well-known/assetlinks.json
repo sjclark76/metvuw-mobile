@@ -1,0 +1,6 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "com.metvuwmobile.www.twa",
+                     "sha256_cert_fingerprints": ["DD:DC:B6:F1:D2:C9:B5:81:C7:00:93:A2:FD:94:E4:06:E2:D7:11:E1:D8:1D:B3:CA:51:E4:D2:79:AC:9B:59:6A"] }
+      }
+]
