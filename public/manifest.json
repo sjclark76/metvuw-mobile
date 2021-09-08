@@ -6,6 +6,32 @@
   "orientation": "portrait",
   "scope": "/",
   "start_url": "https://www.metvuwmobile.com",
+  "short_name": "MetvuwMobile",
+  "screenshots" : [
+    {
+      "src": "Screen Shot.png",
+      "sizes": "2168X2046",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Zealand",
+      "url": "/regions/nz",
+      "description": "New Zealand Forecast Charts"
+    },
+    {
+      "name": "North Island New Zealand",
+      "url": "/regions/nzni",
+      "description": "New Zealand North Island Forecast Charts"
+    },
+    {
+      "name": "South Island New Zealand",
+      "url": "/regions/nzsi",
+      "description": "New Zealand South Island Forecast Charts"
+    }
+  ],
+  "categories": ["meteorology", "forecast", "weather", "metvuw"],
   "icons": [
     {
       "src": "/icon-512x512.png",
