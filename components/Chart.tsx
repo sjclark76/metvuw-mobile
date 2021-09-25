@@ -1,10 +1,10 @@
-import { ChartResponse } from '../pages/api/charts/[region]'
 import { format } from 'date-fns'
 import { Region } from '../shared/region'
 import { WeatherImage } from './WeatherImage'
+import { RainChartData } from '../pages/api'
 
 interface ChartsProps {
-  chart: ChartResponse
+  chart: RainChartData
   region: Region
 }
 
@@ -17,7 +17,11 @@ export const Chart = (props: ChartsProps) => {
 
   return (
     <div className="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white">
-      <WeatherImage imageSrc={props.chart.url} imageAlt={altTag} />
+      <WeatherImage
+        imageSrc={props.chart.url}
+        imageAlt={altTag}
+        isRainForecast={true}
+      />
       <div className="flex items-center rounded-b-lg justify-around py-3 bg-white">
         <span className="text-base font-semibold text-gray-700">
           {format(forecastDate, 'PPPP')}

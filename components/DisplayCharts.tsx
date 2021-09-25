@@ -1,24 +1,25 @@
-import { ChartResponse } from '../pages/api/charts/[region]'
 import { Chart } from './Chart'
 import { format } from 'date-fns'
 import { useContext, useEffect } from 'react'
 import { GlobalContext } from './GlobalProvider'
 import { Region } from '../shared/region'
+import { RainChartData } from '../pages/api'
 interface DisplayChartsProps {
   region: Region
-  charts: ChartResponse[]
+  charts: RainChartData[]
 }
 
 export const DisplayCharts = (props: DisplayChartsProps) => {
   const { setSubmenuText } = useContext(GlobalContext)
-  const submenuText = `Forecast issued at ${format(
-    new Date(props.charts[0].issueDate),
-    'PPPPp'
-  )} for ${props.region.name}`
 
   useEffect(() => {
+    const submenuText = `Forecast issued at ${format(
+      new Date(props.charts[0].issueDate),
+      'PPPPp'
+    )} for ${props.region.name}`
+
     setSubmenuText(submenuText)
-  })
+  }, [props.region])
 
   return (
     <>

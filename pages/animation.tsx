@@ -1,10 +1,10 @@
-import { ChartResponse } from './api/charts/[region]'
 import { GetServerSideProps } from 'next'
 import { config } from '../config'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { RainChartData } from './api'
 interface HomeProps {
-  charts: ChartResponse[]
+  charts: RainChartData[]
 }
 const fadeOutCss =
   'transition-opacity duration-1000 ease-out opacity-100 hover:opacity-0'

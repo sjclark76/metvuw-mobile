@@ -1,10 +1,15 @@
 export interface WeatherImageProps {
   imageSrc: string
   imageAlt: string
+  isRainForecast: boolean
 }
 export const WeatherImage = (props: WeatherImageProps) => {
-  const style = {
+  const rainStyle = {
     objectPosition: '0% 70%',
+  }
+
+  const satelliteStyle = {
+    objectPosition: '0% 0%',
   }
 
   return (
@@ -23,7 +28,7 @@ export const WeatherImage = (props: WeatherImageProps) => {
         src={props.imageSrc}
         decoding="async"
         className="absolute top-0 left-0 bottom-0 right-0, box-border p-0 border-none m-auto block w-0, h-0 min-w-full max-w-full min-h-full max-h-full object-cover"
-        style={style}
+        style={props.isRainForecast ? rainStyle : satelliteStyle}
       />
     </div>
   )
