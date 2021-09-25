@@ -10,6 +10,19 @@ export interface SeoMetaProps {
   imageUrl: string
 }
 
+export const createGeneralSeoMetaProps = (
+  message: string,
+  imageUrl: string,
+  context: GetServerSidePropsContext
+): SeoMetaProps => {
+  return {
+    title: `metvuw mobile | ${message}`,
+    desc: `${message} wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
+    imageUrl: imageUrl,
+    url: new URL(context.resolvedUrl, config.baseUrl).href,
+  }
+}
+
 export const createSeoMetaProps = (
   region: Region,
   imageUrl: string,
