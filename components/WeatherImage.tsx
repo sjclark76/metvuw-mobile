@@ -5,7 +5,7 @@ export interface WeatherImageProps {
 }
 export const WeatherImage = (props: WeatherImageProps) => {
   const rainStyle = {
-    objectPosition: '0% 70%',
+    objectPosition: '0% 62%',
   }
 
   const satelliteStyle = {
