@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next'
 import { config } from '../config'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { RainChartData } from './api'
+import { RainChartData } from './api/rainChartData'
 interface HomeProps {
   charts: RainChartData[]
 }

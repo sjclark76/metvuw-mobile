@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { useContext, useEffect } from 'react'
 import { GlobalContext } from './GlobalProvider'
 import { Region } from '../shared/region'
-import { RainChartData } from '../pages/api'
+import { RainChartData } from '../pages/api/rainChartData'
 interface DisplayChartsProps {
   region: Region
   charts: RainChartData[]
