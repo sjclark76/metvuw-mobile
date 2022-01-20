@@ -7,7 +7,7 @@ import {
   SeoMetaProps,
 } from '../../components/SeoMeta'
 import { regions, Region as RegionType } from '../../shared/region'
-import { RainChartData } from '../api'
+import { RainChartData } from '../api/rainChartData'
 
 interface HomeProps {
   region: RegionType

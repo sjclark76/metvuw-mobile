@@ -1,1 +1,110 @@
-try{self["workbox:core:5.1.4"]&&_()}catch(e){}const e=(e,...t)=>{let s=e;return t.length>0&&(s+=" :: "+JSON.stringify(t)),s};class t extends Error{constructor(t,s){super(e(t,s)),this.name=t,this.details=s}}try{self["workbox:routing:5.1.4"]&&_()}catch(e){}const s=e=>e&&"object"==typeof e?e:{handle:e};class n{constructor(e,t,n="GET"){this.handler=s(t),this.match=e,this.method=n}}class i extends n{constructor(e,t,s){super(({url:t})=>{const s=e.exec(t.href);if(s&&(t.origin===location.origin||0===s.index))return s.slice(1)},t,s)}}const a=e=>new URL(String(e),location.href).href.replace(new RegExp("^"+location.origin),"");class r{constructor(){this.t=new Map}get routes(){return this.t}addFetchListener(){self.addEventListener("fetch",e=>{const{request:t}=e,s=this.handleRequest({request:t,event:e});s&&e.respondWith(s)})}addCacheListener(){self.addEventListener("message",e=>{if(e.data&&"CACHE_URLS"===e.data.type){const{payload:t}=e.data,s=Promise.all(t.urlsToCache.map(e=>{"string"==typeof e&&(e=[e]);const t=new Request(...e);return this.handleRequest({request:t})}));e.waitUntil(s),e.ports&&e.ports[0]&&s.then(()=>e.ports[0].postMessage(!0))}})}handleRequest({request:e,event:t}){const s=new URL(e.url,location.href);if(!s.protocol.startsWith("http"))return;const{params:n,route:i}=this.findMatchingRoute({url:s,request:e,event:t});let a,r=i&&i.handler;if(!r&&this.s&&(r=this.s),r){try{a=r.handle({url:s,request:e,event:t,params:n})}catch(e){a=Promise.reject(e)}return a instanceof Promise&&this.i&&(a=a.catch(n=>this.i.handle({url:s,request:e,event:t}))),a}}findMatchingRoute({url:e,request:t,event:s}){const n=this.t.get(t.method)||[];for(const i of n){let n;const a=i.match({url:e,request:t,event:s});if(a)return n=a,(Array.isArray(a)&&0===a.length||a.constructor===Object&&0===Object.keys(a).length||"boolean"==typeof a)&&(n=void 0),{route:i,params:n}}return{}}setDefaultHandler(e){this.s=s(e)}setCatchHandler(e){this.i=s(e)}registerRoute(e){this.t.has(e.method)||this.t.set(e.method,[]),this.t.get(e.method).push(e)}unregisterRoute(e){if(!this.t.has(e.method))throw new t("unregister-route-but-not-found-with-method",{method:e.method});const s=this.t.get(e.method).indexOf(e);if(!(s>-1))throw new t("unregister-route-route-not-registered");this.t.get(e.method).splice(s,1)}}let c;const o=()=>(c||(c=new r,c.addFetchListener(),c.addCacheListener()),c);function h(e,s,a){let r;if("string"==typeof e){const t=new URL(e,location.href);r=new n(({url:e})=>e.href===t.href,s,a)}else if(e instanceof RegExp)r=new i(e,s,a);else if("function"==typeof e)r=new n(e,s,a);else{if(!(e instanceof n))throw new t("unsupported-route-type",{moduleName:"workbox-routing",funcName:"registerRoute",paramName:"capture"});r=e}return o().registerRoute(r),r}const u={googleAnalytics:"googleAnalytics",precache:"precache-v2",prefix:"workbox",runtime:"runtime",suffix:"undefined"!=typeof registration?registration.scope:""},l=e=>[u.prefix,e,u.suffix].filter(e=>e&&e.length>0).join("-"),f=e=>e||l(u.precache),d=e=>e||l(u.runtime);function w(e){e.then(()=>{})}const p=new Set;class y{constructor(e,t,{onupgradeneeded:s,onversionchange:n}={}){this.o=null,this.h=e,this.u=t,this.l=s,this.p=n||(()=>this.close())}get db(){return this.o}async open(){if(!this.o)return this.o=await new Promise((e,t)=>{let s=!1;setTimeout(()=>{s=!0,t(new Error("The open request was blocked and timed out"))},this.OPEN_TIMEOUT);const n=indexedDB.open(this.h,this.u);n.onerror=()=>t(n.error),n.onupgradeneeded=e=>{s?(n.transaction.abort(),n.result.close()):"function"==typeof this.l&&this.l(e)},n.onsuccess=()=>{const t=n.result;s?t.close():(t.onversionchange=this.p.bind(this),e(t))}}),this}async getKey(e,t){return(await this.getAllKeys(e,t,1))[0]}async getAll(e,t,s){return await this.getAllMatching(e,{query:t,count:s})}async getAllKeys(e,t,s){return(await this.getAllMatching(e,{query:t,count:s,includeKeys:!0})).map(e=>e.key)}async getAllMatching(e,{index:t,query:s=null,direction:n="next",count:i,includeKeys:a=!1}={}){return await this.transaction([e],"readonly",(r,c)=>{const o=r.objectStore(e),h=t?o.index(t):o,u=[],l=h.openCursor(s,n);l.onsuccess=()=>{const e=l.result;e?(u.push(a?e:e.value),i&&u.length>=i?c(u):e.continue()):c(u)}})}async transaction(e,t,s){return await this.open(),await new Promise((n,i)=>{const a=this.o.transaction(e,t);a.onabort=()=>i(a.error),a.oncomplete=()=>n(),s(a,e=>n(e))})}async g(e,t,s,...n){return await this.transaction([t],s,(s,i)=>{const a=s.objectStore(t),r=a[e].apply(a,n);r.onsuccess=()=>i(r.result)})}close(){this.o&&(this.o.close(),this.o=null)}}y.prototype.OPEN_TIMEOUT=2e3;const g={readonly:["get","count","getKey","getAll","getAllKeys"],readwrite:["add","put","clear","delete"]};for(const[e,t]of Object.entries(g))for(const s of t)s in IDBObjectStore.prototype&&(y.prototype[s]=async function(t,...n){return await this.g(s,t,e,...n)});try{self["workbox:expiration:5.1.4"]&&_()}catch(e){}const m=e=>{const t=new URL(e,location.href);return t.hash="",t.href};class v{constructor(e){this.m=e,this.o=new y("workbox-expiration",1,{onupgradeneeded:e=>this.v(e)})}v(e){const t=e.target.result.createObjectStore("cache-entries",{keyPath:"id"});t.createIndex("cacheName","cacheName",{unique:!1}),t.createIndex("timestamp","timestamp",{unique:!1}),(async e=>{await new Promise((t,s)=>{const n=indexedDB.deleteDatabase(e);n.onerror=()=>{s(n.error)},n.onblocked=()=>{s(new Error("Delete blocked"))},n.onsuccess=()=>{t()}})})(this.m)}async setTimestamp(e,t){const s={url:e=m(e),timestamp:t,cacheName:this.m,id:this.q(e)};await this.o.put("cache-entries",s)}async getTimestamp(e){return(await this.o.get("cache-entries",this.q(e))).timestamp}async expireEntries(e,t){const s=await this.o.transaction("cache-entries","readwrite",(s,n)=>{const i=s.objectStore("cache-entries").index("timestamp").openCursor(null,"prev"),a=[];let r=0;i.onsuccess=()=>{const s=i.result;if(s){const n=s.value;n.cacheName===this.m&&(e&&n.timestamp<e||t&&r>=t?a.push(s.value):r++),s.continue()}else n(a)}}),n=[];for(const e of s)await this.o.delete("cache-entries",e.id),n.push(e.url);return n}q(e){return this.m+"|"+m(e)}}class q{constructor(e,t={}){this.R=!1,this._=!1,this.U=t.maxEntries,this.L=t.maxAgeSeconds,this.m=e,this.N=new v(e)}async expireEntries(){if(this.R)return void(this._=!0);this.R=!0;const e=this.L?Date.now()-1e3*this.L:0,t=await this.N.expireEntries(e,this.U),s=await self.caches.open(this.m);for(const e of t)await s.delete(e);this.R=!1,this._&&(this._=!1,w(this.expireEntries()))}async updateTimestamp(e){await this.N.setTimestamp(e,Date.now())}async isURLExpired(e){if(this.L){return await this.N.getTimestamp(e)<Date.now()-1e3*this.L}return!1}async delete(){this._=!1,await this.N.expireEntries(1/0)}}class R{constructor(e={}){var t;this.cachedResponseWillBeUsed=async({event:e,request:t,cacheName:s,cachedResponse:n})=>{if(!n)return null;const i=this.k(n),a=this.T(s);w(a.expireEntries());const r=a.updateTimestamp(t.url);if(e)try{e.waitUntil(r)}catch(e){}return i?n:null},this.cacheDidUpdate=async({cacheName:e,request:t})=>{const s=this.T(e);await s.updateTimestamp(t.url),await s.expireEntries()},this.M=e,this.L=e.maxAgeSeconds,this.O=new Map,e.purgeOnQuotaError&&(t=()=>this.deleteCacheAndMetadata(),p.add(t))}T(e){if(e===d())throw new t("expire-custom-caches-only");let s=this.O.get(e);return s||(s=new q(e,this.M),this.O.set(e,s)),s}k(e){if(!this.L)return!0;const t=this.j(e);if(null===t)return!0;return t>=Date.now()-1e3*this.L}j(e){if(!e.headers.has("date"))return null;const t=e.headers.get("date"),s=new Date(t).getTime();return isNaN(s)?null:s}async deleteCacheAndMetadata(){for(const[e,t]of this.O)await self.caches.delete(e),await t.delete();this.O=new Map}}const b=(e,t)=>e.filter(e=>t in e),x=async({request:e,mode:t,plugins:s=[]})=>{const n=b(s,"cacheKeyWillBeUsed");let i=e;for(const e of n)i=await e.cacheKeyWillBeUsed.call(e,{mode:t,request:i}),"string"==typeof i&&(i=new Request(i));return i},U=async({cacheName:e,request:t,event:s,matchOptions:n,plugins:i=[]})=>{const a=await self.caches.open(e),r=await x({plugins:i,request:t,mode:"read"});let c=await a.match(r,n);for(const t of i)if("cachedResponseWillBeUsed"in t){const i=t.cachedResponseWillBeUsed;c=await i.call(t,{cacheName:e,event:s,matchOptions:n,cachedResponse:c,request:r})}return c},L=async({cacheName:e,request:s,response:n,event:i,plugins:r=[],matchOptions:c})=>{const o=await x({plugins:r,request:s,mode:"write"});if(!n)throw new t("cache-put-with-no-response",{url:a(o.url)});const h=await(async({request:e,response:t,event:s,plugins:n=[]})=>{let i=t,a=!1;for(const t of n)if("cacheWillUpdate"in t){a=!0;const n=t.cacheWillUpdate;if(i=await n.call(t,{request:e,response:i,event:s}),!i)break}return a||(i=i&&200===i.status?i:void 0),i||null})({event:i,plugins:r,response:n,request:o});if(!h)return;const u=await self.caches.open(e),l=b(r,"cacheDidUpdate"),f=l.length>0?await U({cacheName:e,matchOptions:c,request:o}):null;try{await u.put(o,h)}catch(e){throw"QuotaExceededError"===e.name&&await async function(){for(const e of p)await e()}(),e}for(const t of l)await t.cacheDidUpdate.call(t,{cacheName:e,event:i,oldResponse:f,newResponse:h,request:o})},N=U,k=async({request:e,fetchOptions:s,event:n,plugins:i=[]})=>{if("string"==typeof e&&(e=new Request(e)),n instanceof FetchEvent&&n.preloadResponse){const e=await n.preloadResponse;if(e)return e}const a=b(i,"fetchDidFail"),r=a.length>0?e.clone():null;try{for(const t of i)if("requestWillFetch"in t){const s=t.requestWillFetch,i=e.clone();e=await s.call(t,{request:i,event:n})}}catch(e){throw new t("plugin-error-request-will-fetch",{thrownError:e})}const c=e.clone();try{let t;t="navigate"===e.mode?await fetch(e):await fetch(e,s);for(const e of i)"fetchDidSucceed"in e&&(t=await e.fetchDidSucceed.call(e,{event:n,request:c,response:t}));return t}catch(e){for(const t of a)await t.fetchDidFail.call(t,{error:e,event:n,originalRequest:r.clone(),request:c.clone()});throw e}};try{self["workbox:strategies:5.1.4"]&&_()}catch(e){}const E={cacheWillUpdate:async({response:e})=>200===e.status||0===e.status?e:null};let T;async function M(e,t){const s=e.clone(),n={headers:new Headers(s.headers),status:s.status,statusText:s.statusText},i=t?t(n):n,a=function(){if(void 0===T){const e=new Response("");if("body"in e)try{new Response(e.body),T=!0}catch(e){T=!1}T=!1}return T}()?s.body:await s.blob();return new Response(a,i)}try{self["workbox:precaching:5.1.4"]&&_()}catch(e){}function O(e){if(!e)throw new t("add-to-cache-list-unexpected-type",{entry:e});if("string"==typeof e){const t=new URL(e,location.href);return{cacheKey:t.href,url:t.href}}const{revision:s,url:n}=e;if(!n)throw new t("add-to-cache-list-unexpected-type",{entry:e});if(!s){const e=new URL(n,location.href);return{cacheKey:e.href,url:e.href}}const i=new URL(n,location.href),a=new URL(n,location.href);return i.searchParams.set("__WB_REVISION__",s),{cacheKey:i.href,url:a.href}}class j{constructor(e){this.m=f(e),this.K=new Map,this.P=new Map,this.C=new Map}addToCacheList(e){const s=[];for(const n of e){"string"==typeof n?s.push(n):n&&void 0===n.revision&&s.push(n.url);const{cacheKey:e,url:i}=O(n),a="string"!=typeof n&&n.revision?"reload":"default";if(this.K.has(i)&&this.K.get(i)!==e)throw new t("add-to-cache-list-conflicting-entries",{firstEntry:this.K.get(i),secondEntry:e});if("string"!=typeof n&&n.integrity){if(this.C.has(e)&&this.C.get(e)!==n.integrity)throw new t("add-to-cache-list-conflicting-integrities",{url:i});this.C.set(e,n.integrity)}if(this.K.set(i,e),this.P.set(i,a),s.length>0){const e=`Workbox is precaching URLs without revision info: ${s.join(", ")}\nThis is generally NOT safe. Learn more at https://bit.ly/wb-precache`;console.warn(e)}}}async install({event:e,plugins:t}={}){const s=[],n=[],i=await self.caches.open(this.m),a=await i.keys(),r=new Set(a.map(e=>e.url));for(const[e,t]of this.K)r.has(t)?n.push(e):s.push({cacheKey:t,url:e});const c=s.map(({cacheKey:s,url:n})=>{const i=this.C.get(s),a=this.P.get(n);return this.D({cacheKey:s,cacheMode:a,event:e,integrity:i,plugins:t,url:n})});await Promise.all(c);return{updatedURLs:s.map(e=>e.url),notUpdatedURLs:n}}async activate(){const e=await self.caches.open(this.m),t=await e.keys(),s=new Set(this.K.values()),n=[];for(const i of t)s.has(i.url)||(await e.delete(i),n.push(i.url));return{deletedURLs:n}}async D({cacheKey:e,url:s,cacheMode:n,event:i,plugins:a,integrity:r}){const c=new Request(s,{integrity:r,cache:n,credentials:"same-origin"});let o,h=await k({event:i,plugins:a,request:c});for(const e of a||[])"cacheWillUpdate"in e&&(o=e);if(!(o?await o.cacheWillUpdate({event:i,request:c,response:h}):h.status<400))throw new t("bad-precaching-response",{url:s,status:h.status});h.redirected&&(h=await M(h)),await L({event:i,plugins:a,response:h,request:e===s?c:new Request(e),cacheName:this.m,matchOptions:{ignoreSearch:!0}})}getURLsToCacheKeys(){return this.K}getCachedURLs(){return[...this.K.keys()]}getCacheKeyForURL(e){const t=new URL(e,location.href);return this.K.get(t.href)}async matchPrecache(e){const t=e instanceof Request?e.url:e,s=this.getCacheKeyForURL(t);if(s){return(await self.caches.open(this.m)).match(s)}}createHandler(e=!0){return async({request:s})=>{try{const e=await this.matchPrecache(s);if(e)return e;throw new t("missing-precache-entry",{cacheName:this.m,url:s instanceof Request?s.url:s})}catch(t){if(e)return fetch(s);throw t}}}createHandlerBoundToURL(e,s=!0){if(!this.getCacheKeyForURL(e))throw new t("non-precached-url",{url:e});const n=this.createHandler(s),i=new Request(e);return()=>n({request:i})}}let K;const P=()=>(K||(K=new j),K);const C=(e,t)=>{const s=P().getURLsToCacheKeys();for(const n of function*(e,{ignoreURLParametersMatching:t,directoryIndex:s,cleanURLs:n,urlManipulation:i}={}){const a=new URL(e,location.href);a.hash="",yield a.href;const r=function(e,t=[]){for(const s of[...e.searchParams.keys()])t.some(e=>e.test(s))&&e.searchParams.delete(s);return e}(a,t);if(yield r.href,s&&r.pathname.endsWith("/")){const e=new URL(r.href);e.pathname+=s,yield e.href}if(n){const e=new URL(r.href);e.pathname+=".html",yield e.href}if(i){const e=i({url:a});for(const t of e)yield t.href}}(e,t)){const e=s.get(n);if(e)return e}};let D=!1;function I(e){D||((({ignoreURLParametersMatching:e=[/^utm_/],directoryIndex:t="index.html",cleanURLs:s=!0,urlManipulation:n}={})=>{const i=f();self.addEventListener("fetch",a=>{const r=C(a.request.url,{cleanURLs:s,directoryIndex:t,ignoreURLParametersMatching:e,urlManipulation:n});if(!r)return;let c=self.caches.open(i).then(e=>e.match(r)).then(e=>e||fetch(r));a.respondWith(c)})})(e),D=!0)}const A=[],F={get:()=>A,add(e){A.push(...e)}},S=e=>{const t=P(),s=F.get();e.waitUntil(t.install({event:e,plugins:s}).catch(e=>{throw e}))},W=e=>{const t=P();e.waitUntil(t.activate())};var B;self.addEventListener("message",e=>{e.data&&"SKIP_WAITING"===e.data.type&&self.skipWaiting()}),B={},function(e){P().addToCacheList(e),e.length>0&&(self.addEventListener("install",S),self.addEventListener("activate",W))}([{url:"/_next/static/LFktZnCis6a0sI-RFmVe7/_buildManifest.js",revision:"8e5058f3a9b3ddf3f26720695646e0f6"},{url:"/_next/static/LFktZnCis6a0sI-RFmVe7/_ssgManifest.js",revision:"b6652df95db52feb4daf4eca35380933"},{url:"/_next/static/chunks/881-e90b45056c74ef27ad4c.js",revision:"346f09df18ce5c556825da02fd341712"},{url:"/_next/static/chunks/framework-895f067827ebe11ffe45.js",revision:"4328303147a9363db368b17367be6c71"},{url:"/_next/static/chunks/main-38814c07e58c1b4dde71.js",revision:"fb00559630ecc47f4320186aa734f14f"},{url:"/_next/static/chunks/pages/_app-dc634db04489f64b4f5d.js",revision:"d4f11a2711d99b6507d73a2148852997"},{url:"/_next/static/chunks/pages/_error-737a04e9a0da63c9d162.js",revision:"5b1da81a87ce586bb4a1dd94c2d6e7a5"},{url:"/_next/static/chunks/pages/animation-a8f1784ca1dc2cb31a32.js",revision:"bdd211410ce80478b39fc5ee9ad20f6c"},{url:"/_next/static/chunks/pages/index-16e12ad7ea9ef80d814b.js",revision:"1d28040d1dfca7389b8df4ef054c6f8a"},{url:"/_next/static/chunks/pages/regions/[name]-445c944c99fdf949026d.js",revision:"cecbc1741aa4dac0d5b9dd440484e244"},{url:"/_next/static/chunks/pages/satellite-51a76f9609ba28d32d2d.js",revision:"4ad6aa8fdee1e7f4d25955e0789ef48a"},{url:"/_next/static/chunks/polyfills-a54b4f32bdc1ef890ddd.js",revision:"61b1abffd6a05a761d0ca34120d2d043"},{url:"/_next/static/chunks/webpack-61f1b6d34e7ba415b8c1.js",revision:"17612babf61f5ad20661545c2833810b"},{url:"/_next/static/css/63358b44845953340c18.css",revision:"6a841ecc835087f7a67d482d34f419b3"}]),I(B),h(/.gif.*/,new class{constructor(e={}){this.m=d(e.cacheName),this.I=e.plugins||[],this.A=e.fetchOptions,this.F=e.matchOptions}async handle({event:e,request:s}){"string"==typeof s&&(s=new Request(s));let n,i=await N({cacheName:this.m,request:s,event:e,matchOptions:this.F,plugins:this.I});if(!i)try{i=await this.S(s,e)}catch(e){n=e}if(!i)throw new t("no-response",{url:s.url,error:n});return i}async S(e,t){const s=await k({request:e,event:t,fetchOptions:this.A,plugins:this.I}),n=s.clone(),i=L({cacheName:this.m,request:e,response:n,event:t,plugins:this.I});if(t)try{t.waitUntil(i)}catch(e){}return s}}({cacheName:"images",plugins:[new R({maxAgeSeconds:43200,maxEntries:200,purgeOnQuotaError:!0})]}),"GET"),h(/^https?.*/,new class{constructor(e={}){if(this.m=d(e.cacheName),e.plugins){const t=e.plugins.some(e=>!!e.cacheWillUpdate);this.I=t?e.plugins:[E,...e.plugins]}else this.I=[E];this.W=e.networkTimeoutSeconds||0,this.A=e.fetchOptions,this.F=e.matchOptions}async handle({event:e,request:s}){const n=[];"string"==typeof s&&(s=new Request(s));const i=[];let a;if(this.W){const{id:t,promise:r}=this.B({request:s,event:e,logs:n});a=t,i.push(r)}const r=this.H({timeoutId:a,request:s,event:e,logs:n});i.push(r);let c=await Promise.race(i);if(c||(c=await r),!c)throw new t("no-response",{url:s.url});return c}B({request:e,logs:t,event:s}){let n;return{promise:new Promise(t=>{n=setTimeout(async()=>{t(await this.G({request:e,event:s}))},1e3*this.W)}),id:n}}async H({timeoutId:e,request:t,logs:s,event:n}){let i,a;try{a=await k({request:t,event:n,fetchOptions:this.A,plugins:this.I})}catch(e){i=e}if(e&&clearTimeout(e),i||!a)a=await this.G({request:t,event:n});else{const e=a.clone(),s=L({cacheName:this.m,request:t,response:e,event:n,plugins:this.I});if(n)try{n.waitUntil(s)}catch(e){}}return a}G({event:e,request:t}){return N({cacheName:this.m,request:t,event:e,matchOptions:this.F,plugins:this.I})}}({cacheName:"offlineCache",plugins:[new R({maxEntries:50,purgeOnQuotaError:!0})]}),"GET");
+self.__precacheManifest = [
+  {
+    "url": "/_next//_next/build-manifest.json",
+    "revision": "32c807b0a3189c44a45e16eba98e555d"
+  },
+  {
+    "url": "/_next//_next/react-loadable-manifest.json",
+    "revision": "99914b932bd37a50b983c5e7c90ae93b"
+  },
+  {
+    "url": "/_next//_next/server/middleware-manifest.json",
+    "revision": "4f5ca87a6870c96ad6fb0f65adfdac9b"
+  },
+  {
+    "url": "/_next//_next/static/chunks/242-67c4638f23343535.js",
+    "revision": "ae355aab51b42656"
+  },
+  {
+    "url": "/_next//_next/static/chunks/framework-91d7f78b5b4003c8.js",
+    "revision": "bb1ef0ce123a8622"
+  },
+  {
+    "url": "/_next//_next/static/chunks/main-d2c8830eb0901220.js",
+    "revision": "83fe9b8e1f12bb43"
+  },
+  {
+    "url": "/_next//_next/static/chunks/pages/_app-35483f07190e8757.js",
+    "revision": "1894d4d43970bab3"
+  },
+  {
+    "url": "/_next//_next/static/chunks/pages/_error-2280fa386d040b66.js",
+    "revision": "440bc01e345438ee"
+  },
+  {
+    "url": "/_next//_next/static/chunks/pages/animation-6335d84e307f71e6.js",
+    "revision": "87d2881f225c2c7c"
+  },
+  {
+    "url": "/_next//_next/static/chunks/pages/index-532111af1f0b363f.js",
+    "revision": "c307b2e67420d472"
+  },
+  {
+    "url": "/_next//_next/static/chunks/pages/regions/[name]-e1e02f48bc6d5a4b.js",
+    "revision": "3cf51a2b346291fd"
+  },
+  {
+    "url": "/_next//_next/static/chunks/pages/satellite-b14d8915dbc336cf.js",
+    "revision": "baca62d4fada5f9a"
+  },
+  {
+    "url": "/_next//_next/static/chunks/polyfills-5cd94c89d3acac5f.js",
+    "revision": "99442aec5788bccac9b2f0ead2afdd6b"
+  },
+  {
+    "url": "/_next//_next/static/chunks/webpack-45f9f9587e6c08e1.js",
+    "revision": "d69a2cca823c7d79"
+  },
+  {
+    "url": "/_next//_next/static/css/c9f4e8b4c053ff7f.css",
+    "revision": "1894d4d43970bab3"
+  },
+  {
+    "url": "/_next//_next/static/fbE2wUaHakfKp9qq9CssO/_buildManifest.js",
+    "revision": "f92b50bbe31355f367f26e8bae92710a"
+  },
+  {
+    "url": "/_next//_next/static/fbE2wUaHakfKp9qq9CssO/_middlewareManifest.js",
+    "revision": "fb2823d66b3e778e04a3f681d0d2fb19"
+  },
+  {
+    "url": "/_next//_next/static/fbE2wUaHakfKp9qq9CssO/_ssgManifest.js",
+    "revision": "b6652df95db52feb4daf4eca35380933"
+  }
+];
+
+/**
+ * Welcome to your Workbox-powered service worker!
+ *
+ * You'll need to register this file in your web app and you should
+ * disable HTTP caching for this file too.
+ * See https://goo.gl/nhQhGp
+ *
+ * The rest of the code is auto-generated. Please don't update this file
+ * directly; instead, make changes to your Workbox build configuration
+ * and re-run your build process.
+ * See https://goo.gl/2aRDsh
+ */
+
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
+
+importScripts(
+  "/_next/precache-manifest.65992df6974802c6948b48563b038f2c.js"
+);
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+/**
+ * The workboxSW.precacheAndRoute() method efficiently caches and responds to
+ * requests for URLs in the manifest.
+ * See https://goo.gl/S9QRab
+ */
+self.__precacheManifest = [].concat(self.__precacheManifest || []);
+workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
+
+workbox.routing.registerRoute(/.gif.*/, new workbox.strategies.CacheFirst({ "cacheName":"images", plugins: [new workbox.expiration.Plugin({ maxAgeSeconds: 43200, maxEntries: 200, purgeOnQuotaError: false })] }), 'GET');
+workbox.routing.registerRoute(/^https?.*/, new workbox.strategies.NetworkFirst({ "cacheName":"offlineCache", plugins: [new workbox.expiration.Plugin({ maxEntries: 50, purgeOnQuotaError: false })] }), 'GET');
