@@ -1,3 +1,5 @@
+import LazyLoad from 'react-lazyload'
+
 export interface WeatherImageProps {
   imageSrc: string
   imageAlt: string
@@ -23,13 +25,15 @@ export const WeatherImage = (props: WeatherImageProps) => {
           src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzExIiBoZWlnaHQ9IjQ5MiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
         />
       </div>
-      <img
-        alt={props.imageAlt}
-        src={props.imageSrc}
-        decoding="async"
-        className="absolute top-0 left-0 bottom-0 right-0, box-border p-0 border-none m-auto block w-0, h-0 min-w-full max-w-full min-h-full max-h-full object-cover"
-        style={props.isRainForecast ? rainStyle : satelliteStyle}
-      />
+      <LazyLoad height={200} offset={300}>
+        <img
+          alt={props.imageAlt}
+          src={props.imageSrc}
+          decoding="async"
+          className="absolute top-0 left-0 bottom-0 right-0, box-border p-0 border-none m-auto block w-0, h-0 min-w-full max-w-full min-h-full max-h-full object-cover"
+          style={props.isRainForecast ? rainStyle : satelliteStyle}
+        />
+      </LazyLoad>
     </div>
   )
 }
