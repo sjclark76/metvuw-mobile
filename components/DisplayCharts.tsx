@@ -19,7 +19,7 @@ export const DisplayCharts = (props: DisplayChartsProps) => {
     )} for ${props.region.name}`
 
     setSubmenuText(submenuText)
-  }, [props.region])
+  }, [props.region, props.charts, setSubmenuText])
 
   return (
     <>

@@ -37,7 +37,7 @@ export async function getImageUrls(region: string): Promise<RainChartData[]> {
     console.error(e)
   }
 }
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const region = async (req: NextApiRequest, res: NextApiResponse) => {
   let region = req.query['region']
 
   if (!region) region = 'nz'
@@ -47,3 +47,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   )
   res.status(200).json(rainCharts)
 }
+
+export default region

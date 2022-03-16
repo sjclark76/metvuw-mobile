@@ -5,7 +5,7 @@ import {
   SeoMeta,
   SeoMetaProps,
 } from '../components/SeoMeta'
-import { WeatherImage } from '../components/WeatherImage'
+import WeatherImage from '../components/WeatherImage'
 import { format } from 'date-fns'
 import { SatelliteChartData } from './api/satelliteChartData'
 
@@ -24,7 +24,10 @@ export default function Satellite(props: SatellitePageProps) {
       />
       <div className="flex flex-col items-center">
         {props.images.map((image) => (
-          <div className="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white">
+          <div
+            key={image.imageDate}
+            className="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white"
+          >
             <WeatherImage
               imageSrc={image.url}
               imageAlt={`satellite chart for ${format(
