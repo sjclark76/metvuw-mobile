@@ -5,7 +5,7 @@ export interface WeatherImageProps {
   imageAlt: string
   isRainForecast: boolean
 }
-export const WeatherImage = (props: WeatherImageProps) => {
+const WeatherImage = (props: WeatherImageProps) => {
   const rainStyle = {
     objectPosition: '0% 62%',
   }
@@ -37,3 +37,4 @@ export const WeatherImage = (props: WeatherImageProps) => {
     </div>
   )
 }
+export default WeatherImage
