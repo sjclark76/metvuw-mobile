@@ -21,7 +21,7 @@ const securityHeaders = function () {
     {
       key: 'Content-Security-Policy',
       value:
-        "frame-ancestors 'none'; script-src 'self' 'sha256-QYgGfxAvFb95Wfr8/J6nXSuhYgCzYgx3g/AeaN1F5J8=' *.googletagmanager.com *.google-analytics.com; img-src 'self' data: https://*  *.metvuw.com",
+        "frame-ancestors 'none'; script-src 'self' 'sha256-Qa/ZW60QViu4ZpTBXb6ugMmol6ZT2Wq21mwewHgrxPk=' 'sha256-QYgGfxAvFb95Wfr8/J6nXSuhYgCzYgx3g/AeaN1F5J8=' *.googletagmanager.com *.google-analytics.com; img-src 'self' data: https://*  *.metvuw.com",
     },
     {
       key: 'X-Content-Type-Options',
