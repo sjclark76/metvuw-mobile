@@ -18,7 +18,7 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <Partytown debug={true} forward={['dataLayer.push']} />
+          <Partytown debug={false} forward={['dataLayer.push']} />
           <script
             async
             type="text/partytown"
