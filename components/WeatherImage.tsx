@@ -25,7 +25,7 @@ const WeatherImage = (props: WeatherImageProps) => {
           src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzExIiBoZWlnaHQ9IjQ5MiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
         />
       </div>
-      <LazyLoad height={200} offset={600}>
+      <LazyLoad height={200} offset={300}>
         <img
           alt={props.imageAlt}
           src={props.imageSrc}

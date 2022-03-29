@@ -1,32 +1,20 @@
-import Document, {
-  DocumentContext,
-  Head,
-  Html,
-  Main,
-  NextScript,
-} from 'next/document'
-import { Partytown } from '@builder.io/partytown/react'
-
+import Document, { Html, Head, Main, NextScript } from 'next/document'
 class MyDocument extends Document {
-  static async getInitialProps(ctx: DocumentContext) {
+  static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx)
-
-    return initialProps
+    return { ...initialProps }
   }
 
   render() {
     return (
       <Html lang="en">
         <Head>
-          <Partytown debug={false} forward={['dataLayer.push']} />
           <script
             async
-            type="text/partytown"
             src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
           ></script>
 
           <script
-            type="text/partytown"
             dangerouslySetInnerHTML={{
               __html: `
             window.dataLayer = window.dataLayer || [];
