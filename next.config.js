@@ -18,11 +18,11 @@ const securityHeaders = function () {
       key: 'X-DNS-Prefetch-Control',
       value: 'on',
     },
-    // {
-    //   key: 'Content-Security-Policy',
-    //   value:
-    //     "frame-ancestors 'none'; script-src 'unsafe-inline' 'sha256-Qa/ZW60QViu4ZpTBXb6ugMmol6ZT2Wq21mwewHgrxPk=' 'sha256-QYgGfxAvFb95Wfr8/J6nXSuhYgCzYgx3g/AeaN1F5J8=' *.googletagmanager.com *.google-analytics.com; img-src 'self' data: https://*  *.metvuw.com",
-    // },
+    {
+      key: 'Content-Security-Policy',
+      value:
+        "frame-ancestors 'none'; script-src 'self' 'unsafe-inline' 'sha256-Qa/ZW60QViu4ZpTBXb6ugMmol6ZT2Wq21mwewHgrxPk=' 'sha256-QYgGfxAvFb95Wfr8/J6nXSuhYgCzYgx3g/AeaN1F5J8=' *.googletagmanager.com *.google-analytics.com; img-src 'self' data: https://*  *.metvuw.com",
+    },
     {
       key: 'X-Content-Type-Options',
       value: 'nosniff',
