@@ -1,4 +1,3 @@
-import { DisplayCharts } from '../components/DisplayCharts'
 import { GetServerSideProps } from 'next'
 import { config } from '../config'
 import {
@@ -8,6 +7,7 @@ import {
 } from '../components/SeoMeta'
 import { Region, regions } from '../shared/region'
 import { RainChartData } from './api/rainChartData'
+import WeatherCharts from '../components/WeatherCharts'
 interface HomeProps {
   region: Region
   charts: RainChartData[]
@@ -22,7 +22,7 @@ export default function Home(props: HomeProps) {
         url={props.meta.url}
         imageUrl={props.meta.imageUrl}
       />
-      <DisplayCharts charts={props.charts} region={props.region} />
+      <WeatherCharts charts={props.charts} region={props.region} />
     </>
   )
 }
