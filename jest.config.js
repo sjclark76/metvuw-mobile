@@ -5,8 +5,8 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/importJestDOM.ts'],
   coverageThreshold: {
     global: {
-      statements: 50,
-      branches: 90,
+      statements: 10,
+      branches: 40,
       functions: 0,
       lines: 0,
     },
