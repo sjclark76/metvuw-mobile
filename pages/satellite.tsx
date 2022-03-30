@@ -5,7 +5,7 @@ import {
   SeoMeta,
   SeoMetaProps,
 } from '../components/SeoMeta'
-import WeatherImage from '../components/WeatherImage'
+import WeatherImage from '../components/WeatherImage/WeatherImage'
 import { format } from 'date-fns'
 import { SatelliteChartData } from './api/satelliteChartData'
 

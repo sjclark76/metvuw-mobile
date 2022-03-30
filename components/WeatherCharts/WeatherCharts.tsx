@@ -1,15 +1,14 @@
-import { Chart } from './Chart'
+import { Chart } from '../Chart'
 import { format } from 'date-fns'
 import { useContext, useEffect } from 'react'
-import { GlobalContext } from './GlobalProvider'
-import { Region } from '../shared/region'
-import { RainChartData } from '../pages/api/rainChartData'
+import { GlobalContext } from '../GlobalProvider'
+import { Region } from '../../shared/region'
+import { RainChartData } from '../../pages/api/rainChartData'
 interface DisplayChartsProps {
   region: Region
   charts: RainChartData[]
 }
-
-export const DisplayCharts = (props: DisplayChartsProps) => {
+const WeatherCharts = (props: DisplayChartsProps) => {
   const { setSubmenuText } = useContext(GlobalContext)
 
   useEffect(() => {
@@ -31,3 +30,5 @@ export const DisplayCharts = (props: DisplayChartsProps) => {
     </>
   )
 }
+
+export default WeatherCharts
