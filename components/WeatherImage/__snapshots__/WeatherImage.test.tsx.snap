@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`blah it 1`] = `
+exports[`Weather Image it should render correctly 1`] = `
 <div>
   <div
     class="inline-block max-w-full overflow-hidden relative box-border m-0"
