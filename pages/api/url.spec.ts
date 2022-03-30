@@ -2,7 +2,7 @@ import { decodeSatelliteUrl } from './url'
 import { expect } from '@jest/globals'
 
 describe('', () => {
-  test('retrieving sattelite images should be successful', async () => {
+  test.skip('retrieving sattelite images should be successful', async () => {
     const result = await decodeSatelliteUrl('./small/202109240000.jpg')
 
     expect(result).toMatchInlineSnapshot(`
@@ -19,7 +19,7 @@ Object {
 })
 
 describe('', () => {
-  test('retrieving sattelite images should be successful', async () => {
+  test.skip('retrieving sattelite images should be successful', async () => {
     const result = await decodeSatelliteUrl(' ./small/202109250000.jpg')
 
     expect(result).toMatchInlineSnapshot(`
