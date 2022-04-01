@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { useContext, useState } from 'react'
-import { DropDown } from './DropDown'
-import { Region } from '../shared/region'
-import { GlobalContext } from './GlobalProvider'
+import { DropDown } from '../DropDown'
+import { Region } from '../../shared/region'
+import { GlobalContext } from '../GlobalProvider'
 
 const nzLinks: Region[] = [
   { name: 'New Zealand', code: 'nz' },
@@ -39,7 +39,7 @@ const worldLinks: Region[] = [
   { name: 'South Africa', code: 'safrica' },
 ]
 
-export const Navbar = () => {
+const Navbar = () => {
   const [active, setActive] = useState(false)
   const handleClick = () => {
     setActive(!active)
@@ -89,7 +89,7 @@ export const Navbar = () => {
         </Link>
         <button
           aria-label="Open Menu"
-          className=" inline-flex p-3 hover:bg-blue-600 rounded lg:hidden text-white ml-auto hover:text-white outline-none"
+          className="lg:hidden inline-flex p-3 hover:bg-blue-600 rounded text-white ml-auto hover:text-white outline-none"
           onClick={handleClick}
         >
           <svg
@@ -141,3 +141,5 @@ export const Navbar = () => {
     </div>
   )
 }
+
+export default Navbar
