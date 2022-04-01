@@ -1,43 +1,14 @@
 import Link from 'next/link'
 import { useContext, useState } from 'react'
-import { DropDown } from '../DropDown'
-import { Region } from '../../shared/region'
+import DropDown from '../DropDown/DropDown'
+import {
+  australiaLinks,
+  europeLinks,
+  nzLinks,
+  pacificLinks,
+  worldLinks,
+} from '../../shared/region'
 import { GlobalContext } from '../GlobalProvider'
-
-const nzLinks: Region[] = [
-  { name: 'New Zealand', code: 'nz' },
-  { name: 'North Island', code: 'nzni' },
-  { name: 'South Island', code: 'nzsi' },
-]
-const australiaLinks: Region[] = [
-  { name: 'Victoria & Tasmania', code: 'victoria' },
-  { name: 'New South Wales', code: 'nsw' },
-  { name: 'Western Australia', code: 'waussie' },
-  { name: 'Perth', code: 'swaussie' },
-  { name: 'Queensland', code: 'queensland' },
-  { name: 'South Australia', code: 'saussie' },
-  { name: 'South East Australia', code: 'seaussie' },
-]
-const pacificLinks: Region[] = [
-  { name: 'New Caledonia', code: 'newcaledonia' },
-  { name: 'Fiji', code: 'fiji' },
-  { name: 'South West Pacific', code: 'swp' },
-  { name: 'Fiji - NZ', code: 'ocean' },
-]
-const europeLinks: Region[] = [
-  { name: 'Europe', code: 'europe' },
-  { name: 'United Kingdom', code: 'uk' },
-  { name: 'Estonia', code: 'estonia' },
-  { name: 'Turkey', code: 'turkey' },
-]
-const worldLinks: Region[] = [
-  { name: 'World', code: 'world' },
-  { name: 'South Atlantic', code: 'satlantic' },
-  { name: 'North Atlantic', code: 'natlantic' },
-  { name: 'USA', code: 'usa' },
-  { name: 'Japan', code: 'japan' },
-  { name: 'South Africa', code: 'safrica' },
-]
 
 const Navbar = () => {
   const [active, setActive] = useState(false)

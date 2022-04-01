@@ -1,9 +1,9 @@
-import { Chart } from '../Chart'
 import { format } from 'date-fns'
 import { useContext, useEffect } from 'react'
 import { GlobalContext } from '../GlobalProvider'
 import { Region } from '../../shared/region'
 import { RainChartData } from '../../pages/api/rainChartData'
+import { WeatherChart } from './WeatherChart'
 interface DisplayChartsProps {
   region: Region
   charts: RainChartData[]
@@ -24,7 +24,11 @@ const WeatherCharts = (props: DisplayChartsProps) => {
     <>
       <div className="flex flex-col items-center">
         {props.charts.map((chart) => (
-          <Chart key={chart.forecastDate} chart={chart} region={props.region} />
+          <WeatherChart
+            key={chart.forecastDate}
+            chart={chart}
+            region={props.region}
+          />
         ))}
       </div>
     </>

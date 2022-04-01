@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavBar Component should render correctly 1`] = `
+<div>
+  <div
+    class="group inline-block relative"
+  >
+    <button
+      class="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex"
+    >
+      <span
+        class="mr-1"
+      >
+        My Heading
+      </span>
+      <svg
+        class="fill-current h-4 w-4"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+        />
+      </svg>
+    </button>
+    <ul
+      class="absolute w-full	hidden rounded-b text-white font-bold bg-blue-400  group-hover:block z-50"
+    >
+      <li
+        class="hover:bg-blue-500 rounded"
+      >
+        <a
+          class="max-w-full py-2 px-4 block whitespace-no-wrap "
+          href="/regions/nz"
+        >
+          New Zealand
+        </a>
+      </li>
+      <li
+        class="hover:bg-blue-500 rounded"
+      >
+        <a
+          class="max-w-full py-2 px-4 block whitespace-no-wrap "
+          href="/regions/nzni"
+        >
+          North Island
+        </a>
+      </li>
+      <li
+        class="hover:bg-blue-500 rounded"
+      >
+        <a
+          class="max-w-full py-2 px-4 block whitespace-no-wrap "
+          href="/regions/nzsi"
+        >
+          South Island
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+`;

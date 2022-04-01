@@ -1,14 +1,14 @@
 import { format } from 'date-fns'
-import { Region } from '../shared/region'
-import { RainChartData } from '../pages/api/rainChartData'
-import WeatherImage from './WeatherImage/WeatherImage'
+import { Region } from '../../shared/region'
+import { RainChartData } from '../../pages/api/rainChartData'
+import WeatherImage from '../WeatherImage/WeatherImage'
 
-interface ChartsProps {
+interface Props {
   chart: RainChartData
   region: Region
 }
 
-export const Chart = (props: ChartsProps) => {
+export function WeatherChart(props: Props): JSX.Element {
   const altTag = `${props.region.name} forecast chart for ${format(
     new Date(props.chart.forecastDate),
     'PPPPp'

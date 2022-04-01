@@ -5,7 +5,7 @@ import {
   SeoMeta,
   SeoMetaProps,
 } from '../components/SeoMeta'
-import { Region, regions } from '../shared/region'
+import { findRegionByCode, Region } from '../shared/region'
 import { RainChartData } from './api/rainChartData'
 import WeatherCharts from '../components/WeatherCharts'
 interface HomeProps {
@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const response = await fetch(apiURl.href)
   const charts = await response.json()
 
-  const matchedRegion = regions.find((value) => value.code === 'nz')
+  const matchedRegion = findRegionByCode('nz')
 
   const meta: SeoMetaProps = createSeoMetaProps(
     matchedRegion,

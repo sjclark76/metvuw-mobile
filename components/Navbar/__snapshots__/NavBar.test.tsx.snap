@@ -53,7 +53,7 @@ exports[`NavBar Component should render correctly 1`] = `
       </a>
       <button
         aria-label="Open Menu"
-        class=" inline-flex p-3 hover:bg-blue-600 rounded lg:hidden text-white ml-auto hover:text-white outline-none"
+        class="lg:hidden inline-flex p-3 hover:bg-blue-600 rounded text-white ml-auto hover:text-white outline-none"
       >
         <svg
           class="w-6 h-6"

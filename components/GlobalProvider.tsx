@@ -14,7 +14,7 @@ const GlobalProvider: FC = ({ children }) => {
     contextDefaultValues.submenuText
   )
 
-  const setSubmenuText = (newTodo: string) => setText(newTodo)
+  const setSubmenuText = (txt: string) => setText(txt)
 
   return (
     <GlobalContext.Provider
