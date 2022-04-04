@@ -15,7 +15,10 @@ const WeatherImage = (props: WeatherImageProps) => {
   }
 
   return (
-    <div className="inline-block max-w-full overflow-hidden relative box-border m-0">
+    <div
+      data-testid="weather-image"
+      className="inline-block max-w-full overflow-hidden relative box-border m-0"
+    >
       <div className="box-border block, max-w-full">
         <img
           className="max-w-full block m-0 border-none p-0"
