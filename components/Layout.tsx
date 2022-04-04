@@ -1,5 +1,5 @@
-import { Navbar } from './NavBar'
 import GlobalProvider from './GlobalProvider'
+import Navbar from './Navbar'
 
 export default function Layout({ children }) {
   return (

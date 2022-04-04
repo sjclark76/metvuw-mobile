@@ -1,4 +1,4 @@
-import { Region } from '../shared/region'
+import { Region } from '../../shared/region'
 
 interface DropDownItemProps {
   region: Region

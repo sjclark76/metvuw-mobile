@@ -1,12 +1,11 @@
 import { DropDownItem } from './DropDownItem'
-import { Region } from '../shared/region'
+import { Region } from '../../shared/region'
 
 interface DropDownProps {
   heading: string
   links: Region[]
 }
-
-export const DropDown = (props: DropDownProps) => {
+const DropDown = (props: DropDownProps) => {
   return (
     <>
       <div className="group inline-block relative">
@@ -29,3 +28,5 @@ export const DropDown = (props: DropDownProps) => {
     </>
   )
 }
+
+export default DropDown
