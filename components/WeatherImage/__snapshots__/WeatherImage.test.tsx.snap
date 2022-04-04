@@ -4,6 +4,7 @@ exports[`Weather Image it should render correctly 1`] = `
 <div>
   <div
     class="inline-block max-w-full overflow-hidden relative box-border m-0"
+    data-testid="weather-image"
   >
     <div
       class="box-border block, max-w-full"
