@@ -19,9 +19,10 @@ jobs:
       - name: Run Cypress 🌲
         uses: cypress-io/github-action@v2
         with:
-          command: cypress:ci
+          command: npm run cypress:ci
+          config: baseUrl=${{ github.event.deployment_status.target_url }},fixturesFolder=false,supportFile=false,pluginsFile=false,projectId=y2sysj
         env:
-          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          #CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
       # if you are NOT using Cypress GitHub Integration App, then set commit status manually
