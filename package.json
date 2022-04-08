@@ -8,7 +8,8 @@
     "start": "next start",
     "test": "npx jest --runInBand --detectOpenHandles --colors --verbose --reporters=default",
     "test:ci": "npx jest --ci --runInBand --silent --colors --coverage",
-    "cypress:ci": "cypress-expect run --browser chrome --passing 2"
+    "cypress:local": "cypress-expect run --headed --browser  chrome --passing 3",
+    "cypress:ci": "cypress-expect run --browser chrome --passing 3"
   },
   "dependencies": {
     "@types/cheerio": "0.22.31",
