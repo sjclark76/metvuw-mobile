@@ -19,7 +19,7 @@ export async function getSatelliteImageUrls(): Promise<SatelliteChartData[]> {
       let satelliteChartData = decodeSatelliteUrl(relativeUrl)
 
       const url = new URL(
-        `satellite/big/${relativeUrl.substr(8)}`,
+        `satellite/big/${relativeUrl.substring(8)}`,
         metvuwBaseUrl
       )
 
@@ -37,6 +37,7 @@ export async function getSatelliteImageUrls(): Promise<SatelliteChartData[]> {
 
 const satellite = async (req: NextApiRequest, res: NextApiResponse) => {
   const satelliteImages: SatelliteChartData[] = await getSatelliteImageUrls()
+  console.debug('satellite images', satelliteImages)
   res.status(200).json(satelliteImages)
 }
 
