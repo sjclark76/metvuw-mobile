@@ -1,3 +1,3 @@
 export const config = {
-  baseUrl: process.env.BASE_URL,
+  baseUrl: process.env.VERCEL_URL,
 }
