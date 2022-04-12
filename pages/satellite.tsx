@@ -52,8 +52,9 @@ export default function Satellite(props: SatellitePageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const apiURl = new URL(`api/satellite/`, config.baseUrl)
+  const apiURl = new URL(`api/satellite`, config.baseUrl)
   const response = await fetch(apiURl.href)
+
   const satelliteImages: SatelliteChartData[] = await response.json()
 
   const meta = createGeneralSeoMetaProps(

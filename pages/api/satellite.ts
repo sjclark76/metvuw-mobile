@@ -19,7 +19,7 @@ export async function getSatelliteImageUrls(): Promise<SatelliteChartData[]> {
       let satelliteChartData = decodeSatelliteUrl(relativeUrl)
 
       const url = new URL(
-        `satellite/big/${relativeUrl.substr(8)}`,
+        `satellite/big/${relativeUrl.substring(8)}`,
         metvuwBaseUrl
       )
 
