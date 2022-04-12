@@ -8,9 +8,9 @@ describe('satellite  page', () => {
     cy.visit('/satellite')
   })
 
-  // it('should have a forecast issued banner', () => {
-  //   cy.contains('Forecast issued at')
-  // })
+  it('should have a forecast issued banner', () => {
+    cy.contains('Forecast issued at')
+  })
 
   it('should have at least one weather image', () => {
     cy.get('[data-testid="weather-image"]').should('have.length.greaterThan', 1)
