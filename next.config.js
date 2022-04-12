@@ -44,15 +44,15 @@ const securityHeaders = function () {
 
 const nextConfig = {
   /* config options here */
-  // async headers() {
-  //   return [
-  //     {
-  //       // Apply these headers to all routes in your application.
-  //       source: '/(.*)',
-  //       headers: securityHeaders(),
-  //     },
-  //   ]
-  // },
+  async headers() {
+    return [
+      {
+        // Apply these headers to all routes in your application.
+        source: '/(.*)',
+        headers: securityHeaders(),
+      },
+    ]
+  },
   workboxOpts: {
     swDest: '../public/service-worker.js',
     runtimeCaching: [
