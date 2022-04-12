@@ -37,7 +37,7 @@ export async function getSatelliteImageUrls(): Promise<SatelliteChartData[]> {
 
 const satellite = async (req: NextApiRequest, res: NextApiResponse) => {
   const satelliteImages: SatelliteChartData[] = await getSatelliteImageUrls()
-  console.debug('satellite images', satelliteImages)
+  console.log('satellite images', satelliteImages)
   res.status(200).json(satelliteImages)
 }
 
