@@ -55,7 +55,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const apiURl = new URL(`api/satellite`, config.baseUrl)
   const response = await fetch(apiURl.href)
   console.log('retrieved response', response.status, response.statusText)
-  const satelliteImages: SatelliteChartData[] = await response.json()
+  const satelliteImages: SatelliteChartData[] = [] // await response.json()
 
   const meta = createGeneralSeoMetaProps(
     'Satellite',
