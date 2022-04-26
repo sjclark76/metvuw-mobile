@@ -9,7 +9,7 @@ const contextDefaultValues: GlobalContextState = {
 export const GlobalContext =
   createContext<GlobalContextState>(contextDefaultValues)
 
-const GlobalProvider: FC = ({ children }) => {
+const GlobalProvider: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const [submenuText, setText] = useState<string>(
     contextDefaultValues.submenuText
   )
