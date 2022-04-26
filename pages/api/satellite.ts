@@ -1,12 +1,15 @@
 import axios from 'axios'
 import cheerio from 'cheerio'
-import { decodeSatelliteUrl, metvuwBaseUrl } from './url'
+import { decodeSatelliteUrl } from './url'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { SatelliteChartData } from './satelliteChartData'
+import { config } from '../../config'
 
 export async function getSatelliteImageUrls(): Promise<SatelliteChartData[]> {
   try {
-    const response = await axios.get(new URL('satellite', metvuwBaseUrl).href)
+    const response = await axios.get(
+      new URL('satellite', config.metvuwBaseUrl).href
+    )
 
     let rawHtml = response.data
 
@@ -20,7 +23,7 @@ export async function getSatelliteImageUrls(): Promise<SatelliteChartData[]> {
 
       const url = new URL(
         `satellite/big/${relativeUrl.substring(8)}`,
-        metvuwBaseUrl
+        config.cloudFrontUrl
       )
 
       return {

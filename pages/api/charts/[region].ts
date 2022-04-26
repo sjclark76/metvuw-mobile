@@ -1,14 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
-import { decodeRainUrl, metvuwBaseUrl } from '../url'
+import { decodeRainUrl } from '../url'
 import { RainChartData } from '../rainChartData'
+import { config } from '../../../config'
 
 export async function getImageUrls(region: string): Promise<RainChartData[]> {
   try {
     const url = new URL(
       `forecast/forecast.php?type=rain&region=${region}&noofdays=10`,
-      metvuwBaseUrl
+      config.metvuwBaseUrl
     )
     const response = await axios.get(url.href)
 
@@ -22,9 +23,8 @@ export async function getImageUrls(region: string): Promise<RainChartData[]> {
       const relativeUrl = element.attribs.src
       const decodedSrc = decodeRainUrl(relativeUrl)
       const url = new URL(
-        `forecast/${relativeUrl.substr(2)}`,
-        //'https://dpucyvo9dklo9.cloudfront.net'
-        metvuwBaseUrl
+        `forecast/${relativeUrl.substring(2)}`,
+        config.cloudFrontUrl
       )
       return {
         ...decodedSrc,

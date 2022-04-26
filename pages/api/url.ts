@@ -1,8 +1,6 @@
 import { RainChartData } from './rainChartData'
 import { SatelliteChartData } from './satelliteChartData'
 
-export const metvuwBaseUrl = 'https://www.metvuw.com/'
-
 export function decodeRainUrl(relativeUrl: string): RainChartData {
   console.log(relativeUrl)
 
