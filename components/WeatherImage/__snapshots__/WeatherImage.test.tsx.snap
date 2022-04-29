@@ -17,14 +17,14 @@ exports[`Weather Image it should render correctly 1`] = `
         src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzExIiBoZWlnaHQ9IjQ5MiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
       />
     </div>
-    <div
-      class="lazyload-wrapper "
-    >
-      <div
-        class="lazyload-placeholder"
-        style="height: 200px;"
-      />
-    </div>
+    <img
+      alt="foo"
+      class="absolute top-0 left-0 bottom-0 right-0, box-border p-0 border-none m-auto block w-0, h-0 min-w-full max-w-full  max-h-full object-cover"
+      decoding="async"
+      loading="lazy"
+      src="baa"
+      style="object-position: 0% 62%; min-height: 85%;"
+    />
   </div>
 </div>
 `;
