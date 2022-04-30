@@ -3,23 +3,12 @@
 exports[`Weather Image it should render correctly 1`] = `
 <div>
   <div
-    class="inline-block max-w-full overflow-hidden relative box-border m-0"
+    class="aspectRatioBox"
     data-testid="weather-image"
   >
-    <div
-      class="box-border block, max-w-full"
-    >
-      <img
-        alt=""
-        aria-hidden="true"
-        class="max-w-full block m-0 border-none p-0"
-        role="presentation"
-        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzExIiBoZWlnaHQ9IjQ5MiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
-      />
-    </div>
     <img
       alt="foo"
-      class="absolute top-0 left-0 bottom-0 right-0, box-border p-0 border-none m-auto block w-0, h-0 min-w-full max-w-full  max-h-full object-cover"
+      class="croppedImage"
       decoding="async"
       loading="lazy"
       src="baa"
