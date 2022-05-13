@@ -16,12 +16,14 @@ module.exports = {
   },
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   setupFilesAfterEnv: ['<rootDir>/importJestDOM.ts'],
+  collectCoverage: true,
+  //collectCoverageFrom: ['./components/**', './pages/**'],
   coverageThreshold: {
     global: {
-      statements: 10,
-      branches: 40,
+      statements: 75,
+      branches: 45,
       functions: 0,
-      lines: 0,
+      lines: 82,
     },
   },
 }
