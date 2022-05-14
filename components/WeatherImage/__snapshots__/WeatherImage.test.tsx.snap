@@ -8,10 +8,10 @@ exports[`Weather Image it should render correctly 1`] = `
   >
     <img
       alt="foo"
-      class="croppedImage"
+      class="croppedImage loading"
       decoding="async"
       loading="lazy"
-      src="baa"
+      src="/placeholder.png"
       style="object-position: 0% 62%; min-height: 85%;"
     />
   </div>

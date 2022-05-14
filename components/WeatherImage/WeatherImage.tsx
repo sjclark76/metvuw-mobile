@@ -1,4 +1,5 @@
 import styles from './WeatherImage.module.css'
+import ProgressiveImg from '../ProgressiveImg'
 
 export interface WeatherImageProps {
   imageSrc: string
@@ -24,7 +25,10 @@ const WeatherImage = ({
       data-testid="weather-image"
       className={isRainForecast ? styles.aspectRatioBox : null}
     >
-      <img
+      <ProgressiveImg
+        placeholderSrc={
+          isRainForecast ? '/placeholder.png' : '/satellite-compressed.jpg'
+        }
         loading="lazy"
         alt={imageAlt}
         src={imageSrc}
