@@ -1,0 +1,61 @@
+import { GetObjectRequest, PutObjectRequest } from 'aws-sdk/clients/s3'
+import { config } from '../../../config'
+import { S3 } from 'aws-sdk'
+import { SatelliteChartData } from '../types/satelliteChartData'
+
+const s3 = new S3({
+  region: 'ap-southeast-2',
+  accessKeyId: process.env.ACCESS_KEY,
+  secretAccessKey: process.env.SECRET_KEY,
+  signatureVersion: 'v4',
+})
+
+export const buildKeyName = (region: string) => `${region}.json`
+
+export const s3upload = function (params: PutObjectRequest) {
+  return new Promise((resolve, reject) => {
+    s3.createBucket(
+      {
+        Bucket: config.bucketName /* Put your bucket name */,
+      },
+      function () {
+        s3.putObject(params, function (err, data) {
+          if (err) {
+            reject(err)
+          } else {
+            console.log('Successfully uploaded data to bucket')
+            resolve(data)
+          }
+        })
+      }
+    )
+  })
+}
+
+export const s3download = function (
+  params: GetObjectRequest
+): Promise<SatelliteChartData[]> {
+  console.debug('bucket', process.env.BUCKET_NAME)
+  return new Promise((resolve, reject) => {
+    s3.createBucket(
+      {
+        Bucket: config.bucketName /* Put your bucket name */,
+      },
+      () => {
+        console.debug('params', params)
+        s3.getObject(params, (err, data) => {
+          if (err) {
+            console.debug('error:', err)
+            reject(err)
+          } else {
+            if (data.Body) {
+              var file = Buffer.from(data.Body as ArrayBuffer).toString('utf8')
+
+              resolve(JSON.parse(file))
+            }
+          }
+        })
+      }
+    )
+  })
+}

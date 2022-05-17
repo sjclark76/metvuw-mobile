@@ -17,7 +17,8 @@ module.exports = {
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   setupFilesAfterEnv: ['<rootDir>/importJestDOM.ts'],
   collectCoverage: true,
-  //collectCoverageFrom: ['./components/**', './pages/**'],
+  collectCoverageFrom: ['./components/**', './pages/**'],
+  coveragePathIgnorePatterns: ['/node_modules/', '/__snapshots__/'],
   coverageThreshold: {
     global: {
       statements: 75,

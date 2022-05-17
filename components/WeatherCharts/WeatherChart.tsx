@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import { Region } from '../../shared/region'
-import { RainChartData } from '../../pages/api/rainChartData'
+import { RainChartData } from '../../pages/api/types/rainChartData'
 import WeatherImage from '../WeatherImage/WeatherImage'
 
 interface Props {
