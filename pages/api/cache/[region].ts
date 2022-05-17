@@ -30,8 +30,8 @@ export async function getImageUrls(region: string): Promise<RainChartData[]> {
       return {
         ...decodedSrc,
         url: url.href,
-        width: element.attribs.width,
-        height: element.attribs.height,
+        width: +element.attribs.width,
+        height: +element.attribs.height,
       }
     })
   } catch (e) {

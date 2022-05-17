@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "test": "npx jest --runInBand --detectOpenHandles --colors --verbose --reporters=default",
+    "test:watch": "npx jest --watch --runInBand --detectOpenHandles --colors --verbose --reporters=default",
     "test:ci": "npx jest --ci --runInBand --silent --colors --coverageDirectory=reports/coverage",
     "cypress:local": "cypress-expect run --headed --browser  chrome --passing 3",
     "cypress:ci": "cypress-expect run --browser chrome --passing 3"

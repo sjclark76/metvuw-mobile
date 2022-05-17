@@ -29,8 +29,8 @@ async function retrieveSatelliteImages(): Promise<SatelliteChartData[]> {
     return {
       ...satelliteChartData,
       url: url.href,
-      width: element.attribs.width,
-      height: element.attribs.height,
+      width: +element.attribs.width,
+      height: +element.attribs.height,
     }
   })
 }
