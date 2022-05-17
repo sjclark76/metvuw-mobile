@@ -23,7 +23,6 @@ export const s3upload = function (params: PutObjectRequest) {
           if (err) {
             reject(err)
           } else {
-            console.log('Successfully uploaded data to bucket')
             resolve(data)
           }
         })
@@ -35,17 +34,14 @@ export const s3upload = function (params: PutObjectRequest) {
 export const s3download = function (
   params: GetObjectRequest
 ): Promise<SatelliteChartData[]> {
-  console.debug('bucket', process.env.BUCKET_NAME)
   return new Promise((resolve, reject) => {
     s3.createBucket(
       {
         Bucket: config.bucketName /* Put your bucket name */,
       },
       () => {
-        console.debug('params', params)
         s3.getObject(params, (err, data) => {
           if (err) {
-            console.debug('error:', err)
             reject(err)
           } else {
             if (data.Body) {

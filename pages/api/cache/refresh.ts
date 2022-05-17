@@ -38,9 +38,9 @@ export async function cacheImages(): Promise<CacheRefeshResult> {
     })
 }
 
-const refresh = async (req: NextApiRequest, res: NextApiResponse) => {
+const refreshCacheApi = async (req: NextApiRequest, res: NextApiResponse) => {
   const result = await cacheImages()
   res.status(200).json(result)
 }
 
-export default refresh
+export default refreshCacheApi

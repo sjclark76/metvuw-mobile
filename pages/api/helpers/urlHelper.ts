@@ -2,8 +2,6 @@ import { RainChartData } from '../types/rainChartData'
 import { SatelliteChartData } from '../types/satelliteChartData'
 
 export function decodeRainUrl(relativeUrl: string): RainChartData {
-  console.log(relativeUrl)
-
   // ./2021060500/rain-nz-2021060500-006.gif
 
   const slice = relativeUrl.slice(-18).slice(0, 14)

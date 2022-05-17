@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { config } from '../../../config'
 import { buildKeyName, s3download } from '../helpers/s3Helper'
 
-const region = async (req: NextApiRequest, res: NextApiResponse) => {
+const regionDataApi = async (req: NextApiRequest, res: NextApiResponse) => {
   let region = req.query['region']
 
   if (!region) region = 'nz'
@@ -17,4 +17,4 @@ const region = async (req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json(chartData)
 }
 
-export default region
+export default regionDataApi

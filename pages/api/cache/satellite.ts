@@ -5,12 +5,12 @@ import cheerio from 'cheerio'
 import { decodeSatelliteUrl } from '../helpers/urlHelper'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { s3upload } from '../helpers/s3Helper'
+import { CacheImageResult } from '../types/cacheImageResult'
 
 async function retrieveSatelliteImages(): Promise<SatelliteChartData[]> {
   const response = await axios.get(
     new URL('satellite', config.metvuwBaseUrl).href
   )
-
   let rawHtml = response.data
 
   const $ = cheerio.load(rawHtml)
@@ -35,7 +35,10 @@ async function retrieveSatelliteImages(): Promise<SatelliteChartData[]> {
   })
 }
 
-const satellite = async (req: NextApiRequest, res: NextApiResponse) => {
+const satelliteCacheApi = async (
+  req: NextApiRequest,
+  res: NextApiResponse<CacheImageResult>
+) => {
   const result = await retrieveSatelliteImages()
 
   await s3upload({
@@ -50,4 +53,4 @@ const satellite = async (req: NextApiRequest, res: NextApiResponse) => {
   })
 }
 
-export default satellite
+export default satelliteCacheApi
