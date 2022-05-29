@@ -2,13 +2,13 @@ import { format } from 'date-fns'
 import { useContext, useEffect } from 'react'
 import { GlobalContext } from '../GlobalProvider'
 import { Region } from '../../shared/region'
-import { RainChartData } from '../../pages/api/rainChartData'
+import { RainChartData } from '../../pages/api/types/rainChartData'
 import { WeatherChart } from './WeatherChart'
-interface DisplayChartsProps {
+interface WeatherChartsProps {
   region: Region
   charts: RainChartData[]
 }
-const WeatherCharts = (props: DisplayChartsProps) => {
+const WeatherCharts = (props: WeatherChartsProps) => {
   const { setSubmenuText } = useContext(GlobalContext)
 
   useEffect(() => {

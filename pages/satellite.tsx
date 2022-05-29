@@ -7,7 +7,7 @@ import {
 } from '../components/SeoMeta'
 import WeatherImage from '../components/WeatherImage/WeatherImage'
 import { format } from 'date-fns'
-import { SatelliteChartData } from './api/satelliteChartData'
+import { SatelliteChartData } from './api/types/satelliteChartData'
 
 export interface SatellitePageProps {
   images: SatelliteChartData[]

@@ -4,4 +4,10 @@ export const config = {
     : 'http://localhost:3002',
   metvuwBaseUrl: 'https://www.metvuw.com/',
   cloudFrontUrl: 'https://dpucyvo9dklo9.cloudfront.net',
+  s3: {
+    region: process.env.S3_REGION,
+    accessKey: process.env.ACCESS_KEY,
+    secret: process.env.SECRET_KEY,
+    bucketName: process.env.BUCKET_NAME,
+  },
 }

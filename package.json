@@ -6,7 +6,8 @@
     "dev": "next dev -p 3002",
     "build": "next build",
     "start": "next start",
-    "test": "npx jest --runInBand --detectOpenHandles --colors --verbose --reporters=default",
+    "test": "npx jest --runInBand --colors --verbose --reporters=default",
+    "test:watch": "npx jest --watch --runInBand --colors --verbose --reporters=default",
     "test:ci": "npx jest --ci --runInBand --silent --colors --coverageDirectory=reports/coverage",
     "cypress:local": "cypress-expect run --headed --browser  chrome --passing 3",
     "cypress:ci": "cypress-expect run --browser chrome --passing 3"
@@ -14,6 +15,7 @@
   "dependencies": {
     "@types/cheerio": "0.22.31",
     "@types/react-lazyload": "3.2.0",
+    "aws-sdk": "^2.1135.0",
     "axios": "0.27.2",
     "cheerio": "1.0.0-rc.11",
     "date-fns": "2.28.0",
@@ -42,6 +44,7 @@
     "jest-environment-jsdom": "28.1.0",
     "jest-junit": "13.2.0",
     "postcss": "8.4.14",
+    "node-mocks-http": "^1.11.0",
     "prettier": "2.6.2",
     "tailwindcss": "3.0.24",
     "typescript": "4.7.2"

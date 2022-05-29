@@ -16,3 +16,5 @@ describe('home page', () => {
     cy.get('[data-testid="weather-image"]').should('have.length.greaterThan', 1)
   })
 })
+
+export {}
