@@ -1,0 +1,1250 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Home/> should render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="flex flex-col items-center"
+  >
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Tuesday, May 17th, 2022 at 12:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Tuesday, May 17th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Tuesday, May 17th, 2022 at 6:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Tuesday, May 17th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Wednesday, May 18th, 2022 at 12:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Wednesday, May 18th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Wednesday, May 18th, 2022 at 6:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Wednesday, May 18th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Wednesday, May 18th, 2022 at 12:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Wednesday, May 18th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Wednesday, May 18th, 2022 at 6:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Wednesday, May 18th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Thursday, May 19th, 2022 at 12:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Thursday, May 19th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Thursday, May 19th, 2022 at 6:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Thursday, May 19th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Thursday, May 19th, 2022 at 12:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Thursday, May 19th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Thursday, May 19th, 2022 at 6:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Thursday, May 19th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Friday, May 20th, 2022 at 12:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Friday, May 20th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Friday, May 20th, 2022 at 6:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Friday, May 20th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Friday, May 20th, 2022 at 12:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Friday, May 20th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Friday, May 20th, 2022 at 6:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Friday, May 20th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Saturday, May 21st, 2022 at 12:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Saturday, May 21st, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Saturday, May 21st, 2022 at 6:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Saturday, May 21st, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Saturday, May 21st, 2022 at 12:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Saturday, May 21st, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Saturday, May 21st, 2022 at 6:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Saturday, May 21st, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Sunday, May 22nd, 2022 at 12:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Sunday, May 22nd, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Sunday, May 22nd, 2022 at 6:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Sunday, May 22nd, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Sunday, May 22nd, 2022 at 12:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Sunday, May 22nd, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Sunday, May 22nd, 2022 at 6:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Sunday, May 22nd, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Monday, May 23rd, 2022 at 12:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Monday, May 23rd, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Monday, May 23rd, 2022 at 6:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Monday, May 23rd, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Monday, May 23rd, 2022 at 12:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Monday, May 23rd, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Monday, May 23rd, 2022 at 6:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Monday, May 23rd, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Tuesday, May 24th, 2022 at 12:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Tuesday, May 24th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Tuesday, May 24th, 2022 at 6:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Tuesday, May 24th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Tuesday, May 24th, 2022 at 12:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Tuesday, May 24th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Tuesday, May 24th, 2022 at 6:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Tuesday, May 24th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Wednesday, May 25th, 2022 at 12:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Wednesday, May 25th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Wednesday, May 25th, 2022 at 6:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Wednesday, May 25th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Wednesday, May 25th, 2022 at 12:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Wednesday, May 25th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Wednesday, May 25th, 2022 at 6:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Wednesday, May 25th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Thursday, May 26th, 2022 at 12:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Thursday, May 26th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Thursday, May 26th, 2022 at 6:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Thursday, May 26th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Thursday, May 26th, 2022 at 12:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Thursday, May 26th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Thursday, May 26th, 2022 at 6:00 PM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Thursday, May 26th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 PM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Friday, May 27th, 2022 at 12:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Friday, May 27th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          12:00 AM
+        </span>
+      </div>
+    </div>
+    <div
+      class="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 "
+    >
+      <div
+        class="aspectRatioBox"
+        data-testid="weather-image"
+      >
+        <img
+          alt="New Zealand forecast chart for Friday, May 27th, 2022 at 6:00 AM"
+          class="croppedImage loading"
+          decoding="async"
+          loading="lazy"
+          src="/placeholder.png"
+          style="object-position: 0% 62%; min-height: 85%;"
+        />
+      </div>
+      <div
+        class="flex items-center rounded-b-lg justify-around py-3 bg-white"
+      >
+        <span
+          class="text-base font-semibold text-gray-700"
+        >
+          Friday, May 27th, 2022
+        </span>
+        <span
+          class="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
+        >
+          06:00 AM
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
