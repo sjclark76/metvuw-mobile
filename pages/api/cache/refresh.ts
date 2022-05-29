@@ -25,13 +25,15 @@ export async function cacheImages(): Promise<CacheRefeshResult> {
         (cacheImageResultResponse) => cacheImageResultResponse.data
       )
       return {
-        success: cacheImageResult.every((value1) => value1.success),
+        success: cacheImageResult.every((v) => v.success),
         results: cacheImageResult,
+        bucket: config.s3.bucketName,
       }
     })
     .catch((reason) => {
       return {
         success: false,
+        bucket: config.s3.bucketName,
         reason,
         results: [],
       }

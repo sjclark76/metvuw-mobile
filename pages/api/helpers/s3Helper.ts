@@ -3,10 +3,11 @@ import { config } from '../../../config'
 import { S3 } from 'aws-sdk'
 import { SatelliteChartData } from '../types/satelliteChartData'
 
+const { region: region1, accessKey, secret } = config.s3
 const s3 = new S3({
-  region: 'ap-southeast-2',
-  accessKeyId: process.env.ACCESS_KEY,
-  secretAccessKey: process.env.SECRET_KEY,
+  region: region1,
+  accessKeyId: accessKey,
+  secretAccessKey: secret,
   signatureVersion: 'v4',
 })
 
@@ -16,7 +17,7 @@ export const s3upload = function (params: PutObjectRequest) {
   return new Promise((resolve, reject) => {
     s3.createBucket(
       {
-        Bucket: config.bucketName /* Put your bucket name */,
+        Bucket: params.Bucket /* Put your bucket name */,
       },
       function () {
         s3.putObject(params, function (err, data) {
@@ -37,7 +38,7 @@ export const s3download = function (
   return new Promise((resolve, reject) => {
     s3.createBucket(
       {
-        Bucket: config.bucketName /* Put your bucket name */,
+        Bucket: params.Bucket /* Put your bucket name */,
       },
       () => {
         s3.getObject(params, (err, data) => {
@@ -45,7 +46,9 @@ export const s3download = function (
             reject(err)
           } else {
             if (data.Body) {
-              var file = Buffer.from(data.Body as ArrayBuffer).toString('utf8')
+              const file = Buffer.from(data.Body as ArrayBuffer).toString(
+                'utf8'
+              )
 
               resolve(JSON.parse(file))
             }

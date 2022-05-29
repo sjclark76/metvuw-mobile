@@ -1,5 +1,6 @@
 export interface CacheImageResult {
   success: boolean
+  bucket: string
   fileName: string
   reason?: string
 }

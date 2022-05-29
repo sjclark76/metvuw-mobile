@@ -37,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const meta: SeoMetaProps = createSeoMetaProps(
     matchedRegion,
     charts[0].url,
-    context
+    context.resolvedUrl
   )
   return {
     props: {

@@ -10,7 +10,7 @@ const regionDataApi = async (req: NextApiRequest, res: NextApiResponse) => {
   const regionName = Array.isArray(region) ? region[0] : region
 
   const chartData = await s3download({
-    Bucket: config.bucketName,
+    Bucket: config.s3.bucketName,
     Key: buildKeyName(regionName),
   })
 

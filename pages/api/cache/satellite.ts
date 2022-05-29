@@ -42,13 +42,14 @@ const satelliteCacheApi = async (
   const result = await retrieveSatelliteImages()
 
   await s3upload({
-    Bucket: config.bucketName,
+    Bucket: config.s3.bucketName,
     Key: 'satellite.json',
     Body: JSON.stringify(result, null, 2),
   })
 
   res.status(200).json({
     success: true,
+    bucket: config.s3.bucketName,
     fileName: 'satellite.json',
   })
 }

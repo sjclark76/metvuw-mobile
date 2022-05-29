@@ -6,6 +6,7 @@ import { config } from '../../../config'
 import { decodeRainUrl } from '../helpers/urlHelper'
 import { buildKeyName, s3upload } from '../helpers/s3Helper'
 import { findRegionByCode, Region } from '../../../shared/region'
+import { CacheImageResult } from '../types/cacheImageResult'
 
 export async function getImageUrls(region: Region): Promise<RainChartData[]> {
   const url = new URL(
@@ -38,7 +39,7 @@ export async function getImageUrls(region: Region): Promise<RainChartData[]> {
 
 const regionCacheApi = async (
   req: NextApiRequest,
-  response: NextApiResponse
+  response: NextApiResponse<CacheImageResult>
 ) => {
   let regionParam = req.query['region']
 
@@ -54,13 +55,14 @@ const regionCacheApi = async (
     const keyName = buildKeyName(region.code)
 
     await s3upload({
-      Bucket: config.bucketName,
+      Bucket: config.s3.bucketName,
       Key: keyName,
       Body: JSON.stringify(rainCharts, null, 2),
     })
 
     response.status(200).json({
       success: true,
+      bucket: config.s3.bucketName,
       fileName: keyName,
     })
   } else {
