@@ -36,3 +36,4 @@ yarn-error.log*
 /cypress/screenshots/*
 /.idea/inspectionProfiles/Project_Default.xml
 !/public/service-worker.js
+/reports/coverage/**
