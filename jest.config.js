@@ -21,10 +21,10 @@ module.exports = {
   coveragePathIgnorePatterns: ['/node_modules/', '/__snapshots__/'],
   coverageThreshold: {
     global: {
-      statements: 60,
+      statements: 50,
       branches: 45,
       functions: 0,
-      lines: 60,
+      lines: 50,
     },
   },
 }
