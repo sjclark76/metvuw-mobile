@@ -8,7 +8,22 @@ import { buildKeyName, s3upload } from '../helpers/s3Helper'
 import { findRegionByCode, Region } from '../../../shared/region'
 import { CacheImageResult } from '../types/cacheImageResult'
 
-export async function getImageUrls(region: Region): Promise<RainChartData[]> {
+type RainChartDataCache = RainChartData & {
+  primed: boolean
+}
+async function primeCache(url: URL) {
+  try {
+    const { status } = await axios.get(url.href)
+
+    return status === 200
+  } catch (e) {
+    return false
+  }
+}
+
+export async function getImageUrls(
+  region: Region
+): Promise<RainChartDataCache[]> {
   const url = new URL(
     `forecast/forecast.php?type=rain&region=${region.code}&noofdays=10`,
     config.metvuwBaseUrl
@@ -21,7 +36,7 @@ export async function getImageUrls(region: Region): Promise<RainChartData[]> {
 
   const images: cheerio.Cheerio = $('img[src*=rain]')
 
-  return images.toArray().map((element: any) => {
+  const results = images.toArray().map((element: any) => {
     const relativeUrl = element.attribs.src
     const decodedSrc = decodeRainUrl(relativeUrl)
     const url = new URL(
@@ -35,6 +50,11 @@ export async function getImageUrls(region: Region): Promise<RainChartData[]> {
       height: +element.attribs.height,
     }
   })
+
+  const primedResults = results.map((result) => {
+    return primeCache(url).then((value) => ({ ...result, primed: value }))
+  })
+  return Promise.all(primedResults)
 }
 
 const regionCacheApi = async (

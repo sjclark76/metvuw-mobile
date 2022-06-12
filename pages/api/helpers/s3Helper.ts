@@ -1,7 +1,7 @@
 import { GetObjectRequest, PutObjectRequest } from 'aws-sdk/clients/s3'
 import { config } from '../../../config'
 import { S3 } from 'aws-sdk'
-import { SatelliteChartData } from '../types/satelliteChartData'
+import { RainChartData } from '../types/rainChartData'
 
 const { region: region1, accessKey, secret } = config.s3
 const s3 = new S3({
@@ -34,7 +34,7 @@ export const s3upload = function (params: PutObjectRequest) {
 
 export const s3download = function (
   params: GetObjectRequest
-): Promise<SatelliteChartData[]> {
+): Promise<RainChartData[]> {
   return new Promise((resolve, reject) => {
     s3.createBucket(
       {
