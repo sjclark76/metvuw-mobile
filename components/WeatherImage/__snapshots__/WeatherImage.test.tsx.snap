@@ -6,14 +6,17 @@ exports[`Weather Image it should render correctly 1`] = `
     class="aspectRatioBox"
     data-testid="weather-image"
   >
-    <img
-      alt="foo"
-      class="croppedImage loading"
-      decoding="async"
-      loading="lazy"
-      src="/placeholder.png"
-      style="object-position: 0% 62%; min-height: 85%;"
-    />
+    <span
+      class=" lazy-load-image-background "
+      style="background-image: url(/placeholder.png); background-size: 100% 100%; color: transparent; display: inline-block;"
+    >
+      <img
+        alt="foo"
+        class="croppedImage"
+        src="baa"
+        style="object-position: 0% 62%; min-height: 85%;"
+      />
+    </span>
   </div>
 </div>
 `;

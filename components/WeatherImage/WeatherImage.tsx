@@ -1,5 +1,5 @@
 import styles from './WeatherImage.module.css'
-import ProgressiveImg from '../ProgressiveImg'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 export interface WeatherImageProps {
   imageSrc: string
@@ -25,14 +25,13 @@ const WeatherImage = ({
       data-testid="weather-image"
       className={isRainForecast ? styles.aspectRatioBox : null}
     >
-      <ProgressiveImg
+      <LazyLoadImage
+        alt={imageAlt}
         placeholderSrc={
           isRainForecast ? '/placeholder.png' : '/satellite-compressed.jpg'
         }
-        loading="lazy"
-        alt={imageAlt}
-        src={imageSrc}
-        decoding="async"
+        // effect="blur"
+        src={imageSrc} // use normal <img> attributes as props
         className={isRainForecast ? styles.croppedImage : null}
         style={isRainForecast ? rainStyle : satelliteStyle}
       />
