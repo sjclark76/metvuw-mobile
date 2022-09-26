@@ -16,7 +16,7 @@ export function WeatherChart(props: Props): JSX.Element {
   const forecastDate = new Date(props.chart.forecastDate)
 
   return (
-    <div className="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white w-11/12 sm:w-4/5 xl:w-1/2 2xl:w-1/2 ">
+    <div className="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white  w-full sm:w-4/5  xl:w-1/2 2xl:w-1/2 ">
       <WeatherImage
         imageSrc={props.chart.url}
         imageAlt={altTag}
