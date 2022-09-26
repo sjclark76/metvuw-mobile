@@ -27,9 +27,9 @@ const WeatherImage = ({
     >
       <LazyLoadImage
         alt={imageAlt}
-        placeholderSrc={
-          isRainForecast ? '/placeholder.png' : '/satellite-compressed.jpg'
-        }
+        // placeholderSrc={
+        //   isRainForecast ? '/placeholder.png' : '/satellite-compressed.jpg'
+        // }
         // effect="blur"
         src={imageSrc} // use normal <img> attributes as props
         className={isRainForecast ? styles.croppedImage : null}
