@@ -1,13 +1,11 @@
-import { GetServerSideProps } from 'next'
+import { GetStaticProps } from 'next'
 import { config } from '../config'
-import {
-  createGeneralSeoMetaProps,
-  SeoMeta,
-  SeoMetaProps,
-} from '../components/SeoMeta'
+import { SeoMeta, SeoMetaProps } from '../components/SeoMeta'
 import WeatherImage from '../components/WeatherImage/WeatherImage'
 import { format } from 'date-fns'
 import { SatelliteChartData } from './api/types/satelliteChartData'
+import { GetStaticPropsResult } from 'next/types'
+import { s3download } from './api/helpers/s3Helper'
 
 export interface SatellitePageProps {
   images: SatelliteChartData[]
@@ -51,22 +49,25 @@ export default function Satellite(props: SatellitePageProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const apiURl = new URL(`api/satellite`, config.baseUrl)
-  const response = await fetch(apiURl.href)
+export const getStaticProps: GetStaticProps = async () => {
+  const satelliteImages: SatelliteChartData[] = await s3download({
+    Bucket: config.s3.bucketName,
+    Key: 'satellite.json',
+  })
 
-  const satelliteImages: SatelliteChartData[] = await response.json()
+  const meta = {
+    title: `metvuw mobile | Satellite`,
+    desc: `Satellite wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
+    imageUrl: satelliteImages[0].url,
+    url: new URL('satellite', config.baseUrl).href,
+  }
 
-  const meta = createGeneralSeoMetaProps(
-    'Satellite',
-    satelliteImages[0].url,
-    context
-  )
-
-  return {
+  const result: GetStaticPropsResult<SatellitePageProps> = {
     props: {
       images: satelliteImages,
       meta,
-    }, // will be passed to the page component as props
+    },
+    revalidate: 1800, // 30 minutes
   }
+  return result
 }
