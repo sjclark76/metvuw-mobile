@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import { GetServerSidePropsContext } from 'next'
 import { config } from '../config'
 import { Region } from '../shared/region'
 
@@ -13,13 +12,13 @@ export interface SeoMetaProps {
 export const createGeneralSeoMetaProps = (
   message: string,
   imageUrl: string,
-  context: GetServerSidePropsContext
+  resolvedUrl: string
 ): SeoMetaProps => {
   return {
     title: `metvuw mobile | ${message}`,
     desc: `${message} wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
     imageUrl: imageUrl,
-    url: new URL(context.resolvedUrl, config.baseUrl).href,
+    url: new URL(resolvedUrl, config.baseUrl).href,
   }
 }
 

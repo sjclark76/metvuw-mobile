@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next'
+import { GetStaticProps } from 'next'
 import { config } from '../config'
 import {
   createGeneralSeoMetaProps,
@@ -8,6 +8,7 @@ import {
 import WeatherImage from '../components/WeatherImage/WeatherImage'
 import { format } from 'date-fns'
 import { SatelliteChartData } from './api/types/satelliteChartData'
+import { GetStaticPropsResult } from 'next/types'
 
 export interface SatellitePageProps {
   images: SatelliteChartData[]
@@ -51,7 +52,7 @@ export default function Satellite(props: SatellitePageProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetStaticProps = async () => {
   const apiURl = new URL(`api/satellite`, config.baseUrl)
   const response = await fetch(apiURl.href)
 
@@ -60,13 +61,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const meta = createGeneralSeoMetaProps(
     'Satellite',
     satelliteImages[0].url,
-    context
+    'satellite'
   )
 
-  return {
+  const result: GetStaticPropsResult<SatellitePageProps> = {
     props: {
       images: satelliteImages,
       meta,
     }, // will be passed to the page component as props
+    // Next.js will attempt to re-generate the page:
+    // - When a request comes in
+    // - At most once every 10 seconds
+    revalidate: 1800, // 30 minutes
   }
+  return result
 }

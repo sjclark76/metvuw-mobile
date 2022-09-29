@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next'
+import { GetStaticProps } from 'next'
 import { config } from '../config'
 import {
   createSeoMetaProps,
@@ -8,6 +8,7 @@ import {
 import { findRegionByCode, Region } from '../shared/region'
 import { RainChartData } from './api/types/rainChartData'
 import WeatherCharts from '../components/WeatherCharts'
+import { GetStaticPropsResult } from 'next/types'
 interface HomeProps {
   region: Region
   charts: RainChartData[]
@@ -27,7 +28,7 @@ export default function Home(props: HomeProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetStaticProps = async () => {
   const apiURl = new URL('api/charts/nz', config.baseUrl)
   const response = await fetch(apiURl.href)
   const charts = await response.json()
@@ -37,13 +38,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const meta: SeoMetaProps = createSeoMetaProps(
     matchedRegion,
     charts[0].url,
-    context.resolvedUrl
+    '/'
   )
-  return {
+  const result: GetStaticPropsResult<HomeProps> = {
     props: {
       region: matchedRegion,
       charts: charts,
       meta: meta,
     },
+    // Next.js will attempt to re-generate the page:
+    // - When a request comes in
+    // - At most once every 10 seconds
+    revalidate: 1800, // 30 minutes
   }
+
+  return result
 }
