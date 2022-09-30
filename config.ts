@@ -8,6 +8,6 @@ export const config = {
     region: process.env.S3_REGION,
     accessKey: process.env.ACCESS_KEY,
     secret: process.env.SECRET_KEY,
-    bucketName: process.env.BUCKET_NAME,
+    bucketName: process.env.BUCKET_NAME ?? 'metvuw-mobile',
   },
 }

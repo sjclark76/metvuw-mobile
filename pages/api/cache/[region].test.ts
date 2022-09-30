@@ -24,6 +24,7 @@ describe('region cache api', () => {
 
     expect(res.statusCode).toBe(200)
     expect(res._getJSONData()).toEqual({
+      bucket: 'metvuw-mobile',
       success: true,
       fileName: 'victoria.json',
     })
@@ -40,6 +41,7 @@ describe('region cache api', () => {
 
     expect(res.statusCode).toBe(200)
     expect(res._getJSONData()).toEqual({
+      bucket: 'metvuw-mobile',
       success: true,
       fileName: 'nz.json',
     })
