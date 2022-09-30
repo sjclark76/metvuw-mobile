@@ -43,7 +43,7 @@ export const s3download = function (
       () => {
         s3.getObject(params, (err, data) => {
           if (err) {
-            console.debug(
+            console.log(
               'an error occured performing s3 download',
               {
                 region: region1,

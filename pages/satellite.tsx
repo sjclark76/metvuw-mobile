@@ -50,24 +50,29 @@ export default function Satellite(props: SatellitePageProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const satelliteImages: SatelliteChartData[] = await s3download({
-    Bucket: config.s3.bucketName,
-    Key: 'satellite.json',
-  })
+  console.log('starting s3 download', config.s3.bucketName)
+  try {
+    const satelliteImages: SatelliteChartData[] = await s3download({
+      Bucket: config.s3.bucketName,
+      Key: 'satellite.json',
+    })
+    console.log('finished s3 download', JSON.stringify(satelliteImages))
+    const meta = {
+      title: `metvuw mobile | Satellite`,
+      desc: `Satellite wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
+      imageUrl: satelliteImages[0].url,
+      url: new URL('satellite', config.baseUrl).href,
+    }
 
-  const meta = {
-    title: `metvuw mobile | Satellite`,
-    desc: `Satellite wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
-    imageUrl: satelliteImages[0].url,
-    url: new URL('satellite', config.baseUrl).href,
+    const result: GetStaticPropsResult<SatellitePageProps> = {
+      props: {
+        images: satelliteImages,
+        meta,
+      },
+      revalidate: 1800, // 30 minutes
+    }
+    return result
+  } catch (e) {
+    console.error('an error occured getting static props', e)
   }
-
-  const result: GetStaticPropsResult<SatellitePageProps> = {
-    props: {
-      images: satelliteImages,
-      meta,
-    },
-    revalidate: 1800, // 30 minutes
-  }
-  return result
 }
