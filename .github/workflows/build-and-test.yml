@@ -9,7 +9,6 @@ on:
   pull_request:
     branches: [ main ]
 env:
-  BUCKET_NAME : ${{ secrets.BUCKET_NAME }}
   ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
   S3_REGION : ${{ secrets.S3_REGION }}
   SECRET_KEY : ${{ secrets.SECRET_KEY }}
