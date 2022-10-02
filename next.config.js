@@ -1,7 +1,17 @@
 const { withOffline } = require('next-offline-ts')
 
 const securityHeaders = function () {
-  const headers = [
+  // if (process.env.NODE_ENV !== 'production') {
+  //   const index = headers.findIndex(
+  //     (value) => value.key === 'Content-Security-Policy'
+  //   )
+  //
+  //   headers[index].value = headers[index].value.replace(
+  //     "script-src 'self'",
+  //     "script-src 'self' 'unsafe-eval'"
+  //   )
+  // }
+  return [
     {
       key: 'Cache-Control',
       value: 'max-age=31536000',
@@ -18,28 +28,16 @@ const securityHeaders = function () {
       key: 'X-DNS-Prefetch-Control',
       value: 'on',
     },
-    {
-      key: 'Content-Security-Policy',
-      value:
-        "frame-ancestors 'none'; script-src 'self' 'unsafe-inline' 'sha256-Qa/ZW60QViu4ZpTBXb6ugMmol6ZT2Wq21mwewHgrxPk=' 'sha256-QYgGfxAvFb95Wfr8/J6nXSuhYgCzYgx3g/AeaN1F5J8=' *.googletagmanager.com *.google-analytics.com; img-src 'self' data: https://*  *.metvuw.com",
-    },
+    // {
+    //   key: 'Content-Security-Policy',
+    //   value:
+    //     "frame-ancestors 'none'; script-src 'self' 'unsafe-inline' 'sha256-Qa/ZW60QViu4ZpTBXb6ugMmol6ZT2Wq21mwewHgrxPk=' 'sha256-QYgGfxAvFb95Wfr8/J6nXSuhYgCzYgx3g/AeaN1F5J8=' *.googletagmanager.com *.google-analytics.com; img-src 'self' data: https://*  *.metvuw.com *.localhost",
+    // },
     {
       key: 'X-Content-Type-Options',
       value: 'nosniff',
     },
   ]
-
-  if (process.env.NODE_ENV !== 'production') {
-    const index = headers.findIndex(
-      (value) => value.key === 'Content-Security-Policy'
-    )
-
-    headers[index].value = headers[index].value.replace(
-      "script-src 'self'",
-      "script-src 'self' 'unsafe-eval'"
-    )
-  }
-  return headers
 }
 
 const nextConfig = {

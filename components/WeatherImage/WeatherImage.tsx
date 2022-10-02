@@ -27,6 +27,8 @@ const WeatherImage = ({
     >
       <LazyLoadImage
         alt={imageAlt}
+        width={711}
+        height={600}
         // placeholderSrc={
         //   isRainForecast ? '/placeholder.png' : '/satellite-compressed.jpg'
         // }
