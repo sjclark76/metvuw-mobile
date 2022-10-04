@@ -9,8 +9,10 @@ exports[`Weather Image it should render correctly 1`] = `
     <img
       alt="foo"
       class="croppedImage"
+      height="600"
       src="baa"
       style="object-position: 0% 62%; min-height: 85%;"
+      width="711"
     />
   </div>
 </div>

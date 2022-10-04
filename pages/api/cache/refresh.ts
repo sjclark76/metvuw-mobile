@@ -2,13 +2,13 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { config } from '../../../config'
 
 import { regions } from '../../../shared/region'
-import { CacheImageResult, CacheRefeshResult } from '../types/cacheImageResult'
+import { CacheImageResult, CacheRefreshResult } from '../types/cacheImageResult'
 import axios, { AxiosResponse } from 'axios'
 
 /**
  * Asynchronously calls our worker functions to refresh all the images for the satellite page and all region pages
  */
-export async function cacheImages(): Promise<CacheRefeshResult> {
+export async function cacheImages(): Promise<CacheRefreshResult> {
   const satelliteCacheUrl = new URL('api/cache/satellite', config.baseUrl)
   const satellitePromise = axios.get<CacheImageResult>(satelliteCacheUrl.href)
 

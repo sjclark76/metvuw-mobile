@@ -5,6 +5,6 @@ export interface CacheImageResult {
   reason?: string
 }
 
-export interface CacheRefeshResult extends Omit<CacheImageResult, 'fileName'> {
+export interface CacheRefreshResult extends Omit<CacheImageResult, 'fileName'> {
   results: CacheImageResult[]
 }
