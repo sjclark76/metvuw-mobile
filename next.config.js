@@ -1,5 +1,3 @@
-const { withOffline } = require('next-offline-ts')
-
 const securityHeaders = function () {
   // if (process.env.NODE_ENV !== 'production') {
   //   const index = headers.findIndex(
@@ -51,36 +49,10 @@ const nextConfig = {
       },
     ]
   },
-  workboxOpts: {
-    swDest: '../public/service-worker.js',
-    runtimeCaching: [
-      {
-        urlPattern: /.gif.*/,
-        handler: 'CacheFirst',
-        options: {
-          cacheName: 'images',
-          expiration: {
-            maxAgeSeconds: 12 * 60 * 60,
-            maxEntries: 200,
-          },
-        },
-      },
-      {
-        urlPattern: /^https?.*/,
-        handler: 'NetworkFirst',
-        options: {
-          cacheName: 'offlineCache',
-          expiration: {
-            maxEntries: 50,
-          },
-        },
-      },
-    ],
-  },
   poweredByHeader: false,
   images: {
     domains: ['www.metvuw.com'],
   },
 }
 
-module.exports = withOffline(nextConfig)
+module.exports = nextConfig
