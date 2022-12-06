@@ -3,7 +3,7 @@ export const config = {
     ? `https://${process.env.VERCEL_URL}`
     : 'http://localhost:3002',
   metvuwBaseUrl: 'https://www.metvuw.com/',
-  cloudFrontUrl: 'https://dpucyvo9dklo9.cloudfront.net',
+  cloudFrontUrl: 'https://www.metvuw.com/', //https://dpucyvo9dklo9.cloudfront.net',
   s3: {
     region: process.env.S3_REGION,
     accessKey: process.env.ACCESS_KEY,
