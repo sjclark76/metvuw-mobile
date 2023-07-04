@@ -37,7 +37,7 @@
     "autoprefixer": "10.4.14",
     "babel-jest": "29.5.0",
     "cypress": "10.11.0",
-    "cypress-expect": "2.5.3",
+    "cypress-expect": "3.1.0",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.8",
     "identity-obj-proxy": "3.0.0",
