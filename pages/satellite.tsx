@@ -1,11 +1,9 @@
-import { GetStaticProps } from 'next'
 import { config } from '../config'
 import { SeoMeta, SeoMetaProps } from '../components/SeoMeta'
 import WeatherImage from '../components/WeatherImage/WeatherImage'
 import { format } from 'date-fns'
 import { SatelliteChartData } from './api/types/satelliteChartData'
-import { GetStaticPropsResult } from 'next/types'
-import { s3download } from './api/helpers/s3Helper'
+import { downloadSatelliteChartData } from './api/helpers/s3Helper'
 
 export interface SatellitePageProps {
   images: SatelliteChartData[]
@@ -49,13 +47,14 @@ export default function Satellite(props: SatellitePageProps) {
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps = async () => {
   console.log('starting s3 download', config.s3.bucketName)
   try {
-    const satelliteImages: SatelliteChartData[] = await s3download({
-      Bucket: config.s3.bucketName,
-      Key: 'satellite.json',
-    })
+    const satelliteImages: SatelliteChartData[] =
+      await downloadSatelliteChartData({
+        Bucket: config.s3.bucketName,
+        Key: 'satellite.json',
+      })
     console.log('finished s3 download', JSON.stringify(satelliteImages))
     const meta = {
       title: `metvuw mobile | Satellite`,
@@ -64,14 +63,13 @@ export const getStaticProps: GetStaticProps = async () => {
       url: new URL('satellite', config.baseUrl).href,
     }
 
-    const result: GetStaticPropsResult<SatellitePageProps> = {
+    return {
       props: {
         images: satelliteImages,
         meta,
       },
-      revalidate: 1800, // 30 minutes
+      revalidate: 1800,
     }
-    return result
   } catch (e) {
     console.error('an error occured getting static props', e)
   }

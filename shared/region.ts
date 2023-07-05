@@ -51,9 +51,17 @@ export const regions = [
   { name: 'South Africa', code: 'safrica' },
 ] as const
 
-export function findRegionByCode(code: string): Region | undefined {
-  return regions.find((value) => value.code === code)
+export const getByRegionCode = (code: string) => {
+  const region = findRegionByCode(code)
+
+  if (!region) {
+    throw new Error(`invalid country code code: ${code} `)
+  }
+
+  return region
 }
+export const findRegionByCode = (code: string): Region | undefined =>
+  regions.find((value) => value.code === code)
 
 export const nzLinks: Region[] = [
   { name: 'New Zealand', code: 'nz' },
@@ -90,4 +98,4 @@ export const worldLinks: Region[] = [
   { name: 'South Africa', code: 'safrica' },
 ]
 
-export type Region = typeof regions[number]
+export type Region = (typeof regions)[number]
