@@ -1,7 +1,19 @@
 import { RainChartData } from '../types/rainChartData'
 import { SatelliteChartData } from '../types/satelliteChartData'
 
-export function decodeRainUrl(relativeUrl: string): RainChartData {
+export function decodeRainUrl(
+  relativeUrl: string
+): Pick<
+  RainChartData,
+  | 'year'
+  | 'month'
+  | 'day'
+  | 'hour'
+  | 'utcDate'
+  | 'issueDate'
+  | 'forecastDate'
+  | 'offset'
+> {
   // ./2021060500/rain-nz-2021060500-006.gif
 
   const slice = relativeUrl.slice(-18).slice(0, 14)
@@ -25,7 +37,12 @@ export function decodeRainUrl(relativeUrl: string): RainChartData {
   }
 }
 
-export function decodeSatelliteUrl(relativeUrl: string): SatelliteChartData {
+export function decodeSatelliteUrl(
+  relativeUrl: string
+): Pick<
+  SatelliteChartData,
+  'year' | 'month' | 'day' | 'hour' | 'imageDate' | 'imageDateIso'
+> {
   // ./small/202109240000.jpg
 
   const slice = relativeUrl.slice(-17).slice(0, 12)

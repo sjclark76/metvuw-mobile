@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react'
 import WeatherCharts from './WeatherCharts'
-import { findRegionByCode } from '../../shared/region'
+import { getByRegionCode } from '../../shared/region'
 import { nzRegionCharts } from '../../testing/nz'
 describe('<WeatherCharts/>', () => {
   test('should render with our image for the correct day', () => {
     nzRegionCharts
     render(
-      <WeatherCharts region={findRegionByCode('nz')} charts={nzRegionCharts} />
+      <WeatherCharts region={getByRegionCode('nz')} charts={nzRegionCharts} />
     )
 
     expect(

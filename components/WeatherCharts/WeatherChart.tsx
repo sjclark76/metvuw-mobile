@@ -8,7 +8,7 @@ interface Props {
   region: Region
 }
 
-export function WeatherChart(props: Props): JSX.Element {
+export function WeatherChart(props: Props) {
   const altTag = `${props.region.name} forecast chart for ${format(
     new Date(props.chart.forecastDate),
     'PPPPp'

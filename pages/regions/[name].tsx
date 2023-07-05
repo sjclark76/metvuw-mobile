@@ -6,13 +6,13 @@ import {
   SeoMetaProps,
 } from '../../components/SeoMeta'
 import {
-  findRegionByCode,
+  getByRegionCode,
   Region as RegionType,
   regions,
 } from '../../shared/region'
 import { RainChartData } from '../api/types/rainChartData'
 import WeatherCharts from '../../components/WeatherCharts'
-import { buildKeyName, s3download } from '../api/helpers/s3Helper'
+import { buildKeyName, downloadRainChartData } from '../api/helpers/s3Helper'
 
 interface HomeProps {
   region: RegionType
@@ -33,24 +33,29 @@ export default function Region(props: HomeProps) {
   )
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  let { name: region } = context.params
+export const getStaticProps: GetStaticProps<
+  HomeProps,
+  { name: string }
+> = async (context) => {
+  const name = context.params?.name
 
-  if (!region) region = 'nz'
+  const region = name ?? 'nz'
 
-  const regionName = Array.isArray(region) ? region[0] : region
-  const chartData = await s3download({
+  // const regionName = Array.isArray(region) ? region[0] : region
+
+  const regionName = region
+  const chartData = await downloadRainChartData({
     Bucket: config.s3.bucketName,
     Key: buildKeyName(regionName),
   })
 
-  const matchedRegion = findRegionByCode(
+  const matchedRegion = getByRegionCode(
     Array.isArray(regionName) ? regionName[0] : regionName
   )
 
   const meta = createSeoMetaProps(
     matchedRegion,
-    chartData[0].url,
+    chartData[0].url ?? '',
     `regions/${regionName}`
   )
 
@@ -59,7 +64,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
       region: matchedRegion,
       charts: chartData,
       meta: meta,
-    }, // will be passed to the page component as props
+    },
+    revalidate: 1800, // will be passed to the page component as props
   }
 }
 
