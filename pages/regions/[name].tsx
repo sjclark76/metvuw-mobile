@@ -39,11 +39,7 @@ export const getStaticProps: GetStaticProps<
 > = async (context) => {
   const name = context.params?.name
 
-  const region = name ?? 'nz'
-
-  // const regionName = Array.isArray(region) ? region[0] : region
-
-  const regionName = region
+  const regionName = name ?? 'nz'
   const chartData = await downloadRainChartData({
     Bucket: config.s3.bucketName,
     Key: buildKeyName(regionName),
