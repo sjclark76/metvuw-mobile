@@ -22,9 +22,10 @@ export async function cacheImages(): Promise<CacheRefreshResult> {
   return Promise.all([satellitePromise, ...regionsPromise])
     .then((cacheImageResults) => {
       const cacheImageResult = cacheImageResults.map(
-        (cacheImageResultResponse) => cacheImageResultResponse.data
+        (cacheImageResultResponse) => cacheImageResultResponse.data,
       )
       return {
+        refreshTime: new Date().toISOString(),
         success: cacheImageResult.every((v) => v.success),
         results: cacheImageResult,
         bucket: config.s3.bucketName,
@@ -32,6 +33,7 @@ export async function cacheImages(): Promise<CacheRefreshResult> {
     })
     .catch((reason) => {
       return {
+        refreshTime: new Date().toISOString(),
         success: false,
         bucket: config.s3.bucketName,
         reason,

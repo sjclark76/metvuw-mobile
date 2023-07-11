@@ -6,5 +6,6 @@ export interface CacheImageResult {
 }
 
 export interface CacheRefreshResult extends Omit<CacheImageResult, 'fileName'> {
+  refreshTime: string
   results: CacheImageResult[]
 }
