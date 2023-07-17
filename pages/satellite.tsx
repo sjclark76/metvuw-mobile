@@ -4,6 +4,8 @@ import WeatherImage from '../components/WeatherImage/WeatherImage'
 import { format } from 'date-fns'
 import { SatelliteChartData } from './api/types/satelliteChartData'
 import { downloadSatelliteChartData } from './api/helpers/s3Helper'
+import { GetServerSideProps } from 'next'
+import { GetServerSidePropsResult } from 'next/types'
 
 export interface SatellitePageProps {
   images: SatelliteChartData[]
@@ -28,7 +30,7 @@ export default function Satellite(props: SatellitePageProps) {
               imageSrc={image.url}
               imageAlt={`satellite chart for ${format(
                 new Date(image.imageDate),
-                'PPPPp'
+                'PPPPp',
               )}`}
               isRainForecast={false}
             />
@@ -47,30 +49,27 @@ export default function Satellite(props: SatellitePageProps) {
   )
 }
 
-export const getStaticProps = async () => {
-  console.log('starting s3 download', config.s3.bucketName)
-  try {
-    const satelliteImages: SatelliteChartData[] =
-      await downloadSatelliteChartData({
-        Bucket: config.s3.bucketName,
-        Key: 'satellite.json',
-      })
-    console.log('finished s3 download', JSON.stringify(satelliteImages))
-    const meta = {
-      title: `metvuw mobile | Satellite`,
-      desc: `Satellite wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
-      imageUrl: satelliteImages[0].url,
-      url: new URL('satellite', config.baseUrl).href,
-    }
+export const getServerSideProps: GetServerSideProps<
+  SatellitePageProps
+> = async () => {
+  const satelliteImagesPromise = downloadSatelliteChartData({
+    Bucket: config.s3.bucketName,
+    Key: 'satellite.json',
+  })
 
-    return {
-      props: {
+  const serverSideProps: GetServerSidePropsResult<SatellitePageProps> = {
+    props: satelliteImagesPromise.then((satelliteImages) => {
+      return {
         images: satelliteImages,
-        meta,
-      },
-      revalidate: 1800,
-    }
-  } catch (e) {
-    console.error('an error occured getting static props', e)
+        meta: {
+          title: `metvuw mobile | Satellite`,
+          desc: `Satellite wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
+          imageUrl: satelliteImages[0].url,
+          url: new URL('satellite', config.baseUrl).href,
+        },
+      }
+    }),
   }
+
+  return serverSideProps
 }
