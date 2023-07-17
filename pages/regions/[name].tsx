@@ -1,23 +1,25 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
+import { GetServerSideProps } from 'next'
 import { config } from '../../config'
 import {
   createSeoMetaProps,
   SeoMeta,
   SeoMetaProps,
 } from '../../components/SeoMeta'
-import {
-  getByRegionCode,
-  Region as RegionType,
-  regions,
-} from '../../shared/region'
+import { getByRegionCode, Region as RegionType } from '../../shared/region'
 import { RainChartData } from '../api/types/rainChartData'
 import WeatherCharts from '../../components/WeatherCharts'
 import { buildKeyName, downloadRainChartData } from '../api/helpers/s3Helper'
+import { ParsedUrlQuery } from 'querystring'
+import { GetServerSidePropsResult } from 'next/types'
 
 interface HomeProps {
   region: RegionType
   charts: RainChartData[]
   meta: SeoMetaProps
+}
+
+interface Params extends ParsedUrlQuery {
+  name: string
 }
 export default function Region(props: HomeProps) {
   return (
@@ -33,49 +35,35 @@ export default function Region(props: HomeProps) {
   )
 }
 
-export const getStaticProps: GetStaticProps<
-  HomeProps,
-  { name: string }
-> = async (context) => {
+export const getServerSideProps: GetServerSideProps<HomeProps, Params> = async (
+  context,
+) => {
   const name = context.params?.name
 
   const regionName = name ?? 'nz'
-  const chartData = await downloadRainChartData({
+
+  const matchedRegion = getByRegionCode(
+    Array.isArray(regionName) ? regionName[0] : regionName,
+  )
+
+  const chartDataPromise = downloadRainChartData({
     Bucket: config.s3.bucketName,
     Key: buildKeyName(regionName),
   })
 
-  const matchedRegion = getByRegionCode(
-    Array.isArray(regionName) ? regionName[0] : regionName
-  )
-
-  const meta = createSeoMetaProps(
-    matchedRegion,
-    chartData[0].url ?? '',
-    `regions/${regionName}`
-  )
-
-  return {
-    props: {
-      region: matchedRegion,
-      charts: chartData,
-      meta: meta,
-    },
-    revalidate: 1800, // will be passed to the page component as props
+  const serverSideProps: GetServerSidePropsResult<HomeProps> = {
+    props: chartDataPromise.then((chartData) => {
+      return {
+        charts: chartData,
+        region: matchedRegion,
+        meta: createSeoMetaProps(
+          matchedRegion,
+          chartData[0].url ?? '',
+          `regions/${regionName}`,
+        ),
+      }
+    }),
   }
-}
 
-// This function gets called at build time on server-side.
-// It may be called again, on a serverless function, if
-// the path has not been generated.
-export const getStaticPaths: GetStaticPaths = async () => {
-  // Get the paths we want to pre-render based on posts
-  const paths = regions.map((region) => ({
-    params: { name: region.code },
-  }))
-
-  // We'll pre-render only these paths at build time.
-  // { fallback: blocking } will server-render pages
-  // on-demand if the path doesn't exist.
-  return { paths, fallback: 'blocking' }
+  return serverSideProps
 }
