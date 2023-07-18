@@ -1,4 +1,9 @@
 {
+  "crons": [{
+    "path": "/api/cache/refresh",
+    "schedule": "0 * * * *"
+  }
+  ],
   "headers": [
     {
       "source": "/(.*).(avif|jpg|jpeg|png|webp)",
