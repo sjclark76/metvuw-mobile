@@ -1,20 +1,21 @@
 import { format } from 'date-fns'
-import { useContext, useEffect } from 'react'
-import { GlobalContext } from '../GlobalProvider'
+import { useEffect } from 'react'
 import { Region } from '../../shared/region'
 import { RainChartData } from '../../pages/api/types/rainChartData'
 import { WeatherChart } from './WeatherChart'
+import { useSetAtom } from 'jotai'
+import { submenuTextAtom } from '../Atoms/GlobalState'
 interface WeatherChartsProps {
   region: Region
   charts: RainChartData[]
 }
 const WeatherCharts = (props: WeatherChartsProps) => {
-  const { setSubmenuText } = useContext(GlobalContext)
+  const setSubmenuText = useSetAtom(submenuTextAtom)
 
   useEffect(() => {
     const submenuText = `Forecast issued at ${format(
       new Date(props.charts[0].issueDate),
-      'PPPPp'
+      'PPPPp',
     )} for ${props.region.name}`
 
     setSubmenuText(submenuText)

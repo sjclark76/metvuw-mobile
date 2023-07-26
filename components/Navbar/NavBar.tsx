@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import DropDown from '../DropDown/DropDown'
 import {
   australiaLinks,
@@ -8,14 +8,15 @@ import {
   pacificLinks,
   worldLinks,
 } from '../../shared/region'
-import { GlobalContext } from '../GlobalProvider'
+import { useAtomValue } from 'jotai'
+import { submenuTextAtom } from '../Atoms/GlobalState'
 
 const Navbar = () => {
   const [active, setActive] = useState(false)
   const handleClick = () => {
     setActive(!active)
   }
-  const { submenuText } = useContext(GlobalContext)
+  const submenuText = useAtomValue(submenuTextAtom)
   return (
     <div className="sticky top-0 z-50">
       <nav className="flex items-center flex-wrap bg-gradient-to-r from-purple-400  to-blue-600 p-2 ">
@@ -102,7 +103,7 @@ const Navbar = () => {
       </nav>
       <div className="flex flex-row justify-center">
         <div className="px-2 filter  bg-gray-50 w-full ">
-          <h1 className="text-base text-center font-medium text-sm text-gray-800 my-4 ">
+          <h1 className="text-center font-medium text-sm text-gray-800 my-4 ">
             {submenuText}
           </h1>
         </div>
