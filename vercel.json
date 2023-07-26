@@ -8,10 +8,5 @@
       "path": "/api/cache/refresh",
       "schedule": "0 20 * * *"
     }
-  ],
-  "headers": [
-    {
-      "source": "/(.*).(avif|jpg|jpeg|png|webp)"
-    }
   ]
 }
