@@ -1,18 +1,23 @@
-import { config } from '../config'
-import { SeoMeta, SeoMetaProps } from '../components/SeoMeta'
-import WeatherImage from '../components/WeatherImage/WeatherImage'
-import { format } from 'date-fns'
-import { SatelliteChartData } from './api/types/satelliteChartData'
-import { downloadSatelliteChartData } from './api/helpers/s3Helper'
 import { GetServerSideProps } from 'next'
 import { GetServerSidePropsResult } from 'next/types'
+import { SeoMeta, SeoMetaProps } from '../../components/SeoMeta'
+import { RadarChartData } from '../api/types/radarChartData'
+import WeatherImage from '../../components/WeatherImage'
+import { format } from 'date-fns'
+import { downloadRadarChartData } from '../api/helpers/s3Helper'
+import { config } from '../../config'
+import { RadarCode } from '../../shared/radarRegions'
+import { useSetAtom } from 'jotai/index'
+import { submenuTextAtom } from '../../components/Atoms/GlobalState'
 
-export interface SatellitePageProps {
-  images: SatelliteChartData[]
+export interface RadarPageProps {
+  images: RadarChartData[]
   meta: SeoMetaProps
 }
-export default function Satellite(props: SatellitePageProps) {
-  console.debug('stuart', { images: props.images })
+export default function Radar(props: RadarPageProps) {
+  const setSubmenuText = useSetAtom(submenuTextAtom)
+
+  setSubmenuText(`Radar Chart for ${props.images[0].radar}`)
   return (
     <>
       <SeoMeta
@@ -50,23 +55,30 @@ export default function Satellite(props: SatellitePageProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps<
-  SatellitePageProps
-> = async () => {
-  const satelliteImagesPromise = downloadSatelliteChartData({
+export const getServerSideProps: GetServerSideProps<RadarPageProps> = async (
+  context,
+) => {
+  const radarImagesPromise = downloadRadarChartData({
     Bucket: config.s3.bucketName,
-    Key: 'satellite.json',
+    Key: 'radar.json',
   })
 
-  const serverSideProps: GetServerSidePropsResult<SatellitePageProps> = {
-    props: satelliteImagesPromise.then((satelliteImages) => {
+  const radarCode: RadarCode | undefined = context.params?.code as RadarCode
+  console.debug({ radarCode })
+
+  const serverSideProps: GetServerSidePropsResult<RadarPageProps> = {
+    props: radarImagesPromise.then((radarImages) => {
       return {
-        images: satelliteImages,
+        images: radarCode
+          ? radarImages.filter(
+              (radarImage) => radarImage.radarCode === radarCode,
+            )
+          : radarImages,
         meta: {
-          title: `metvuw mobile | Satellite`,
-          desc: `Satellite wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
-          imageUrl: satelliteImages[0].url,
-          url: new URL('satellite', config.baseUrl).href,
+          title: `metvuw mobile | Radar`,
+          desc: `Radar charts. Optimized for mobile devices. Sourced from metvuw.com`,
+          imageUrl: radarImages[0].url,
+          url: new URL('radar', config.baseUrl).href,
         },
       }
     }),

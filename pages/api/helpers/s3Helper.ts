@@ -3,6 +3,7 @@ import { config } from '../../../config'
 import { S3 } from 'aws-sdk'
 import { RainChartData } from '../types/rainChartData'
 import { SatelliteChartData } from '../types/satelliteChartData'
+import { RadarChartData } from '../types/radarChartData'
 
 const { region: region1, accessKey, secret } = config.s3
 const s3 = new S3({
@@ -28,7 +29,7 @@ export const s3upload = function (params: PutObjectRequest) {
             resolve(data)
           }
         })
-      }
+      },
     )
   })
 }
@@ -50,29 +51,33 @@ const s3download = function (params: GetObjectRequest): Promise<unknown> {
                 secretAccessKey: secret,
                 signatureVersion: 'v4',
               },
-              err
+              err,
             )
             reject(err)
           } else {
             if (data.Body) {
               const file = Buffer.from(data.Body as ArrayBuffer).toString(
-                'utf8'
+                'utf8',
               )
 
               resolve(JSON.parse(file))
             }
           }
         })
-      }
+      },
     )
   })
 }
 
+export const downloadRadarChartData = (
+  params: GetObjectRequest,
+): Promise<RadarChartData[]> => s3download(params) as Promise<RadarChartData[]>
+
 export const downloadSatelliteChartData = (
-  params: GetObjectRequest
+  params: GetObjectRequest,
 ): Promise<SatelliteChartData[]> =>
   s3download(params) as Promise<SatelliteChartData[]>
 
 export const downloadRainChartData = (
-  params: GetObjectRequest
+  params: GetObjectRequest,
 ): Promise<RainChartData[]> => s3download(params) as Promise<RainChartData[]>

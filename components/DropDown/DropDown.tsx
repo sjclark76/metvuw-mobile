@@ -1,9 +1,10 @@
 import { DropDownItem } from './DropDownItem'
 import { Region } from '../../shared/region'
+import { MenuLink } from './types'
 
 interface DropDownProps {
   heading: string
-  links: Region[]
+  links: MenuLink[]
 }
 const DropDown = (props: DropDownProps) => {
   return (
@@ -20,8 +21,8 @@ const DropDown = (props: DropDownProps) => {
           </svg>
         </button>
         <ul className="absolute w-full	hidden rounded-b text-white font-bold bg-blue-400  group-hover:block z-50">
-          {props.links.map((link) => (
-            <DropDownItem key={link.code} region={link} />
+          {props.links.map(({ key, value, href }) => (
+            <DropDownItem key={key} value={value} href={href} />
           ))}
         </ul>
       </div>

@@ -1,18 +1,20 @@
 import { Region } from '../../shared/region'
 
 interface DropDownItemProps {
-  region: Region
+  key: string
+  value: string
+  href: string
 }
 
-export const DropDownItem = (props: DropDownItemProps) => {
+export const DropDownItem = ({ key, value, href }: DropDownItemProps) => {
   return (
     <>
-      <li key={props.region.code} className="hover:bg-blue-500 rounded">
+      <li key={key} className="hover:bg-blue-500 rounded">
         <a
           className="max-w-full py-2 px-4 block whitespace-no-wrap "
-          href={`/regions/${props.region.code}`}
+          href={href}
         >
-          {props.region.name}
+          {value}
         </a>
       </li>
     </>
