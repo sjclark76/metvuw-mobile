@@ -69,15 +69,22 @@ const s3download = function (params: GetObjectRequest): Promise<unknown> {
   })
 }
 
-export const downloadRadarChartData = (
-  params: GetObjectRequest,
-): Promise<RadarChartData[]> => s3download(params) as Promise<RadarChartData[]>
+export const downloadRadarChartData = (): Promise<RadarChartData[]> =>
+  s3download({
+    Bucket: config.s3.bucketName,
+    Key: 'radar.json',
+  }) as Promise<RadarChartData[]>
 
-export const downloadSatelliteChartData = (
-  params: GetObjectRequest,
-): Promise<SatelliteChartData[]> =>
-  s3download(params) as Promise<SatelliteChartData[]>
+export const downloadSatelliteChartData = (): Promise<SatelliteChartData[]> =>
+  s3download({
+    Bucket: config.s3.bucketName,
+    Key: 'satellite.json',
+  }) as Promise<SatelliteChartData[]>
 
 export const downloadRainChartData = (
-  params: GetObjectRequest,
-): Promise<RainChartData[]> => s3download(params) as Promise<RainChartData[]>
+  regionName: string,
+): Promise<RainChartData[]> =>
+  s3download({
+    Bucket: config.s3.bucketName,
+    Key: buildKeyName(regionName),
+  }) as Promise<RainChartData[]>
