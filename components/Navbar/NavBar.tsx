@@ -1,21 +1,45 @@
 import Link from 'next/link'
-import { useContext, useState } from 'react'
-import DropDown from '../DropDown/DropDown'
+import { useState } from 'react'
+import DropDown from './components/DropDown'
 import {
-  australiaLinks,
-  europeLinks,
-  nzLinks,
-  pacificLinks,
-  worldLinks,
+  australiaRegions,
+  europeRegions,
+  nzRegions,
+  pacificRegions,
+  Region,
+  worldRegions,
 } from '../../shared/region'
-import { GlobalContext } from '../GlobalProvider'
+import { MenuLink } from './types'
+import { radarRegions } from '../../shared/radarRegions'
+import styles from './NavBar.module.css'
+import { useAtomValue } from 'jotai'
+import { submenuTextAtom } from '../Atoms/GlobalState'
+
+export const mapRegionToMenuLink = (regions: Region[]): MenuLink[] =>
+  regions.map((region) => ({
+    key: region.code,
+    value: region.name,
+    href: `/regions/${region.code}`,
+  }))
+
+const nzLinks = mapRegionToMenuLink(nzRegions)
+const australiaLinks = mapRegionToMenuLink(australiaRegions)
+const pacificLinks = mapRegionToMenuLink(pacificRegions)
+const europeLinks = mapRegionToMenuLink(europeRegions)
+const worldLinks = mapRegionToMenuLink(worldRegions)
+const radarLinks: MenuLink[] = Object.keys(radarRegions).map((key) => ({
+  key,
+  value: radarRegions[key],
+  href: `/radar/${key}`,
+}))
 
 const Navbar = () => {
   const [active, setActive] = useState(false)
   const handleClick = () => {
     setActive(!active)
   }
-  const { submenuText } = useContext(GlobalContext)
+  const submenuText = useAtomValue(submenuTextAtom)
+
   return (
     <div className="sticky top-0 z-50">
       <nav className="flex items-center flex-wrap bg-gradient-to-r from-purple-400  to-blue-600 p-2 ">
@@ -87,12 +111,13 @@ const Navbar = () => {
             <DropDown heading="Pacific" links={pacificLinks} />
             <DropDown heading="Europe" links={europeLinks} />
             <DropDown heading="Rest Of World" links={worldLinks} />
-            <div className="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex">
+            <div className={styles.headerText}>
               <Link href="/satellite" className="mr-1">
                 Satellite
               </Link>
             </div>
-            <div className="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex">
+            <DropDown heading="Radar" links={radarLinks} />
+            <div className={styles.headerText}>
               <a className="mr-1" href="mailto:metvuwmobile@gmail.com">
                 Contact
               </a>
@@ -102,7 +127,7 @@ const Navbar = () => {
       </nav>
       <div className="flex flex-row justify-center">
         <div className="px-2 filter  bg-gray-50 w-full ">
-          <h1 className="text-base text-center font-medium text-sm text-gray-800 my-4 ">
+          <h1 className="text-center font-medium text-sm text-gray-800 my-4 ">
             {submenuText}
           </h1>
         </div>

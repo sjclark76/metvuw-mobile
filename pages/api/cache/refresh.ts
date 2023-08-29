@@ -19,7 +19,10 @@ export async function cacheImages(): Promise<CacheRefreshResult> {
       return axios.get<CacheImageResult>(apiURl.href)
     })
 
-  return Promise.all([satellitePromise, ...regionsPromise])
+  const radarCacheUrl = new URL('api/cache/radar', config.baseUrl)
+  const radarPromise = axios.get<CacheImageResult>(radarCacheUrl.href)
+
+  return Promise.all([radarPromise, satellitePromise, ...regionsPromise])
     .then((cacheImageResults) => {
       const cacheImageResult = cacheImageResults.map(
         (cacheImageResultResponse) => cacheImageResultResponse.data,

@@ -29,10 +29,6 @@ const WeatherImage = ({
         alt={imageAlt}
         width={711}
         height={600}
-        // placeholderSrc={
-        //   isRainForecast ? '/placeholder.png' : '/satellite-compressed.jpg'
-        // }
-        // effect="blur"
         src={imageSrc} // use normal <img> attributes as props
         className={isRainForecast ? styles.croppedImage : undefined}
         style={isRainForecast ? rainStyle : satelliteStyle}

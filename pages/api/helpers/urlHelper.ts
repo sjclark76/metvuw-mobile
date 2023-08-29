@@ -1,62 +1,84 @@
 import { RainChartData } from '../types/rainChartData'
-import { SatelliteChartData } from '../types/satelliteChartData'
+import { ChartData } from '../types/chartData'
+import { RadarChartData, RadarMap } from '../types/radarChartData'
+import { RadarCode } from '../../../shared/radarRegions'
 
-export function decodeRainUrl(
-  relativeUrl: string
-): Pick<
-  RainChartData,
-  | 'year'
-  | 'month'
-  | 'day'
-  | 'hour'
-  | 'utcDate'
-  | 'issueDate'
-  | 'forecastDate'
-  | 'offset'
-> {
-  // ./2021060500/rain-nz-2021060500-006.gif
+function extractFilename(relativeUrl: string, regex: RegExp): string {
+  const match = relativeUrl.match(regex)
+  return match?.groups?.filename ?? ''
+}
 
-  const slice = relativeUrl.slice(-18).slice(0, 14)
-
-  const year = +slice.slice(0, 4) // +groups.year
-  const month = +slice.slice(4, 6) - 1 //+groups.month - 1
-  const day = +slice.slice(6, 8) // +groups.day
-  const hour = +slice.slice(8, 10) //+groups.hour
-  const offset = +slice.slice(11, 14) //+ groups.offset
+function constructChartData(
+  fileName: string,
+): Omit<ChartData, 'url' | 'width' | 'height'> {
+  const year = +fileName.slice(0, 4)
+  const month = +fileName.slice(4, 6) - 1
+  const day = +fileName.slice(6, 8)
+  const hour = +fileName.slice(8, 10)
+  const utcDate = Date.UTC(year, month, day, hour)
   return {
     year: year,
     month: month,
     day: day,
     hour: hour,
-    utcDate: Date.UTC(year, month, day, hour),
-    issueDate: new Date(Date.UTC(year, month, day, hour)).toISOString(),
+    imageDateUTC: utcDate,
+    imageDateISO: new Date(utcDate).toISOString(),
+  }
+}
+export function decodeRainUrl(
+  relativeUrl: string,
+): Omit<RainChartData, 'url' | 'width' | 'height'> {
+  // ./2021060500/rain-nz-2021060500-006.gif
+
+  const regex = /\.\/\d+\/rain-\w+-thumb-(?<filename>\d+-\d+\.gif)/
+  const filename = extractFilename(relativeUrl, regex)
+
+  const chartData = constructChartData(filename)
+
+  const offset = +filename.slice(11, 14)
+
+  return {
+    ...chartData,
     forecastDate: new Date(
-      Date.UTC(year, month, day, hour + offset)
+      Date.UTC(
+        chartData.year,
+        chartData.month,
+        chartData.day,
+        chartData.hour + offset,
+      ),
     ).toISOString(),
     offset: offset,
   }
 }
 
 export function decodeSatelliteUrl(
-  relativeUrl: string
-): Pick<
-  SatelliteChartData,
-  'year' | 'month' | 'day' | 'hour' | 'imageDate' | 'imageDateIso'
-> {
+  relativeUrl: string,
+): Omit<ChartData, 'url' | 'width' | 'height'> {
   // ./small/202109240000.jpg
 
-  const slice = relativeUrl.slice(-17).slice(0, 12)
+  const regex = /\.\/\w+\/(?<filename>\d+\.jpg)/
+  const filename = extractFilename(relativeUrl, regex)
 
-  const year = +slice.slice(0, 4) // +groups.year
-  const month = +slice.slice(4, 6) - 1 //+groups.month - 1
-  const day = +slice.slice(6, 8) // +groups.day
-  const hour = +slice.slice(8, 10) //+groups.hour
+  const chartData = constructChartData(filename)
+
   return {
-    year: year,
-    month: month,
-    day: day,
-    hour: hour,
-    imageDate: Date.UTC(year, month, day, hour),
-    imageDateIso: new Date(Date.UTC(year, month, day, hour)).toISOString(),
+    ...chartData,
+  }
+}
+
+export function decodeRadarUrl(
+  relativeUrl: string,
+): Omit<RadarChartData, 'url' | 'width' | 'height'> {
+  // ./images/202308271500Z_nl.gif
+
+  const regex = /\.\/\w+\/(?<filename>\d+\w+.gif)/
+  const filename = extractFilename(relativeUrl, regex)
+  const radar = filename.match(/\d+\w_(?<radar>\w+).gif/)?.groups?.radar ?? ''
+  const chartData = constructChartData(filename)
+
+  return {
+    ...chartData,
+    radarCode: radar as RadarCode,
+    radar: RadarMap.get(radar),
   }
 }
