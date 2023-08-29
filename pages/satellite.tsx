@@ -12,7 +12,6 @@ export interface SatellitePageProps {
   meta: SeoMetaProps
 }
 export default function Satellite(props: SatellitePageProps) {
-  console.debug('stuart', { images: props.images })
   return (
     <>
       <SeoMeta

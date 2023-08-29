@@ -77,377 +77,650 @@ exports[`NavBar Component should render correctly 1`] = `
           class="lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start  flex flex-col lg:h-auto"
         >
           <div
-            class="group inline-block relative"
+            class="relative inline-flex "
+            id="dropdown"
           >
             <button
-              class="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex"
+              aria-expanded="false"
+              class="headerText"
             >
-              <span
-                class="mr-1"
-              >
+              <span>
                 New Zealand
               </span>
-              <svg
-                class="fill-current h-4 w-4"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="relative only:-mx-5"
               >
-                <path
-                  d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                />
-              </svg>
+                <svg
+                  aria-labelledby="t-01 d-01"
+                  class="w-5 h-5"
+                  fill="none"
+                  role="graphics-symbol"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title
+                    id="t-01"
+                  >
+                    Button icon
+                  </title>
+                  <desc
+                    id="d-01"
+                  >
+                    An icon describing the buttons usage
+                  </desc>
+                  <path
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
             </button>
             <ul
-              class="absolute w-full	hidden rounded-b text-white font-bold bg-blue-400  group-hover:block z-50"
+              class="hidden absolute top-full z-10 mt-3 flex w-72 list-none flex-col rounded bg-white py-2 shadow-md shadow-slate-500/10 "
             >
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/nz"
                 >
-                  New Zealand
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      New Zealand
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/nzni"
                 >
-                  North Island
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      North Island
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/nzsi"
                 >
-                  South Island
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      South Island
+                    </span>
+                  </span>
                 </a>
               </li>
             </ul>
           </div>
           <div
-            class="group inline-block relative"
+            class="relative inline-flex "
+            id="dropdown"
           >
             <button
-              class="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex"
+              aria-expanded="false"
+              class="headerText"
             >
-              <span
-                class="mr-1"
-              >
+              <span>
                 Australia
               </span>
-              <svg
-                class="fill-current h-4 w-4"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="relative only:-mx-5"
               >
-                <path
-                  d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                />
-              </svg>
+                <svg
+                  aria-labelledby="t-01 d-01"
+                  class="w-5 h-5"
+                  fill="none"
+                  role="graphics-symbol"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title
+                    id="t-01"
+                  >
+                    Button icon
+                  </title>
+                  <desc
+                    id="d-01"
+                  >
+                    An icon describing the buttons usage
+                  </desc>
+                  <path
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
             </button>
             <ul
-              class="absolute w-full	hidden rounded-b text-white font-bold bg-blue-400  group-hover:block z-50"
+              class="hidden absolute top-full z-10 mt-3 flex w-72 list-none flex-col rounded bg-white py-2 shadow-md shadow-slate-500/10 "
             >
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/victoria"
                 >
-                  Victoria & Tasmania
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Victoria & Tasmania
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/nsw"
                 >
-                  New South Wales
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      New South Wales
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/waussie"
                 >
-                  Western Australia
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Western Australia
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/swaussie"
                 >
-                  Perth
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Perth
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/queensland"
                 >
-                  Queensland
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Queensland
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/saussie"
                 >
-                  South Australia
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      South Australia
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/seaussie"
                 >
-                  South East Australia
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      South East Australia
+                    </span>
+                  </span>
                 </a>
               </li>
             </ul>
           </div>
           <div
-            class="group inline-block relative"
+            class="relative inline-flex "
+            id="dropdown"
           >
             <button
-              class="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex"
+              aria-expanded="false"
+              class="headerText"
             >
-              <span
-                class="mr-1"
-              >
+              <span>
                 Pacific
               </span>
-              <svg
-                class="fill-current h-4 w-4"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="relative only:-mx-5"
               >
-                <path
-                  d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                />
-              </svg>
+                <svg
+                  aria-labelledby="t-01 d-01"
+                  class="w-5 h-5"
+                  fill="none"
+                  role="graphics-symbol"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title
+                    id="t-01"
+                  >
+                    Button icon
+                  </title>
+                  <desc
+                    id="d-01"
+                  >
+                    An icon describing the buttons usage
+                  </desc>
+                  <path
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
             </button>
             <ul
-              class="absolute w-full	hidden rounded-b text-white font-bold bg-blue-400  group-hover:block z-50"
+              class="hidden absolute top-full z-10 mt-3 flex w-72 list-none flex-col rounded bg-white py-2 shadow-md shadow-slate-500/10 "
             >
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/newcaledonia"
                 >
-                  New Caledonia
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      New Caledonia
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/fiji"
                 >
-                  Fiji
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Fiji
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/swp"
                 >
-                  South West Pacific
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      South West Pacific
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/ocean"
                 >
-                  Fiji - NZ
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Fiji - NZ
+                    </span>
+                  </span>
                 </a>
               </li>
             </ul>
           </div>
           <div
-            class="group inline-block relative"
+            class="relative inline-flex "
+            id="dropdown"
           >
             <button
-              class="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex"
+              aria-expanded="false"
+              class="headerText"
             >
-              <span
-                class="mr-1"
-              >
+              <span>
                 Europe
               </span>
-              <svg
-                class="fill-current h-4 w-4"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="relative only:-mx-5"
               >
-                <path
-                  d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                />
-              </svg>
+                <svg
+                  aria-labelledby="t-01 d-01"
+                  class="w-5 h-5"
+                  fill="none"
+                  role="graphics-symbol"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title
+                    id="t-01"
+                  >
+                    Button icon
+                  </title>
+                  <desc
+                    id="d-01"
+                  >
+                    An icon describing the buttons usage
+                  </desc>
+                  <path
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
             </button>
             <ul
-              class="absolute w-full	hidden rounded-b text-white font-bold bg-blue-400  group-hover:block z-50"
+              class="hidden absolute top-full z-10 mt-3 flex w-72 list-none flex-col rounded bg-white py-2 shadow-md shadow-slate-500/10 "
             >
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/europe"
                 >
-                  Europe
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Europe
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/uk"
                 >
-                  United Kingdom
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      United Kingdom
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/estonia"
                 >
-                  Estonia
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Estonia
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/turkey"
                 >
-                  Turkey
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Turkey
+                    </span>
+                  </span>
                 </a>
               </li>
             </ul>
           </div>
           <div
-            class="group inline-block relative"
+            class="relative inline-flex "
+            id="dropdown"
           >
             <button
-              class="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex"
+              aria-expanded="false"
+              class="headerText"
             >
-              <span
-                class="mr-1"
-              >
+              <span>
                 Rest Of World
               </span>
-              <svg
-                class="fill-current h-4 w-4"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="relative only:-mx-5"
               >
-                <path
-                  d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                />
-              </svg>
+                <svg
+                  aria-labelledby="t-01 d-01"
+                  class="w-5 h-5"
+                  fill="none"
+                  role="graphics-symbol"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title
+                    id="t-01"
+                  >
+                    Button icon
+                  </title>
+                  <desc
+                    id="d-01"
+                  >
+                    An icon describing the buttons usage
+                  </desc>
+                  <path
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
             </button>
             <ul
-              class="absolute w-full	hidden rounded-b text-white font-bold bg-blue-400  group-hover:block z-50"
+              class="hidden absolute top-full z-10 mt-3 flex w-72 list-none flex-col rounded bg-white py-2 shadow-md shadow-slate-500/10 "
             >
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/world"
                 >
-                  World
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      World
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/satlantic"
                 >
-                  South Atlantic
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      South Atlantic
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/natlantic"
                 >
-                  North Atlantic
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      North Atlantic
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/usa"
                 >
-                  USA
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      USA
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/japan"
                 >
-                  Japan
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Japan
+                    </span>
+                  </span>
                 </a>
               </li>
-              <li
-                class="hover:bg-blue-500 rounded"
-              >
+              <li>
                 <a
-                  class="max-w-full py-2 px-4 block whitespace-no-wrap "
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
                   href="/regions/safrica"
                 >
-                  South Africa
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      South Africa
+                    </span>
+                  </span>
                 </a>
               </li>
             </ul>
           </div>
           <div
-            class="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex"
+            class="headerText"
           >
             <a
               class="mr-1"
@@ -457,7 +730,207 @@ exports[`NavBar Component should render correctly 1`] = `
             </a>
           </div>
           <div
-            class="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex"
+            class="relative inline-flex "
+            id="dropdown"
+          >
+            <button
+              aria-expanded="false"
+              class="headerText"
+            >
+              <span>
+                Radar
+              </span>
+              <span
+                class="relative only:-mx-5"
+              >
+                <svg
+                  aria-labelledby="t-01 d-01"
+                  class="w-5 h-5"
+                  fill="none"
+                  role="graphics-symbol"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title
+                    id="t-01"
+                  >
+                    Button icon
+                  </title>
+                  <desc
+                    id="d-01"
+                  >
+                    An icon describing the buttons usage
+                  </desc>
+                  <path
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+            </button>
+            <ul
+              class="hidden absolute top-full z-10 mt-3 flex w-72 list-none flex-col rounded bg-white py-2 shadow-md shadow-slate-500/10 "
+            >
+              <li>
+                <a
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
+                  href="/radar/nl"
+                >
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Northland
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
+                  href="/radar/ak"
+                >
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Auckland
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
+                  href="/radar/bp"
+                >
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Bay of Plenty
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
+                  href="/radar/mh"
+                >
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Hawkes Bay
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
+                  href="/radar/np"
+                >
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Taranaki
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
+                  href="/radar/wn"
+                >
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Wellington
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
+                  href="/radar/ch"
+                >
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Christchurch
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
+                  href="/radar/wl"
+                >
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Westland
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
+                  href="/radar/nv"
+                >
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Southland
+                    </span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div
+            class="headerText"
           >
             <a
               class="mr-1"
@@ -476,7 +949,7 @@ exports[`NavBar Component should render correctly 1`] = `
         class="px-2 filter  bg-gray-50 w-full "
       >
         <h1
-          class="text-base text-center font-medium text-sm text-gray-800 my-4 "
+          class="text-center font-medium text-sm text-gray-800 my-4 "
         />
       </div>
     </div>

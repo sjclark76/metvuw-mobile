@@ -15,9 +15,9 @@ export interface RadarPageProps {
   meta: SeoMetaProps
 }
 export default function Radar(props: RadarPageProps) {
-  const setSubmenuText = useSetAtom(submenuTextAtom)
+  // const setSubmenuText = useSetAtom(submenuTextAtom)
 
-  setSubmenuText(`Radar Chart for ${props.images[0].radar}`)
+  // setSubmenuText(`Radar Chart for ${props.images[0].radar}`)
   return (
     <>
       <SeoMeta
@@ -64,7 +64,6 @@ export const getServerSideProps: GetServerSideProps<RadarPageProps> = async (
   })
 
   const radarCode: RadarCode | undefined = context.params?.code as RadarCode
-  console.debug({ radarCode })
 
   const serverSideProps: GetServerSidePropsResult<RadarPageProps> = {
     props: radarImagesPromise.then((radarImages) => {

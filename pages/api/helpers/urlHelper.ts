@@ -30,7 +30,7 @@ export function decodeRainUrl(
 ): Omit<RainChartData, 'url' | 'width' | 'height'> {
   // ./2021060500/rain-nz-2021060500-006.gif
 
-  const regex = /\.\/\d+\/rain-nz-(?<filename>\d+-\d+\.gif)/
+  const regex = /\.\/\d+\/rain-\w+-thumb-(?<filename>\d+-\d+\.gif)/
   const filename = extractFilename(relativeUrl, regex)
 
   const chartData = constructChartData(filename)

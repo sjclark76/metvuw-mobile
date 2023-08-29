@@ -3,7 +3,7 @@ import { decodeRadarUrl, decodeRainUrl, decodeSatelliteUrl } from './urlHelper'
 describe('urlHelper tests', () => {
   describe('decodeRainUrl', () => {
     it('should return the correct object', () => {
-      const relativeUrl = './2021060500/rain-nz-2021060500-006.gif'
+      const relativeUrl = './2021060500/rain-nz-thumb-2021060500-006.gif'
 
       expect(decodeRainUrl(relativeUrl)).toMatchInlineSnapshot(`
 {
@@ -18,7 +18,26 @@ describe('urlHelper tests', () => {
 }
 `)
     })
+
+    it('should return the correct object for the north island', () => {
+      const relativeUrl = './2023082818/rain-nzni-thumb-2023082818-240.gif'
+
+      expect(decodeRainUrl(relativeUrl)).toMatchInlineSnapshot(`
+{
+  "day": 28,
+  "forecastDate": "2023-09-07T18:00:00.000Z",
+  "hour": 18,
+  "imageDateISO": "2023-08-28T18:00:00.000Z",
+  "imageDateUTC": 1693245600000,
+  "month": 7,
+  "offset": 240,
+  "year": 2023,
+}
+`)
+    })
   })
+
+  // ./2023082818/rain-nzni-thumb-2023082818-240.gif
 
   describe('decodeSatelliteUrl', () => {
     it('should return the correct object', () => {

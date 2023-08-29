@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useState } from 'react'
-import DropDown from '../DropDown/DropDown'
+import DropDown from './components/DropDown'
 import {
   australiaRegions,
   europeRegions,
@@ -9,12 +9,13 @@ import {
   Region,
   worldRegions,
 } from '../../shared/region'
-import { MenuLink } from '../DropDown/types'
+import { MenuLink } from './types'
 import { radarRegions } from '../../shared/radarRegions'
+import styles from './NavBar.module.css'
 import { useAtomValue } from 'jotai'
 import { submenuTextAtom } from '../Atoms/GlobalState'
 
-const mapRegionToMenuLink = (regions: Region[]): MenuLink[] =>
+export const mapRegionToMenuLink = (regions: Region[]): MenuLink[] =>
   regions.map((region) => ({
     key: region.code,
     value: region.name,
@@ -110,13 +111,13 @@ const Navbar = () => {
             <DropDown heading="Pacific" links={pacificLinks} />
             <DropDown heading="Europe" links={europeLinks} />
             <DropDown heading="Rest Of World" links={worldLinks} />
-            <div className="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex">
+            <div className={styles.headerText}>
               <Link href="/satellite" className="mr-1">
                 Satellite
               </Link>
             </div>
             <DropDown heading="Radar" links={radarLinks} />
-            <div className="px-3 py-2 rounded-t text-white font-bold items-center justify-center hover:bg-blue-400 hover:text-white inline-flex">
+            <div className={styles.headerText}>
               <a className="mr-1" href="mailto:metvuwmobile@gmail.com">
                 Contact
               </a>
@@ -127,7 +128,7 @@ const Navbar = () => {
       <div className="flex flex-row justify-center">
         <div className="px-2 filter  bg-gray-50 w-full ">
           <h1 className="text-center font-medium text-sm text-gray-800 my-4 ">
-            {submenuText}
+            {/*{submenuTextAtomnuText}*/}
           </h1>
         </div>
       </div>
