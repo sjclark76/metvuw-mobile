@@ -6,7 +6,7 @@ exports[`NavBar Component should render correctly 1`] = `
     class="sticky top-0 z-50"
   >
     <nav
-      class="flex items-center flex-wrap bg-gradient-to-r from-purple-400  to-blue-600 p-2 "
+      class="flex items-center flex-wrap bg-gradient-to-r from-blue-300  to-blue-600 p-2 "
     >
       <a
         class="inline-flex items-center p-2 mr-4 "
@@ -53,7 +53,7 @@ exports[`NavBar Component should render correctly 1`] = `
       </a>
       <button
         aria-label="Open Menu"
-        class="lg:hidden inline-flex p-3 hover:bg-blue-600 rounded text-white ml-auto hover:text-white outline-none"
+        class="xl:hidden inline-flex p-3 hover:bg-blue-600 rounded text-white ml-auto hover:text-white outline-none"
       >
         <svg
           class="w-6 h-6"
@@ -71,10 +71,10 @@ exports[`NavBar Component should render correctly 1`] = `
         </svg>
       </button>
       <div
-        class="hidden   w-full lg:inline-flex lg:flex-grow lg:w-auto"
+        class="hidden   w-full xl:inline-flex xl:flex-grow xl:w-auto"
       >
         <div
-          class="lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start  flex flex-col lg:h-auto"
+          class="xl:inline-flex xl:flex-row xl:ml-auto xl:w-auto w-full xl:items-center items-start  flex flex-col xl:h-auto"
         >
           <div
             class="relative inline-flex "
@@ -923,6 +923,104 @@ exports[`NavBar Component should render correctly 1`] = `
                       class="truncate leading-5"
                     >
                       Southland
+                    </span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div
+            class="relative inline-flex "
+            id="dropdown"
+          >
+            <button
+              aria-expanded="false"
+              class="headerText"
+            >
+              <span>
+                Upper Air
+              </span>
+              <span
+                class="relative only:-mx-5"
+              >
+                <svg
+                  aria-labelledby="t-01 d-01"
+                  class="w-5 h-5"
+                  fill="none"
+                  role="graphics-symbol"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title
+                    id="t-01"
+                  >
+                    Button icon
+                  </title>
+                  <desc
+                    id="d-01"
+                  >
+                    An icon describing the buttons usage
+                  </desc>
+                  <path
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+            </button>
+            <ul
+              class="hidden absolute top-full z-10 mt-3 flex w-72 list-none flex-col rounded bg-white py-2 shadow-md shadow-slate-500/10 "
+            >
+              <li>
+                <a
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
+                  href="/upperair/93112"
+                >
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Whenuapai
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
+                  href="/upperair/93417"
+                >
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Paraparaumu
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  aria-current="false"
+                  class=" bg-none text-slate-500 flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none"
+                  href="/upperair/93844"
+                >
+                  <span
+                    class="flex flex-col gap-1 overflow-hidden whitespace-nowrap"
+                  >
+                    <span
+                      class="truncate leading-5"
+                    >
+                      Invercargill
                     </span>
                   </span>
                 </a>
