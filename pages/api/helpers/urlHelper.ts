@@ -1,7 +1,12 @@
 import { RainChartData } from '../types/rainChartData'
 import { ChartData } from '../types/chartData'
-import { RadarChartData, RadarMap } from '../types/radarChartData'
-import { RadarCode } from '../../../shared/radarRegions'
+import { RadarChartData } from '../types/radarChartData'
+import { RadarCode, radarRegions } from '../../../shared/radarRegions'
+import { UpperAirChartData } from '../types/upperAirChartData'
+import {
+  BalloonLocationCode,
+  balloonLocations,
+} from '../../../shared/balloonLocations'
 
 function extractFilename(relativeUrl: string, regex: RegExp): string {
   const match = relativeUrl.match(regex)
@@ -79,6 +84,24 @@ export function decodeRadarUrl(
   return {
     ...chartData,
     radarCode: radar as RadarCode,
-    radar: RadarMap.get(radar),
+    radar: radarRegions[radar],
+  }
+}
+
+export function decodeUpperAirUrl(
+  relativeUrl: string,
+): Omit<UpperAirChartData, 'url' | 'width' | 'height'> {
+  // ./202308301200.93112.thumb.png
+
+  const regex = /\.\/(?<date>\d+)\.(?<balloon>\d+).thumb.png/
+  const regexMatch = relativeUrl.match(regex)
+  const date = regexMatch?.groups?.date ?? ''
+  const balloonLocationCode = regexMatch?.groups?.balloon ?? ''
+  const chartData = constructChartData(date)
+
+  return {
+    ...chartData,
+    balloonLocationCode: balloonLocationCode as BalloonLocationCode,
+    balloonLocation: balloonLocations[balloonLocationCode],
   }
 }

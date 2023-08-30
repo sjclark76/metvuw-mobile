@@ -5,7 +5,7 @@ import { downloadSatelliteChartData } from './api/helpers/s3Helper'
 import { GetServerSideProps } from 'next'
 import { GetServerSidePropsResult } from 'next/types'
 import RadarAndSatelliteImages from '../components/RadarAndSatelliteImages'
-import { useSetAtom } from 'jotai/index'
+import { useSetAtom } from 'jotai'
 import { submenuTextAtom } from '../components/Atoms/GlobalState'
 
 export interface SatellitePageProps {
@@ -17,7 +17,13 @@ export default function Satellite({ images, meta }: SatellitePageProps) {
 
   setSubmenuText(`Satellite Imagery for New Zealand`)
 
-  return <RadarAndSatelliteImages meta={meta} images={images} />
+  return (
+    <RadarAndSatelliteImages
+      meta={meta}
+      images={images}
+      chartType={'Satellite'}
+    />
+  )
 }
 
 export const getServerSideProps: GetServerSideProps<

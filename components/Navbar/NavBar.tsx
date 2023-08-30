@@ -13,6 +13,7 @@ import { MenuLink } from './types'
 import { radarRegions } from '../../shared/radarRegions'
 import styles from './NavBar.module.css'
 import { SubHeader } from './components/SubHeader'
+import { balloonLocations } from '../../shared/balloonLocations'
 
 export const mapRegionToMenuLink = (regions: Region[]): MenuLink[] =>
   regions.map((region) => ({
@@ -31,6 +32,11 @@ const radarLinks: MenuLink[] = Object.keys(radarRegions).map((key) => ({
   value: radarRegions[key],
   href: `/radar/${key}`,
 }))
+const balloonLinks: MenuLink[] = Object.keys(balloonLocations).map((key) => ({
+  key,
+  value: balloonLocations[key],
+  href: `/upperair/${key}`,
+}))
 
 const Navbar = () => {
   const [active, setActive] = useState(false)
@@ -40,7 +46,7 @@ const Navbar = () => {
 
   return (
     <div className="sticky top-0 z-50">
-      <nav className="flex items-center flex-wrap bg-gradient-to-r from-purple-400  to-blue-600 p-2 ">
+      <nav className="flex items-center flex-wrap bg-gradient-to-r from-blue-300  to-blue-600 p-2 ">
         <Link href="/" className="inline-flex items-center p-2 mr-4 ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -115,6 +121,7 @@ const Navbar = () => {
               </Link>
             </div>
             <DropDown heading="Radar" links={radarLinks} />
+            <DropDown heading="Upper Air" links={balloonLinks} />
             <div className={styles.headerText}>
               <a className="mr-1" href="mailto:metvuwmobile@gmail.com">
                 Contact

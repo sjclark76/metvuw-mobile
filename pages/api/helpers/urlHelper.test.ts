@@ -1,4 +1,9 @@
-import { decodeRadarUrl, decodeRainUrl, decodeSatelliteUrl } from './urlHelper'
+import {
+  decodeRadarUrl,
+  decodeRainUrl,
+  decodeSatelliteUrl,
+  decodeUpperAirUrl,
+} from './urlHelper'
 
 describe('urlHelper tests', () => {
   describe('decodeRainUrl', () => {
@@ -69,6 +74,25 @@ describe('urlHelper tests', () => {
   "month": 7,
   "radar": "Northland",
   "radarCode": "nl",
+  "year": 2023,
+}
+`)
+    })
+  })
+
+  describe('decodeRadarUrl', () => {
+    it('should return the correct object', () => {
+      const url = './202308301200.93112.thumb.png'
+
+      expect(decodeUpperAirUrl(url)).toMatchInlineSnapshot(`
+{
+  "balloonLocation": "Whenuapai",
+  "balloonLocationCode": "93112",
+  "day": 30,
+  "hour": 12,
+  "imageDateISO": "2023-08-30T12:00:00.000Z",
+  "imageDateUTC": 1693396800000,
+  "month": 7,
   "year": 2023,
 }
 `)
