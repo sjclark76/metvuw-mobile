@@ -11,7 +11,7 @@ interface Props {
 export function WeatherChart(props: Props) {
   const altTag = `${props.region.name} forecast chart for ${format(
     new Date(props.chart.forecastDate),
-    'PPPPp'
+    'PPPPp',
   )}`
   const forecastDate = new Date(props.chart.forecastDate)
 
@@ -20,7 +20,7 @@ export function WeatherChart(props: Props) {
       <WeatherImage
         imageSrc={props.chart.url}
         imageAlt={altTag}
-        isRainForecast={true}
+        chartType={'Rain'}
       />
       <div className="flex items-center rounded-b-lg justify-around py-3 bg-white">
         <span className="text-base font-semibold text-gray-700">

@@ -5,7 +5,7 @@ import { RadarChartData } from '../api/types/radarChartData'
 import { downloadRadarChartData } from '../api/helpers/s3Helper'
 import { config } from '../../config'
 import { RadarCode } from '../../shared/radarRegions'
-import { useSetAtom } from 'jotai/index'
+import { useSetAtom } from 'jotai'
 import { submenuTextAtom } from '../../components/Atoms/GlobalState'
 import RadarAndSatelliteImages from '../../components/RadarAndSatelliteImages'
 
@@ -18,7 +18,9 @@ export default function Radar({ images, meta }: RadarPageProps) {
 
   setSubmenuText(`Radar Chart for ${images[0].radar}`)
 
-  return <RadarAndSatelliteImages meta={meta} images={images} />
+  return (
+    <RadarAndSatelliteImages meta={meta} images={images} chartType={'Radar'} />
+  )
 }
 
 export const getServerSideProps: GetServerSideProps<RadarPageProps> = async (

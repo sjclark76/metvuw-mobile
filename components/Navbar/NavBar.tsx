@@ -12,8 +12,8 @@ import {
 import { MenuLink } from './types'
 import { radarRegions } from '../../shared/radarRegions'
 import styles from './NavBar.module.css'
-import { useAtomValue } from 'jotai'
-import { submenuTextAtom } from '../Atoms/GlobalState'
+import { SubHeader } from './components/SubHeader'
+import { balloonLocations } from '../../shared/balloonLocations'
 
 export const mapRegionToMenuLink = (regions: Region[]): MenuLink[] =>
   regions.map((region) => ({
@@ -32,17 +32,21 @@ const radarLinks: MenuLink[] = Object.keys(radarRegions).map((key) => ({
   value: radarRegions[key],
   href: `/radar/${key}`,
 }))
+const balloonLinks: MenuLink[] = Object.keys(balloonLocations).map((key) => ({
+  key,
+  value: balloonLocations[key],
+  href: `/upperair/${key}`,
+}))
 
 const Navbar = () => {
   const [active, setActive] = useState(false)
   const handleClick = () => {
     setActive(!active)
   }
-  const submenuText = useAtomValue(submenuTextAtom)
 
   return (
     <div className="sticky top-0 z-50">
-      <nav className="flex items-center flex-wrap bg-gradient-to-r from-purple-400  to-blue-600 p-2 ">
+      <nav className="flex items-center flex-wrap bg-gradient-to-r from-blue-300  to-blue-600 p-2 ">
         <Link href="/" className="inline-flex items-center p-2 mr-4 ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +86,7 @@ const Navbar = () => {
         </Link>
         <button
           aria-label="Open Menu"
-          className="lg:hidden inline-flex p-3 hover:bg-blue-600 rounded text-white ml-auto hover:text-white outline-none"
+          className="xl:hidden inline-flex p-3 hover:bg-blue-600 rounded text-white ml-auto hover:text-white outline-none"
           onClick={handleClick}
         >
           <svg
@@ -103,9 +107,9 @@ const Navbar = () => {
         <div
           className={`${
             active ? '' : 'hidden'
-          }   w-full lg:inline-flex lg:flex-grow lg:w-auto`}
+          }   w-full xl:inline-flex xl:flex-grow xl:w-auto`}
         >
-          <div className="lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start  flex flex-col lg:h-auto">
+          <div className="xl:inline-flex xl:flex-row xl:ml-auto xl:w-auto w-full xl:items-center items-start  flex flex-col xl:h-auto">
             <DropDown heading="New Zealand" links={nzLinks} />
             <DropDown heading="Australia" links={australiaLinks} />
             <DropDown heading="Pacific" links={pacificLinks} />
@@ -117,6 +121,7 @@ const Navbar = () => {
               </Link>
             </div>
             <DropDown heading="Radar" links={radarLinks} />
+            <DropDown heading="Upper Air" links={balloonLinks} />
             <div className={styles.headerText}>
               <a className="mr-1" href="mailto:metvuwmobile@gmail.com">
                 Contact
@@ -125,13 +130,7 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-      <div className="flex flex-row justify-center">
-        <div className="px-2 filter  bg-gray-50 w-full ">
-          <h1 className="text-center font-medium text-sm text-gray-800 my-4 ">
-            {submenuText}
-          </h1>
-        </div>
-      </div>
+      <SubHeader />
     </div>
   )
 }

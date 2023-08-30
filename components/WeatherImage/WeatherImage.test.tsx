@@ -4,7 +4,7 @@ import WeatherImage from './WeatherImage'
 describe('Weather Image', () => {
   test('it should render correctly', () => {
     const { container } = render(
-      <WeatherImage isRainForecast imageAlt="foo" imageSrc="baa" />
+      <WeatherImage chartType={'Rain'} imageAlt="foo" imageSrc="baa" />,
     )
 
     expect(container).toMatchSnapshot()

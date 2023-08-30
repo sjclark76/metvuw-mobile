@@ -2,13 +2,16 @@ import { SeoMeta, SeoMetaProps } from './SeoMeta'
 import WeatherImage from './WeatherImage'
 import { format } from 'date-fns'
 import { ChartData } from '../pages/api/types/chartData'
+import { ChartType } from '../shared/ChartType'
 
 interface Props {
   images: ChartData[]
+  chartType: ChartType
   meta: SeoMetaProps
 }
 export default function RadarAndSatelliteImages({
   images,
+  chartType,
   meta: { desc, imageUrl, title, url },
 }: Props) {
   return (
@@ -26,7 +29,7 @@ export default function RadarAndSatelliteImages({
                 new Date(image.imageDateUTC),
                 'PPPPp',
               )}`}
-              isRainForecast={false}
+              chartType={chartType}
             />
             <div className="flex items-center rounded-b-lg justify-around py-3 bg-white">
               <span className="text-base font-semibold text-gray-700">
