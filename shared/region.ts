@@ -49,6 +49,14 @@ export const regions = [
   { name: 'USA', code: 'usa' },
   { name: 'Japan', code: 'japan' },
   { name: 'South Africa', code: 'safrica' },
+
+  { code: 'ocean', name: 'New Zealand to Fiji' },
+  { code: 'pacific', name: 'Pacific Islands' },
+  { code: 'fiji', name: 'Fiji Islands' },
+  { code: 'spacific', name: 'South Pacific' },
+  { code: 'pitcairn', name: 'Pitcairn Island' },
+  { code: 'natlantic', name: 'North Atlantic' },
+  { code: 'satlantic', name: 'South Atlantic' },
 ] as const
 
 export const getByRegionCode = (code: string) => {
@@ -96,6 +104,16 @@ export const worldRegions: Region[] = [
   { name: 'USA', code: 'usa' },
   { name: 'Japan', code: 'japan' },
   { name: 'South Africa', code: 'safrica' },
+]
+
+export const oceans: Region[] = [
+  { code: 'ocean', name: 'New Zealand to Fiji' },
+  { code: 'pacific', name: 'Pacific Islands' },
+  { code: 'fiji', name: 'Fiji Islands' },
+  { code: 'spacific', name: 'South Pacific' },
+  { code: 'pitcairn', name: 'Pitcairn Island' },
+  { code: 'natlantic', name: 'North Atlantic' },
+  { code: 'satlantic', name: 'South Atlantic' },
 ]
 
 export type Region = (typeof regions)[number]

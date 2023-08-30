@@ -5,6 +5,7 @@ import {
   australiaRegions,
   europeRegions,
   nzRegions,
+  oceans,
   pacificRegions,
   Region,
   worldRegions,
@@ -27,6 +28,7 @@ const australiaLinks = mapRegionToMenuLink(australiaRegions)
 const pacificLinks = mapRegionToMenuLink(pacificRegions)
 const europeLinks = mapRegionToMenuLink(europeRegions)
 const worldLinks = mapRegionToMenuLink(worldRegions)
+const oceanLinks = mapRegionToMenuLink(oceans)
 const radarLinks: MenuLink[] = Object.keys(radarRegions).map((key) => ({
   key,
   value: radarRegions[key],
@@ -115,6 +117,7 @@ const Navbar = () => {
             <DropDown heading="Pacific" links={pacificLinks} />
             <DropDown heading="Europe" links={europeLinks} />
             <DropDown heading="Rest Of World" links={worldLinks} />
+            <DropDown heading="Oceans" links={oceanLinks} />
             <div className={styles.headerText}>
               <Link href="/satellite" className="mr-1">
                 Satellite
