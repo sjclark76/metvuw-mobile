@@ -1,72 +1,53 @@
-import { GetObjectRequest, PutObjectRequest } from 'aws-sdk/clients/s3'
 import { config } from '../../../config'
-import { S3 } from 'aws-sdk'
+
+const { S3Client } = require('@aws-sdk/client-s3')
 import { RainChartData } from '../types/rainChartData'
 import { SatelliteChartData } from '../types/satelliteChartData'
 import { RadarChartData } from '../types/radarChartData'
+import {
+  GetObjectCommand,
+  GetObjectCommandInput,
+  PutObjectCommand,
+} from '@aws-sdk/client-s3'
+import { PutObjectCommandInput } from '@aws-sdk/client-s3/dist-types/commands/PutObjectCommand'
 
-const { region: region1, accessKey, secret } = config.s3
-const s3 = new S3({
-  region: region1,
-  accessKeyId: accessKey,
-  secretAccessKey: secret,
+const { region, accessKey, secret } = config.s3
+
+const s3Client = new S3Client({
+  region,
+  credentials: {
+    accessKeyId: accessKey,
+    secretAccessKey: secret,
+  },
   signatureVersion: 'v4',
 })
 
 export const buildKeyName = (region: string) => `${region}.json`
 
-export const s3upload = function (params: PutObjectRequest) {
-  return new Promise((resolve, reject) => {
-    s3.createBucket(
-      {
-        Bucket: params.Bucket /* Put your bucket name */,
-      },
-      function () {
-        s3.putObject(params, function (err, data) {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(data)
-          }
-        })
-      },
-    )
-  })
+export const s3upload = async (params: PutObjectCommandInput) => {
+  const command = new PutObjectCommand(params)
+
+  try {
+    const response = await s3Client.send(command)
+    console.log(response)
+  } catch (err) {
+    console.error(err)
+  }
 }
 
-const s3download = function (params: GetObjectRequest): Promise<unknown> {
-  return new Promise((resolve, reject) => {
-    s3.createBucket(
-      {
-        Bucket: params.Bucket /* Put your bucket name */,
-      },
-      () => {
-        s3.getObject(params, (err, data) => {
-          if (err) {
-            console.log(
-              'an error occured performing s3 download',
-              {
-                region: region1,
-                accessKeyId: accessKey,
-                secretAccessKey: secret,
-                signatureVersion: 'v4',
-              },
-              err,
-            )
-            reject(err)
-          } else {
-            if (data.Body) {
-              const file = Buffer.from(data.Body as ArrayBuffer).toString(
-                'utf8',
-              )
+export const s3download = async (params: GetObjectCommandInput) => {
+  const command = new GetObjectCommand(params)
 
-              resolve(JSON.parse(file))
-            }
-          }
-        })
-      },
-    )
-  })
+  try {
+    const response = await s3Client.send(command)
+
+    console.log(response)
+
+    const file = await response.Body.transformToString()
+    return JSON.parse(file)
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 export const downloadRadarChartData = (): Promise<RadarChartData[]> =>
