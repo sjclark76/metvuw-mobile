@@ -10,6 +10,7 @@ import {
   PutObjectCommand,
 } from '@aws-sdk/client-s3'
 import { PutObjectCommandInput } from '@aws-sdk/client-s3/dist-types/commands/PutObjectCommand'
+import { UpperAirChartData } from '../types/upperAirChartData'
 
 const { region, accessKey, secret } = config.s3
 
@@ -49,6 +50,12 @@ export const s3download = async (params: GetObjectCommandInput) => {
     console.error(err)
   }
 }
+
+export const downloadUpperAirChartData = (): Promise<UpperAirChartData[]> =>
+  s3download({
+    Bucket: config.s3.bucketName,
+    Key: 'upperair.json',
+  }) as Promise<UpperAirChartData[]>
 
 export const downloadRadarChartData = (): Promise<RadarChartData[]> =>
   s3download({
