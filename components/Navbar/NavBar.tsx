@@ -12,8 +12,6 @@ import {
 import { MenuLink } from './types'
 import { radarRegions } from '../../shared/radarRegions'
 import styles from './NavBar.module.css'
-import { useAtomValue } from 'jotai'
-import { submenuTextAtom } from '../Atoms/GlobalState'
 import { SubHeader } from './components/SubHeader'
 
 export const mapRegionToMenuLink = (regions: Region[]): MenuLink[] =>
