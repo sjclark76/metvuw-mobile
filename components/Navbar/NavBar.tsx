@@ -14,6 +14,7 @@ import { radarRegions } from '../../shared/radarRegions'
 import styles from './NavBar.module.css'
 import { useAtomValue } from 'jotai'
 import { submenuTextAtom } from '../Atoms/GlobalState'
+import { SubHeader } from './components/SubHeader'
 
 export const mapRegionToMenuLink = (regions: Region[]): MenuLink[] =>
   regions.map((region) => ({
@@ -38,7 +39,6 @@ const Navbar = () => {
   const handleClick = () => {
     setActive(!active)
   }
-  const submenuText = useAtomValue(submenuTextAtom)
 
   return (
     <div className="sticky top-0 z-50">
@@ -125,13 +125,7 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-      <div className="flex flex-row justify-center">
-        <div className="px-2 filter  bg-gray-50 w-full ">
-          <h1 className="text-center font-medium text-sm text-gray-800 my-4 ">
-            {submenuText}
-          </h1>
-        </div>
-      </div>
+      <SubHeader />
     </div>
   )
 }
