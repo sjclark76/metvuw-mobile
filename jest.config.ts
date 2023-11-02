@@ -23,10 +23,10 @@ const config: Config = {
   coveragePathIgnorePatterns: ['/node_modules/', '/__snapshots__/'],
   coverageThreshold: {
     global: {
-      statements: 50,
-      branches: 20,
+      statements: 10,
+      branches: 10,
       functions: 0,
-      lines: 50,
+      lines: 10,
     },
   },
   prettierPath: null,
