@@ -8,8 +8,7 @@ interface DropDownProps {
 const DropDown = (props: DropDownProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [currentItem, setCurrentItem] = useState<number | undefined>(undefined)
-  const wrapperRef = useRef<HTMLButtonElement>(null)
-
+  const menuRef = useRef<HTMLUListElement>(null)
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown)
     return () => {
@@ -17,7 +16,21 @@ const DropDown = (props: DropDownProps) => {
     }
   })
 
-  const handleKeyDown = (e) => {
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [menuRef])
+
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (isOpen) {
       e.preventDefault()
 
@@ -57,7 +70,6 @@ const DropDown = (props: DropDownProps) => {
         className={`${styles.headerText}`}
         onClick={() => setIsOpen((prevState) => !prevState)}
         aria-expanded={isOpen}
-        ref={wrapperRef}
       >
         <span>{props.heading}</span>
         <span className="relative only:-mx-5">
@@ -82,6 +94,7 @@ const DropDown = (props: DropDownProps) => {
         </span>
       </button>
       <ul
+        ref={menuRef}
         className={`${
           isOpen ? 'flex' : 'hidden'
         } absolute top-full z-10 mt-3 flex w-72 list-none flex-col rounded bg-white py-2 shadow-md shadow-slate-500/10 `}
