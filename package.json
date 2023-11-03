@@ -27,7 +27,7 @@
     "react-lazy-load-image-component": "1.6.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "6.1.2",
+    "@testing-library/jest-dom": "6.1.4",
     "@testing-library/react": "14.0.0",
     "@types/jest": "29.5.4",
     "@types/node": "18.18.8",
