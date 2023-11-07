@@ -32,7 +32,7 @@
     "@types/jest": "29.5.7",
     "@types/node": "18.18.8",
     "@types/react": "18.2.36",
-    "@types/react-lazy-load-image-component": "1.6.2",
+    "@types/react-lazy-load-image-component": "1.6.3",
     "@types/testing-library__jest-dom": "5.14.9",
     "autoprefixer": "10.4.16",
     "babel-jest": "29.7.0",
