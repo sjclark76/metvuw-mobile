@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.441.0",
-    "@types/cheerio": "0.22.33",
+    "@types/cheerio": "0.22.34",
     "@types/react-lazyload": "3.2.2",
     "@vercel/analytics": "1.1.1",
     "axios": "1.6.0",
