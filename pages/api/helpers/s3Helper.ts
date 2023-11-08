@@ -29,8 +29,7 @@ export const s3upload = async (params: PutObjectCommandInput) => {
   const command = new PutObjectCommand(params)
 
   try {
-    const response = await s3Client.send(command)
-    console.log(response)
+    await s3Client.send(command)
   } catch (err) {
     console.error(err)
   }
@@ -41,8 +40,6 @@ export const s3download = async (params: GetObjectCommandInput) => {
 
   try {
     const response = await s3Client.send(command)
-
-    console.log(response)
 
     const file = await response.Body.transformToString()
     return JSON.parse(file)
