@@ -1,6 +1,7 @@
 import { MenuLink } from '../types'
 import { useEffect, useRef, useState } from 'react'
 import styles from '../NavBar.module.css'
+import Favourite from '../../Favourite'
 interface DropDownProps {
   heading: string
   links: MenuLink[]
@@ -101,13 +102,15 @@ const DropDown = (props: DropDownProps) => {
       >
         {props.links.map((item, index) => {
           return (
-            <li key={index}>
+            <li
+              key={index}
+              className={` ${
+                index === currentItem
+                  ? 'bg-emerald-50 text-blue-500'
+                  : 'bg-none text-slate-500'
+              } flex items-start justify-between gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none`}
+            >
               <a
-                className={` ${
-                  index === currentItem
-                    ? 'bg-emerald-50 text-blue-500'
-                    : 'bg-none text-slate-500'
-                } flex items-start justify-start gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none`}
                 href={item.href}
                 aria-current={index + 1 === currentItem ? 'page' : 'false'}
               >
@@ -115,6 +118,7 @@ const DropDown = (props: DropDownProps) => {
                   <span className="truncate leading-5">{item.value}</span>
                 </span>
               </a>
+              <Favourite menuLink={item} />
             </li>
           )
         })}
