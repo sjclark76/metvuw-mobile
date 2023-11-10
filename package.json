@@ -11,7 +11,7 @@
     "test:ci": "npx jest --ci --runInBand --silent --colors --coverageDirectory=reports/coverage"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.445.0",
+    "@aws-sdk/client-s3": "3.449.0",
     "@heroicons/react": "2.0.18",
     "@types/cheerio": "0.22.34",
     "@types/react-lazyload": "3.2.3",
