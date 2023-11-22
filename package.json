@@ -6,6 +6,8 @@
     "dev": "next dev -p 3002",
     "build": "next build",
     "start": "next start -p 3002",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "test": "npx jest --runInBand --colors --verbose --reporters=default",
     "test:watch": "npx jest --watch --runInBand --colors --verbose --reporters=default",
     "test:ci": "npx jest --ci --runInBand --silent --colors --coverageDirectory=reports/coverage"
@@ -39,6 +41,8 @@
     "babel-jest": "29.7.0",
     "eslint": "8.54.0",
     "eslint-config-next": "14.0.3",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
     "identity-obj-proxy": "3.0.0",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",

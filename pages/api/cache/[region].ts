@@ -22,11 +22,11 @@ async function primeCache(url: URL) {
 }
 
 export async function getImageUrls(
-  region: Region
+  region: Region,
 ): Promise<RainChartDataCache[]> {
   const url = new URL(
     `forecast/forecast.php?type=rain&region=${region.code}&noofdays=10`,
-    config.metvuwBaseUrl
+    config.metvuwBaseUrl,
   )
   const response = await axios.get(url.href)
 
@@ -41,7 +41,7 @@ export async function getImageUrls(
     const decodedSrc = decodeRainUrl(relativeUrl)
     const url = new URL(
       `forecast/${relativeUrl.substring(2)}`,
-      config.cloudFrontUrl
+      config.cloudFrontUrl,
     )
     return {
       ...decodedSrc,
@@ -59,7 +59,7 @@ export async function getImageUrls(
 
 const regionCacheApi = async (
   req: NextApiRequest,
-  response: NextApiResponse<CacheImageResult>
+  response: NextApiResponse<CacheImageResult>,
 ) => {
   let regionParam = req.query['region']
 

@@ -3,8 +3,10 @@
     "browser": true,
     "jest": true
   },
-  "extends": "next/core-web-vitals",
+  "extends": ["next/core-web-vitals", "prettier"],
+  "plugins": ["prettier"],
   "rules": {
-    " @next/next/no-img-element": "off"
+    "@next/next/no-img-element": "off",
+    "prettier/prettier": ["error"]
   }
 }

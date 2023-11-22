@@ -9,7 +9,7 @@ import { CacheImageResult } from '../types/cacheImageResult'
 
 async function retrieveSatelliteImages(): Promise<SatelliteChartData[]> {
   const response = await axios.get(
-    new URL('satellite', config.metvuwBaseUrl).href
+    new URL('satellite', config.metvuwBaseUrl).href,
   )
   let rawHtml = response.data
 
@@ -23,7 +23,7 @@ async function retrieveSatelliteImages(): Promise<SatelliteChartData[]> {
 
     const url = new URL(
       `satellite/big/${relativeUrl.substring(8)}`,
-      config.cloudFrontUrl
+      config.cloudFrontUrl,
     )
 
     return {
@@ -37,7 +37,7 @@ async function retrieveSatelliteImages(): Promise<SatelliteChartData[]> {
 
 const satelliteCacheApi = async (
   req: NextApiRequest,
-  res: NextApiResponse<CacheImageResult>
+  res: NextApiResponse<CacheImageResult>,
 ) => {
   const result = await retrieveSatelliteImages()
 

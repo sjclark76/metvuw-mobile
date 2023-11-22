@@ -13,7 +13,7 @@ export interface SeoMetaProps {
 export const createGeneralSeoMetaProps = (
   message: string,
   imageUrl: string,
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ): SeoMetaProps => {
   return {
     title: `metvuw mobile | ${message}`,
@@ -26,7 +26,7 @@ export const createGeneralSeoMetaProps = (
 export const createSeoMetaProps = (
   region: Region,
   imageUrl: string,
-  resolvedUrl: string
+  resolvedUrl: string,
 ): SeoMetaProps => {
   return {
     title: `metvuw mobile | ${region.name}`,
