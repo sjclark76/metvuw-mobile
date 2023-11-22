@@ -4,7 +4,7 @@ import {
   SeoMeta,
   SeoMetaProps,
 } from '../../components/SeoMeta'
-import { getByRegionCode, Region as RegionType } from '../../shared/region'
+import { findRegionByCode, Region as RegionType } from '../../shared/region'
 import { RainChartData } from '../api/types/rainChartData'
 import WeatherCharts from '../../components/WeatherCharts'
 import { ParsedUrlQuery } from 'querystring'
@@ -41,9 +41,19 @@ export const getServerSideProps: GetServerSideProps<HomeProps, Params> = async (
 
   const regionName = name ?? 'nz'
 
-  const matchedRegion = getByRegionCode(
+  const matchedRegion = findRegionByCode(
     Array.isArray(regionName) ? regionName[0] : regionName,
   )
+
+  if (!matchedRegion) {
+    // Redirect to a 404 page if the region is not found
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    }
+  }
 
   const chartDataPromise = downloadRainChartData(regionName)
 

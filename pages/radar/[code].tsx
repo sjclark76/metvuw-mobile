@@ -4,7 +4,7 @@ import { SeoMetaProps } from '../../components/SeoMeta'
 import { RadarChartData } from '../api/types/radarChartData'
 import { downloadRadarChartData } from '../api/helpers/s3Helper'
 import { config } from '../../config'
-import { RadarCode } from '../../shared/radarRegions'
+import { isRadarCode, RadarCode } from '../../shared/radarRegions'
 import { useSetAtom } from 'jotai'
 import { submenuTextAtom } from '../../components/Atoms/GlobalState'
 import RadarAndSatelliteImages from '../../components/RadarAndSatelliteImages'
@@ -29,6 +29,16 @@ export const getServerSideProps: GetServerSideProps<RadarPageProps> = async (
   const radarImagesPromise = downloadRadarChartData()
 
   const radarCode: RadarCode | undefined = context.params?.code as RadarCode
+
+  if (!isRadarCode(radarCode)) {
+    // Redirect to a 404 page if the region is not found
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    }
+  }
 
   const serverSideProps: GetServerSidePropsResult<RadarPageProps> = {
     props: radarImagesPromise.then((radarImages) => {

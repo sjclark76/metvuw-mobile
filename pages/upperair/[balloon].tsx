@@ -7,7 +7,10 @@ import { useSetAtom } from 'jotai'
 import { submenuTextAtom } from '../../components/Atoms/GlobalState'
 import RadarAndSatelliteImages from '../../components/RadarAndSatelliteImages'
 import { UpperAirChartData } from '../api/types/upperAirChartData'
-import { BalloonLocationCode } from '../../shared/balloonLocations'
+import {
+  BalloonLocationCode,
+  isBalloonLocationCode,
+} from '../../shared/balloonLocations'
 
 export interface UpperAirPageProps {
   images: UpperAirChartData[]
@@ -35,6 +38,15 @@ export const getServerSideProps: GetServerSideProps<UpperAirPageProps> = async (
   const balloonLocationCode: BalloonLocationCode | undefined = context.params
     ?.balloon as BalloonLocationCode
 
+  if (!isBalloonLocationCode(balloonLocationCode)) {
+    // Redirect to a 404 page if the region is not found
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    }
+  }
   const serverSideProps: GetServerSidePropsResult<UpperAirPageProps> = {
     props: upperAirImagesPromise.then((upperAirImages) => {
       return {
