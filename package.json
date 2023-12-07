@@ -13,7 +13,7 @@
     "test:ci": "npx jest --ci --runInBand --silent --colors --coverageDirectory=reports/coverage"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.465.0",
+    "@aws-sdk/client-s3": "3.468.0",
     "@baselime/node-opentelemetry": "^0.2.14",
     "@heroicons/react": "2.0.18",
     "@types/cheerio": "0.22.35",
