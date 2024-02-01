@@ -33,7 +33,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "6.4.1",
     "@testing-library/react": "14.2.0",
-    "@types/jest": "29.5.11",
+    "@types/jest": "29.5.12",
     "@types/node": "20.11.15",
     "@types/react": "18.2.51",
     "@types/react-lazy-load-image-component": "1.6.3",
