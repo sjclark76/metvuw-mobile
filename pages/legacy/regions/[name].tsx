@@ -3,10 +3,10 @@ import {
   createSeoMetaProps,
   SeoMeta,
   SeoMetaProps,
-} from '../../components/SeoMeta'
-import { findRegionByCode, Region as RegionType } from '../../shared/region'
-import { RainChartData } from '../api/types/rainChartData'
-import WeatherCharts from '../../components/WeatherCharts'
+} from '@legacy-components/SeoMeta'
+import { findRegionByCode, Region as RegionType } from '@shared/region'
+import { RainChartData } from '../../api/types/rainChartData'
+import WeatherCharts from '@legacy-components/WeatherCharts'
 import { ParsedUrlQuery } from 'querystring'
 import { GetServerSidePropsResult } from 'next/types'
 import { downloadRainChartData } from '@shared/helpers/s3Helper'

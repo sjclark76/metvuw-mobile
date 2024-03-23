@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAtomValue } from 'jotai'
-import { favouritePageAtom } from '../components/Navbar/state/favouritePageAtom'
+import { favouritePageAtom } from '@legacy-components/Navbar/state/favouritePageAtom'
 
 function Home() {
   const favouritePage = useAtomValue(favouritePageAtom)

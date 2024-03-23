@@ -9,12 +9,12 @@ import {
   pacificRegions,
   Region,
   worldRegions,
-} from '../../shared/region'
+} from '@shared/region'
 import { MenuLink } from './types'
-import { radarRegions } from '../../shared/radarRegions'
+import { radarRegions } from '@shared/radarRegions'
 import styles from './NavBar.module.css'
 import { SubHeader } from './components/SubHeader'
-import { balloonLocations } from '../../shared/balloonLocations'
+import { balloonLocations } from '@shared/balloonLocations'
 
 export const mapRegionToMenuLink = (regions: Region[]): MenuLink[] =>
   regions.map((region) => ({
@@ -119,7 +119,7 @@ const Navbar = () => {
             <DropDown heading="Rest Of World" links={worldLinks} />
             <DropDown heading="Oceans" links={oceanLinks} />
             <div className={styles.headerText}>
-              <Link href="/satellite" className="mr-1">
+              <Link href="/legacy/satellite" className="mr-1">
                 Satellite
               </Link>
             </div>

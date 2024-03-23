@@ -1,12 +1,12 @@
-import { config } from '../config'
-import { SeoMetaProps } from '../components/SeoMeta'
-import { SatelliteChartData } from './api/types/satelliteChartData'
+import { config } from '../../config'
+import { SeoMetaProps } from '@legacy-components/SeoMeta'
+import { SatelliteChartData } from '../api/types/satelliteChartData'
 import { downloadSatelliteChartData } from '@shared/helpers/s3Helper'
 import { GetServerSideProps } from 'next'
 import { GetServerSidePropsResult } from 'next/types'
-import RadarAndSatelliteImages from '../components/RadarAndSatelliteImages'
+import RadarAndSatelliteImages from '@legacy-components/RadarAndSatelliteImages'
 import { useSetAtom } from 'jotai'
-import { submenuTextAtom } from '../components/Atoms/GlobalState'
+import { submenuTextAtom } from '@legacy-components/Atoms/GlobalState'
 
 export interface SatellitePageProps {
   images: SatelliteChartData[]

@@ -1,13 +1,13 @@
 import { GetServerSideProps } from 'next'
 import { GetServerSidePropsResult } from 'next/types'
-import { SeoMetaProps } from '../../components/SeoMeta'
-import { RadarChartData } from '../api/types/radarChartData'
+import { SeoMetaProps } from '@legacy-components/SeoMeta'
+import { RadarChartData } from '../../api/types/radarChartData'
 import { downloadRadarChartData } from '@shared/helpers/s3Helper'
-import { config } from '../../config'
-import { isRadarCode, RadarCode } from '../../shared/radarRegions'
+import { config } from '../../../config'
+import { isRadarCode, RadarCode } from '@shared/radarRegions'
 import { useSetAtom } from 'jotai'
-import { submenuTextAtom } from '../../components/Atoms/GlobalState'
-import RadarAndSatelliteImages from '../../components/RadarAndSatelliteImages'
+import { submenuTextAtom } from '@legacy-components/Atoms/GlobalState'
+import RadarAndSatelliteImages from '@legacy-components/RadarAndSatelliteImages'
 
 export interface RadarPageProps {
   images: RadarChartData[]

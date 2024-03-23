@@ -1,16 +1,16 @@
 import { GetServerSideProps } from 'next'
 import { GetServerSidePropsResult } from 'next/types'
-import { SeoMetaProps } from '../../components/SeoMeta'
+import { SeoMetaProps } from '@legacy-components/SeoMeta'
 import { downloadUpperAirChartData } from '@shared/helpers/s3Helper'
-import { config } from '../../config'
+import { config } from '../../../config'
 import { useSetAtom } from 'jotai'
-import { submenuTextAtom } from '../../components/Atoms/GlobalState'
-import RadarAndSatelliteImages from '../../components/RadarAndSatelliteImages'
-import { UpperAirChartData } from '../api/types/upperAirChartData'
+import { submenuTextAtom } from '@legacy-components/Atoms/GlobalState'
+import RadarAndSatelliteImages from '@legacy-components/RadarAndSatelliteImages'
+import { UpperAirChartData } from '../../api/types/upperAirChartData'
 import {
   BalloonLocationCode,
   isBalloonLocationCode,
-} from '../../shared/balloonLocations'
+} from '@shared/balloonLocations'
 
 export interface UpperAirPageProps {
   images: UpperAirChartData[]
