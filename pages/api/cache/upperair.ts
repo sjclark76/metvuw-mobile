@@ -1,6 +1,6 @@
 import { SatelliteChartData } from '../types/satelliteChartData'
 import axios from 'axios'
-import { config } from '../../../config'
+import { config } from '@/config'
 import cheerio from 'cheerio'
 import { decodeUpperAirUrl } from '@shared/helpers/urlHelper'
 import { NextApiRequest, NextApiResponse } from 'next'

@@ -2,8 +2,24 @@ import RegionPage from '@/components/RegionPage/region-page'
 import { findRegionByCode } from '@shared/region'
 import { notFound } from 'next/navigation'
 import { downloadRainChartData } from '@shared/helpers/s3Helper'
+import { Metadata } from 'next'
+import generateSEOMetadata from '@shared/helpers/generateSEOMetadata'
 
-export default async function Region({ params }: { params: { name: string } }) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // read route params
+  const regionName = params.name
+  return generateSEOMetadata({
+    title: `metvuw mobile | ${regionName}`,
+    description: `metvuw ${regionName} wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
+    url: `regions/${regionName}`,
+  })
+}
+
+interface Props {
+  params: { name: string }
+}
+
+export default async function Region({ params }: Props) {
   const matchedRegion = findRegionByCode(params.name)
 
   if (!matchedRegion) {

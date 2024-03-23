@@ -2,6 +2,16 @@ import { downloadRadarChartData } from '@shared/helpers/s3Helper'
 import { isRadarCode } from '@shared/radarRegions'
 import { notFound } from 'next/navigation'
 import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
+import { config } from '@/config'
+import { Metadata } from 'next'
+import generateSEOMetadata from '@shared/helpers/generateSEOMetadata'
+
+export const generateMetadata = async (): Promise<Metadata> =>
+  generateSEOMetadata({
+    title: `metvuw mobile | Radar`,
+    description: `Radar charts. Optimized for mobile devices. Sourced from metvuw.com`,
+    url: new URL('radar', config.baseUrl).href,
+  })
 
 export default async function RadarPage({
   params,

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { config } from '../../../config'
+import { config } from '@/config'
 
-import { regions } from '../../../shared/region'
+import { regions } from '@shared/region'
 import { CacheImageResult, CacheRefreshResult } from '../types/cacheImageResult'
 import axios, { AxiosResponse } from 'axios'
 

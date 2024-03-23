@@ -2,10 +2,10 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 import { RainChartData } from '../types/rainChartData'
-import { config } from '../../../config'
+import { config } from '@/config'
 import { decodeRainUrl } from '@shared/helpers/urlHelper'
 import { buildKeyName, s3upload } from '@shared/helpers/s3Helper'
-import { findRegionByCode, Region } from '../../../shared/region'
+import { findRegionByCode, Region } from '@shared/region'
 import { CacheImageResult } from '../types/cacheImageResult'
 
 type RainChartDataCache = RainChartData & {

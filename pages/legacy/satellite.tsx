@@ -1,4 +1,4 @@
-import { config } from '../../config'
+import { config } from '@/config'
 import { SeoMetaProps } from '@legacy-components/SeoMeta'
 import { SatelliteChartData } from '../api/types/satelliteChartData'
 import { downloadSatelliteChartData } from '@shared/helpers/s3Helper'

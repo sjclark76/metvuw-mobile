@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { GetServerSidePropsContext } from 'next'
-import { config } from '../config'
-import { Region } from '../shared/region'
+import { config } from '@/config'
+import { Region } from '@shared/region'
 
 export interface SeoMetaProps {
   title: string

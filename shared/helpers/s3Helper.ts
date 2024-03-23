@@ -1,4 +1,4 @@
-import { config } from '../../config'
+import { config } from '@/config'
 
 const { S3Client } = require('@aws-sdk/client-s3')
 import { RainChartData } from '../../pages/api/types/rainChartData'
