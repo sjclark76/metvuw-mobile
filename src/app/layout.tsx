@@ -1,11 +1,9 @@
-import { Metadata } from 'next'
+'use client'
 import '../../styles/globals.css'
 import Navbar from '../components/Navbar'
 import GoogleTag from '@/components/GoogleTag'
-
-export const metadata: Metadata = {
-  title: 'metvuw mobile',
-}
+import Footer from '@/components/Footer'
+import SubHeader from '@/components/SubHeader'
 
 export default function RootLayout({
   // Layouts must accept a children prop.
@@ -19,8 +17,12 @@ export default function RootLayout({
       <GoogleTag />
       <body>
         <main className="relative">
-          <Navbar />
+          <div className="sticky top-0 z-50">
+            <Navbar />
+            <SubHeader />
+          </div>
           {children}
+          <Footer />
         </main>
       </body>
     </html>

@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai'
-import { submenuTextAtom } from '../../Atoms/GlobalState'
+import { submenuTextAtom } from '@/components/Atoms/GlobalState'
 
 export function SubHeader() {
   const submenuText = useAtomValue(submenuTextAtom)

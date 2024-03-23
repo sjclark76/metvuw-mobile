@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation'
+import HomePage from '@/components/HomePage'
 
-export default function V2() {
-  redirect(`/regions/nz`)
+export default function Page() {
+  return <HomePage />
 }
