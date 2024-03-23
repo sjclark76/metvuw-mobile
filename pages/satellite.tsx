@@ -1,7 +1,7 @@
 import { config } from '../config'
 import { SeoMetaProps } from '../components/SeoMeta'
 import { SatelliteChartData } from './api/types/satelliteChartData'
-import { downloadSatelliteChartData } from './api/helpers/s3Helper'
+import { downloadSatelliteChartData } from '@shared/helpers/s3Helper'
 import { GetServerSideProps } from 'next'
 import { GetServerSidePropsResult } from 'next/types'
 import RadarAndSatelliteImages from '../components/RadarAndSatelliteImages'

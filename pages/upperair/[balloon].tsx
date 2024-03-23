@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next'
 import { GetServerSidePropsResult } from 'next/types'
 import { SeoMetaProps } from '../../components/SeoMeta'
-import { downloadUpperAirChartData } from '../api/helpers/s3Helper'
+import { downloadUpperAirChartData } from '@shared/helpers/s3Helper'
 import { config } from '../../config'
 import { useSetAtom } from 'jotai'
 import { submenuTextAtom } from '../../components/Atoms/GlobalState'

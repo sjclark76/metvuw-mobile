@@ -1,12 +1,9 @@
-import { RainChartData } from '../types/rainChartData'
-import { ChartData } from '../types/chartData'
-import { RadarChartData } from '../types/radarChartData'
-import { RadarCode, radarRegions } from '../../../shared/radarRegions'
-import { UpperAirChartData } from '../types/upperAirChartData'
-import {
-  BalloonLocationCode,
-  balloonLocations,
-} from '../../../shared/balloonLocations'
+import { RainChartData } from '../../pages/api/types/rainChartData'
+import { ChartData } from '../../pages/api/types/chartData'
+import { RadarChartData } from '../../pages/api/types/radarChartData'
+import { RadarCode, radarRegions } from '../radarRegions'
+import { UpperAirChartData } from '../../pages/api/types/upperAirChartData'
+import { BalloonLocationCode, balloonLocations } from '../balloonLocations'
 
 function extractFilename(relativeUrl: string, regex: RegExp): string {
   const match = relativeUrl.match(regex)

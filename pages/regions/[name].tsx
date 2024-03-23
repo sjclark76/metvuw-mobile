@@ -9,7 +9,7 @@ import { RainChartData } from '../api/types/rainChartData'
 import WeatherCharts from '../../components/WeatherCharts'
 import { ParsedUrlQuery } from 'querystring'
 import { GetServerSidePropsResult } from 'next/types'
-import { downloadRainChartData } from '../api/helpers/s3Helper'
+import { downloadRainChartData } from '@shared/helpers/s3Helper'
 
 interface HomeProps {
   region: RegionType

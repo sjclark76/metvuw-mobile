@@ -2,9 +2,9 @@ import { SatelliteChartData } from '../types/satelliteChartData'
 import axios from 'axios'
 import { config } from '../../../config'
 import cheerio from 'cheerio'
-import { decodeUpperAirUrl } from '../helpers/urlHelper'
+import { decodeUpperAirUrl } from '@shared/helpers/urlHelper'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { s3upload } from '../helpers/s3Helper'
+import { s3upload } from '@shared/helpers/s3Helper'
 import { CacheImageResult } from '../types/cacheImageResult'
 
 async function retrieveRadarImages(): Promise<SatelliteChartData[]> {
