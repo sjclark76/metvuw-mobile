@@ -1,7 +1,8 @@
 'use client'
-import { useEffect } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
 import { useAtomValue } from 'jotai'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+
 import { favouritePageAtom } from '@/components/Navbar/state/favouritePageAtom'
 
 export function HomePage() {

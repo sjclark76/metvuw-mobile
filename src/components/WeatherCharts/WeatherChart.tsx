@@ -1,8 +1,10 @@
-import { format } from 'date-fns'
-import WeatherImage from '../WeatherImage/WeatherImage'
-import { RainChartData } from '@shared/types/rainChartData'
 import { Region } from '@shared/region'
+import { RainChartData } from '@shared/types/rainChartData'
+import { format } from 'date-fns'
+
 import Card from '@/components/Card'
+
+import WeatherImage from '../WeatherImage/WeatherImage'
 
 interface Props {
   chart: RainChartData

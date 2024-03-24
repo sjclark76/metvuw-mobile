@@ -1,10 +1,11 @@
-import { format } from 'date-fns'
-import { useEffect } from 'react'
-import { useSetAtom } from 'jotai'
-import { submenuTextAtom } from '../Atoms/GlobalState'
-import { WeatherChart } from './WeatherChart'
 import { Region } from '@shared/region'
 import { RainChartData } from '@shared/types/rainChartData'
+import { format } from 'date-fns'
+import { useSetAtom } from 'jotai'
+import { useEffect } from 'react'
+
+import { submenuTextAtom } from '../Atoms/GlobalState'
+import { WeatherChart } from './WeatherChart'
 interface WeatherChartsProps {
   region: Region
   charts: RainChartData[]

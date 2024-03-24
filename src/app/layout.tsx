@@ -1,12 +1,15 @@
 'use client'
-import Navbar from '../components/Navbar'
-import GoogleTag from '@/components/GoogleTag'
-import Footer from '@/components/Footer'
-import SubHeader from '@/components/SubHeader'
 import './globals.css'
+
+import { Provider } from 'jotai'
 import { Inter } from 'next/font/google'
 import React from 'react'
-import { Provider } from 'jotai'
+
+import Footer from '@/components/Footer'
+import GoogleTag from '@/components/GoogleTag'
+import SubHeader from '@/components/SubHeader'
+
+import Navbar from '../components/Navbar'
 const inter = Inter({ subsets: ['latin'] })
 export default function RootLayout({
   // Layouts must accept a children prop.

@@ -1,6 +1,7 @@
-import { StarIcon as SolidStarIcon } from '@heroicons/react/24/solid'
 import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline'
+import { StarIcon as SolidStarIcon } from '@heroicons/react/24/solid'
 import { useAtom } from 'jotai'
+
 import { favouritePageAtom } from '../Navbar/state/favouritePageAtom'
 import { MenuLink } from '../Navbar/types'
 export function Favourite({ menuLink }: { menuLink: MenuLink }) {
