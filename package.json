@@ -10,7 +10,8 @@
     "lint:fix": "next lint --fix",
     "test": "npx jest --runInBand --colors --verbose --reporters=default",
     "test:watch": "npx jest --watch --runInBand --colors --verbose --reporters=default",
-    "test:ci": "npx jest --ci --runInBand --silent --colors --coverageDirectory=reports/coverage"
+    "test:ci": "npx jest --ci --runInBand --silent --colors --coverageDirectory=reports/coverage",
+    "e2e:interactive": "npx playwright test --ui"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.540.0",
@@ -32,6 +33,7 @@
     "react-lazy-load-image-component": "1.6.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.8.5",
     "@playwright/test": "^1.42.1",
     "@testing-library/jest-dom": "6.4.2",
     "@testing-library/react": "14.2.2",
