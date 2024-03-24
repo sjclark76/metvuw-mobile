@@ -8,6 +8,9 @@ test.describe('homepage', () => {
   }) => {
     await page.goto('/') // 3
 
+    // Expect a title "to contain" a substring.
+    await expect(page).toHaveTitle(/metvuw mobile | nz/)
+
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze()
 
     expect(accessibilityScanResults.violations).toEqual([])
