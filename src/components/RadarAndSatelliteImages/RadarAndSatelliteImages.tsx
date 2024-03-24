@@ -1,12 +1,12 @@
 'use client'
-import { ChartType } from '@shared/ChartType'
-import { ChartData } from '@shared/types/chartData'
 import { format } from 'date-fns'
 import { useSetAtom } from 'jotai'
 
 import { submenuTextAtom } from '@/components/Atoms/GlobalState'
 import Card from '@/components/Card'
 import WeatherImage from '@/components/WeatherImage'
+import { ChartType } from '@/shared/ChartType'
+import { ChartData } from '@/shared/types/chartData'
 
 interface Props {
   images: ChartData[]

@@ -1,14 +1,14 @@
-import {
-  balloonLocations,
-  isBalloonLocationCode,
-} from '@shared/balloonLocations'
-import generateSEOMetadata from '@shared/helpers/generateSEOMetadata'
-import { downloadUpperAirChartData } from '@shared/helpers/s3Helper'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
 import { config } from '@/config'
+import {
+  balloonLocations,
+  isBalloonLocationCode,
+} from '@/shared/balloonLocations'
+import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
+import { downloadUpperAirChartData } from '@/shared/helpers/s3Helper'
 
 export const generateMetadata = async (): Promise<Metadata> =>
   generateSEOMetadata({

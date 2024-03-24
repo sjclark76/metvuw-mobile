@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+
 import { config } from '@/config'
 
 export default function generateSEOMetadata({

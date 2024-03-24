@@ -1,4 +1,4 @@
-import { RainChartData } from '@shared/types/rainChartData'
+import { RainChartData } from '@/shared/types/rainChartData'
 
 export const nzRegionCharts: RainChartData[] = [
   {
