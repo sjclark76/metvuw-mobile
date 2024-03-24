@@ -57,7 +57,7 @@ const Navbar = () => {
       </Link>
       <button
         aria-label="Open Menu"
-        className="ml-auto inline-flex rounded p-3 text-white outline-none hover:bg-blue-600 hover:text-white lg:hidden"
+        className="ml-auto inline-flex rounded p-3 text-white outline-none hover:bg-blue-600 hover:text-white 2xl:hidden"
         onClick={handleClick}
       >
         <svg
@@ -78,9 +78,9 @@ const Navbar = () => {
       <div
         className={`${
           active ? '' : 'hidden'
-        }   w-full lg:inline-flex lg:w-auto lg:flex-grow`}
+        }   w-full 2xl:inline-flex 2xl:w-auto 2xl:flex-grow`}
       >
-        <div className="flex w-full flex-col items-start lg:ml-auto lg:inline-flex lg:h-auto  lg:w-auto lg:flex-row lg:items-center">
+        <div className="flex w-full flex-col items-start 2xl:ml-auto 2xl:inline-flex 2xl:h-auto  2xl:w-auto 2xl:flex-row 2xl:items-center">
           <DropDown heading="New Zealand" links={nzLinks} />
           <DropDown heading="Australia" links={australiaLinks} />
           <DropDown heading="Pacific" links={pacificLinks} />
