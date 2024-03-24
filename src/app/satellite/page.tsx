@@ -1,7 +1,8 @@
-import { downloadSatelliteChartData } from '@shared/helpers/s3Helper'
-import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
-import { Metadata } from 'next'
 import generateSEOMetadata from '@shared/helpers/generateSEOMetadata'
+import { downloadSatelliteChartData } from '@shared/helpers/s3Helper'
+import { Metadata } from 'next'
+
+import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
 import { config } from '@/config'
 
 export const generateMetadata = async (): Promise<Metadata> =>
@@ -13,8 +14,11 @@ export const generateMetadata = async (): Promise<Metadata> =>
 
 export default async function SatellitePage() {
   const satelliteData = await downloadSatelliteChartData()
-
   return (
-    <RadarAndSatelliteImages images={satelliteData} chartType="Satellite" />
+    <RadarAndSatelliteImages
+      images={satelliteData}
+      chartType="Satellite"
+      headerText="Satellite Imagery for New Zealand"
+    />
   )
 }

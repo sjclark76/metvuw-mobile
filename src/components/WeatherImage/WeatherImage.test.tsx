@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react'
+
 import WeatherImage from './WeatherImage'
 
 describe('Weather Image', () => {

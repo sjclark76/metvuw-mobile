@@ -1,4 +1,5 @@
 import { useAtomValue } from 'jotai'
+
 import { submenuTextAtom } from '@/components/Atoms/GlobalState'
 
 export function SubHeader() {

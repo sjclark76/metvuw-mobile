@@ -1,11 +1,12 @@
+import { s3upload } from '@shared/helpers/s3Helper'
+import { decodeSatelliteUrl } from '@shared/helpers/urlHelper'
+import { CacheImageResult } from '@shared/types/cacheImageResult'
 import { SatelliteChartData } from '@shared/types/satelliteChartData'
 import axios from 'axios'
-import { config } from '@/config'
 import cheerio from 'cheerio'
-import { decodeSatelliteUrl } from '@shared/helpers/urlHelper'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { s3upload } from '@shared/helpers/s3Helper'
-import { CacheImageResult } from '@shared/types/cacheImageResult'
+
+import { config } from '@/config'
 
 async function retrieveSatelliteImages(): Promise<SatelliteChartData[]> {
   const response = await axios.get(

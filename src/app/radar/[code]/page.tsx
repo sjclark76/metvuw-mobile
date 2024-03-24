@@ -1,10 +1,11 @@
+import generateSEOMetadata from '@shared/helpers/generateSEOMetadata'
 import { downloadRadarChartData } from '@shared/helpers/s3Helper'
-import { isRadarCode } from '@shared/radarRegions'
+import { isRadarCode, radarRegions } from '@shared/radarRegions'
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+
 import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
 import { config } from '@/config'
-import { Metadata } from 'next'
-import generateSEOMetadata from '@shared/helpers/generateSEOMetadata'
 
 export const generateMetadata = async (): Promise<Metadata> =>
   generateSEOMetadata({
@@ -26,7 +27,12 @@ export default async function RadarPage({
   const filteredRadarData = allRadarData.filter(
     (radarImage) => radarImage.radarCode === params.code,
   )
+
   return (
-    <RadarAndSatelliteImages images={filteredRadarData} chartType="Radar" />
+    <RadarAndSatelliteImages
+      images={filteredRadarData}
+      chartType="Radar"
+      headerText={`Radar Chart for ${radarRegions[params.code]}`}
+    />
   )
 }

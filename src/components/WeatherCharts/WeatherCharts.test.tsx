@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react'
-import WeatherCharts from './WeatherCharts'
 import { getByRegionCode } from '@shared/region'
+import { render, screen } from '@testing-library/react'
+
 import { nzRegionCharts } from '../../../testing/nz'
+import WeatherCharts from './WeatherCharts'
 describe.skip('<WeatherCharts/>', () => {
   test('should render with our image for the correct day', () => {
     render(

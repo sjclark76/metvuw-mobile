@@ -1,12 +1,12 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-import { config } from '@/config'
-
 import { regions } from '@shared/region'
 import {
   CacheImageResult,
   CacheRefreshResult,
 } from '@shared/types/cacheImageResult'
 import axios, { AxiosResponse } from 'axios'
+import { NextApiRequest, NextApiResponse } from 'next'
+
+import { config } from '@/config'
 
 /**
  * Asynchronously calls our worker functions to refresh all the images for the satellite page and all region pages

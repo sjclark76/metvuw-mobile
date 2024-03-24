@@ -1,5 +1,5 @@
-import { ReactNode } from 'react'
 import clsx from 'clsx'
+import { ReactNode } from 'react'
 
 export default function Card({
   weatherImage,
@@ -17,12 +17,12 @@ export default function Card({
     isLoading && 'animate-pulse',
   )
   return (
-    <div className={styling}>
+    <li className={styling}>
       {weatherImage}
       <div className="flex items-center justify-around rounded-b-lg bg-white py-3">
         {date}
         {time}
       </div>
-    </div>
+    </li>
   )
 }

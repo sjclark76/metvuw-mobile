@@ -1,6 +1,7 @@
-import styles from './WeatherImage.module.css'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { ChartType } from '@shared/ChartType'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+
+import styles from './WeatherImage.module.css'
 
 export interface WeatherImageProps {
   imageSrc: string | undefined
