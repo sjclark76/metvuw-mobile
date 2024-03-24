@@ -84,7 +84,6 @@ export default function generateSEOMetadata({
       },
     ],
     manifest: '/manifest.json',
-    themeColor: '#ffffff',
     metadataBase: new URL(config.baseUrl),
   }
 }
