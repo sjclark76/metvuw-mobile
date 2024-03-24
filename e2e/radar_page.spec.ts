@@ -1,12 +1,12 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 
-test.describe('homepage', () => {
+test.describe('radar page', () => {
   // 2
   test('should not have any automatically detectable accessibility issues', async ({
     page,
   }) => {
-    await page.goto('/') // 3
+    await page.goto('/radar/nl')
 
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze()
 
@@ -14,14 +14,13 @@ test.describe('homepage', () => {
   })
 
   test('should render page correctly', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('/radar/nl') // 3
 
-    // Expect a title "to contain" a substring.
-    await expect(page).toHaveTitle(/metvuw mobile | nz/)
+    await expect(page).toHaveTitle(/metvuw mobile | radar/)
 
     await expect(
       page.getByRole('heading', {
-        name: /forecast issued at .* for new zealand/i,
+        name: /radar chart for northland/i,
       }),
     ).toBeVisible()
 
@@ -29,7 +28,7 @@ test.describe('homepage', () => {
 
     await expect(
       firstCard.getByRole('img', {
-        name: /new zealand forecast chart for .*/i,
+        name: /radar chart for/i,
       }),
     ).toBeVisible()
   })

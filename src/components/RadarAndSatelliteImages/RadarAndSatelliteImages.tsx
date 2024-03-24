@@ -1,16 +1,35 @@
 'use client'
-import { format } from 'date-fns'
-import { ChartData } from '@shared/types/chartData'
 import { ChartType } from '@shared/ChartType'
-import WeatherImage from '@/components/WeatherImage'
+import { ChartData } from '@shared/types/chartData'
+import { format } from 'date-fns'
+import { useSetAtom } from 'jotai'
+
+import { submenuTextAtom } from '@/components/Atoms/GlobalState'
 import Card from '@/components/Card'
+import WeatherImage from '@/components/WeatherImage'
 
 interface Props {
   images: ChartData[]
-  chartType: ChartType
+  chartType: Extract<ChartType, 'Radar' | 'Satellite' | 'Upper Air'>
+  headerText: string
 }
 
-export function RadarAndSatelliteImages({ images, chartType }: Props) {
+export function RadarAndSatelliteImages({
+  images,
+  chartType,
+  headerText,
+}: Props) {
+  const setSubmenuText = useSetAtom(submenuTextAtom)
+
+  setSubmenuText(headerText)
+
+  const createImgAlt = (image: ChartData) => {
+    return `${chartType.toLowerCase()} chart for ${format(
+      new Date(image.imageDateUTC),
+      'PPPPp',
+    )}`
+  }
+
   return (
     <ul className="flex flex-col items-center">
       {images.map((image) => (
@@ -19,10 +38,7 @@ export function RadarAndSatelliteImages({ images, chartType }: Props) {
           weatherImage={
             <WeatherImage
               imageSrc={image.url}
-              imageAlt={`satellite chart for ${format(
-                new Date(image.imageDateUTC),
-                'PPPPp',
-              )}`}
+              imageAlt={createImgAlt(image)}
               chartType={chartType}
             />
           }

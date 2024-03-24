@@ -1,10 +1,13 @@
-import { downloadUpperAirChartData } from '@shared/helpers/s3Helper'
-import { isBalloonLocationCode } from '@shared/balloonLocations'
-
-import { notFound } from 'next/navigation'
-import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
-import { Metadata } from 'next'
+import {
+  balloonLocations,
+  isBalloonLocationCode,
+} from '@shared/balloonLocations'
 import generateSEOMetadata from '@shared/helpers/generateSEOMetadata'
+import { downloadUpperAirChartData } from '@shared/helpers/s3Helper'
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+
+import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
 import { config } from '@/config'
 
 export const generateMetadata = async (): Promise<Metadata> =>
@@ -31,6 +34,10 @@ export default async function UpperAirPage({
   )
 
   return (
-    <RadarAndSatelliteImages images={filteredImages} chartType="Upper Air" />
+    <RadarAndSatelliteImages
+      images={filteredImages}
+      chartType="Upper Air"
+      headerText={`Upper Air Chart for ${balloonLocations[params.balloon]}`}
+    />
   )
 }

@@ -1,7 +1,6 @@
 'use client'
-import Link from 'next/link'
-import { useState } from 'react'
-import DropDown from './components/DropDown'
+import { balloonLocations } from '@shared/balloonLocations'
+import { radarRegions } from '@shared/radarRegions'
 import {
   australiaRegions,
   europeRegions,
@@ -11,11 +10,14 @@ import {
   Region,
   worldRegions,
 } from '@shared/region'
-import { MenuLink } from './types'
-import { radarRegions } from '@shared/radarRegions'
-import styles from './NavBar.module.css'
-import { balloonLocations } from '@shared/balloonLocations'
+import Link from 'next/link'
+import { useState } from 'react'
+
 import { MetvuwMobileImage } from '@/components/Navbar/components/MetvuwMobileImage'
+
+import DropDown from './components/DropDown'
+import styles from './NavBar.module.css'
+import { MenuLink } from './types'
 
 export const mapRegionToMenuLink = (regions: Region[]): MenuLink[] =>
   regions.map((region) => ({
