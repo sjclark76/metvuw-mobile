@@ -1,7 +1,7 @@
-import { MenuLink } from '../types'
 import { useEffect, useRef, useState } from 'react'
 import styles from '../NavBar.module.css'
-import Favourite from '../../Favourite'
+import Favourite from '@/components/Favourite'
+import { MenuLink } from '@/components/Navbar/types'
 interface DropDownProps {
   heading: string
   links: MenuLink[]

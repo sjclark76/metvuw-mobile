@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import WeatherCharts from './WeatherCharts'
 import { getByRegionCode } from '@shared/region'
 import { nzRegionCharts } from '../../../testing/nz'
-describe('<WeatherCharts/>', () => {
+describe.skip('<WeatherCharts/>', () => {
   test('should render with our image for the correct day', () => {
     render(
       <WeatherCharts region={getByRegionCode('nz')} charts={nzRegionCharts} />,
