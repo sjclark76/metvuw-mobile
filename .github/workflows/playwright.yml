@@ -17,7 +17,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           max_timeout: 600
-  test:
+  test_e2e:
+    needs: tests_setup
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
