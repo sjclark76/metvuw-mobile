@@ -14,7 +14,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>
 
 describe.skip('region cache api', () => {
   test('calling api for the victoria region should return a 200 success', async () => {
-    const { req, res } = createMocks({ query: { region: 'victoria' } })
+    const { res } = createMocks({ query: { region: 'victoria' } })
 
     mockedAxios.get.mockResolvedValueOnce({
       data: nzForecastHtml,
@@ -31,7 +31,7 @@ describe.skip('region cache api', () => {
   })
 
   test('calling api with no specified region should return a 200 but defaulted to nz', async () => {
-    const { req, res } = createMocks()
+    const { res } = createMocks()
 
     mockedAxios.get.mockResolvedValueOnce({
       data: nzForecastHtml,
@@ -48,7 +48,7 @@ describe.skip('region cache api', () => {
   })
 
   test('calling api for an invalid region should return a 400 bad request', async () => {
-    const { req, res } = createMocks({ query: { region: 'foo baa' } })
+    const { res } = createMocks({ query: { region: 'foo baa' } })
 
     mockedAxios.get.mockResolvedValueOnce({
       data: nzForecastHtml,

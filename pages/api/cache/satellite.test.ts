@@ -9,7 +9,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>
 
 describe.skip('satellite cache api', () => {
   test('calling api should return a 200 success', async () => {
-    const { req, res } = createMocks()
+    const { res } = createMocks()
 
     mockedAxios.get.mockResolvedValueOnce({
       data: satelliteHtml,

@@ -21,10 +21,11 @@
     "@vercel/analytics": "1.2.2",
     "axios": "1.6.8",
     "cheerio": "1.0.0-rc.12",
+    "clsx": "^2.1.0",
     "date-fns": "3.6.0",
     "express": "4.19.1",
     "jotai": "2.7.1",
-    "next": "13.4.19",
+    "next": "14.0.4",
     "prop-types": "15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -41,7 +42,7 @@
     "autoprefixer": "10.4.19",
     "babel-jest": "29.7.0",
     "eslint": "8.57.0",
-    "eslint-config-next": "14.1.4",
+    "eslint-config-next": "^14.1.4",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
     "identity-obj-proxy": "3.0.0",
@@ -50,9 +51,11 @@
     "jest-junit": "16.0.0",
     "node-mocks-http": "1.14.1",
     "postcss": "8.4.38",
-    "prettier": "3.2.5",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.12",
     "tailwindcss": "3.4.1",
     "ts-node": "10.9.2",
-    "typescript": "5.4.3"
+    "typescript": "5.4.3",
+    "typescript-eslint": "^7.3.1"
   }
 }
