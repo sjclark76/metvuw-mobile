@@ -12,6 +12,7 @@ const config = {
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
 
   testEnvironment: 'jest-environment-jsdom',
+  passWithNoTests : true,
   moduleNameMapper: {
     /* Handle CSS imports (with CSS modules)
     https://jestjs.io/docs/webpack#mocking-css-modules */
@@ -25,6 +26,9 @@ const config = {
     // '^.+\\.(jpg|jpeg|png|gif|webp|avif|svg)$':
     //     '<rootDir>/__mocks__/fileMock.js',
   },
+  testMatch: [
+    "**/?(*.)+(test).[jt]s?(x)",
+  ],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
