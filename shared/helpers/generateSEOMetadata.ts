@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { config } from '@/config'
 
 export default function generateSEOMetadata({
   title,
@@ -84,5 +85,6 @@ export default function generateSEOMetadata({
     ],
     manifest: '/manifest.json',
     themeColor: '#ffffff',
+    metadataBase: new URL(config.baseUrl),
   }
 }

@@ -15,6 +15,6 @@ export default async function SatellitePage() {
   const satelliteData = await downloadSatelliteChartData()
 
   return (
-    <RadarAndSatelliteImages images={satelliteData} chartType={'Satellite'} />
+    <RadarAndSatelliteImages images={satelliteData} chartType="Satellite" />
   )
 }

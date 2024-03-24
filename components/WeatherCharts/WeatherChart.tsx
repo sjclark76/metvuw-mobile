@@ -16,17 +16,17 @@ export function WeatherChart(props: Props) {
   const forecastDate = new Date(props.chart.forecastDate)
 
   return (
-    <div className="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white  w-full sm:w-4/5  xl:w-1/2 2xl:w-1/2 ">
+    <div className="mb-5 w-full rounded-xl bg-white pt-5 drop-shadow-2xl  filter sm:w-4/5  xl:w-1/2 2xl:w-1/2 ">
       <WeatherImage
         imageSrc={props.chart.url}
         imageAlt={altTag}
-        chartType={'Rain'}
+        chartType="Rain"
       />
-      <div className="flex items-center rounded-b-lg justify-around py-3 bg-white">
+      <div className="flex items-center justify-around rounded-b-lg bg-white py-3">
         <span className="text-base font-semibold text-gray-700">
           {format(forecastDate, 'PPPP')}
         </span>
-        <span className="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none">
+        <span className="w-20 transform rounded bg-gray-900 px-2 py-1 text-center text-xs font-semibold uppercase text-white transition-colors duration-200 hover:bg-gray-200 focus:bg-gray-400 focus:outline-none">
           {format(forecastDate, 'hh:mm a')}
         </span>
       </div>

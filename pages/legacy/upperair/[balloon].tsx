@@ -25,7 +25,7 @@ export default function Balloon({ images, meta }: UpperAirPageProps) {
     <RadarAndSatelliteImages
       meta={meta}
       images={images}
-      chartType={'Upper Air'}
+      chartType="Upper Air"
     />
   )
 }

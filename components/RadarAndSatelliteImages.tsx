@@ -21,7 +21,7 @@ export default function RadarAndSatelliteImages({
         {images.map((image) => (
           <div
             key={image.imageDateUTC}
-            className="pt-5 mb-5 rounded-xl filter drop-shadow-2xl bg-white"
+            className="mb-5 rounded-xl bg-white pt-5 drop-shadow-2xl filter"
           >
             <WeatherImage
               imageSrc={image.url}
@@ -31,11 +31,11 @@ export default function RadarAndSatelliteImages({
               )}`}
               chartType={chartType}
             />
-            <div className="flex items-center rounded-b-lg justify-around py-3 bg-white">
+            <div className="flex items-center justify-around rounded-b-lg bg-white py-3">
               <span className="text-base font-semibold text-gray-700">
                 {format(image.imageDateUTC, 'PPPP')}
               </span>
-              <span className="text-center px-2 py-1 w-20 text-xs font-semibold text-white uppercase transition-colors duration-200 transform bg-gray-900 rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none">
+              <span className="w-20 transform rounded bg-gray-900 px-2 py-1 text-center text-xs font-semibold uppercase text-white transition-colors duration-200 hover:bg-gray-200 focus:bg-gray-400 focus:outline-none">
                 {format(image.imageDateUTC, 'hh:mm a')}
               </span>
             </div>

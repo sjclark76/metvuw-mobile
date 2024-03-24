@@ -48,8 +48,8 @@ const Navbar = () => {
 
   return (
     <div className="sticky top-0 z-50">
-      <nav className="flex items-center flex-wrap bg-gradient-to-r from-blue-300  to-blue-600 p-2 ">
-        <Link href="/" className="inline-flex items-center p-2 mr-4 ">
+      <nav className="flex flex-wrap items-center bg-gradient-to-r from-blue-300  to-blue-600 p-2 ">
+        <Link href="/" className="mr-4 inline-flex items-center p-2 ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24pt"
@@ -82,17 +82,17 @@ const Navbar = () => {
             </g>
           </svg>
 
-          <span className="pl-2 text-xl text-white font-bold uppercase tracking-wide ">
+          <span className="pl-2 text-xl font-bold uppercase tracking-wide text-white ">
             Metvuw Mobile
           </span>
         </Link>
         <button
           aria-label="Open Menu"
-          className="xl:hidden inline-flex p-3 hover:bg-blue-600 rounded text-white ml-auto hover:text-white outline-none"
+          className="ml-auto inline-flex rounded p-3 text-white outline-none hover:bg-blue-600 hover:text-white xl:hidden"
           onClick={handleClick}
         >
           <svg
-            className="w-6 h-6"
+            className="h-6 w-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -109,9 +109,9 @@ const Navbar = () => {
         <div
           className={`${
             active ? '' : 'hidden'
-          }   w-full xl:inline-flex xl:flex-grow xl:w-auto`}
+          }   w-full xl:inline-flex xl:w-auto xl:flex-grow`}
         >
-          <div className="xl:inline-flex xl:flex-row xl:ml-auto xl:w-auto w-full xl:items-center items-start  flex flex-col xl:h-auto">
+          <div className="flex w-full flex-col items-start xl:ml-auto xl:inline-flex xl:h-auto  xl:w-auto xl:flex-row xl:items-center">
             <DropDown heading="New Zealand" links={nzLinks} />
             <DropDown heading="Australia" links={australiaLinks} />
             <DropDown heading="Pacific" links={pacificLinks} />
@@ -119,7 +119,7 @@ const Navbar = () => {
             <DropDown heading="Rest Of World" links={worldLinks} />
             <DropDown heading="Oceans" links={oceanLinks} />
             <div className={styles.headerText}>
-              <Link href="/legacy/satellite" className="mr-1">
+              <Link href="/satellite" className="mr-1">
                 Satellite
               </Link>
             </div>

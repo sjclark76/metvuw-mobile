@@ -19,7 +19,7 @@ export default function Radar({ images, meta }: RadarPageProps) {
   setSubmenuText(`Radar Chart for ${images[0].radar}`)
 
   return (
-    <RadarAndSatelliteImages meta={meta} images={images} chartType={'Radar'} />
+    <RadarAndSatelliteImages meta={meta} images={images} chartType="Radar" />
   )
 }
 

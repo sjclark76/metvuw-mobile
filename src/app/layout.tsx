@@ -1,10 +1,12 @@
 'use client'
-import '../../styles/globals.css'
 import Navbar from '../components/Navbar'
 import GoogleTag from '@/components/GoogleTag'
 import Footer from '@/components/Footer'
 import SubHeader from '@/components/SubHeader'
-
+import './globals.css'
+import { Inter } from 'next/font/google'
+import React from 'react'
+const inter = Inter({ subsets: ['latin'] })
 export default function RootLayout({
   // Layouts must accept a children prop.
   // This will be populated with nested layouts or pages
@@ -15,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <GoogleTag />
-      <body>
+      <body className={inter.className}>
         <main className="relative">
           <div className="sticky top-0 z-50">
             <Navbar />

@@ -48,20 +48,20 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="flex items-center flex-wrap bg-gradient-to-r from-blue-300  to-blue-600 p-2 ">
-      <Link href="/" className="inline-flex items-center p-2 mr-4 ">
+    <nav className="flex flex-wrap items-center bg-gradient-to-r from-blue-300  to-blue-600 p-2 ">
+      <Link href="/" className="mr-4 inline-flex items-center p-2 ">
         <MetvuwMobileImage />
-        <span className="pl-2 text-xl text-white font-bold uppercase tracking-wide ">
+        <span className="pl-2 text-xl font-bold uppercase tracking-wide text-white ">
           Metvuw Mobile
         </span>
       </Link>
       <button
         aria-label="Open Menu"
-        className="lg:hidden inline-flex p-3 hover:bg-blue-600 rounded text-white ml-auto hover:text-white outline-none"
+        className="ml-auto inline-flex rounded p-3 text-white outline-none hover:bg-blue-600 hover:text-white lg:hidden"
         onClick={handleClick}
       >
         <svg
-          className="w-6 h-6"
+          className="h-6 w-6"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -78,9 +78,9 @@ const Navbar = () => {
       <div
         className={`${
           active ? '' : 'hidden'
-        }   w-full lg:inline-flex lg:flex-grow lg:w-auto`}
+        }   w-full lg:inline-flex lg:w-auto lg:flex-grow`}
       >
-        <div className="lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start  flex flex-col lg:h-auto">
+        <div className="flex w-full flex-col items-start lg:ml-auto lg:inline-flex lg:h-auto  lg:w-auto lg:flex-row lg:items-center">
           <DropDown heading="New Zealand" links={nzLinks} />
           <DropDown heading="Australia" links={australiaLinks} />
           <DropDown heading="Pacific" links={pacificLinks} />
@@ -88,7 +88,7 @@ const Navbar = () => {
           <DropDown heading="Rest Of World" links={worldLinks} />
           <DropDown heading="Oceans" links={oceanLinks} />
           <div className={styles.headerText}>
-            <Link href="/legacy/satellite" className="mr-1">
+            <Link href="/satellite" className="mr-1">
               Satellite
             </Link>
           </div>

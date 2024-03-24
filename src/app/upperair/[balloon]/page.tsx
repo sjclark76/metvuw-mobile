@@ -31,6 +31,6 @@ export default async function UpperAirPage({
   )
 
   return (
-    <RadarAndSatelliteImages images={filteredImages} chartType={'Upper Air'} />
+    <RadarAndSatelliteImages images={filteredImages} chartType="Upper Air" />
   )
 }

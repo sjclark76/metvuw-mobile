@@ -8,7 +8,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head title={'metvuw mobile'} />
+        <Head title="metvuw mobile" />
         <body>
           <Main />
           <NextScript />

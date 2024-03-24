@@ -6,8 +6,8 @@ export function SubHeader() {
 
   return (
     <div className="flex flex-row justify-center">
-      <div className="px-2 filter  bg-gray-50 w-full ">
-        <h1 className="text-center font-medium text-sm text-gray-800 my-4 ">
+      <div className="w-full bg-gray-50  px-2 filter ">
+        <h1 className="my-4 text-center text-sm font-medium text-gray-800 ">
           {submenuText}
         </h1>
       </div>

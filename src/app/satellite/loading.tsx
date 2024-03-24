@@ -1,3 +1,5 @@
+// import { WeatherChartSkeleton } from '@/components/WeatherCharts/Skeleton'
+
 import { WeatherChartSkeleton } from '@/components/WeatherCharts/Skeleton'
 
 export default function Loading() {
