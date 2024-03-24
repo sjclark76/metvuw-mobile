@@ -19,12 +19,12 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
         with:
           # See here for caching with `yarn` https://github.com/actions/cache/blob/main/examples.md#node---yarn or you can leverage caching with actions/setup-node https://github.com/actions/setup-node
           path: |
@@ -36,7 +36,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'

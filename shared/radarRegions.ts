@@ -31,3 +31,9 @@ export const radarRegions: Record<RadarCode, RadarRegion> = {
   wl: 'Westland',
   nv: 'Southland',
 }
+
+export function isRadarCode(value: string): value is RadarCode {
+  return ['nl', 'ak', 'bp', 'mh', 'np', 'wn', 'ch', 'wl', 'nv'].includes(
+    value as RadarCode,
+  )
+}

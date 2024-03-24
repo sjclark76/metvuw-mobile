@@ -1,11 +1,11 @@
-import { SatelliteChartData } from '../types/satelliteChartData'
+import { SatelliteChartData } from '@shared/types/satelliteChartData'
 import axios from 'axios'
-import { config } from '../../../config'
+import { config } from '@/config'
 import cheerio from 'cheerio'
-import { decodeRadarUrl } from '../helpers/urlHelper'
+import { decodeRadarUrl } from '@shared/helpers/urlHelper'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { s3upload } from '../helpers/s3Helper'
-import { CacheImageResult } from '../types/cacheImageResult'
+import { s3upload } from '@shared/helpers/s3Helper'
+import { CacheImageResult } from '@shared/types/cacheImageResult'
 
 async function retrieveRadarImages(): Promise<SatelliteChartData[]> {
   const response = await axios.get(

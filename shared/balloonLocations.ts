@@ -11,3 +11,9 @@ export const balloonLocations: Record<BalloonLocationCode, BalloonLocation> = {
   '93417': 'Paraparaumu',
   '93844': 'Invercargill',
 }
+
+export function isBalloonLocationCode(
+  value: string,
+): value is BalloonLocationCode {
+  return ['93112', '93417', '93844'].includes(value as BalloonLocationCode)
+}

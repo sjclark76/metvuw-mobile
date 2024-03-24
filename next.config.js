@@ -39,6 +39,9 @@ const securityHeaders = function () {
 }
 
 const nextConfig = {
+  experimental: {
+    instrumentationHook: false,
+  },
   /* config options here */
   async headers() {
     return [
