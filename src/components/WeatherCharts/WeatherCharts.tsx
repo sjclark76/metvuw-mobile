@@ -23,7 +23,7 @@ const WeatherCharts = (props: WeatherChartsProps) => {
 
   return (
     <>
-      <div className="flex flex-col items-center">
+      <ul className="flex flex-col items-center">
         {props.charts.map((chart) => (
           <WeatherChart
             key={chart.forecastDate}
@@ -31,7 +31,7 @@ const WeatherCharts = (props: WeatherChartsProps) => {
             region={props.region}
           />
         ))}
-      </div>
+      </ul>
     </>
   )
 }
