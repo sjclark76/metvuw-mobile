@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useSetAtom } from 'jotai'
 import { submenuTextAtom } from '../Atoms/GlobalState'
 import { Region } from '../../shared/region'
-import { RainChartData } from '../../pages/api/types/rainChartData'
+import { RainChartData } from '@shared/types/rainChartData'
 import { WeatherChart } from './WeatherChart'
 interface WeatherChartsProps {
   region: Region

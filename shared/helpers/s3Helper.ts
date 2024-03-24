@@ -1,16 +1,16 @@
 import { config } from '@/config'
 
 const { S3Client } = require('@aws-sdk/client-s3')
-import { RainChartData } from '../../pages/api/types/rainChartData'
-import { SatelliteChartData } from '../../pages/api/types/satelliteChartData'
-import { RadarChartData } from '../../pages/api/types/radarChartData'
+import { RainChartData } from '@shared/types/rainChartData'
+import { SatelliteChartData } from '@shared/types/satelliteChartData'
+import { RadarChartData } from '@shared/types/radarChartData'
 import {
   GetObjectCommand,
   GetObjectCommandInput,
   PutObjectCommand,
 } from '@aws-sdk/client-s3'
 import { PutObjectCommandInput } from '@aws-sdk/client-s3/dist-types/commands/PutObjectCommand'
-import { UpperAirChartData } from '../../pages/api/types/upperAirChartData'
+import { UpperAirChartData } from '@shared/types/upperAirChartData'
 
 const { region, accessKey, secret } = config.s3
 

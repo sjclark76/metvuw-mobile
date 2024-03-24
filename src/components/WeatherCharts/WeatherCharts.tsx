@@ -4,7 +4,7 @@ import { useSetAtom } from 'jotai'
 import { submenuTextAtom } from '../Atoms/GlobalState'
 import { WeatherChart } from './WeatherChart'
 import { Region } from '@shared/region'
-import { RainChartData } from '../../../pages/api/types/rainChartData'
+import { RainChartData } from '@shared/types/rainChartData'
 interface WeatherChartsProps {
   region: Region
   charts: RainChartData[]

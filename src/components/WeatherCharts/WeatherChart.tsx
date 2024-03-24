@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import WeatherImage from '../WeatherImage/WeatherImage'
-import { RainChartData } from '../../../pages/api/types/rainChartData'
+import { RainChartData } from '@shared/types/rainChartData'
 import { Region } from '@shared/region'
 import Card from '@/components/Card'
 

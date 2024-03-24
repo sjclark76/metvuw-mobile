@@ -1,8 +1,8 @@
-import { RainChartData } from '../../pages/api/types/rainChartData'
-import { ChartData } from '../../pages/api/types/chartData'
-import { RadarChartData } from '../../pages/api/types/radarChartData'
+import { RainChartData } from '@shared/types/rainChartData'
+import { ChartData } from '@shared/types/chartData'
+import { RadarChartData } from '@shared/types/radarChartData'
 import { RadarCode, radarRegions } from '../radarRegions'
-import { UpperAirChartData } from '../../pages/api/types/upperAirChartData'
+import { UpperAirChartData } from '@shared/types/upperAirChartData'
 import { BalloonLocationCode, balloonLocations } from '../balloonLocations'
 
 function extractFilename(relativeUrl: string, regex: RegExp): string {

@@ -1,6 +1,6 @@
 'use client'
 import { format } from 'date-fns'
-import { ChartData } from '../../../pages/api/types/chartData'
+import { ChartData } from '@shared/types/chartData'
 import { ChartType } from '@shared/ChartType'
 import WeatherImage from '@/components/WeatherImage'
 import Card from '@/components/Card'

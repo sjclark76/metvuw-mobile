@@ -1,6 +1,6 @@
 'use client'
 
-import { RainChartData } from '../../../pages/api/types/rainChartData'
+import { RainChartData } from '@shared/types/rainChartData'
 import WeatherCharts from '@/components/WeatherCharts'
 import { Region } from '@shared/region'
 
