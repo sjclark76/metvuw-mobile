@@ -1,17 +1,11 @@
 import axios from 'axios'
-import * as cheerio from 'cheerio'
-import { NextApiRequest, NextApiResponse } from 'next'
+import cheerio from 'cheerio'
 
+import { RainChartDataCache } from '@/app/api/cache2/[region]/types'
 import { config } from '@/config'
-import { buildKeyName, s3upload } from '@/shared/helpers/s3Helper'
 import { decodeRainUrl } from '@/shared/helpers/urlHelper'
-import { findRegionByCode, Region } from '@/shared/region'
-import { CacheRequestResult } from '@/shared/types/cacheRequestResult'
-import { RainChartData } from '@/shared/types/rainChartData'
+import { Region } from '@/shared/region'
 
-type RainChartDataCache = RainChartData & {
-  primed: boolean
-}
 async function primeCache(url: URL) {
   try {
     const { status } = await axios.get(url.href)
@@ -21,7 +15,6 @@ async function primeCache(url: URL) {
     return false
   }
 }
-
 export async function getImageUrls(
   region: Region,
 ): Promise<RainChartDataCache[]> {
@@ -57,38 +50,3 @@ export async function getImageUrls(
   })
   return Promise.all(primedResults)
 }
-
-const regionCacheApi = async (
-  req: NextApiRequest,
-  response: NextApiResponse<CacheRequestResult>,
-) => {
-  let regionParam = req.query['region']
-
-  if (!regionParam) regionParam = 'nz'
-
-  const regionCode = Array.isArray(regionParam) ? regionParam[0] : regionParam
-
-  const region = findRegionByCode(regionCode)
-
-  if (region) {
-    const rainCharts: RainChartData[] = await getImageUrls(region)
-
-    const keyName = buildKeyName(region.code)
-
-    await s3upload({
-      Bucket: config.s3.bucketName,
-      Key: keyName,
-      Body: JSON.stringify(rainCharts, null, 2),
-    })
-
-    response.status(200).json({
-      success: true,
-      bucket: config.s3.bucketName,
-      fileName: keyName,
-    })
-  } else {
-    response.status(400)
-  }
-}
-
-export default regionCacheApi

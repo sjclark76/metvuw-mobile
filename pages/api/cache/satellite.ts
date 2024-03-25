@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { config } from '@/config'
 import { s3upload } from '@/shared/helpers/s3Helper'
 import { decodeSatelliteUrl } from '@/shared/helpers/urlHelper'
-import { CacheImageResult } from '@/shared/types/cacheImageResult'
+import { CacheRequestResult } from '@/shared/types/cacheRequestResult'
 import { SatelliteChartData } from '@/shared/types/satelliteChartData'
 
 async function retrieveSatelliteImages(): Promise<SatelliteChartData[]> {
@@ -38,7 +38,7 @@ async function retrieveSatelliteImages(): Promise<SatelliteChartData[]> {
 
 const satelliteCacheApi = async (
   req: NextApiRequest,
-  res: NextApiResponse<CacheImageResult>,
+  res: NextApiResponse<CacheRequestResult>,
 ) => {
   const result = await retrieveSatelliteImages()
 

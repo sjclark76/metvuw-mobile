@@ -4,29 +4,29 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { config } from '@/config'
 import { regions } from '@/shared/region'
 import {
-  CacheImageResult,
   CacheRefreshResult,
-} from '@/shared/types/cacheImageResult'
+  CacheRequestResult,
+} from '@/shared/types/cacheRequestResult'
 
 /**
  * Asynchronously calls our worker functions to refresh all the images for the satellite page and all region pages
  */
 export async function cacheImages(): Promise<CacheRefreshResult> {
   const satelliteCacheUrl = new URL('api/cache/satellite', config.baseUrl)
-  const satellitePromise = axios.get<CacheImageResult>(satelliteCacheUrl.href)
+  const satellitePromise = axios.get<CacheRequestResult>(satelliteCacheUrl.href)
 
-  const regionsPromise: Promise<AxiosResponse<CacheImageResult>>[] =
+  const regionsPromise: Promise<AxiosResponse<CacheRequestResult>>[] =
     regions.map((region) => {
       const apiURl = new URL(`api/cache/${region.code}`, config.baseUrl)
 
-      return axios.get<CacheImageResult>(apiURl.href)
+      return axios.get<CacheRequestResult>(apiURl.href)
     })
 
   const radarCacheUrl = new URL('api/cache/radar', config.baseUrl)
-  const radarPromise = axios.get<CacheImageResult>(radarCacheUrl.href)
+  const radarPromise = axios.get<CacheRequestResult>(radarCacheUrl.href)
 
   const upperAirCacheUrl = new URL('api/cache/upperair', config.baseUrl)
-  const upperAirPromise = axios.get<CacheImageResult>(upperAirCacheUrl.href)
+  const upperAirPromise = axios.get<CacheRequestResult>(upperAirCacheUrl.href)
 
   return Promise.all([
     upperAirPromise,

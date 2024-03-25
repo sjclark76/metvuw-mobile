@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { config } from '@/config'
 import { s3upload } from '@/shared/helpers/s3Helper'
 import { decodeRadarUrl } from '@/shared/helpers/urlHelper'
-import { CacheImageResult } from '@/shared/types/cacheImageResult'
+import { CacheRequestResult } from '@/shared/types/cacheRequestResult'
 import { SatelliteChartData } from '@/shared/types/satelliteChartData'
 
 async function retrieveRadarImages(): Promise<SatelliteChartData[]> {
@@ -38,7 +38,7 @@ async function retrieveRadarImages(): Promise<SatelliteChartData[]> {
 
 const radarCacheApi = async (
   req: NextApiRequest,
-  res: NextApiResponse<CacheImageResult>,
+  res: NextApiResponse<CacheRequestResult>,
 ) => {
   const result = await retrieveRadarImages()
 
