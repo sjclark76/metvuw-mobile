@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { getImageUrls } from '@/app/api/cache2/[region]/helpers'
+import { getImageUrls } from '@/app/api/cache/[region]/helpers'
 import { config } from '@/config'
 import { buildKeyName, s3upload } from '@/shared/helpers/s3Helper'
 import { findRegionByCode } from '@/shared/region'

@@ -4,7 +4,7 @@ test.describe('region api spec', () => {
   test('requesting for a valid region should return a 200 response', async ({
     request,
   }) => {
-    const cacheResponse = await request.get(`/api/cache2/nz`)
+    const cacheResponse = await request.get(`/api/cache/nz`)
     expect(cacheResponse.ok()).toBeTruthy()
 
     expect(await cacheResponse.json()).toEqual(
@@ -19,7 +19,7 @@ test.describe('region api spec', () => {
   test('requesting for an invalid region should return a 404 response', async ({
     request,
   }) => {
-    const cacheResponse = await request.get(`/api/cache2/foobaa`)
+    const cacheResponse = await request.get(`/api/cache/foobaa`)
     expect(cacheResponse.status()).toBe(404)
 
     expect(await cacheResponse.text()).toEqual('invalid region code: foobaa')
@@ -28,7 +28,7 @@ test.describe('region api spec', () => {
   test('requesting with no region should return a 404 response', async ({
     request,
   }) => {
-    const cacheResponse = await request.get(`/api/cache2`)
+    const cacheResponse = await request.get(`/api/cache`)
     expect(cacheResponse.status()).toBe(404)
   })
 })
