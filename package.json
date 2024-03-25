@@ -24,7 +24,7 @@
     "cheerio": "1.0.0-rc.12",
     "clsx": "^2.1.0",
     "date-fns": "3.6.0",
-    "express": "4.19.1",
+    "express": "4.19.2",
     "jotai": "2.7.1",
     "next": "14.1.4",
     "prop-types": "15.8.1",
