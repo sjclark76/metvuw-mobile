@@ -1,7 +1,7 @@
 import axios from 'axios'
 import cheerio from 'cheerio'
 
-import { RainChartDataCache } from '@/app/api/cache/[region]/types'
+import { RainChartDataCache } from '@/app/api/cache/rain/[region]/types'
 import { config } from '@/config'
 import { decodeRainUrl } from '@/shared/helpers/urlHelper'
 import { Region } from '@/shared/region'

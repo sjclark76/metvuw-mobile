@@ -1,6 +1,6 @@
 import axios from 'axios'
 import cheerio from 'cheerio'
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextResponse } from 'next/server'
 
 import { config } from '@/config'
 import { s3upload } from '@/shared/helpers/s3Helper'
@@ -35,23 +35,22 @@ async function retrieveRadarImages(): Promise<SatelliteChartData[]> {
     }
   })
 }
-
-const radarCacheApi = async (
-  req: NextApiRequest,
-  res: NextApiResponse<CacheRequestResult>,
-) => {
+export async function GET(): Promise<NextResponse<CacheRequestResult>> {
   const result = await retrieveRadarImages()
+
+  const keyName = 'upperair.json'
 
   await s3upload({
     Bucket: config.s3.bucketName,
-    Key: 'upperair.json',
+    Key: keyName,
     Body: JSON.stringify(result, null, 2),
   })
-  res.status(200).json({
+
+  const response: CacheRequestResult = {
     success: true,
     bucket: config.s3.bucketName,
-    fileName: 'upperair.json',
-  })
-}
+    fileName: keyName,
+  }
 
-export default radarCacheApi
+  return NextResponse.json(response)
+}

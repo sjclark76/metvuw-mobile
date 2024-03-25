@@ -1,34 +1,34 @@
 import axios from 'axios'
 import cheerio from 'cheerio'
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextResponse } from 'next/server'
 
 import { config } from '@/config'
 import { s3upload } from '@/shared/helpers/s3Helper'
-import { decodeSatelliteUrl } from '@/shared/helpers/urlHelper'
+import { decodeRadarUrl } from '@/shared/helpers/urlHelper'
 import { CacheRequestResult } from '@/shared/types/cacheRequestResult'
 import { SatelliteChartData } from '@/shared/types/satelliteChartData'
 
-async function retrieveSatelliteImages(): Promise<SatelliteChartData[]> {
+async function retrieveRadarImages(): Promise<SatelliteChartData[]> {
   const response = await axios.get(
-    new URL('satellite', config.metvuwBaseUrl).href,
+    new URL('radar/radar.php?location=nz', config.metvuwBaseUrl).href,
   )
   let rawHtml = response.data
 
   const $ = cheerio.load(rawHtml)
 
-  const images: cheerio.Cheerio = $('img[src*=small]')
+  const images: cheerio.Cheerio = $('img[src*=images]')
 
   return images.toArray().map((element: any) => {
     const relativeUrl = element.attribs.src
-    let satelliteChartData = decodeSatelliteUrl(relativeUrl)
+    let radarChartData = decodeRadarUrl(relativeUrl)
 
     const url = new URL(
-      `satellite/big/${relativeUrl.substring(8)}`,
+      `radar/images/${relativeUrl.substring(9)}`,
       config.cloudFrontUrl,
     )
 
     return {
-      ...satelliteChartData,
+      ...radarChartData,
       url: url.href,
       width: +element.attribs.width,
       height: +element.attribs.height,
@@ -36,23 +36,21 @@ async function retrieveSatelliteImages(): Promise<SatelliteChartData[]> {
   })
 }
 
-const satelliteCacheApi = async (
-  req: NextApiRequest,
-  res: NextApiResponse<CacheRequestResult>,
-) => {
-  const result = await retrieveSatelliteImages()
+export async function GET(): Promise<NextResponse<CacheRequestResult>> {
+  const result = await retrieveRadarImages()
 
+  const keyName = 'radar.json'
   await s3upload({
     Bucket: config.s3.bucketName,
-    Key: 'satellite.json',
+    Key: keyName,
     Body: JSON.stringify(result, null, 2),
   })
 
-  res.status(200).json({
+  const response: CacheRequestResult = {
     success: true,
     bucket: config.s3.bucketName,
-    fileName: 'satellite.json',
-  })
-}
+    fileName: keyName,
+  }
 
-export default satelliteCacheApi
+  return NextResponse.json(response)
+}
