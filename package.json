@@ -12,7 +12,9 @@
     "test:watch": "npx jest --watch --runInBand --colors --verbose --reporters=default",
     "test:ci": "npx jest --ci --runInBand --silent --colors --coverageDirectory=reports/coverage",
     "e2e": "npx playwright test",
-    "e2e:interactive": "npx playwright test --ui"
+    "e2e:interactive": "npx playwright test --ui",
+    "checkly:test": "npx checkly test",
+    "checkly:deploy": "npx checkly deploy"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.540.0",
@@ -58,8 +60,9 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.12",
     "tailwindcss": "3.4.1",
-    "ts-node": "10.9.2",
-    "typescript": "5.4.3",
-    "typescript-eslint": "^7.3.1"
+    "ts-node": "latest",
+    "typescript": "latest",
+    "typescript-eslint": "^7.3.1",
+    "checkly": "latest"
   }
 }
