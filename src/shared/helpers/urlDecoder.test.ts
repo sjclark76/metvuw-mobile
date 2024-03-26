@@ -3,22 +3,26 @@ import {
   decodeRainUrl,
   decodeSatelliteUrl,
   decodeUpperAirUrl,
-} from './urlHelper'
+} from './urlDecoder'
 
-describe('urlHelper tests', () => {
+const attributes = { url: 'https://go-here.com', width: 100, height: 100 }
+describe('urlDecoder  tests', () => {
   describe('decodeRainUrl', () => {
     it('should return the correct object', () => {
       const relativeUrl = './2021060500/rain-nz-thumb-2021060500-006.gif'
 
-      expect(decodeRainUrl(relativeUrl)).toMatchInlineSnapshot(`
+      expect(decodeRainUrl(relativeUrl, attributes)).toMatchInlineSnapshot(`
 {
   "day": 5,
   "forecastDate": "2021-06-05T06:00:00.000Z",
+  "height": 100,
   "hour": 0,
   "imageDateISO": "2021-06-05T00:00:00.000Z",
   "imageDateUTC": 1622851200000,
   "month": 5,
   "offset": 6,
+  "url": "https://go-here.com",
+  "width": 100,
   "year": 2021,
 }
 `)
@@ -27,15 +31,18 @@ describe('urlHelper tests', () => {
     it('should return the correct object for the north island', () => {
       const relativeUrl = './2023082818/rain-nzni-thumb-2023082818-240.gif'
 
-      expect(decodeRainUrl(relativeUrl)).toMatchInlineSnapshot(`
+      expect(decodeRainUrl(relativeUrl, attributes)).toMatchInlineSnapshot(`
 {
   "day": 28,
   "forecastDate": "2023-09-07T18:00:00.000Z",
+  "height": 100,
   "hour": 18,
   "imageDateISO": "2023-08-28T18:00:00.000Z",
   "imageDateUTC": 1693245600000,
   "month": 7,
   "offset": 240,
+  "url": "https://go-here.com",
+  "width": 100,
   "year": 2023,
 }
 `)
@@ -48,13 +55,16 @@ describe('urlHelper tests', () => {
     it('should return the correct object', () => {
       const url = './small/202308270300.jpg'
 
-      expect(decodeSatelliteUrl(url)).toMatchInlineSnapshot(`
+      expect(decodeSatelliteUrl(url, attributes)).toMatchInlineSnapshot(`
 {
   "day": 27,
+  "height": 100,
   "hour": 3,
   "imageDateISO": "2023-08-27T03:00:00.000Z",
   "imageDateUTC": 1693105200000,
   "month": 7,
+  "url": "https://go-here.com",
+  "width": 100,
   "year": 2023,
 }
 `)
@@ -65,15 +75,18 @@ describe('urlHelper tests', () => {
     it('should return the correct object', () => {
       const url = './images/202308271500Z_nl.gif'
 
-      expect(decodeRadarUrl(url)).toMatchInlineSnapshot(`
+      expect(decodeRadarUrl(url, attributes)).toMatchInlineSnapshot(`
 {
   "day": 27,
+  "height": 100,
   "hour": 15,
   "imageDateISO": "2023-08-27T15:00:00.000Z",
   "imageDateUTC": 1693148400000,
   "month": 7,
   "radar": "Northland",
   "radarCode": "nl",
+  "url": "https://go-here.com",
+  "width": 100,
   "year": 2023,
 }
 `)
@@ -84,15 +97,18 @@ describe('urlHelper tests', () => {
     it('should return the correct object', () => {
       const url = './202308301200.93112.thumb.png'
 
-      expect(decodeUpperAirUrl(url)).toMatchInlineSnapshot(`
+      expect(decodeUpperAirUrl(url, attributes)).toMatchInlineSnapshot(`
 {
   "balloonLocation": "Whenuapai",
   "balloonLocationCode": "93112",
   "day": 30,
+  "height": 100,
   "hour": 12,
   "imageDateISO": "2023-08-30T12:00:00.000Z",
   "imageDateUTC": 1693396800000,
   "month": 7,
+  "url": "https://go-here.com",
+  "width": 100,
   "year": 2023,
 }
 `)

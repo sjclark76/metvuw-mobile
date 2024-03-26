@@ -1,16 +1,18 @@
+/* eslint-disable no-console */
 import { config } from '@/config'
 
 const { S3Client } = require('@aws-sdk/client-s3')
-import { RainChartData } from '@shared/types/rainChartData'
-import { SatelliteChartData } from '@shared/types/satelliteChartData'
-import { RadarChartData } from '@shared/types/radarChartData'
 import {
   GetObjectCommand,
   GetObjectCommandInput,
   PutObjectCommand,
 } from '@aws-sdk/client-s3'
 import { PutObjectCommandInput } from '@aws-sdk/client-s3/dist-types/commands/PutObjectCommand'
-import { UpperAirChartData } from '@shared/types/upperAirChartData'
+
+import { RadarChartData } from '@/shared/types/radarChartData'
+import { RainChartData } from '@/shared/types/rainChartData'
+import { SatelliteChartData } from '@/shared/types/satelliteChartData'
+import { UpperAirChartData } from '@/shared/types/upperAirChartData'
 
 const { region, accessKey, secret } = config.s3
 

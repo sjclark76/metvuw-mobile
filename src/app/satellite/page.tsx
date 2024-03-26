@@ -1,9 +1,9 @@
-import generateSEOMetadata from '@shared/helpers/generateSEOMetadata'
-import { downloadSatelliteChartData } from '@shared/helpers/s3Helper'
 import { Metadata } from 'next'
 
 import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
 import { config } from '@/config'
+import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
+import { downloadSatelliteChartData } from '@/shared/helpers/s3Helper'
 
 export const generateMetadata = async (): Promise<Metadata> =>
   generateSEOMetadata({

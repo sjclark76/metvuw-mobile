@@ -1,9 +1,8 @@
 'use client'
 
-import { Region } from '@shared/region'
-import { RainChartData } from '@shared/types/rainChartData'
-
 import WeatherCharts from '@/components/WeatherCharts'
+import { RainChartData } from '@/shared/types/rainChartData'
+import { Region } from '@/shared/types/region'
 
 interface RegionPageProps {
   region: Region

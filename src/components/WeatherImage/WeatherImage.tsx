@@ -1,5 +1,6 @@
-import { ChartType } from '@shared/ChartType'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
+
+import { ChartType } from '@/shared/types/ChartType'
 
 import styles from './WeatherImage.module.css'
 
