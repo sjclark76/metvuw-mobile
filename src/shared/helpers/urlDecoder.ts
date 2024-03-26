@@ -9,9 +9,10 @@ import {
 } from '../types/balloonLocations'
 import { RadarCode, radarRegions } from '../types/radarRegions'
 
+// eslint-disable-no-unused-vars
 export type UrlDecoder<T extends ChartData> = (
-  relativeUrl: string,
-  attributes: { url: string; width: number; height: number },
+  relativeUrl: string, // eslint-disable-line
+  attributes: { url: string; width: number; height: number }, // eslint-disable-line
 ) => T
 
 function extractFilename(relativeUrl: string, regex: RegExp): string {
@@ -43,7 +44,7 @@ function decodeUrl<T extends ChartData>(
   relativeUrl: string,
   attributes: { url: string; width: number; height: number },
   regex: RegExp,
-  additionalProcessing: (fileName: string, chartData: ChartData) => T,
+  additionalProcessing: (fileName: string, chartData: ChartData) => T, // eslint-disable-line
 ): T {
   const filename = extractFilename(relativeUrl, regex)
 
@@ -94,7 +95,7 @@ export function decodeSatelliteUrl(
     relativeUrl,
     attributes,
     regex,
-    (filename, chartData) => chartData,
+    (_filename, chartData) => chartData,
   )
 }
 
@@ -134,7 +135,7 @@ export function decodeUpperAirUrl(
     relativeUrl,
     attributes,
     regex,
-    (filename, chartData) => {
+    (_filename, chartData) => {
       const balloonLocationCode =
         relativeUrl.match(regex)?.groups?.balloon ?? ''
 
