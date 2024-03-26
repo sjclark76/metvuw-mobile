@@ -2,11 +2,11 @@ import axios from 'axios'
 import { NextResponse } from 'next/server'
 
 import { config } from '@/config'
-import { regions } from '@/shared/region'
 import {
   CacheRefreshResult,
   CacheRequestResult,
 } from '@/shared/types/cacheRequestResult'
+import { regions } from '@/shared/types/region'
 
 export async function GET(): Promise<NextResponse<CacheRefreshResult>> {
   const cacheUrls = [

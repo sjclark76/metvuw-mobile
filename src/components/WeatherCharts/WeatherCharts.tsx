@@ -2,8 +2,8 @@ import { format } from 'date-fns'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
-import { Region } from '@/shared/region'
 import { RainChartData } from '@/shared/types/rainChartData'
+import { Region } from '@/shared/types/region'
 
 import { submenuTextAtom } from '../Atoms/GlobalState'
 import { WeatherChart } from './WeatherChart'

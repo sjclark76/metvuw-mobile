@@ -5,7 +5,7 @@ import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { downloadRadarChartData } from '@/shared/helpers/s3Helper'
-import { isRadarCode, radarRegions } from '@/shared/radarRegions'
+import { isRadarCode, radarRegions } from '@/shared/types/radarRegions'
 
 export const generateMetadata = async (): Promise<Metadata> =>
   generateSEOMetadata({

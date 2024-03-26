@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { getImageUrls } from '@/app/api/cache/rain/[region]/helpers'
 import { config } from '@/config'
 import { buildKeyName, s3upload } from '@/shared/helpers/s3Helper'
-import { findRegionByCode } from '@/shared/region'
+import { scrapeRainImages } from '@/shared/helpers/screenScraper'
 import { CacheRequestResult } from '@/shared/types/cacheRequestResult'
 import { RainChartData } from '@/shared/types/rainChartData'
+import { findRegionByCode } from '@/shared/types/region'
 
 export async function GET(
   _request: NextRequest,
@@ -20,7 +20,7 @@ export async function GET(
       status: 404,
     })
 
-  const rainCharts: RainChartData[] = await getImageUrls(region)
+  const rainCharts: RainChartData[] = await scrapeRainImages(region)
 
   const keyName = buildKeyName(region.code)
 

@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 import { MetvuwMobileImage } from '@/components/Navbar/components/MetvuwMobileImage'
-import { balloonLocations } from '@/shared/balloonLocations'
-import { radarRegions } from '@/shared/radarRegions'
+import { balloonLocations } from '@/shared/types/balloonLocations'
+import { radarRegions } from '@/shared/types/radarRegions'
 import {
   australiaRegions,
   europeRegions,
@@ -13,7 +13,7 @@ import {
   pacificRegions,
   Region,
   worldRegions,
-} from '@/shared/region'
+} from '@/shared/types/region'
 
 import DropDown from './components/DropDown'
 import styles from './NavBar.module.css'

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 
-import { getByRegionCode } from '@/shared/region'
+import { getByRegionCode } from '@/shared/types/region'
 
 import { nzRegionCharts } from '../../../testing/nz'
 import WeatherCharts from './WeatherCharts'

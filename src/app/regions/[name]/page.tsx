@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import RegionPage from '@/components/RegionPage/region-page'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { downloadRainChartData } from '@/shared/helpers/s3Helper'
-import { findRegionByCode } from '@/shared/region'
+import { findRegionByCode } from '@/shared/types/region'
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // read route params
