@@ -1,29 +1,3 @@
-// type RegionCode =
-//   | 'nz'
-//   | 'nzni'
-//   | 'nzsi'
-//   | 'victoria'
-//   | 'nsw'
-//   | 'waussie'
-//   | 'swaussie'
-//   | 'queensland'
-//   | 'saussie'
-//   | 'seaussie'
-//   | 'newcaledonia'
-//   | 'fiji'
-//   | 'swp'
-//   | 'ocean'
-//   | 'europe'
-//   | 'uk'
-//   | 'estonia'
-//   | 'turkey'
-//   | 'world'
-//   | 'satlantic'
-//   | 'natlantic'
-//   | 'usa'
-//   | 'japan'
-//   | 'safrica'
-
 export const regions = [
   { name: 'New Zealand', code: 'nz' },
   { name: 'North Island', code: 'nzni' },
