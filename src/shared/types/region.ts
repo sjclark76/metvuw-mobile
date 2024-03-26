@@ -1,29 +1,3 @@
-// type RegionCode =
-//   | 'nz'
-//   | 'nzni'
-//   | 'nzsi'
-//   | 'victoria'
-//   | 'nsw'
-//   | 'waussie'
-//   | 'swaussie'
-//   | 'queensland'
-//   | 'saussie'
-//   | 'seaussie'
-//   | 'newcaledonia'
-//   | 'fiji'
-//   | 'swp'
-//   | 'ocean'
-//   | 'europe'
-//   | 'uk'
-//   | 'estonia'
-//   | 'turkey'
-//   | 'world'
-//   | 'satlantic'
-//   | 'natlantic'
-//   | 'usa'
-//   | 'japan'
-//   | 'safrica'
-
 export const regions = [
   { name: 'New Zealand', code: 'nz' },
   { name: 'North Island', code: 'nzni' },
@@ -36,16 +10,12 @@ export const regions = [
   { name: 'South Australia', code: 'saussie' },
   { name: 'South East Australia', code: 'seaussie' },
   { name: 'New Caledonia', code: 'newcaledonia' },
-  { name: 'Fiji', code: 'fiji' },
   { name: 'South West Pacific', code: 'swp' },
-  { name: 'Fiji - NZ', code: 'ocean' },
   { name: 'Europe', code: 'europe' },
   { name: 'United Kingdom', code: 'uk' },
   { name: 'Estonia', code: 'estonia' },
   { name: 'Turkey', code: 'turkey' },
   { name: 'World', code: 'world' },
-  { name: 'South Atlantic', code: 'satlantic' },
-  { name: 'North Atlantic', code: 'natlantic' },
   { name: 'USA', code: 'usa' },
   { name: 'Japan', code: 'japan' },
   { name: 'South Africa', code: 'safrica' },
@@ -87,9 +57,9 @@ export const australiaRegions: Region[] = [
 ]
 export const pacificRegions: Region[] = [
   { name: 'New Caledonia', code: 'newcaledonia' },
-  { name: 'Fiji', code: 'fiji' },
+  { code: 'fiji', name: 'Fiji Islands' },
   { name: 'South West Pacific', code: 'swp' },
-  { name: 'Fiji - NZ', code: 'ocean' },
+  // { name: 'Fiji - NZ', code: 'ocean' },
 ]
 export const europeRegions: Region[] = [
   { name: 'Europe', code: 'europe' },
