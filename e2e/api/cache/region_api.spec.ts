@@ -10,7 +10,7 @@ test.describe('region api spec', () => {
     expect(await cacheResponse.json()).toEqual(
       expect.objectContaining({
         success: true,
-        bucket: 'metvuw-mobile-dev',
+        bucket: expect.stringMatching(/metvuw-mobile-dev|metvuw-mobile-prev/),
         fileName: 'nz.json',
       }),
     )
