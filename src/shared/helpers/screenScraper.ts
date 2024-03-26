@@ -30,22 +30,15 @@ async function scrapeImages<T extends ChartData>(
   url: string,
   imageSelector: string,
   urlDecoder: UrlDecoder<T>,
-  path: string,
 ): Promise<T[]> {
   const images = await loadImages(url, imageSelector)
 
-  return images.map((element: any) => {
-    const relativeUrl = element.attribs.src
-
-    const url = new URL(
-      `${path}/${relativeUrl.substring(path.length + 1)}`,
-      config.cloudFrontUrl,
-    )
+  return images.map((image: any) => {
+    const relativeUrl = image.attribs.src
 
     return urlDecoder(relativeUrl, {
-      url: url.href,
-      width: +element.attribs.width,
-      height: +element.attribs.height,
+      width: +image.attribs.width,
+      height: +image.attribs.height,
     })
   })
 }
@@ -55,26 +48,14 @@ export const scrapeRadarImages = () =>
     'radar/radar.php?location=nz',
     'img[src*=images]',
     decodeRadarUrl,
-    'radar/images',
   )
 export const scrapeSatelliteImages = () =>
-  scrapeImages(
-    'satellite',
-    'img[src*=small]',
-    decodeSatelliteUrl,
-    'satellite/big',
-  )
+  scrapeImages('satellite', 'img[src*=small]', decodeSatelliteUrl)
 export const scrapeUpperAirImages = () =>
-  scrapeImages(
-    'upperair',
-    'img[src$="thumb.png"]',
-    decodeUpperAirUrl,
-    'upperair',
-  )
+  scrapeImages('upperair', 'img[src$="thumb.png"]', decodeUpperAirUrl)
 export const scrapeRainImages = (region: Region) =>
   scrapeImages(
     `forecast/forecast.php?type=rain&region=${region.code}&noofdays=10`,
     'img[src*=rain]',
     decodeRainUrl,
-    'forecast',
   )
