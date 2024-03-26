@@ -11,6 +11,7 @@
     "test": "npx jest --runInBand --colors --verbose --reporters=default",
     "test:watch": "npx jest --watch --runInBand --colors --verbose --reporters=default",
     "test:ci": "npx jest --ci --runInBand --silent --colors --coverageDirectory=reports/coverage",
+    "e2e": "npx playwright test",
     "e2e:interactive": "npx playwright test --ui"
   },
   "dependencies": {

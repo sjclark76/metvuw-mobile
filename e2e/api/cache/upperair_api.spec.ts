@@ -8,7 +8,9 @@ test.describe('radar api spec', () => {
     expect(await cacheResponse.json()).toEqual(
       expect.objectContaining({
         success: true,
-        bucket: expect.stringMatching(/metvuw-mobile-dev|metvuw-mobile-prev/),
+        bucket: expect.stringMatching(
+          /metvuw-mobile-dev|metvuw-mobile-prev|metvuw-mobile/,
+        ),
         fileName: 'upperair.json',
       }),
     )

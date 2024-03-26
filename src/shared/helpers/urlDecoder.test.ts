@@ -5,25 +5,25 @@ import {
   decodeUpperAirUrl,
 } from './urlDecoder'
 
-const attributes = { url: 'https://go-here.com', width: 100, height: 100 }
+const attributes = { width: 100, height: 100 }
 describe('urlDecoder  tests', () => {
   describe('decodeRainUrl', () => {
     it('should return the correct object', () => {
-      const relativeUrl = './2021060500/rain-nz-thumb-2021060500-006.gif'
+      const relativeUrl = './2024032518/rain-nz-thumb-2024032518-006.gif'
 
       expect(decodeRainUrl(relativeUrl, attributes)).toMatchInlineSnapshot(`
 {
-  "day": 5,
-  "forecastDate": "2021-06-05T06:00:00.000Z",
+  "day": 25,
+  "forecastDate": "2024-03-26T00:00:00.000Z",
   "height": 100,
-  "hour": 0,
-  "imageDateISO": "2021-06-05T00:00:00.000Z",
-  "imageDateUTC": 1622851200000,
-  "month": 5,
+  "hour": 18,
+  "imageDateISO": "2024-03-25T18:00:00.000Z",
+  "imageDateUTC": 1711389600000,
+  "month": 2,
   "offset": 6,
-  "url": "https://go-here.com",
+  "url": "https://metvuw.com/forecast/2024032518/rain-nz-thumb-2024032518-006.gif",
   "width": 100,
-  "year": 2021,
+  "year": 2024,
 }
 `)
     })
@@ -41,7 +41,7 @@ describe('urlDecoder  tests', () => {
   "imageDateUTC": 1693245600000,
   "month": 7,
   "offset": 240,
-  "url": "https://go-here.com",
+  "url": "https://metvuw.com/forecast/2023082818/rain-nzni-thumb-2023082818-240.gif",
   "width": 100,
   "year": 2023,
 }
@@ -63,7 +63,7 @@ describe('urlDecoder  tests', () => {
   "imageDateISO": "2023-08-27T03:00:00.000Z",
   "imageDateUTC": 1693105200000,
   "month": 7,
-  "url": "https://go-here.com",
+  "url": "https://metvuw.com/satellite/big/202308270300.jpg",
   "width": 100,
   "year": 2023,
 }
@@ -85,7 +85,7 @@ describe('urlDecoder  tests', () => {
   "month": 7,
   "radar": "Northland",
   "radarCode": "nl",
-  "url": "https://go-here.com",
+  "url": "https://metvuw.com/radar/images/202308271500Z_nl.gif",
   "width": 100,
   "year": 2023,
 }
@@ -93,7 +93,7 @@ describe('urlDecoder  tests', () => {
     })
   })
 
-  describe('decodeRadarUrl', () => {
+  describe('decodeUpperAirUrl', () => {
     it('should return the correct object', () => {
       const url = './202308301200.93112.thumb.png'
 
@@ -107,7 +107,7 @@ describe('urlDecoder  tests', () => {
   "imageDateISO": "2023-08-30T12:00:00.000Z",
   "imageDateUTC": 1693396800000,
   "month": 7,
-  "url": "https://go-here.com",
+  "url": "https://metvuw.com/upperair/202308301200.93112.png",
   "width": 100,
   "year": 2023,
 }
