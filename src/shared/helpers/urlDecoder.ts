@@ -1,3 +1,5 @@
+import path from 'node:path'
+
 import { config } from '@/config'
 import { ChartData } from '@/shared/types/chartData'
 import { RadarChartData } from '@/shared/types/radarChartData'
@@ -31,15 +33,19 @@ function constructChartData(
   const day = +fileName.slice(6, 8)
   const hour = +fileName.slice(8, 10)
   const utcDate = Date.UTC(year, month, day, hour)
+  const originalFileName = path.basename(absoluteURL.pathname)
+
   return {
-    url: absoluteURL.href,
-    year: year,
-    month: month,
     day: day,
     hour: hour,
-    imageDateUTC: utcDate,
     imageDateISO: new Date(utcDate).toISOString(),
+    imageDateUTC: utcDate,
+    month: month,
+    name: originalFileName,
+    publicUrl: '',
+    url: absoluteURL.href,
     ...dimensions,
+    year: year,
   }
 }
 
@@ -131,8 +137,8 @@ export function decodeRadarUrl(
         filename.match(/\d+\w_(?<radar>\w+).gif/)?.groups?.radar ?? ''
       return {
         ...chartData,
-        radarCode: radar as RadarCode,
         radar: radarRegions[radar],
+        radarCode: radar as RadarCode,
       }
     },
   )
@@ -163,8 +169,8 @@ export function decodeUpperAirUrl(
 
       return {
         ...chartData,
-        balloonLocationCode: balloonLocationCode as BalloonLocationCode,
         balloonLocation: balloonLocations[balloonLocationCode],
+        balloonLocationCode: balloonLocationCode as BalloonLocationCode,
       }
     },
   )

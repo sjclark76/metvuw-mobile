@@ -5,7 +5,7 @@ import {
   decodeUpperAirUrl,
 } from './urlDecoder'
 
-const attributes = { width: 100, height: 100 }
+const attributes = { height: 100, width: 100 }
 describe('urlDecoder  tests', () => {
   describe('decodeRainUrl', () => {
     it('should return the correct object', () => {
@@ -14,6 +14,7 @@ describe('urlDecoder  tests', () => {
       expect(decodeRainUrl(relativeUrl, attributes)).toMatchInlineSnapshot(`
 {
   "day": 25,
+  "fileName": "rain-nz-thumb-2024032518-006.gif",
   "forecastDate": "2024-03-26T00:00:00.000Z",
   "height": 100,
   "hour": 18,
@@ -34,6 +35,7 @@ describe('urlDecoder  tests', () => {
       expect(decodeRainUrl(relativeUrl, attributes)).toMatchInlineSnapshot(`
 {
   "day": 28,
+  "fileName": "rain-nzni-thumb-2023082818-240.gif",
   "forecastDate": "2023-09-07T18:00:00.000Z",
   "height": 100,
   "hour": 18,
@@ -58,6 +60,7 @@ describe('urlDecoder  tests', () => {
       expect(decodeSatelliteUrl(url, attributes)).toMatchInlineSnapshot(`
 {
   "day": 27,
+  "fileName": "202308270300.jpg",
   "height": 100,
   "hour": 3,
   "imageDateISO": "2023-08-27T03:00:00.000Z",
@@ -78,6 +81,7 @@ describe('urlDecoder  tests', () => {
       expect(decodeRadarUrl(url, attributes)).toMatchInlineSnapshot(`
 {
   "day": 27,
+  "fileName": "202308271500Z_nl.gif",
   "height": 100,
   "hour": 15,
   "imageDateISO": "2023-08-27T15:00:00.000Z",
@@ -102,6 +106,7 @@ describe('urlDecoder  tests', () => {
   "balloonLocation": "Whenuapai",
   "balloonLocationCode": "93112",
   "day": 30,
+  "fileName": "202308301200.93112.png",
   "height": 100,
   "hour": 12,
   "imageDateISO": "2023-08-30T12:00:00.000Z",

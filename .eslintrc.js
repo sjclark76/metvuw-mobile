@@ -1,23 +1,28 @@
 module.exports = {
-  plugins: ['prettier', 'simple-import-sort'],
+  env: {
+    browser: true,
+    jest: true,
+  },
   extends: [
     'next/core-web-vitals',
     'prettier',
     'eslint:recommended',
     'plugin:prettier/recommended',
   ],
+  plugins: ['prettier', 'simple-import-sort'],
   rules: {
+    '@next/next/no-img-element': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
-    '@next/next/no-img-element': 'off',
     'prettier/prettier': ['error'],
     'react/jsx-curly-brace-presence': 'warn',
+    'simple-import-sort/exports': 'error',
 
     'simple-import-sort/imports': 'error',
-    'simple-import-sort/exports': 'error',
-  },
-  env: {
-    browser: true,
-    jest: true,
+    'sort-keys': [
+      'error',
+      'asc',
+      { caseSensitive: true, minKeys: 2, natural: false },
+    ],
   },
 }
