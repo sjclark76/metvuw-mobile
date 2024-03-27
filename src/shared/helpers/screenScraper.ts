@@ -43,12 +43,13 @@ async function scrapeImages<T extends ChartData>(
   })
 }
 
-export const scrapeRadarImages = () =>
-  scrapeImages(
+export const scrapeRadarImages = () => {
+  return scrapeImages(
     'radar/radar.php?location=nz',
     'img[src*=images]',
     decodeRadarUrl,
   )
+}
 export const scrapeSatelliteImages = () =>
   scrapeImages('satellite', 'img[src*=small]', decodeSatelliteUrl)
 export const scrapeUpperAirImages = () =>
