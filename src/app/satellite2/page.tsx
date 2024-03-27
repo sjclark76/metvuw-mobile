@@ -1,5 +1,3 @@
-import path from 'node:path'
-
 import { Metadata } from 'next'
 
 import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
@@ -7,18 +5,16 @@ import { config } from '@/config'
 import serviceRoleDb from '@/shared/db/serviceRoleDb'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { ChartData } from '@/shared/types/chartData'
-// import { downloadSatelliteChartData } from '@/shared/helpers/s3Helper'
 
 async function constructChartData(
   fileName: string,
   // absoluteURL: URL,
   dimensions: { width: number; height: number },
 ): Promise<ChartData> {
-  const { data: publicUrl } = await serviceRoleDb.storage
+  const { data: publicUrl } = serviceRoleDb.storage
     .from('satellite')
     .getPublicUrl(fileName)
-  //
-  // result.publicUrl = data.data.publicUrl
+
   const year = +fileName.slice(0, 4)
   const month = +fileName.slice(4, 6) - 1
   const day = +fileName.slice(6, 8)

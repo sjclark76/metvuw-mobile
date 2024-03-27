@@ -1,4 +1,4 @@
-import { StorageImage } from '@/shared/helpers/imageStorage/imageStorage'
+import { StorageImage } from '@/shared/helpers/imageStorage/storageImage'
 
 export const determineImagesToAdd = <T extends StorageImage>(
   newImages: T[],

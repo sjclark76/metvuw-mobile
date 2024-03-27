@@ -5,22 +5,22 @@ import { ChartType } from '@/shared/types/ChartType'
 import styles from './WeatherImage.module.css'
 
 export interface WeatherImageProps {
-  imageSrc: string | undefined
-  imageAlt: string
   chartType: ChartType
+  imageAlt: string
+  imageSrc: string | undefined
 }
 
 const widthAndHeightMap: Record<ChartType, { width: number; height: number }> =
   {
-    Rain: { width: 711, height: 600 },
     Radar: { width: 760, height: 760 },
+    Rain: { width: 711, height: 600 },
     Satellite: { width: 840, height: 630 },
     'Upper Air': { width: 760, height: 690 },
   }
 const WeatherImage = ({ imageAlt, imageSrc, chartType }: WeatherImageProps) => {
   const rainStyle = {
-    objectPosition: '0% 62%',
     minHeight: '85%',
+    objectPosition: '0% 62%',
   }
 
   const satelliteStyle = {

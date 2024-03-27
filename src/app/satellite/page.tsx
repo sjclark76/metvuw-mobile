@@ -7,8 +7,8 @@ import { downloadSatelliteChartData } from '@/shared/helpers/s3Helper'
 
 export const generateMetadata = async (): Promise<Metadata> =>
   generateSEOMetadata({
-    title: `metvuw mobile | Satellite`,
     description: `Satellite wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
+    title: `metvuw mobile | Satellite`,
     url: new URL('satellite', config.baseUrl).href,
   })
 

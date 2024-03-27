@@ -9,6 +9,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:prettier/recommended',
   ],
+
   plugins: ['prettier', 'simple-import-sort'],
   rules: {
     '@next/next/no-img-element': 'off',
@@ -19,10 +20,11 @@ module.exports = {
     'simple-import-sort/exports': 'error',
 
     'simple-import-sort/imports': 'error',
-    'sort-keys': [
-      'error',
-      'asc',
-      { caseSensitive: true, minKeys: 2, natural: false },
-    ],
+    // 'sort-keys': [
+    //   'error',
+    //   'asc',
+    //   { caseSensitive: true, minKeys: 2, natural: false },
+    // ],
   },
+  ignorePatterns: ['src/shared/db/databaseTypes.ts'],
 }
