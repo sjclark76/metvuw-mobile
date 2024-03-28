@@ -40,6 +40,7 @@ const WeatherImage = ({ imageAlt, imageSrc, chartType }: WeatherImageProps) => {
         src={imageSrc} // use normal <img> attributes as props
         className={isRainForecast ? styles.croppedImage : undefined}
         style={isRainForecast ? rainStyle : satelliteStyle}
+        threshold={500}
       />
     </div>
   )
