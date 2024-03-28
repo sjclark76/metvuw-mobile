@@ -16,7 +16,6 @@ export async function GET(): Promise<NextResponse<ChartData[]>> {
 
   const imagesToAdd = determineImagesToAdd(newImages, existingImages)
 
-  console.debug({ newImages, existingImages, imagesToAdd })
   if (imagesToAdd.length > 0) {
     await removeImagesFromStorage(existingImages, 'satellite')
   }

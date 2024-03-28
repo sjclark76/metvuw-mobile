@@ -56,7 +56,6 @@ export default async function SatellitePage() {
     })
   const existingImages = data ?? []
 
-  console.table(existingImages)
   const satelliteData = await Promise.all(
     existingImages.map((file) =>
       constructChartData(file.name, { height: 210, width: 280 }),
