@@ -26,21 +26,24 @@ async function constructChartData(
     .from('images')
     .getPublicUrl(path)
 
-  const year = +fileName.slice(0, 4)
-  const month = +fileName.slice(4, 6) - 1
-  const day = +fileName.slice(6, 8)
-  const hour = +fileName.slice(8, 10)
+  const regex = /rain-(?<region>\w+)-thumb-(?<filename>\d+-\d+\.gif)/ // MODIFIED FROM OTHER CODE
+  const match = fileName.match(regex)
+  const fooName = match?.groups?.filename ?? ''
+  const year = +fooName.slice(0, 4)
+  const month = +fooName.slice(4, 6) - 1
+  const day = +fooName.slice(6, 8)
+  const hour = +fooName.slice(8, 10)
 
-  console.debug({ fileName, year, month, day, hour })
+  console.debug({ fileName, fooName, year, month, day, hour })
   const utcDate = Date.UTC(year, month, day, hour)
-  const offset = +fileName.slice(11, 14)
+  const offset = +fooName.slice(11, 14)
   return {
     day: day,
     hour: hour,
     imageDateISO: new Date(utcDate).toISOString(),
     imageDateUTC: utcDate,
     month: month,
-    name: fileName,
+    name: fooName,
     path: '',
     url: publicUrl.publicUrl,
     ...dimensions,
