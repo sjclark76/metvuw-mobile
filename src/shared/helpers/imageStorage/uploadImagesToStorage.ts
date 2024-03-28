@@ -10,6 +10,7 @@ async function downloadImageToBuffer(url: string) {
     url,
   })
 
+  console.log('downloaded image', response.headers['content-type'])
   return Buffer.from(response.data, 'binary')
 }
 export async function uploadImagesToStorage(
@@ -18,7 +19,13 @@ export async function uploadImagesToStorage(
   const promises = imagesToUpload.map(async (result) => {
     const image = await downloadImageToBuffer(result.url)
 
-    await serviceRoleDb.storage.from('satellite').upload(result.name, image)
+    const { error } = await serviceRoleDb.storage
+      .from('images')
+      .upload(result.path, image, { contentType: 'image/jpeg' })
+
+    if (error) {
+      console.error(error)
+    }
 
     return result
   })

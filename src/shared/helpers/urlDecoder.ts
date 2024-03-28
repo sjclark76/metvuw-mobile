@@ -42,7 +42,7 @@ function constructChartData(
     imageDateUTC: utcDate,
     month: month,
     name: originalFileName,
-    publicUrl: '',
+    path: originalFileName,
     url: absoluteURL.href,
     ...dimensions,
     year: year,
@@ -69,7 +69,10 @@ export function decodeRainUrl(
 ): RainChartData {
   // ./2021060500/rain-nz-2021060500-006.gif
 
-  const regex = /\.\/\d+\/rain-\w+-thumb-(?<filename>\d+-\d+\.gif)/
+  const regex = /\.\/\d+\/rain-(?<region>\w+)-thumb-(?<filename>\d+-\d+\.gif)/
+
+  const match = relativeUrl.match(regex)
+  const region = match?.groups?.region ?? ''
 
   const transformedUrl = relativeUrl.replace('.', 'forecast')
   const absoluteURL = new URL(transformedUrl, config.metvuwBaseUrl)
@@ -91,6 +94,7 @@ export function decodeRainUrl(
           ),
         ).toISOString(),
         offset: offset,
+        path: `rain/${region}/${chartData.name}`,
       }
     },
   )
@@ -112,7 +116,10 @@ export function decodeSatelliteUrl(
     absoluteURL,
     dimensions,
     regex,
-    (_filename, chartData) => chartData,
+    (_filename, chartData) => ({
+      ...chartData,
+      path: `satellite/${chartData.name}`,
+    }),
   )
 }
 
@@ -139,6 +146,7 @@ export function decodeRadarUrl(
         ...chartData,
         radar: radarRegions[radar],
         radarCode: radar as RadarCode,
+        path: `radar/${radar}/${chartData.name}`,
       }
     },
   )
@@ -171,6 +179,7 @@ export function decodeUpperAirUrl(
         ...chartData,
         balloonLocation: balloonLocations[balloonLocationCode],
         balloonLocationCode: balloonLocationCode as BalloonLocationCode,
+        path: `upper-air/${balloonLocationCode}/${chartData.name}`,
       }
     },
   )

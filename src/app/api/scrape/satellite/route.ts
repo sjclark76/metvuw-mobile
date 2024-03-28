@@ -10,14 +10,15 @@ import { ChartData } from '@/shared/types/chartData'
 export async function GET(): Promise<NextResponse<ChartData[]>> {
   const newImages = await scrapeSatelliteImages()
 
-  const { data } = await serviceRoleDb.storage.from('satellite').list()
+  const { data } = await serviceRoleDb.storage.from('images').list('satellite')
 
   const existingImages = data ?? []
 
   const imagesToAdd = determineImagesToAdd(newImages, existingImages)
 
+  console.debug({ newImages, existingImages, imagesToAdd })
   if (imagesToAdd.length > 0) {
-    await removeImagesFromStorage(existingImages)
+    await removeImagesFromStorage(existingImages, 'satellite')
   }
 
   await uploadImagesToStorage(imagesToAdd)

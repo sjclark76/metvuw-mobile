@@ -19,9 +19,9 @@ export function RadarAndSatelliteImages({
   chartType,
   headerText,
 }: Props) {
-  const setSubmenuText = useSetAtom(submenuTextAtom)
+  // const setSubmenuText = useSetAtom(submenuTextAtom)
 
-  setSubmenuText(headerText)
+  // setSubmenuText(headerText)
 
   const createImgAlt = (image: ChartData) => {
     return `${chartType.toLowerCase()} chart for ${format(

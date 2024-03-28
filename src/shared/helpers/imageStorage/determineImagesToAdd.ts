@@ -1,9 +1,10 @@
 import { StorageImage } from '@/shared/helpers/imageStorage/storageImage'
+import { ChartData } from '@/shared/types/chartData'
 
-export const determineImagesToAdd = <T extends StorageImage>(
-  newImages: T[],
+export const determineImagesToAdd = (
+  newImages: ChartData[],
   existingImages: StorageImage[],
-): T[] => {
+): ChartData[] => {
   return newImages.every((newImage) =>
     existingImages.some(
       (existingImage) => existingImage.name === newImage.name,
