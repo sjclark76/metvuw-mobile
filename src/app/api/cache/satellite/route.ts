@@ -11,15 +11,15 @@ export async function GET(): Promise<NextResponse<CacheRequestResult>> {
   const keyName = 'satellite.json'
 
   await s3upload({
+    Body: JSON.stringify(result, null, 2),
     Bucket: config.s3.bucketName,
     Key: keyName,
-    Body: JSON.stringify(result, null, 2),
   })
 
   const response: CacheRequestResult = {
-    success: true,
     bucket: config.s3.bucketName,
     fileName: keyName,
+    success: true,
   }
 
   return NextResponse.json(response)

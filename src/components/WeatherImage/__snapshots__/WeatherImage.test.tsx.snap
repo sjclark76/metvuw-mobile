@@ -11,7 +11,7 @@ exports[`Weather Image it should render correctly 1`] = `
       class="croppedImage"
       height="600"
       src="baa"
-      style="object-position: 0% 62%; min-height: 85%;"
+      style="min-height: 85%; object-position: 0% 62%;"
       width="711"
     />
   </div>

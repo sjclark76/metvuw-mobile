@@ -5,7 +5,7 @@ import {
   decodeUpperAirUrl,
 } from './urlDecoder'
 
-const attributes = { width: 100, height: 100 }
+const attributes = { height: 100, width: 100 }
 describe('urlDecoder  tests', () => {
   describe('decodeRainUrl', () => {
     it('should return the correct object', () => {
@@ -20,7 +20,9 @@ describe('urlDecoder  tests', () => {
   "imageDateISO": "2024-03-25T18:00:00.000Z",
   "imageDateUTC": 1711389600000,
   "month": 2,
+  "name": "rain-nz-thumb-2024032518-006.gif",
   "offset": 6,
+  "publicUrl": "",
   "url": "https://metvuw.com/forecast/2024032518/rain-nz-thumb-2024032518-006.gif",
   "width": 100,
   "year": 2024,
@@ -40,7 +42,9 @@ describe('urlDecoder  tests', () => {
   "imageDateISO": "2023-08-28T18:00:00.000Z",
   "imageDateUTC": 1693245600000,
   "month": 7,
+  "name": "rain-nzni-thumb-2023082818-240.gif",
   "offset": 240,
+  "publicUrl": "",
   "url": "https://metvuw.com/forecast/2023082818/rain-nzni-thumb-2023082818-240.gif",
   "width": 100,
   "year": 2023,
@@ -63,6 +67,8 @@ describe('urlDecoder  tests', () => {
   "imageDateISO": "2023-08-27T03:00:00.000Z",
   "imageDateUTC": 1693105200000,
   "month": 7,
+  "name": "202308270300.jpg",
+  "publicUrl": "",
   "url": "https://metvuw.com/satellite/big/202308270300.jpg",
   "width": 100,
   "year": 2023,
@@ -83,6 +89,8 @@ describe('urlDecoder  tests', () => {
   "imageDateISO": "2023-08-27T15:00:00.000Z",
   "imageDateUTC": 1693148400000,
   "month": 7,
+  "name": "202308271500Z_nl.gif",
+  "publicUrl": "",
   "radar": "Northland",
   "radarCode": "nl",
   "url": "https://metvuw.com/radar/images/202308271500Z_nl.gif",
@@ -107,6 +115,8 @@ describe('urlDecoder  tests', () => {
   "imageDateISO": "2023-08-30T12:00:00.000Z",
   "imageDateUTC": 1693396800000,
   "month": 7,
+  "name": "202308301200.93112.png",
+  "publicUrl": "",
   "url": "https://metvuw.com/upperair/202308301200.93112.png",
   "width": 100,
   "year": 2023,

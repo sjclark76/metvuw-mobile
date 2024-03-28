@@ -33,14 +33,14 @@ const europeLinks = mapRegionToMenuLink(europeRegions)
 const worldLinks = mapRegionToMenuLink(worldRegions)
 const oceanLinks = mapRegionToMenuLink(oceans)
 const radarLinks: MenuLink[] = Object.keys(radarRegions).map((key) => ({
+  href: `/radar/${key}`,
   key,
   value: radarRegions[key],
-  href: `/radar/${key}`,
 }))
 const balloonLinks: MenuLink[] = Object.keys(balloonLocations).map((key) => ({
+  href: `/upperair/${key}`,
   key,
   value: balloonLocations[key],
-  href: `/upperair/${key}`,
 }))
 
 const Navbar = () => {

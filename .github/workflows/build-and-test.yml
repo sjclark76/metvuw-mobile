@@ -12,6 +12,8 @@ env:
   ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
   S3_REGION : ${{ secrets.S3_REGION }}
   SECRET_KEY : ${{ secrets.SECRET_KEY }}
+  SUPABASE_SERVICE_ROLE_KEY: ${{secrets.SUPABASE_SERVICE_ROLE_KEY}}
+  NEXT_PUBLIC_SUPABASE_URL : ${{secrets.NEXT_PUBLIC_SUPABASE_URL}}
 jobs:
   build:
 

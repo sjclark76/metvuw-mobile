@@ -7,23 +7,15 @@ export default function generateSEOMetadata({
   description,
   url,
 }: {
-  title: string
   description: string
+  title: string
   url: string
 }): Metadata {
   return {
-    title,
-    description,
-    openGraph: {
-      type: 'website',
-      title,
-      description,
-      siteName: 'Metvuw Mobile',
-      url,
-    },
     alternates: {
       canonical: url,
     },
+    description,
     icons: [
       { rel: 'apple-touch-icon', sizes: '57x57', url: '/apple-icon-57x57.png' },
       { rel: 'apple-touch-icon', sizes: '60x60', url: '/apple-icon-60x60.png' },
@@ -61,30 +53,38 @@ export default function generateSEOMetadata({
       },
       {
         rel: 'icon',
-        type: 'image/png',
         sizes: '192x192',
+        type: 'image/png',
         url: '/android-icon-192x192.png',
       },
       {
         rel: 'icon',
-        type: 'image/png',
         sizes: '32x32',
+        type: 'image/png',
         url: '/favicon-32x32.png',
       },
       {
         rel: 'icon',
-        type: 'image/png',
         sizes: '96x96',
+        type: 'image/png',
         url: '/favicon-96x96.png',
       },
       {
         rel: 'icon',
-        type: 'image/png',
         sizes: '16x16',
+        type: 'image/png',
         url: '/favicon-16x16.png',
       },
     ],
     manifest: '/manifest.json',
     metadataBase: new URL(config.baseUrl),
+    openGraph: {
+      description,
+      siteName: 'Metvuw Mobile',
+      title,
+      type: 'website',
+      url,
+    },
+    title,
   }
 }
