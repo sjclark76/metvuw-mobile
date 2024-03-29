@@ -1,18 +1,19 @@
 import { NextResponse } from 'next/server'
 
-import serviceRoleDb from '@/shared/db/serviceRoleDb'
-import { determineImagesToAdd } from '@/shared/helpers/imageStorage/determineImagesToAdd'
-import { removeImagesFromStorage } from '@/shared/helpers/imageStorage/removeImagesFromStorage'
-import { uploadImagesToStorage } from '@/shared/helpers/imageStorage/uploadImagesToStorage'
-import { scrapeUpperAirImages } from '@/shared/helpers/screenScraper'
-import { UpperAirChartData } from '@/shared/types/upperAirChartData'
+import {
+  determineImagesToAdd,
+  removeImagesFromStorage,
+  retrieveLatestImagesFromStorage,
+  uploadImagesToStorage,
+} from '@/shared/helpers/v2/imageStorage'
+import { scrapeUpperAirImages } from '@/shared/helpers/v2/screenScraper'
 
-export async function GET(): Promise<NextResponse<UpperAirChartData[]>> {
+export const dynamic = 'force-dynamic'
+
+export async function GET() {
   const newImages = await scrapeUpperAirImages()
 
-  const { data } = await serviceRoleDb.storage.from('images').list('upper-air')
-
-  const existingImages = data ?? []
+  const existingImages = await retrieveLatestImagesFromStorage('upper-air')
 
   const imagesToAdd = determineImagesToAdd(newImages, existingImages)
 
@@ -20,7 +21,7 @@ export async function GET(): Promise<NextResponse<UpperAirChartData[]>> {
     await removeImagesFromStorage(existingImages, 'upper-air')
   }
 
-  await uploadImagesToStorage(imagesToAdd)
+  const result = await uploadImagesToStorage(imagesToAdd)
 
-  return NextResponse.json(newImages)
+  return NextResponse.json(result)
 }

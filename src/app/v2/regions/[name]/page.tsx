@@ -4,8 +4,11 @@ import { notFound } from 'next/navigation'
 import RegionPage from '@/components/RegionPage/region-page'
 import serviceRoleDb from '@/shared/db/serviceRoleDb'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
+import { retrieveLatestImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import { RainChartData } from '@/shared/types/rainChartData'
 import { findRegionByCode } from '@/shared/types/region'
+
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // read route params
@@ -34,7 +37,6 @@ async function constructChartData(
   const day = +fooName.slice(6, 8)
   const hour = +fooName.slice(8, 10)
 
-  console.debug({ fileName, fooName, year, month, day, hour })
   const utcDate = Date.UTC(year, month, day, hour)
   const offset = +fooName.slice(11, 14)
   return {
@@ -65,21 +67,10 @@ export default async function Region({ params }: Props) {
     // Redirect to a 404 page if the region is not found
     return notFound()
   }
-  // const rainChartData = await downloadRainChartData(matchedRegion.code)
 
-  const { data } = await serviceRoleDb.storage
-    .from('images')
-    .list(`rain/${matchedRegion.code}`, {
-      limit: 200,
-      offset: 0,
-      search: '',
-      sortBy: {
-        column: 'name',
-        order: 'asc',
-      },
-    })
-
-  const existingImages = data ?? []
+  const existingImages = await retrieveLatestImagesFromStorage(
+    `rain/${matchedRegion.code}`,
+  )
 
   const rainChartData = await Promise.all(
     existingImages.map((file) =>

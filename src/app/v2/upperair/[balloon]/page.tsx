@@ -11,6 +11,8 @@ import {
 } from '@/shared/types/balloonLocations'
 import { ChartData } from '@/shared/types/chartData'
 
+export const dynamic = 'force-dynamic'
+
 export const generateMetadata = async (): Promise<Metadata> =>
   generateSEOMetadata({
     title: `metvuw mobile | Upper Air Data`,

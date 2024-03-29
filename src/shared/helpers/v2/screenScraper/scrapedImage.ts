@@ -3,4 +3,6 @@ export interface ScrapedImage {
   originalFileName: string
   width: number
   height: number
+  storagePath: string
+  fullStoragePath: string
 }

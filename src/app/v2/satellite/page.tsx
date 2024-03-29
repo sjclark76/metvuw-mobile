@@ -4,7 +4,10 @@ import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
 import { config } from '@/config'
 import serviceRoleDb from '@/shared/db/serviceRoleDb'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
+import { retrieveLatestImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import { ChartData } from '@/shared/types/chartData'
+
+export const dynamic = 'force-dynamic'
 
 async function constructChartData(
   fileName: string,
@@ -43,18 +46,7 @@ export const generateMetadata = async (): Promise<Metadata> =>
   })
 
 export default async function SatellitePage() {
-  const { data } = await serviceRoleDb.storage
-    .from('images')
-    .list('satellite', {
-      limit: 200,
-      offset: 0,
-      search: '',
-      sortBy: {
-        column: 'name',
-        order: 'asc',
-      },
-    })
-  const existingImages = data ?? []
+  const existingImages = await retrieveLatestImagesFromStorage('satelite')
 
   const satelliteData = await Promise.all(
     existingImages.map((file) =>

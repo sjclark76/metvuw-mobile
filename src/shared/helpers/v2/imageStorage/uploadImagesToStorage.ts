@@ -13,10 +13,7 @@ async function downloadImageToBuffer(url: string) {
   console.log('downloaded image', response.headers['content-type'])
   return Buffer.from(response.data, 'binary')
 }
-export async function uploadImagesToStorage(
-  imagesToUpload: ScrapedImage[],
-  folderPath: string,
-) {
+export async function uploadImagesToStorage(imagesToUpload: ScrapedImage[]) {
   const promises = imagesToUpload.map(async (imageToScrape) => {
     const image = await downloadImageToBuffer(
       imageToScrape.originalImageURL.href,
@@ -24,7 +21,7 @@ export async function uploadImagesToStorage(
 
     const result = await serviceRoleDb.storage
       .from('images')
-      .upload(`${folderPath}/${imageToScrape.originalFileName}`, image, {
+      .upload(`${imageToScrape.fullStoragePath}`, image, {
         contentType: 'image/jpeg',
       }) //TODO:
 

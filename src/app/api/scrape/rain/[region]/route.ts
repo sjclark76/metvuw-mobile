@@ -1,17 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import serviceRoleDb from '@/shared/db/serviceRoleDb'
-import { determineImagesToAdd } from '@/shared/helpers/imageStorage/determineImagesToAdd'
-import { removeImagesFromStorage } from '@/shared/helpers/imageStorage/removeImagesFromStorage'
-import { uploadImagesToStorage } from '@/shared/helpers/imageStorage/uploadImagesToStorage'
-import { scrapeRainImages } from '@/shared/helpers/screenScraper'
-import { RainChartData } from '@/shared/types/rainChartData'
+import {
+  determineImagesToAdd,
+  removeImagesFromStorage,
+  retrieveLatestImagesFromStorage,
+  uploadImagesToStorage,
+} from '@/shared/helpers/v2/imageStorage'
+import {
+  scrapeRainImages,
+  scrapeUpperAirImages,
+} from '@/shared/helpers/v2/screenScraper'
 import { findRegionByCode } from '@/shared/types/region'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: { region: string } },
-): Promise<NextResponse<RainChartData[]>> {
+) {
   const regionCode = params.region ?? 'nz'
 
   const region = findRegionByCode(regionCode)
@@ -21,21 +27,20 @@ export async function GET(
       status: 404,
     })
 
-  const newImages: RainChartData[] = await scrapeRainImages(region)
+  const newImages = await scrapeRainImages(region)
 
-  const { data } = await serviceRoleDb.storage
-    .from('images')
-    .list(`rain/${regionCode}`)
-
-  const existingImages = data ?? []
+  const existingImages = await retrieveLatestImagesFromStorage(
+    `rain/${regionCode}`,
+  )
 
   const imagesToAdd = determineImagesToAdd(newImages, existingImages)
 
+  console.log(`${imagesToAdd.length} images to add`)
   if (imagesToAdd.length > 0) {
     await removeImagesFromStorage(existingImages, `rain/${regionCode}`)
   }
 
-  await uploadImagesToStorage(imagesToAdd)
+  const result = await uploadImagesToStorage(imagesToAdd)
 
-  return NextResponse.json(newImages)
+  return NextResponse.json(result)
 }

@@ -8,6 +8,8 @@ import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { ChartData } from '@/shared/types/chartData'
 import { isRadarCode, radarRegions } from '@/shared/types/radarRegions'
 
+export const dynamic = 'force-dynamic'
+
 export const generateMetadata = async (): Promise<Metadata> =>
   generateSEOMetadata({
     title: `metvuw mobile | Radar`,
