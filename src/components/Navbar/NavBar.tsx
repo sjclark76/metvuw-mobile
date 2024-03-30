@@ -44,9 +44,9 @@ const balloonLinks: MenuLink[] = Object.keys(balloonLocations).map((key) => ({
 }))
 
 const Navbar = () => {
-  const [active, setActive] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const handleClick = () => {
-    setActive(!active)
+    setMenuOpen(!menuOpen)
   }
 
   return (
@@ -79,7 +79,7 @@ const Navbar = () => {
       </button>
       <div
         className={`${
-          active ? '' : 'hidden'
+          menuOpen ? '' : 'hidden'
         }   w-full 2xl:inline-flex 2xl:w-auto 2xl:flex-grow`}
       >
         <div className="flex w-full flex-col items-start 2xl:ml-auto 2xl:inline-flex 2xl:h-auto  2xl:w-auto 2xl:flex-row 2xl:items-center">
@@ -90,7 +90,11 @@ const Navbar = () => {
           <DropDown heading="Rest Of World" links={worldLinks} />
           <DropDown heading="Oceans" links={oceanLinks} />
           <div className={styles.headerText}>
-            <Link href="/satellite" className="mr-1">
+            <Link
+              href="/satellite"
+              className="mr-1"
+              onClick={(event) => setMenuOpen(false)}
+            >
               Satellite
             </Link>
           </div>
