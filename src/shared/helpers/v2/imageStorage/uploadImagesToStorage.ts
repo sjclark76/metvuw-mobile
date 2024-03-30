@@ -23,7 +23,7 @@ export async function uploadImagesToStorage(imagesToUpload: ScrapedImage[]) {
       .from('images')
       .upload(`${imageToScrape.fullStoragePath}`, image, {
         contentType: 'image/jpeg',
-      }) //TODO:
+      }) //TODO: get content type...
 
     return result
   })
