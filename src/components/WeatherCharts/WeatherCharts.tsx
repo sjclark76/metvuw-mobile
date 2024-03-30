@@ -2,14 +2,17 @@ import { format } from 'date-fns'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
-import { RainChartData } from '@/shared/types/rainChartData'
+import {
+  RainChartData,
+  SkinnyRainChartData,
+} from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
 
 import { submenuTextAtom } from '../Atoms/GlobalState'
 import { WeatherChart } from './WeatherChart'
 interface WeatherChartsProps {
   region: Region
-  charts: RainChartData[]
+  charts: SkinnyRainChartData[]
 }
 const WeatherCharts = (props: WeatherChartsProps) => {
   const setSubmenuText = useSetAtom(submenuTextAtom)

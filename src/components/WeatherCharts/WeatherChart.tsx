@@ -1,13 +1,16 @@
 import { format } from 'date-fns'
 
 import Card from '@/components/Card'
-import { RainChartData } from '@/shared/types/rainChartData'
+import {
+  RainChartData,
+  SkinnyRainChartData,
+} from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
 
 import WeatherImage from '../WeatherImage/WeatherImage'
 
 interface Props {
-  chart: RainChartData
+  chart: SkinnyRainChartData
   region: Region
 }
 

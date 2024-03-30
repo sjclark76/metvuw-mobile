@@ -30,10 +30,7 @@ export default async function RadarPage({
 
   const existingImages = await retrieveLatestImagesFromStorage(path)
 
-  const filteredRadarData = constructChartData(existingImages, path, {
-    height: 240,
-    width: 240,
-  })
+  const filteredRadarData = constructChartData(existingImages, path)
 
   return (
     <RadarAndSatelliteImages

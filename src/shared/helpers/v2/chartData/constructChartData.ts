@@ -3,11 +3,12 @@ import { FileObject } from '@supabase/storage-js'
 import serviceRoleDb from '@/shared/db/serviceRoleDb'
 import { ChartData } from '@/shared/types/chartData'
 
+export type SkinnyChartData = Pick<ChartData, 'imageDateUTC' | 'url'>
+
 export function constructChartData(
   fileObjects: FileObject[],
   path: string,
-  dimensions: { height: number; width: number },
-): ChartData[] {
+): SkinnyChartData[] {
   return fileObjects.map((fileObject) => {
     const fileName = fileObject.name
     const { data: publicUrl } = serviceRoleDb.storage
@@ -21,16 +22,8 @@ export function constructChartData(
     const utcDate = Date.UTC(year, month, day, hour)
 
     return {
-      day: day,
-      hour: hour,
-      imageDateISO: new Date(utcDate).toISOString(),
       imageDateUTC: utcDate,
-      month: month,
-      name: fileName,
-      path: '',
       url: publicUrl.publicUrl,
-      ...dimensions,
-      year: year,
     }
   })
 }
