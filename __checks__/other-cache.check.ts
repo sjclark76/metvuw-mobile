@@ -16,7 +16,7 @@ for (const endpoint of endpoints) {
     runParallel: false,
     locations: [],
     tags: [],
-    frequency: Frequency.EVERY_3H,
+    frequency: Frequency.EVERY_6H,
     environmentVariables: [],
     // group: your check belongs to group 'Update Cache',
     maxResponseTime: 20000,

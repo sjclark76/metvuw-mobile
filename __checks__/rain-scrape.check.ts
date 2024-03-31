@@ -6,18 +6,18 @@
 
 import { ApiCheck, Frequency, RetryStrategyBuilder } from 'checkly/constructs'
 
-import { regions } from '../src/shared/types/region'
+import { regions } from '@/shared/types/region'
 
 for (const region of regions) {
-  new ApiCheck(`${region.code}`, {
-    name: region.name,
+  new ApiCheck(`scrape-${region.code}`, {
+    name: `Scrape ${region.name}`,
     activated: true,
     muted: false,
     shouldFail: false,
     runParallel: false,
     locations: [],
     tags: [],
-    frequency: Frequency.EVERY_3H,
+    frequency: Frequency.EVERY_6H,
     environmentVariables: [],
     // group: your check belongs to group 'Update Cache',
     maxResponseTime: 20000,

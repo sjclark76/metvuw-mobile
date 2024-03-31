@@ -8,15 +8,15 @@ import { ApiCheck, Frequency, RetryStrategyBuilder } from 'checkly/constructs'
 
 const endpoints = ['satellite', 'radar', 'upper-air']
 for (const endpoint of endpoints) {
-  new ApiCheck(`${endpoint}`, {
-    name: endpoint,
+  new ApiCheck(`scrape-${endpoint}`, {
+    name: `Scrape ${endpoint}`,
     activated: true,
     muted: false,
     shouldFail: false,
     runParallel: false,
     locations: [],
     tags: [],
-    frequency: Frequency.EVERY_3H,
+    frequency: Frequency.EVERY_6H,
     environmentVariables: [],
     // group: your check belongs to group 'Update Cache',
     maxResponseTime: 20000,
