@@ -20,10 +20,7 @@ export default async function SatellitePage() {
 
   const existingImages = await retrieveLatestImagesFromStorage(path)
 
-  const satelliteData = constructChartData(existingImages, path, {
-    height: 210,
-    width: 280,
-  })
+  const satelliteData = constructChartData(existingImages, path)
 
   return (
     <RadarAndSatelliteImages
