@@ -1,4 +1,3 @@
-import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructRainChartData'
 
 describe('constructRainChartData', () => {
