@@ -6,7 +6,7 @@ import { ChartData } from '@/shared/types/chartData'
 export type SkinnyChartData = Pick<ChartData, 'imageDateUTC' | 'url'>
 
 export function constructChartData(
-  fileObjects: FileObject[],
+  fileObjects: Pick<FileObject, 'name'>[],
   path: string,
 ): SkinnyChartData[] {
   return fileObjects.map((fileObject) => {

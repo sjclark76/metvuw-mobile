@@ -20,34 +20,6 @@ export const generateMetadata = async (): Promise<Metadata> =>
     url: new URL('upperair', config.baseUrl).href,
   })
 
-// async function constructChartData(
-//   fileName: string,
-//   path: string,
-//   dimensions: { width: number; height: number },
-// ): Promise<ChartData> {
-//   const { data: publicUrl } = serviceRoleDb.storage
-//     .from('images')
-//     .getPublicUrl(path)
-//
-//   const year = +fileName.slice(0, 4)
-//   const month = +fileName.slice(4, 6) - 1
-//   const day = +fileName.slice(6, 8)
-//   const hour = +fileName.slice(8, 10)
-//   const utcDate = Date.UTC(year, month, day, hour)
-//
-//   return {
-//     day: day,
-//     hour: hour,
-//     imageDateISO: new Date(utcDate).toISOString(),
-//     imageDateUTC: utcDate,
-//     month: month,
-//     name: fileName,
-//     url: publicUrl.publicUrl,
-//     ...dimensions,
-//     year: year,
-//   }
-// }
-
 export default async function UpperAirPage({
   params,
 }: {

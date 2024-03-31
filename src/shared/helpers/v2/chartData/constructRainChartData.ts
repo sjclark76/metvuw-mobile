@@ -4,7 +4,7 @@ import serviceRoleDb from '@/shared/db/serviceRoleDb'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 
 export function constructRainChartData(
-  fileObjects: FileObject[],
+  fileObjects: Pick<FileObject, 'name'>[],
   path: string,
 ): SkinnyRainChartData[] {
   const regex =
