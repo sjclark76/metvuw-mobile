@@ -15,7 +15,6 @@ export async function GET() {
 
   const existingImages = await retrieveLatestImagesFromStorage('radar')
 
-  console.table(existingImages)
   const imagesToAdd = determineImagesToAdd(newImages, existingImages)
 
   if (imagesToAdd.length > 0) {

@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 
 import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
 import { config } from '@/config'
-import serviceRoleDb from '@/shared/db/serviceRoleDb'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { retrieveLatestImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
@@ -11,7 +10,6 @@ import {
   balloonLocations,
   isBalloonLocationCode,
 } from '@/shared/types/balloonLocations'
-import { ChartData } from '@/shared/types/chartData'
 
 export const dynamic = 'force-dynamic'
 
@@ -64,10 +62,7 @@ export default async function UpperAirPage({
 
   const existingImages = await retrieveLatestImagesFromStorage(path)
 
-  const chartData = constructChartData(existingImages, path, {
-    height: 200,
-    width: 220,
-  })
+  const chartData = constructChartData(existingImages, path)
 
   return (
     <RadarAndSatelliteImages

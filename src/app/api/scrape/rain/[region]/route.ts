@@ -6,10 +6,7 @@ import {
   retrieveLatestImagesFromStorage,
   uploadImagesToStorage,
 } from '@/shared/helpers/v2/imageStorage'
-import {
-  scrapeRainImages,
-  scrapeUpperAirImages,
-} from '@/shared/helpers/v2/screenScraper'
+import { scrapeRainImages } from '@/shared/helpers/v2/screenScraper'
 import { findRegionByCode } from '@/shared/types/region'
 
 export const dynamic = 'force-dynamic'
@@ -35,7 +32,6 @@ export async function GET(
 
   const imagesToAdd = determineImagesToAdd(newImages, existingImages)
 
-  console.log(`${imagesToAdd.length} images to add`)
   if (imagesToAdd.length > 0) {
     await removeImagesFromStorage(existingImages, `rain/${regionCode}`)
   }

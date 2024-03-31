@@ -27,8 +27,6 @@ export const scrapeRainImages = async (
     return {
       originalImageURL: absoluteURL,
       originalFileName: originalFileName,
-      width: image.width,
-      height: image.height,
       fullStoragePath: `rain/${regionCode}/${originalFileName}`,
       storagePath: `rain/${regionCode}`,
     }

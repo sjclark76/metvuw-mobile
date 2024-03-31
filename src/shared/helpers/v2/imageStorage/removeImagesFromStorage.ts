@@ -10,5 +10,6 @@ export async function removeImagesFromStorage(
     .from('images')
     .remove(images.map((image) => `${path}/${image.name}`))
 
+  // eslint-disable-next-line no-console
   if (error) console.error(error)
 }

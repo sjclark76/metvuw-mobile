@@ -23,7 +23,7 @@ for (const region of regions) {
     maxResponseTime: 20000,
     degradedResponseTime: 5000,
     request: {
-      url: `https://metvuwmobile.com/api/cache/rain/${region.code}`,
+      url: `https://metvuwmobile.com/api/scrape/rain/${region.code}`,
       method: 'GET',
       followRedirects: true,
       skipSSL: false,

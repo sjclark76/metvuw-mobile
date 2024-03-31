@@ -93,7 +93,7 @@ const Navbar = () => {
             <Link
               href="/satellite"
               className="mr-1"
-              onClick={(event) => setMenuOpen(false)}
+              onClick={() => setMenuOpen(false)}
             >
               Satellite
             </Link>

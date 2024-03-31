@@ -16,7 +16,7 @@ import { config } from '@/config'
 export async function loadImages(
   url: string,
   imageSelector: string,
-): Promise<{ relativeUrl: string; width: number; height: number }[]> {
+): Promise<{ relativeUrl: string }[]> {
   const response = await axios.get(new URL(url, config.metvuwBaseUrl).href)
   const rawHtml = response.data
 
@@ -26,7 +26,5 @@ export async function loadImages(
 
   return images.toArray().map((image: any) => ({
     relativeUrl: image.attribs.src as string,
-    width: +image.attribs.width,
-    height: +image.attribs.height,
   }))
 }

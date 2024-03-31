@@ -6,11 +6,10 @@
 
 import { ApiCheck, Frequency, RetryStrategyBuilder } from 'checkly/constructs'
 
-import { regions } from '../src/shared/types/region'
-
-for (const region of regions) {
-  new ApiCheck(`${region.code}`, {
-    name: region.name,
+const endpoints = ['satellite', 'radar', 'upper-air']
+for (const endpoint of endpoints) {
+  new ApiCheck(`${endpoint}`, {
+    name: endpoint,
     activated: true,
     muted: false,
     shouldFail: false,
@@ -23,7 +22,7 @@ for (const region of regions) {
     maxResponseTime: 20000,
     degradedResponseTime: 5000,
     request: {
-      url: `https://metvuwmobile.com/api/cache/rain/${region.code}`,
+      url: `https://metvuwmobile.com/api/scrape/${endpoint}`,
       method: 'GET',
       followRedirects: true,
       skipSSL: false,
