@@ -1,3 +1,5 @@
+// noinspection ES6PreferShortImport
+
 /**
  * This is a Checkly CLI ApiCheck construct. To learn more, visit:
  * - https://www.checklyhq.com/docs/cli/
@@ -17,7 +19,7 @@ for (const region of regions) {
     runParallel: false,
     locations: [],
     tags: [],
-    frequency: Frequency.EVERY_2H,
+    frequency: Frequency.EVERY_6H,
     environmentVariables: [],
     // group: your check belongs to group 'Update Cache',
     maxResponseTime: 20000,

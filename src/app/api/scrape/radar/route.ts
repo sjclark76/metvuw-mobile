@@ -1,10 +1,27 @@
 import { NextResponse } from 'next/server'
 
-import { scrapeRadarImages } from '@/shared/helpers/screenScraper'
-import { RadarChartData } from '@/shared/types/radarChartData'
+import {
+  determineImagesToAdd,
+  removeImagesFromStorage,
+  retrieveLatestImagesFromStorage,
+  uploadImagesToStorage,
+} from '@/shared/helpers/v2/imageStorage'
+import { scrapeRadarImages } from '@/shared/helpers/v2/screenScraper'
 
-export async function GET(): Promise<NextResponse<RadarChartData[]>> {
-  const result = await scrapeRadarImages()
+export const dynamic = 'force-dynamic'
+
+export async function GET() {
+  const newImages = await scrapeRadarImages()
+
+  const existingImages = await retrieveLatestImagesFromStorage('radar')
+
+  const imagesToAdd = determineImagesToAdd(newImages, existingImages)
+
+  if (imagesToAdd.length > 0) {
+    await removeImagesFromStorage(existingImages, 'radar')
+  }
+
+  const result = await uploadImagesToStorage(imagesToAdd)
 
   return NextResponse.json(result)
 }

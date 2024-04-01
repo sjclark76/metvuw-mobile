@@ -1,26 +1,27 @@
 import { NextResponse } from 'next/server'
 
-import serviceRoleDb from '@/shared/db/serviceRoleDb'
-import { determineImagesToAdd } from '@/shared/helpers/imageStorage/determineImagesToAdd'
-import { removeImagesFromStorage } from '@/shared/helpers/imageStorage/removeImagesFromStorage'
-import { uploadImagesToStorage } from '@/shared/helpers/imageStorage/uploadImagesToStorage'
-import { scrapeSatelliteImages } from '@/shared/helpers/screenScraper'
-import { ChartData } from '@/shared/types/chartData'
+import {
+  determineImagesToAdd,
+  removeImagesFromStorage,
+  retrieveLatestImagesFromStorage,
+  uploadImagesToStorage,
+} from '@/shared/helpers/v2/imageStorage'
+import { scrapeSatelliteImages } from '@/shared/helpers/v2/screenScraper/scrapeSatelliteImages'
 
-export async function GET(): Promise<NextResponse<ChartData[]>> {
+export const dynamic = 'force-dynamic'
+
+export async function GET() {
   const newImages = await scrapeSatelliteImages()
 
-  const { data } = await serviceRoleDb.storage.from('satellite').list()
-
-  const existingImages = data ?? []
+  const existingImages = await retrieveLatestImagesFromStorage('satellite')
 
   const imagesToAdd = determineImagesToAdd(newImages, existingImages)
 
   if (imagesToAdd.length > 0) {
-    await removeImagesFromStorage(existingImages)
+    await removeImagesFromStorage(existingImages, 'satellite')
   }
 
-  await uploadImagesToStorage(imagesToAdd)
+  const result = await uploadImagesToStorage(imagesToAdd)
 
-  return NextResponse.json(newImages)
+  return NextResponse.json(result)
 }

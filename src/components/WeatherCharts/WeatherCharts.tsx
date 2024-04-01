@@ -1,27 +1,30 @@
 import { format } from 'date-fns'
 import { useSetAtom } from 'jotai'
-import { useEffect } from 'react'
 
-import { RainChartData } from '@/shared/types/rainChartData'
+import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
 
 import { submenuTextAtom } from '../Atoms/GlobalState'
 import { WeatherChart } from './WeatherChart'
 interface WeatherChartsProps {
   region: Region
-  charts: RainChartData[]
+  charts: SkinnyRainChartData[]
 }
 const WeatherCharts = (props: WeatherChartsProps) => {
   const setSubmenuText = useSetAtom(submenuTextAtom)
 
-  useEffect(() => {
+  // useEffect(() => {
+  if (props.charts.length > 0) {
     const submenuText = `Forecast issued at ${format(
       new Date(props.charts[0].imageDateUTC),
       'PPPPp',
     )} for ${props.region.name}`
 
     setSubmenuText(submenuText)
-  }, [props.region, props.charts, setSubmenuText])
+  } else {
+    setSubmenuText('')
+  }
+  // }, [props.region, props.charts, setSubmenuText])
 
   return (
     <>

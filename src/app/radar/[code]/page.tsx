@@ -1,11 +1,15 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
+import NoForecast from '@/components/NoForecast'
+import { RadarPage } from '@/components/RadarPage'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { downloadRadarChartData } from '@/shared/helpers/s3Helper'
-import { isRadarCode, radarRegions } from '@/shared/types/radarRegions'
+import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+import { retrieveLatestImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
+import { isRadarCode } from '@/shared/types/radarRegions'
+
+export const dynamic = 'force-dynamic'
 
 export const generateMetadata = async (): Promise<Metadata> =>
   generateSEOMetadata({
@@ -14,25 +18,20 @@ export const generateMetadata = async (): Promise<Metadata> =>
     url: new URL('radar', config.baseUrl).href,
   })
 
-export default async function RadarPage({
-  params,
-}: {
-  params: { code: string }
-}) {
-  const allRadarData = await downloadRadarChartData()
-
+export default async function Page({ params }: { params: { code: string } }) {
   if (!isRadarCode(params.code)) {
     return notFound()
   }
-  const filteredRadarData = allRadarData.filter(
-    (radarImage) => radarImage.radarCode === params.code,
-  )
 
-  return (
-    <RadarAndSatelliteImages
-      images={filteredRadarData}
-      chartType="Radar"
-      headerText={`Radar Chart for ${radarRegions[params.code]}`}
-    />
-  )
+  const path = `radar/${params.code}`
+
+  const existingImages = await retrieveLatestImagesFromStorage(path)
+
+  if (existingImages.length === 0) {
+    return <NoForecast />
+  }
+
+  const radarData = constructChartData(existingImages, path)
+
+  return <RadarPage radarData={radarData} radarCode={params.code} />
 }

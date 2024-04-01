@@ -100,7 +100,7 @@ const DropDown = (props: DropDownProps) => {
         ref={menuRef}
         className={`${
           isOpen ? 'flex' : 'hidden'
-        } absolute top-full z-10 mt-3 flex w-72 list-none flex-col rounded bg-white py-2 shadow-md shadow-slate-500/10 `}
+        } absolute top-full z-20 mt-3 flex w-72 list-none flex-col rounded bg-white py-2 shadow-md shadow-slate-500/10 `}
       >
         {props.links.map((item, index) => {
           return (

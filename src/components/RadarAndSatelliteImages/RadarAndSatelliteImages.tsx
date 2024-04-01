@@ -5,11 +5,11 @@ import { useSetAtom } from 'jotai'
 import { submenuTextAtom } from '@/components/Atoms/GlobalState'
 import Card from '@/components/Card'
 import WeatherImage from '@/components/WeatherImage'
-import { ChartData } from '@/shared/types/chartData'
+import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { ChartType } from '@/shared/types/ChartType'
 
 interface Props {
-  images: ChartData[]
+  images: SkinnyChartData[]
   chartType: Extract<ChartType, 'Radar' | 'Satellite' | 'Upper Air'>
   headerText: string
 }
@@ -23,7 +23,7 @@ export function RadarAndSatelliteImages({
 
   setSubmenuText(headerText)
 
-  const createImgAlt = (image: ChartData) => {
+  const createImgAlt = (image: SkinnyChartData) => {
     return `${chartType.toLowerCase()} chart for ${format(
       new Date(image.imageDateUTC),
       'PPPPp',

@@ -1,14 +1,15 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
+import NoForecast from '@/components/NoForecast'
+import { UpperAirPage } from '@/components/UpperAirPage'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { downloadUpperAirChartData } from '@/shared/helpers/s3Helper'
-import {
-  balloonLocations,
-  isBalloonLocationCode,
-} from '@/shared/types/balloonLocations'
+import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+import { retrieveLatestImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
+import { isBalloonLocationCode } from '@/shared/types/balloonLocations'
+
+export const dynamic = 'force-dynamic'
 
 export const generateMetadata = async (): Promise<Metadata> =>
   generateSEOMetadata({
@@ -17,7 +18,7 @@ export const generateMetadata = async (): Promise<Metadata> =>
     url: new URL('upperair', config.baseUrl).href,
   })
 
-export default async function UpperAirPage({
+export default async function Page({
   params,
 }: {
   params: { balloon: string }
@@ -27,17 +28,15 @@ export default async function UpperAirPage({
     return notFound()
   }
 
-  const allUpperAirImages = await downloadUpperAirChartData()
+  const path = `upper-air/${params.balloon}`
 
-  const filteredImages = allUpperAirImages.filter(
-    (upperAirImage) => upperAirImage.balloonLocationCode === params.balloon,
-  )
+  const existingImages = await retrieveLatestImagesFromStorage(path)
 
-  return (
-    <RadarAndSatelliteImages
-      images={filteredImages}
-      chartType="Upper Air"
-      headerText={`Upper Air Chart for ${balloonLocations[params.balloon]}`}
-    />
-  )
+  const chartData = constructChartData(existingImages, path)
+
+  if (existingImages.length === 0) {
+    return <NoForecast />
+  }
+
+  return <UpperAirPage balloonCode={params.balloon} chartData={chartData} />
 }

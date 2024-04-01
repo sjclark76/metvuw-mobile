@@ -2,17 +2,6 @@ import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 
 test.describe('upper air page', () => {
-  // 2
-  test('should not have any automatically detectable accessibility issues', async ({
-    page,
-  }) => {
-    await page.goto('/upperair/93112')
-
-    const accessibilityScanResults = await new AxeBuilder({ page }).analyze()
-
-    expect(accessibilityScanResults.violations).toEqual([])
-  })
-
   test('should render page correctly', async ({ page }) => {
     await page.goto('/upperair/93112') // 3
 
@@ -31,5 +20,9 @@ test.describe('upper air page', () => {
         name: /upper air chart for/i,
       }),
     ).toBeVisible()
+
+    const accessibilityScanResults = await new AxeBuilder({ page }).analyze()
+
+    expect(accessibilityScanResults.violations).toEqual([])
   })
 })

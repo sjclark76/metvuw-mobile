@@ -1,10 +1,14 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import NoForecast from '@/components/NoForecast'
 import RegionPage from '@/components/RegionPage/region-page'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { downloadRainChartData } from '@/shared/helpers/s3Helper'
+import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructRainChartData'
+import { retrieveLatestImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import { findRegionByCode } from '@/shared/types/region'
+
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // read route params
@@ -27,7 +31,15 @@ export default async function Region({ params }: Props) {
     // Redirect to a 404 page if the region is not found
     return notFound()
   }
-  const rainChartData = await downloadRainChartData(matchedRegion.code)
+
+  const path = `rain/${matchedRegion.code}`
+  const existingImages = await retrieveLatestImagesFromStorage(path)
+
+  if (existingImages.length === 0) {
+    return <NoForecast />
+  }
+
+  const rainChartData = constructRainChartData(existingImages, path)
 
   return <RegionPage region={matchedRegion} rainChartData={rainChartData} />
 }

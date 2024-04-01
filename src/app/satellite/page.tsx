@@ -1,9 +1,13 @@
 import { Metadata } from 'next'
 
-import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
+import NoForecast from '@/components/NoForecast'
+import { SatellitePage } from '@/components/SatellitePage'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { downloadSatelliteChartData } from '@/shared/helpers/s3Helper'
+import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+import { retrieveLatestImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
+
+export const dynamic = 'force-dynamic'
 
 export const generateMetadata = async (): Promise<Metadata> =>
   generateSEOMetadata({
@@ -12,13 +16,16 @@ export const generateMetadata = async (): Promise<Metadata> =>
     url: new URL('satellite', config.baseUrl).href,
   })
 
-export default async function SatellitePage() {
-  const satelliteData = await downloadSatelliteChartData()
-  return (
-    <RadarAndSatelliteImages
-      images={satelliteData}
-      chartType="Satellite"
-      headerText="Satellite Imagery for New Zealand"
-    />
-  )
+export default async function Page() {
+  const path = 'satellite'
+
+  const existingImages = await retrieveLatestImagesFromStorage(path)
+
+  if (existingImages.length === 0) {
+    return <NoForecast />
+  }
+
+  const satelliteData = constructChartData(existingImages, path)
+
+  return <SatellitePage satelliteData={satelliteData} />
 }

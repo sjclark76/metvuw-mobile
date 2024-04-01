@@ -1,13 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { scrapeRainImages } from '@/shared/helpers/screenScraper'
-import { RainChartData } from '@/shared/types/rainChartData'
+import {
+  determineImagesToAdd,
+  removeImagesFromStorage,
+  retrieveLatestImagesFromStorage,
+  uploadImagesToStorage,
+} from '@/shared/helpers/v2/imageStorage'
+import { scrapeRainImages } from '@/shared/helpers/v2/screenScraper'
 import { findRegionByCode } from '@/shared/types/region'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: { region: string } },
-): Promise<NextResponse<RainChartData[]>> {
+) {
   const regionCode = params.region ?? 'nz'
 
   const region = findRegionByCode(regionCode)
@@ -17,7 +24,19 @@ export async function GET(
       status: 404,
     })
 
-  const rainCharts: RainChartData[] = await scrapeRainImages(region)
+  const newImages = await scrapeRainImages(region)
 
-  return NextResponse.json(rainCharts)
+  const existingImages = await retrieveLatestImagesFromStorage(
+    `rain/${regionCode}`,
+  )
+
+  const imagesToAdd = determineImagesToAdd(newImages, existingImages)
+
+  if (imagesToAdd.length > 0) {
+    await removeImagesFromStorage(existingImages, `rain/${regionCode}`)
+  }
+
+  const result = await uploadImagesToStorage(imagesToAdd)
+
+  return NextResponse.json(result)
 }
