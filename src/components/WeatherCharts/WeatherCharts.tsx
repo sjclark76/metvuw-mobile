@@ -27,21 +27,6 @@ const WeatherCharts = (props: WeatherChartsProps) => {
     }
   }, [props.region, props.charts, setSubmenuText])
 
-  if (props.charts.length === 0) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '100vh',
-        }}
-      >
-        No forecast to display
-      </div>
-    )
-  }
-
   return (
     <>
       <ul className="flex flex-col items-center">

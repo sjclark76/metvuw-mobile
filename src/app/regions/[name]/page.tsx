@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import NoForecast from '@/components/NoForecast'
 import RegionPage from '@/components/RegionPage/region-page'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructRainChartData'
@@ -33,6 +34,10 @@ export default async function Region({ params }: Props) {
 
   const path = `rain/${matchedRegion.code}`
   const existingImages = await retrieveLatestImagesFromStorage(path)
+
+  if (existingImages.length === 0) {
+    return <NoForecast />
+  }
 
   const rainChartData = constructRainChartData(existingImages, path)
 

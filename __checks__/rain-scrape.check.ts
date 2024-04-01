@@ -1,3 +1,5 @@
+// noinspection ES6PreferShortImport
+
 /**
  * This is a Checkly CLI ApiCheck construct. To learn more, visit:
  * - https://www.checklyhq.com/docs/cli/
@@ -6,7 +8,7 @@
 
 import { ApiCheck, Frequency, RetryStrategyBuilder } from 'checkly/constructs'
 
-import { regions } from '@/shared/types/region'
+import { regions } from '../src/shared/types/region'
 
 for (const region of regions) {
   new ApiCheck(`scrape-${region.code}`, {

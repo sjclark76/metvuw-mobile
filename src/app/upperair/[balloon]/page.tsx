@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import NoForecast from '@/components/NoForecast'
 import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
@@ -35,6 +36,10 @@ export default async function UpperAirPage({
   const existingImages = await retrieveLatestImagesFromStorage(path)
 
   const chartData = constructChartData(existingImages, path)
+
+  if (existingImages.length === 0) {
+    return <NoForecast />
+  }
 
   return (
     <RadarAndSatelliteImages

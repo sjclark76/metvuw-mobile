@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import NoForecast from '@/components/NoForecast'
 import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
@@ -29,6 +30,10 @@ export default async function RadarPage({
   const path = `radar/${params.code}`
 
   const existingImages = await retrieveLatestImagesFromStorage(path)
+
+  if (existingImages.length === 0) {
+    return <NoForecast />
+  }
 
   const filteredRadarData = constructChartData(existingImages, path)
 
