@@ -9,7 +9,7 @@ export function SubHeader() {
   const menuOpen = useAtomValue(isMenuOpenAtom)
 
   const styling = clsx(
-    'sticky  z-50',
+    'sticky  z-10',
     menuOpen && 'top-[29rem]',
     !menuOpen && 'top-16',
   )

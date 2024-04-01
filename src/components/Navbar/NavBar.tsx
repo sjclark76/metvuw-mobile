@@ -3,6 +3,7 @@ import { useAtom } from 'jotai'
 import Link from 'next/link'
 
 import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
+import { HamburgerSvg } from '@/components/Navbar/components/HamburgerSvg'
 import { MetvuwMobileImage } from '@/components/Navbar/components/MetvuwMobileImage'
 import { balloonLocations } from '@/shared/types/balloonLocations'
 import { radarRegions } from '@/shared/types/radarRegions'
@@ -63,20 +64,7 @@ const Navbar = () => {
         className="ml-auto inline-flex rounded p-3 text-white outline-none hover:bg-blue-600 hover:text-white 2xl:hidden"
         onClick={handleClick}
       >
-        <svg
-          className="h-6 w-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
+        <HamburgerSvg />
       </button>
       <div
         className={`${
