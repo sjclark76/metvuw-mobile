@@ -1,5 +1,6 @@
 'use client'
 
+import { format } from 'date-fns'
 import React from 'react'
 
 import SubHeader from '@/components/SubHeader'
@@ -12,9 +13,17 @@ interface RegionPageProps {
   rainChartData: SkinnyRainChartData[]
 }
 export default function RegionPage({ region, rainChartData }: RegionPageProps) {
+  const submenuText =
+    rainChartData.length > 0
+      ? `Forecast issued at ${format(
+          new Date(rainChartData[0].imageDateUTC),
+          'PPPPp',
+        )} for ${region.name}`
+      : ''
+
   return (
     <>
-      <SubHeader />
+      <SubHeader submenuText={submenuText} />
       <WeatherCharts region={region} charts={rainChartData} />
     </>
   )

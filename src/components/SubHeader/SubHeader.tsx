@@ -2,10 +2,9 @@
 import clsx from 'clsx'
 import { useAtomValue } from 'jotai'
 
-import { isMenuOpenAtom, submenuTextAtom } from '@/components/Atoms/GlobalState'
+import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
 
-export function SubHeader() {
-  const submenuText = useAtomValue(submenuTextAtom)
+export function SubHeader({ submenuText }: { submenuText: string }) {
   const menuOpen = useAtomValue(isMenuOpenAtom)
 
   const styling = clsx(

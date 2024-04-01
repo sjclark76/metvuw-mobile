@@ -5,7 +5,7 @@ import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { downloadRadarChartData } from '@/shared/helpers/s3Helper'
-import { isRadarCode, radarRegions } from '@/shared/types/radarRegions'
+import { isRadarCode } from '@/shared/types/radarRegions'
 
 export const generateMetadata = async (): Promise<Metadata> =>
   generateSEOMetadata({
@@ -29,10 +29,6 @@ export default async function RadarPage({
   )
 
   return (
-    <RadarAndSatelliteImages
-      images={filteredRadarData}
-      chartType="Radar"
-      headerText={`Radar Chart for ${radarRegions[params.code]}`}
-    />
+    <RadarAndSatelliteImages images={filteredRadarData} chartType="Radar" />
   )
 }

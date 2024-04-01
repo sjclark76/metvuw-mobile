@@ -12,12 +12,8 @@ export function RadarPage({
 }) {
   return (
     <>
-      <SubHeader />
-      <RadarAndSatelliteImages
-        images={radarData}
-        chartType="Radar"
-        headerText={`Radar Chart for ${radarRegions[radarCode]}`}
-      />
+      <SubHeader submenuText={`Radar Chart for ${radarRegions[radarCode]}`} />
+      <RadarAndSatelliteImages images={radarData} chartType="Radar" />
     </>
   )
 }

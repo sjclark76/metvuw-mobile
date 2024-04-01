@@ -10,12 +10,8 @@ export function SatellitePage({
 }) {
   return (
     <>
-      <SubHeader />
-      <RadarAndSatelliteImages
-        images={satelliteData}
-        chartType="Satellite"
-        headerText="Satellite Imagery for New Zealand"
-      />
+      <SubHeader submenuText="Satellite Imagery for New Zealand" />
+      <RadarAndSatelliteImages images={satelliteData} chartType="Satellite" />
     </>
   )
 }
