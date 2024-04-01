@@ -1,7 +1,8 @@
 'use client'
+import { useAtom } from 'jotai'
 import Link from 'next/link'
-import { useState } from 'react'
 
+import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
 import { MetvuwMobileImage } from '@/components/Navbar/components/MetvuwMobileImage'
 import { balloonLocations } from '@/shared/types/balloonLocations'
 import { radarRegions } from '@/shared/types/radarRegions'
@@ -44,9 +45,9 @@ const balloonLinks: MenuLink[] = Object.keys(balloonLocations).map((key) => ({
 }))
 
 const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useAtom(isMenuOpenAtom)
   const handleClick = () => {
-    setMenuOpen(!menuOpen)
+    setMenuOpen((prev) => !prev)
   }
 
   return (

@@ -7,7 +7,6 @@ import React from 'react'
 
 import Footer from '@/components/Footer'
 import GoogleTag from '@/components/GoogleTag'
-import SubHeader from '@/components/SubHeader'
 
 import Navbar from '../components/Navbar'
 const inter = Inter({ subsets: ['latin'] })
@@ -26,8 +25,8 @@ export default function RootLayout({
           <Provider>
             <div className="sticky top-0 z-50">
               <Navbar />
-              <SubHeader />
             </div>
+
             {children}
             <Footer />
           </Provider>

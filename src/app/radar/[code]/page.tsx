@@ -2,12 +2,12 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import NoForecast from '@/components/NoForecast'
-import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
+import { RadarPage } from '@/components/RadarPage'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { retrieveLatestImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
-import { isRadarCode, radarRegions } from '@/shared/types/radarRegions'
+import { isRadarCode } from '@/shared/types/radarRegions'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,11 +18,7 @@ export const generateMetadata = async (): Promise<Metadata> =>
     url: new URL('radar', config.baseUrl).href,
   })
 
-export default async function RadarPage({
-  params,
-}: {
-  params: { code: string }
-}) {
+export default async function Page({ params }: { params: { code: string } }) {
   if (!isRadarCode(params.code)) {
     return notFound()
   }
@@ -35,13 +31,7 @@ export default async function RadarPage({
     return <NoForecast />
   }
 
-  const filteredRadarData = constructChartData(existingImages, path)
+  const radarData = constructChartData(existingImages, path)
 
-  return (
-    <RadarAndSatelliteImages
-      images={filteredRadarData}
-      chartType="Radar"
-      headerText={`Radar Chart for ${radarRegions[params.code]}`}
-    />
-  )
+  return <RadarPage radarData={radarData} radarCode={params.code} />
 }

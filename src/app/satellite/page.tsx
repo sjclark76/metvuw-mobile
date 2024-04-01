@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 import NoForecast from '@/components/NoForecast'
-import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
+import { SatellitePage } from '@/components/SatellitePage'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
@@ -16,7 +16,7 @@ export const generateMetadata = async (): Promise<Metadata> =>
     url: new URL('satellite', config.baseUrl).href,
   })
 
-export default async function SatellitePage() {
+export default async function Page() {
   const path = 'satellite'
 
   const existingImages = await retrieveLatestImagesFromStorage(path)
@@ -27,11 +27,5 @@ export default async function SatellitePage() {
 
   const satelliteData = constructChartData(existingImages, path)
 
-  return (
-    <RadarAndSatelliteImages
-      images={satelliteData}
-      chartType="Satellite"
-      headerText="Satellite Imagery for New Zealand"
-    />
-  )
+  return <SatellitePage satelliteData={satelliteData} />
 }

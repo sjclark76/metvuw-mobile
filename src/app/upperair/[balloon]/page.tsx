@@ -2,15 +2,12 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import NoForecast from '@/components/NoForecast'
-import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
+import { UpperAirPage } from '@/components/UpperAirPage'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { retrieveLatestImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
-import {
-  balloonLocations,
-  isBalloonLocationCode,
-} from '@/shared/types/balloonLocations'
+import { isBalloonLocationCode } from '@/shared/types/balloonLocations'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,7 +18,7 @@ export const generateMetadata = async (): Promise<Metadata> =>
     url: new URL('upperair', config.baseUrl).href,
   })
 
-export default async function UpperAirPage({
+export default async function Page({
   params,
 }: {
   params: { balloon: string }
@@ -41,11 +38,5 @@ export default async function UpperAirPage({
     return <NoForecast />
   }
 
-  return (
-    <RadarAndSatelliteImages
-      images={chartData}
-      chartType="Upper Air"
-      headerText={`Upper Air Chart for ${balloonLocations[params.balloon]}`}
-    />
-  )
+  return <UpperAirPage balloonCode={params.balloon} chartData={chartData} />
 }
