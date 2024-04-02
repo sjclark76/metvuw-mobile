@@ -9,6 +9,7 @@ import WeatherImage from '../WeatherImage/WeatherImage'
 interface Props {
   chart: SkinnyRainChartData
   region: Region
+  index: number
 }
 
 export function WeatherChart(props: Props) {
@@ -25,6 +26,7 @@ export function WeatherChart(props: Props) {
           imageSrc={props.chart.url}
           imageAlt={altTag}
           chartType="Rain"
+          isLazy={props.index > 1}
         />
       }
       date={
