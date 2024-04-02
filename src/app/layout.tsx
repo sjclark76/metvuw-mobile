@@ -7,6 +7,7 @@ import React from 'react'
 
 import Footer from '@/components/Footer'
 import GoogleTag from '@/components/GoogleTag'
+import { config } from '@/config'
 
 import Navbar from '../components/Navbar'
 const inter = Inter({ subsets: ['latin'] })
@@ -19,6 +20,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href={config.supabaseUrl} />
+      </head>
       <GoogleTag />
       <body className={inter.className}>
         <main className="relative">
