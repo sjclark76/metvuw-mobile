@@ -3,16 +3,13 @@
 exports[`Weather Image it should render correctly 1`] = `
 <div>
   <div
-    class="aspectRatioBox"
     data-testid="weather-image"
   >
     <img
       alt="foo"
-      class="croppedImage"
-      height="600"
+      height="396"
       src="baa"
-      style="min-height: 85%; object-position: 0% 62%;"
-      width="711"
+      width="565"
     />
   </div>
 </div>
