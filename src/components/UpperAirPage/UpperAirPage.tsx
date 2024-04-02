@@ -12,12 +12,10 @@ export function UpperAirPage({
 }) {
   return (
     <>
-      <SubHeader />
-      <RadarAndSatelliteImages
-        images={chartData}
-        chartType="Upper Air"
-        headerText={`Upper Air Chart for ${balloonLocations[balloonCode]}`}
+      <SubHeader
+        submenuText={`Upper Air Chart for ${balloonLocations[balloonCode]}`}
       />
+      <RadarAndSatelliteImages images={chartData} chartType="Upper Air" />
     </>
   )
 }

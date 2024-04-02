@@ -15,10 +15,6 @@ export const generateMetadata = async (): Promise<Metadata> =>
 export default async function SatellitePage() {
   const satelliteData = await downloadSatelliteChartData()
   return (
-    <RadarAndSatelliteImages
-      images={satelliteData}
-      chartType="Satellite"
-      headerText="Satellite Imagery for New Zealand"
-    />
+    <RadarAndSatelliteImages images={satelliteData} chartType="Satellite" />
   )
 }

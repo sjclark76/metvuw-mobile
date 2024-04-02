@@ -1,8 +1,6 @@
 'use client'
 import { format } from 'date-fns'
-import { useSetAtom } from 'jotai'
 
-import { submenuTextAtom } from '@/components/Atoms/GlobalState'
 import Card from '@/components/Card'
 import WeatherImage from '@/components/WeatherImage'
 import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
@@ -11,18 +9,9 @@ import { ChartType } from '@/shared/types/ChartType'
 interface Props {
   images: SkinnyChartData[]
   chartType: Extract<ChartType, 'Radar' | 'Satellite' | 'Upper Air'>
-  headerText: string
 }
 
-export function RadarAndSatelliteImages({
-  images,
-  chartType,
-  headerText,
-}: Props) {
-  const setSubmenuText = useSetAtom(submenuTextAtom)
-
-  setSubmenuText(headerText)
-
+export function RadarAndSatelliteImages({ images, chartType }: Props) {
   const createImgAlt = (image: SkinnyChartData) => {
     return `${chartType.toLowerCase()} chart for ${format(
       new Date(image.imageDateUTC),
