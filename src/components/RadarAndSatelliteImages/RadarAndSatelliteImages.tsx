@@ -21,7 +21,7 @@ export function RadarAndSatelliteImages({ images, chartType }: Props) {
 
   return (
     <ul className="flex flex-col items-center">
-      {images.map((image) => (
+      {images.map((image, index) => (
         <Card
           key={image.imageDateUTC}
           weatherImage={
@@ -29,6 +29,7 @@ export function RadarAndSatelliteImages({ images, chartType }: Props) {
               imageSrc={image.url}
               imageAlt={createImgAlt(image)}
               chartType={chartType}
+              isLazy={index > 1}
             />
           }
           date={

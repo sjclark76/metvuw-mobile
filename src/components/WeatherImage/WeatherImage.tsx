@@ -12,6 +12,7 @@ export interface WeatherImageProps {
   chartType: ChartType
   imageAlt: string
   imageSrc: string | undefined
+  isLazy: boolean
 }
 
 export const widthAndHeightMap: Record<
@@ -23,16 +24,25 @@ export const widthAndHeightMap: Record<
   Satellite: satelliteImageDimensions,
   'Upper Air': upperAirImageDimensions,
 }
-const WeatherImage = ({ imageAlt, imageSrc, chartType }: WeatherImageProps) => {
+const WeatherImage = ({
+  imageAlt,
+  imageSrc,
+  chartType,
+  isLazy,
+}: WeatherImageProps) => {
   const widthAndHeight = widthAndHeightMap[chartType]
   return (
     <div data-testid="weather-image">
-      <LazyLoadImage
-        alt={imageAlt}
-        {...widthAndHeight}
-        src={imageSrc} // use normal <img> attributes as props
-        threshold={500}
-      />
+      {isLazy ? (
+        <LazyLoadImage
+          alt={imageAlt}
+          {...widthAndHeight}
+          src={imageSrc} // use normal <img> attributes as props
+          threshold={500}
+        />
+      ) : (
+        <img alt={imageAlt} {...widthAndHeight} src={imageSrc} />
+      )}
     </div>
   )
 }
