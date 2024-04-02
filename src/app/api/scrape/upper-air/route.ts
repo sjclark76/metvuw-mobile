@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
+import { compressUpperAirImage } from '@/shared/helpers/v2/imageCompression/compressUpperAirImage'
 import {
   determineImagesToAdd,
   removeImagesFromStorage,
@@ -10,18 +11,22 @@ import { scrapeUpperAirImages } from '@/shared/helpers/v2/screenScraper'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+export async function GET(_request: NextRequest) {
+  const force = Boolean(_request.nextUrl.searchParams.get('force'))
+
   const newImages = await scrapeUpperAirImages()
 
   const existingImages = await retrieveLatestImagesFromStorage('upper-air')
 
-  const imagesToAdd = determineImagesToAdd(newImages, existingImages)
+  const imagesToAdd = force
+    ? newImages
+    : determineImagesToAdd(newImages, existingImages)
 
-  if (imagesToAdd.length > 0) {
+  if (imagesToAdd.length > 0 || force) {
     await removeImagesFromStorage(existingImages, 'upper-air')
   }
 
-  const result = await uploadImagesToStorage(imagesToAdd)
+  const result = await uploadImagesToStorage(imagesToAdd, compressUpperAirImage)
 
   return NextResponse.json(result)
 }
