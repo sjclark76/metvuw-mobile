@@ -41,7 +41,12 @@ const WeatherImage = ({
           threshold={500}
         />
       ) : (
-        <img alt={imageAlt} {...widthAndHeight} src={imageSrc} />
+        <img
+          fetchPriority="high"
+          alt={imageAlt}
+          {...widthAndHeight}
+          src={imageSrc}
+        />
       )}
     </div>
   )
