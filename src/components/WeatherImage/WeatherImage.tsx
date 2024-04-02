@@ -1,8 +1,12 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 
+import {
+  radarImageDimensions,
+  rainImageDimensions,
+  satelliteImageDimensions,
+  upperAirImageDimensions,
+} from '@/shared/helpers/v2/imageCompression/imageDimensions'
 import { ChartType } from '@/shared/types/ChartType'
-
-import styles from './WeatherImage.module.css'
 
 export interface WeatherImageProps {
   chartType: ChartType
@@ -10,36 +14,23 @@ export interface WeatherImageProps {
   imageSrc: string | undefined
 }
 
-const widthAndHeightMap: Record<ChartType, { width: number; height: number }> =
-  {
-    Radar: { width: 760, height: 760 },
-    Rain: { width: 711, height: 600 },
-    Satellite: { width: 840, height: 630 },
-    'Upper Air': { width: 760, height: 690 },
-  }
+export const widthAndHeightMap: Record<
+  ChartType,
+  { width: number; height: number }
+> = {
+  Radar: radarImageDimensions,
+  Rain: rainImageDimensions,
+  Satellite: satelliteImageDimensions,
+  'Upper Air': upperAirImageDimensions,
+}
 const WeatherImage = ({ imageAlt, imageSrc, chartType }: WeatherImageProps) => {
-  const rainStyle = {
-    minHeight: '85%',
-    objectPosition: '0% 62%',
-  }
-
-  const satelliteStyle = {
-    objectPosition: '0% 0%',
-  }
-
   const widthAndHeight = widthAndHeightMap[chartType]
-  const isRainForecast = chartType === 'Rain'
   return (
-    <div
-      data-testid="weather-image"
-      className={isRainForecast ? styles.aspectRatioBox : undefined}
-    >
+    <div data-testid="weather-image">
       <LazyLoadImage
         alt={imageAlt}
         {...widthAndHeight}
         src={imageSrc} // use normal <img> attributes as props
-        className={isRainForecast ? styles.croppedImage : undefined}
-        style={isRainForecast ? rainStyle : satelliteStyle}
         threshold={500}
       />
     </div>

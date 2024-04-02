@@ -8,7 +8,7 @@ export function constructRainChartData(
   path: string,
 ): SkinnyRainChartData[] {
   const regex =
-    /rain-(?<region>\w+)-thumb-(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})(?<hour>\d{2})-(?<offset>\d{3}).gif/
+    /rain-(?<region>\w+)-thumb-(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})(?<hour>\d{2})-(?<offset>\d{3}).webp/
 
   return fileObjects.map((fileObject) => {
     const fileName = fileObject.name

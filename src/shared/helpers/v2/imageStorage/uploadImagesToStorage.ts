@@ -1,27 +1,34 @@
-import axios from 'axios'
+import path from 'node:path'
+
+import * as buffer from 'buffer'
 
 import serviceRoleDb from '@/shared/db/serviceRoleDb'
+import { downloadImageToBuffer } from '@/shared/helpers/v2/imageStorage/downloadImageToBuffer'
 import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
 
-async function downloadImageToBuffer(url: string) {
-  const { data, headers } = await axios.get(url, {
-    responseType: 'arraybuffer',
-  })
-  return {
-    fileBuffer: Buffer.from(data, 'binary'),
-    contentType: headers['content-type'],
-  }
-}
-
-export async function uploadImagesToStorage(imagesToUpload: ScrapedImage[]) {
+export async function uploadImagesToStorage(
+  imagesToUpload: ScrapedImage[],
+  // eslint-disable-next-line no-unused-vars
+  transformer?: (i: buffer.Buffer) => Promise<buffer.Buffer>,
+) {
   return Promise.all(
     imagesToUpload.map(async ({ originalImageURL, fullStoragePath }) => {
       const image = await downloadImageToBuffer(originalImageURL.href)
+
+      const imageToUpload = transformer
+        ? await transformer(image.fileBuffer)
+        : image.fileBuffer
+
+      const fileExtension = path.extname(fullStoragePath)
       return serviceRoleDb.storage
         .from('images')
-        .upload(fullStoragePath, image.fileBuffer, {
-          contentType: image.contentType,
-        })
+        .upload(
+          fullStoragePath.replace(fileExtension, '.webp'),
+          imageToUpload,
+          {
+            contentType: 'image/webp',
+          },
+        )
     }),
   )
 }

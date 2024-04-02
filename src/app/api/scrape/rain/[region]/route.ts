@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+import compressRainImage from '@/shared/helpers/v2/imageCompression/compressRainImage'
 import {
   determineImagesToAdd,
   removeImagesFromStorage,
@@ -15,6 +16,8 @@ export async function GET(
   _request: NextRequest,
   { params }: { params: { region: string } },
 ) {
+  const force = Boolean(_request.nextUrl.searchParams.get('force'))
+
   const regionCode = params.region ?? 'nz'
 
   const region = findRegionByCode(regionCode)
@@ -30,13 +33,15 @@ export async function GET(
     `rain/${regionCode}`,
   )
 
-  const imagesToAdd = determineImagesToAdd(newImages, existingImages)
+  const imagesToAdd = force
+    ? newImages
+    : determineImagesToAdd(newImages, existingImages)
 
-  if (imagesToAdd.length > 0) {
+  if (imagesToAdd.length > 0 || force) {
     await removeImagesFromStorage(existingImages, `rain/${regionCode}`)
   }
 
-  const result = await uploadImagesToStorage(imagesToAdd)
+  const result = await uploadImagesToStorage(imagesToAdd, compressRainImage)
 
   return NextResponse.json(result)
 }
