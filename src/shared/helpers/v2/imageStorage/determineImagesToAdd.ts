@@ -10,7 +10,7 @@ export const determineImagesToAdd = (
   newImages.every((newImage) =>
     existingImages.some(
       (existingImage) =>
-        Path.parse(existingImage.name).name ===
+        Path.parse(existingImage.imageFileName).name ===
         Path.parse(newImage.originalFileName).name,
     ),
   )

@@ -20,7 +20,7 @@ export const scrapeRadarImages = async (): Promise<ScrapedImage[]> => {
       originalImageURL: absoluteURL,
       originalFileName: originalFileName,
       fullStoragePath: `radar/${radarCode}/${originalFileName}`,
-      storagePath: `radar/${radarCode}`,
+      imageFileName: `radar/${radarCode}`,
     }
   })
 }

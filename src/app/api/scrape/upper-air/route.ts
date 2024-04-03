@@ -4,7 +4,7 @@ import { compressUpperAirImage } from '@/shared/helpers/v2/imageCompression/comp
 import {
   determineImagesToAdd,
   removeImagesFromStorage,
-  retrieveLatestImagesFromStorage,
+  retrieveImagesFromStorage,
   uploadImagesToStorage,
 } from '@/shared/helpers/v2/imageStorage'
 import { scrapeUpperAirImages } from '@/shared/helpers/v2/screenScraper'
@@ -16,14 +16,14 @@ export async function GET(_request: NextRequest) {
 
   const newImages = await scrapeUpperAirImages()
 
-  const existingImages = await retrieveLatestImagesFromStorage('upper-air')
+  const existingImages = await retrieveImagesFromStorage('upper-air')
 
   const imagesToAdd = force
     ? newImages
     : determineImagesToAdd(newImages, existingImages)
 
   if (imagesToAdd.length > 0 || force) {
-    await removeImagesFromStorage(existingImages, 'upper-air')
+    await removeImagesFromStorage(existingImages)
   }
 
   const result = await uploadImagesToStorage(imagesToAdd, compressUpperAirImage)

@@ -5,7 +5,7 @@ import NoForecast from '@/components/NoForecast'
 import RegionPage from '@/components/RegionPage/region-page'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructRainChartData'
-import { retrieveLatestImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
+import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import { findRegionByCode } from '@/shared/types/region'
 
 export const dynamic = 'force-dynamic'
@@ -33,13 +33,13 @@ export default async function Region({ params }: Props) {
   }
 
   const path = `rain/${matchedRegion.code}`
-  const existingImages = await retrieveLatestImagesFromStorage(path)
+  const existingImages = await retrieveImagesFromStorage(path)
 
   if (existingImages.length === 0) {
     return <NoForecast />
   }
 
-  const rainChartData = constructRainChartData(existingImages, path)
+  const rainChartData = constructRainChartData(existingImages)
 
   return <RegionPage region={matchedRegion} rainChartData={rainChartData} />
 }

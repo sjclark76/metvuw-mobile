@@ -2,10 +2,12 @@ import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructR
 
 describe('constructRainChartData', () => {
   test('should construct correctly for rain', () => {
-    const chartData = constructRainChartData(
-      [{ name: 'rain-nzsi-thumb-2024033018-006.webp' }],
-      'region/nzsi',
-    )
+    const chartData = constructRainChartData([
+      {
+        imageFileName: 'rain-nzsi-thumb-2024033018-006.webp',
+        fullStoragePath: 'region/nzsi/rain-nzsi-thumb-2024033018-006.webp',
+      },
+    ])
 
     expect(chartData).toMatchObject([
       {

@@ -4,7 +4,7 @@ import compressRainImage from '@/shared/helpers/v2/imageCompression/compressRain
 import {
   determineImagesToAdd,
   removeImagesFromStorage,
-  retrieveLatestImagesFromStorage,
+  retrieveImagesFromStorage,
   uploadImagesToStorage,
 } from '@/shared/helpers/v2/imageStorage'
 import { scrapeRainImages } from '@/shared/helpers/v2/screenScraper'
@@ -29,16 +29,14 @@ export async function GET(
 
   const newImages = await scrapeRainImages(region)
 
-  const existingImages = await retrieveLatestImagesFromStorage(
-    `rain/${regionCode}`,
-  )
+  const existingImages = await retrieveImagesFromStorage(`rain/${regionCode}`)
 
   const imagesToAdd = force
     ? newImages
     : determineImagesToAdd(newImages, existingImages)
 
   if (imagesToAdd.length > 0 || force) {
-    await removeImagesFromStorage(existingImages, `rain/${regionCode}`)
+    await removeImagesFromStorage(existingImages)
   }
 
   const result = await uploadImagesToStorage(imagesToAdd, compressRainImage)
