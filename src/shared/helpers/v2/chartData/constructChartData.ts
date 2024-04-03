@@ -6,7 +6,7 @@ export type SkinnyChartData = Pick<ChartData, 'imageDateUTC' | 'url'>
 
 export function constructChartData(images: StorageImage[]): SkinnyChartData[] {
   return images.map((image) => {
-    const fileName = image.storagePath
+    const fileName = image.imageFileName
     const { data: publicUrl } = serviceRoleDb.storage
       .from('images')
       .getPublicUrl(image.fullStoragePath)

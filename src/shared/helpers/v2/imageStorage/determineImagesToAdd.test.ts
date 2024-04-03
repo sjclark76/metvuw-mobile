@@ -9,7 +9,7 @@ describe('determineImagesToAdd', () => {
         originalFileName: 'image-to-add',
         originalImageURL: new URL('http://metvuw.com'),
         fullStoragePath: '',
-        storagePath: '',
+        imageFileName: '',
       },
     ]
     const existingImages: StorageImage[] = [{ name: 'existing-image' }]
@@ -25,7 +25,7 @@ describe('determineImagesToAdd', () => {
         originalFileName: 'existing-image',
         originalImageURL: new URL('http://metvuw.com'),
         fullStoragePath: '',
-        storagePath: '',
+        imageFileName: '',
       },
     ]
     const existingImages: StorageImage[] = [{ name: 'existing-image' }]

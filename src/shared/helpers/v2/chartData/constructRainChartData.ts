@@ -9,7 +9,7 @@ export function constructRainChartData(
     /rain-(?<region>\w+)-thumb-(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})(?<hour>\d{2})-(?<offset>\d{3}).webp/
 
   return images.map((image) => {
-    const fileName = image.storagePath
+    const fileName = image.imageFileName
     const publicUrl = serviceRoleDb.storage
       .from('images')
       .getPublicUrl(image.fullStoragePath).data.publicUrl

@@ -37,12 +37,11 @@ export async function retrieveImagesFromStorage(
         const newPath = `${path}/${file.name}`
         return retrieveImagesFromStorage(newPath)
       } else {
-        return [
-          {
-            fullStoragePath: `${path}/${file.name}`,
-            storagePath: file.name,
-          },
-        ]
+        const storageImage: StorageImage = {
+          fullStoragePath: `${path}/${file.name}`,
+          imageFileName: file.name,
+        }
+        return [storageImage]
       }
     }),
   )

@@ -4,7 +4,7 @@ describe('constructChartData', () => {
   test('should construct correctly for satellite', () => {
     const chartData = constructChartData([
       {
-        storagePath: '202403291200.jpg',
+        imageFileName: '202403291200.jpg',
         fullStoragePath: 'satellite/202403291200.jpg',
       },
     ])
@@ -20,7 +20,7 @@ describe('constructChartData', () => {
   test('should construct correctly for radar', () => {
     const chartData = constructChartData([
       {
-        storagePath: '202403292100Z_ak.gif',
+        imageFileName: '202403292100Z_ak.gif',
         fullStoragePath: 'radar/ak/202403292100Z_ak.gif',
       },
     ])
@@ -36,7 +36,7 @@ describe('constructChartData', () => {
   test('should construct correctly for upper-air', () => {
     const chartData = constructChartData([
       {
-        storagePath: '202403201200.93112.webp',
+        imageFileName: '202403201200.93112.webp',
         fullStoragePath: 'upper-air/93112/202403201200.93112.webp',
       },
     ])
