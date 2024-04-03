@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: { code: string } }) {
     return notFound()
   }
 
-  const path = `radar/${params.code}`
+  const path = `images/radar/${params.code}`
 
   const existingImages = await retrieveImagesFromStorage(path)
 

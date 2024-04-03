@@ -32,7 +32,7 @@ export default async function Region({ params }: Props) {
     return notFound()
   }
 
-  const path = `rain/${matchedRegion.code}`
+  const path = `images/rain/${matchedRegion.code}`
   const existingImages = await retrieveImagesFromStorage(path)
 
   if (existingImages.length === 0) {

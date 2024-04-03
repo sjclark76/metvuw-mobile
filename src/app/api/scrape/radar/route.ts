@@ -17,7 +17,7 @@ export async function GET(_request: NextRequest) {
 
   const newImages = await scrapeRadarImages()
   console.log('scrapeRadarImages completed')
-  const existingImages = await retrieveImagesFromStorage('radar')
+  const existingImages = await retrieveImagesFromStorage('images/radar')
 
   console.log('retrieveImagesFromStorage completed')
 

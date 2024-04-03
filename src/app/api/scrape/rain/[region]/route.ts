@@ -29,7 +29,9 @@ export async function GET(
 
   const newImages = await scrapeRainImages(region)
 
-  const existingImages = await retrieveImagesFromStorage(`rain/${regionCode}`)
+  const existingImages = await retrieveImagesFromStorage(
+    `images/rain/${regionCode}`,
+  )
 
   const imagesToAdd = force
     ? newImages
