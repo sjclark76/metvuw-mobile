@@ -2,6 +2,7 @@ import { FileObject } from '@supabase/storage-js'
 
 import serviceRoleDb from '@/shared/db/serviceRoleDb'
 import { defaultSearchOptions } from '@/shared/helpers/v2/imageStorage/defaults'
+import { StorageImage } from '@/shared/types/storageImage'
 
 /**
  * Checks if a given file object represents a directory.
@@ -18,9 +19,9 @@ function isDirectory(file: FileObject): boolean {
  * @param {string} path - The path to retrieve images from.
  * @returns {Promise<FileObject[]>} A promise that resolves to an array of FileObjects representing the images.
  */
-export async function retrieveLatestImagesFromStorage(
+export async function retrieveImagesFromStorage(
   path: string,
-): Promise<FileObject[]> {
+): Promise<StorageImage[]> {
   // Retrieve the list of files (or directories) from the given path
   const { data } = await serviceRoleDb.storage
     .from('images')
@@ -34,9 +35,14 @@ export async function retrieveLatestImagesFromStorage(
     files.flatMap(async (file) => {
       if (isDirectory(file)) {
         const newPath = `${path}/${file.name}`
-        return retrieveLatestImagesFromStorage(newPath)
+        return retrieveImagesFromStorage(newPath)
       } else {
-        return [file]
+        return [
+          {
+            fullStoragePath: `${path}/${file.name}`,
+            storagePath: file.name,
+          },
+        ]
       }
     }),
   )

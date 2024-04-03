@@ -4,7 +4,7 @@ import { compressRadarImage } from '@/shared/helpers/v2/imageCompression/compres
 import {
   determineImagesToAdd,
   removeImagesFromStorage,
-  retrieveLatestImagesFromStorage,
+  retrieveImagesFromStorage,
   uploadImagesToStorage,
 } from '@/shared/helpers/v2/imageStorage'
 import { scrapeRadarImages } from '@/shared/helpers/v2/screenScraper'
@@ -16,14 +16,14 @@ export async function GET(_request: NextRequest) {
 
   const newImages = await scrapeRadarImages()
 
-  const existingImages = await retrieveLatestImagesFromStorage('radar')
+  const existingImages = await retrieveImagesFromStorage('radar')
 
   const imagesToAdd = force
     ? newImages
     : determineImagesToAdd(newImages, existingImages)
 
   if (imagesToAdd.length > 0 || force) {
-    await removeImagesFromStorage(existingImages, 'radar')
+    await removeImagesFromStorage(existingImages)
   }
 
   const result = await uploadImagesToStorage(imagesToAdd, compressRadarImage)

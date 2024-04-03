@@ -6,7 +6,7 @@ import { UpperAirPage } from '@/components/UpperAirPage'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
-import { retrieveLatestImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
+import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import { isBalloonLocationCode } from '@/shared/types/balloonLocations'
 
 export const dynamic = 'force-dynamic'
@@ -30,9 +30,9 @@ export default async function Page({
 
   const path = `upper-air/${params.balloon}`
 
-  const existingImages = await retrieveLatestImagesFromStorage(path)
+  const existingImages = await retrieveImagesFromStorage(path)
 
-  const chartData = constructChartData(existingImages, path)
+  const chartData = constructChartData(existingImages)
 
   if (existingImages.length === 0) {
     return <NoForecast />

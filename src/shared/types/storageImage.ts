@@ -1,3 +1,4 @@
 export interface StorageImage {
-  name: string
+  fullStoragePath: string
+  storagePath: string
 }

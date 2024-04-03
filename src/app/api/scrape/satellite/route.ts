@@ -4,7 +4,7 @@ import { compressSatelliteImage } from '@/shared/helpers/v2/imageCompression/com
 import {
   determineImagesToAdd,
   removeImagesFromStorage,
-  retrieveLatestImagesFromStorage,
+  retrieveImagesFromStorage,
   uploadImagesToStorage,
 } from '@/shared/helpers/v2/imageStorage'
 import { scrapeSatelliteImages } from '@/shared/helpers/v2/screenScraper/scrapeSatelliteImages'
@@ -16,14 +16,14 @@ export async function GET(_request: NextRequest) {
 
   const newImages = await scrapeSatelliteImages()
 
-  const existingImages = await retrieveLatestImagesFromStorage('satellite')
+  const existingImages = await retrieveImagesFromStorage('satellite')
 
   const imagesToAdd = force
     ? newImages
     : determineImagesToAdd(newImages, existingImages)
 
   if (imagesToAdd.length > 0 || force) {
-    await removeImagesFromStorage(existingImages, 'satellite')
+    await removeImagesFromStorage(existingImages)
   }
 
   const result = await uploadImagesToStorage(

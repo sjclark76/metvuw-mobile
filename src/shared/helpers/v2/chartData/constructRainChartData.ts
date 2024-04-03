@@ -1,20 +1,18 @@
-import { FileObject } from '@supabase/storage-js'
-
 import serviceRoleDb from '@/shared/db/serviceRoleDb'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
+import { StorageImage } from '@/shared/types/storageImage'
 
 export function constructRainChartData(
-  fileObjects: Pick<FileObject, 'name'>[],
-  path: string,
+  images: StorageImage[],
 ): SkinnyRainChartData[] {
   const regex =
     /rain-(?<region>\w+)-thumb-(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})(?<hour>\d{2})-(?<offset>\d{3}).webp/
 
-  return fileObjects.map((fileObject) => {
-    const fileName = fileObject.name
+  return images.map((image) => {
+    const fileName = image.storagePath
     const publicUrl = serviceRoleDb.storage
       .from('images')
-      .getPublicUrl(`${path}/${fileName}`).data.publicUrl
+      .getPublicUrl(image.fullStoragePath).data.publicUrl
     const match = fileName.match(regex)?.groups || {}
 
     const getGroup = (groupName: string) => +match[groupName] || 0

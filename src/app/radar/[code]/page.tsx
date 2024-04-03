@@ -6,7 +6,7 @@ import { RadarPage } from '@/components/RadarPage'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
-import { retrieveLatestImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
+import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import { isRadarCode } from '@/shared/types/radarRegions'
 
 export const dynamic = 'force-dynamic'
@@ -25,13 +25,13 @@ export default async function Page({ params }: { params: { code: string } }) {
 
   const path = `radar/${params.code}`
 
-  const existingImages = await retrieveLatestImagesFromStorage(path)
+  const existingImages = await retrieveImagesFromStorage(path)
 
   if (existingImages.length === 0) {
     return <NoForecast />
   }
 
-  const radarData = constructChartData(existingImages, path)
+  const radarData = constructChartData(existingImages)
 
   return <RadarPage radarData={radarData} radarCode={params.code} />
 }
