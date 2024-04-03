@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { NextRequest, NextResponse } from 'next/server'
 
 import { compressRadarImage } from '@/shared/helpers/v2/imageCompression/compressRadarImage'
