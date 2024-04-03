@@ -7,12 +7,17 @@ describe('determineImagesToAdd', () => {
     const newImages: ScrapedImage[] = [
       {
         originalFileName: 'image-to-add',
-        originalImageURL: new URL('http://metvuw.com'),
-        fullStoragePath: '',
-        imageFileName: '',
+        originalImageURL: new URL('https://metvuw.com'),
+        fullStoragePath: 'satellite/image-to-add.webp',
+        imageFileName: 'image-to-add.webp',
       },
     ]
-    const existingImages: StorageImage[] = [{ name: 'existing-image' }]
+    const existingImages: StorageImage[] = [
+      {
+        imageFileName: 'existing-image.webp',
+        fullStoragePath: 'satellite/existing-image.webp',
+      },
+    ]
 
     const toAdd = determineImagesToAdd(newImages, existingImages)
 
@@ -23,12 +28,17 @@ describe('determineImagesToAdd', () => {
     const newImages: ScrapedImage[] = [
       {
         originalFileName: 'existing-image',
-        originalImageURL: new URL('http://metvuw.com'),
-        fullStoragePath: '',
-        imageFileName: '',
+        originalImageURL: new URL('https://metvuw.com'),
+        fullStoragePath: 'satellite/existing-image.webp',
+        imageFileName: 'existing-image.webp',
       },
     ]
-    const existingImages: StorageImage[] = [{ name: 'existing-image' }]
+    const existingImages: StorageImage[] = [
+      {
+        imageFileName: 'existing-image.webp',
+        fullStoragePath: 'satellite/existing-image.webp',
+      },
+    ]
 
     const toAdd = determineImagesToAdd(newImages, existingImages)
 

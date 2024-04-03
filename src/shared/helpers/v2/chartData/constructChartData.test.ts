@@ -55,7 +55,7 @@ describe('constructChartData', () => {
 
   test('upper air scenario 1 creates the correct date', () => {
     const storageImage = {
-      storagePath: '202403201200.93112.webp',
+      imageFileName: '202403201200.93112.webp',
       fullStoragePath: 'upper-air/93112/202403201200.93112.webp',
     }
     const result = constructChartData([storageImage])
@@ -68,7 +68,7 @@ describe('constructChartData', () => {
 
   test('upper air scenario 1 creates the correct date', () => {
     const storageImage = {
-      storagePath: '202403210000.93112.webp',
+      imageFileName: '202403210000.93112.webp',
       fullStoragePath: 'upper-air/93112/202403210000.93112.webp',
     }
     const result = constructChartData([storageImage])
