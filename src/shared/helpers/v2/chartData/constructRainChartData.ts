@@ -1,3 +1,4 @@
+import { config } from '@/config'
 import serviceRoleDb from '@/shared/db/serviceRoleDb'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { StorageImage } from '@/shared/types/storageImage'
@@ -11,7 +12,7 @@ export function constructRainChartData(
   return images.map((image) => {
     const fileName = image.imageFileName
     const publicUrl = serviceRoleDb.storage
-      .from('images')
+      .from(config.supbabaseBucketName)
       .getPublicUrl(image.fullStoragePath).data.publicUrl
     const match = fileName.match(regex)?.groups || {}
 

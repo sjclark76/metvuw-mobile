@@ -28,7 +28,7 @@ export default async function Page({
     return notFound()
   }
 
-  const path = `upper-air/${params.balloon}`
+  const path = `images/upper-air/${params.balloon}`
 
   const existingImages = await retrieveImagesFromStorage(path)
 

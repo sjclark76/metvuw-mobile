@@ -17,7 +17,7 @@ export const generateMetadata = async (): Promise<Metadata> =>
   })
 
 export default async function Page() {
-  const path = 'satellite'
+  const path = 'images/satellite'
 
   const existingImages = await retrieveImagesFromStorage(path)
 

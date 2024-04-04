@@ -14,8 +14,8 @@ export const scrapeSatelliteImages = async (): Promise<ScrapedImage[]> => {
     return {
       originalImageURL: absoluteURL,
       originalFileName: originalFileName,
-      imageFileName: 'satellite',
-      fullStoragePath: `satellite/${originalFileName}`,
+      imageFileName: 'images/satellite',
+      fullStoragePath: `images/satellite/${originalFileName}`,
     }
   })
 }

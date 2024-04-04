@@ -1,3 +1,4 @@
+import { config } from '@/config'
 import serviceRoleDb from '@/shared/db/serviceRoleDb'
 import { ChartData } from '@/shared/types/chartData'
 import { StorageImage } from '@/shared/types/storageImage'
@@ -8,7 +9,7 @@ export function constructChartData(images: StorageImage[]): SkinnyChartData[] {
   return images.map((image) => {
     const fileName = image.imageFileName
     const { data: publicUrl } = serviceRoleDb.storage
-      .from('images')
+      .from(config.supbabaseBucketName)
       .getPublicUrl(image.fullStoragePath)
 
     const year = +fileName.slice(0, 4)

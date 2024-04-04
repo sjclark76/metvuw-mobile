@@ -16,7 +16,7 @@ export async function GET(_request: NextRequest) {
 
   const newImages = await scrapeSatelliteImages()
 
-  const existingImages = await retrieveImagesFromStorage('satellite')
+  const existingImages = await retrieveImagesFromStorage('images/satellite')
 
   const imagesToAdd = force
     ? newImages

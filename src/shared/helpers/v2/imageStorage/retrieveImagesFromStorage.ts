@@ -1,5 +1,6 @@
 import { FileObject } from '@supabase/storage-js'
 
+import { config } from '@/config'
 import serviceRoleDb from '@/shared/db/serviceRoleDb'
 import { defaultSearchOptions } from '@/shared/helpers/v2/imageStorage/defaults'
 import { StorageImage } from '@/shared/types/storageImage'
@@ -24,7 +25,7 @@ export async function retrieveImagesFromStorage(
 ): Promise<StorageImage[]> {
   // Retrieve the list of files (or directories) from the given path
   const { data } = await serviceRoleDb.storage
-    .from('images')
+    .from(config.supbabaseBucketName)
     .list(path, defaultSearchOptions)
 
   const files = data ?? []

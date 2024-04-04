@@ -21,8 +21,8 @@ export const scrapeUpperAirImages = async (): Promise<ScrapedImage[]> => {
     return {
       originalImageURL: absoluteURL,
       originalFileName: originalFileName,
-      fullStoragePath: `upper-air/${balloonCode}/${originalFileName}`,
-      imageFileName: `upper-air/${balloonCode}`,
+      fullStoragePath: `images/upper-air/${balloonCode}/${originalFileName}`,
+      imageFileName: `images/upper-air/${balloonCode}`,
     }
   })
 }

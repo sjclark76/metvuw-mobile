@@ -16,7 +16,7 @@ export async function GET(_request: NextRequest) {
 
   const newImages = await scrapeUpperAirImages()
 
-  const existingImages = await retrieveImagesFromStorage('upper-air')
+  const existingImages = await retrieveImagesFromStorage('images/upper-air')
 
   const imagesToAdd = force
     ? newImages
