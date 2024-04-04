@@ -1,6 +1,4 @@
-import path from 'node:path'
-
-import { config } from '@/config'
+import { imagePipeline } from '@/shared/helpers/v2/screenScraper/imagePipeline'
 import { loadImages } from '@/shared/helpers/v2/screenScraper/loadImages'
 import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
 
@@ -8,23 +6,18 @@ export const scrapeUpperAirImages = async (): Promise<ScrapedImage[]> => {
   const images = await loadImages('upperair', 'img[src$="thumb.png"]')
 
   return images.map((image) => {
-    const transformedUrl = image.relativeUrl
-      .replace('.', 'upperair')
-      .replace('.thumb', '')
+    return imagePipeline(
+      (relativeUrl) =>
+        relativeUrl.replace('.', 'upperair').replace('.thumb', ''),
+      (originalFileName, newFileName) => {
+        const regex = /(?<date>\d+)\.(?<balloon>\d+).png/
+        const balloonCode = originalFileName.match(regex)?.groups?.balloon ?? ''
 
-    const regex = /(?<date>\d+)\.(?<balloon>\d+).png/
-    const absoluteURL = new URL(transformedUrl, config.metvuwBaseUrl)
-    const originalFileName = path.basename(absoluteURL.pathname)
-    const fileExtension = path.extname(originalFileName)
-    const newFileName = originalFileName.replace(fileExtension, '.webp')
-    const balloonCode = originalFileName.match(regex)?.groups?.balloon ?? ''
-
-    return {
-      originalImageURL: absoluteURL,
-      originalFileName: originalFileName,
-      fullStoragePath: `images/upper-air/${balloonCode}/${newFileName}`,
-      imageFileName: `${newFileName}`,
-      smallImageStoragePath: `small-images/upper-air/${balloonCode}/${newFileName}`,
-    }
+        return {
+          fullStoragePath: `images/upper-air/${balloonCode}/${newFileName}`,
+          smallImageStoragePath: `small-images/upper-air/${balloonCode}/${newFileName}`,
+        }
+      },
+    )(image)
   })
 }
