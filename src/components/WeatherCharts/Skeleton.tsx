@@ -1,12 +1,15 @@
 import Card from '@/components/Card'
 
-export function WeatherChartSkeleton() {
+export function WeatherChartSkeleton(props: { width: number; height: number }) {
   return (
     <Card
       isLoading={true}
       weatherImage={
-        <div className="mb-4 flex h-full w-full items-center justify-center rounded bg-gray-300 dark:bg-gray-700">
-          <div className="flex h-[470px] w-[730px] items-center justify-center">
+        <div className="flex h-full w-full items-center justify-center rounded bg-gray-300 dark:bg-gray-700">
+          <div
+            style={{ width: props.width, height: props.height }}
+            className="flex items-center justify-center"
+          >
             <svg
               className="h-10 w-10 text-gray-200 dark:text-gray-600"
               aria-hidden="true"
@@ -21,10 +24,10 @@ export function WeatherChartSkeleton() {
         </div>
       }
       date={
-        <div className="mb-4 h-6 w-52 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+        <div className="h-6 w-52 rounded-full bg-gray-200 dark:bg-gray-700"></div>
       }
       time={
-        <div className="mb-4 h-6 w-20 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+        <div className="h-6 w-20 rounded-full bg-gray-200 dark:bg-gray-700"></div>
       }
     />
   )
