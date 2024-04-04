@@ -1,6 +1,4 @@
-import path from 'node:path'
-
-import { config } from '@/config'
+import { imagePipeline } from '@/shared/helpers/v2/screenScraper/imagePipeline'
 import { loadImages } from '@/shared/helpers/v2/screenScraper/loadImages'
 import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
 
@@ -11,16 +9,15 @@ export const scrapeRadarImages = async (): Promise<ScrapedImage[]> => {
   )
 
   return images.map((image) => {
-    const transformedUrl = image.relativeUrl.replace('.', 'radar')
-    const absoluteURL = new URL(transformedUrl, config.metvuwBaseUrl)
-    const originalFileName = path.basename(absoluteURL.pathname)
-    const radarCode =
-      originalFileName.match(/\d+\w_(?<radar>\w+).gif/)?.groups?.radar ?? ''
-    return {
-      originalImageURL: absoluteURL,
-      originalFileName: originalFileName,
-      fullStoragePath: `images/radar/${radarCode}/${originalFileName}`,
-      imageFileName: `images/radar/${radarCode}`,
-    }
+    return imagePipeline(
+      (relativeUrl) => relativeUrl.replace('.', 'radar'),
+      (originalFileName, newFileName) => {
+        const radarCode =
+          originalFileName.match(/\d+\w_(?<radar>\w+).gif/)?.groups?.radar ?? ''
+        return {
+          fullStoragePath: `images/radar/${radarCode}/${newFileName}`,
+        }
+      },
+    )(image)
   })
 }

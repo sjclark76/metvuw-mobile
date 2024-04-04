@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { compressSatelliteImage } from '@/shared/helpers/v2/imageCompression/compressSatelliteImage'
+import {
+  compressSatelliteImage,
+  compressSmallSatelliteImage,
+} from '@/shared/helpers/v2/imageCompression/compressSatelliteImage'
 import {
   determineImagesToAdd,
   removeImagesFromStorage,
@@ -29,6 +32,7 @@ export async function GET(_request: NextRequest) {
   const result = await uploadImagesToStorage(
     imagesToAdd,
     compressSatelliteImage,
+    compressSmallSatelliteImage,
   )
 
   return NextResponse.json(result)

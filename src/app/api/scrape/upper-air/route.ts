@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { compressUpperAirImage } from '@/shared/helpers/v2/imageCompression/compressUpperAirImage'
+import {
+  compressSmallUpperAirImage,
+  compressUpperAirImage,
+} from '@/shared/helpers/v2/imageCompression/compressUpperAirImage'
 import {
   determineImagesToAdd,
   removeImagesFromStorage,
@@ -26,7 +29,11 @@ export async function GET(_request: NextRequest) {
     await removeImagesFromStorage(existingImages)
   }
 
-  const result = await uploadImagesToStorage(imagesToAdd, compressUpperAirImage)
+  const result = await uploadImagesToStorage(
+    imagesToAdd,
+    compressUpperAirImage,
+    compressSmallUpperAirImage,
+  )
 
   return NextResponse.json(result)
 }
