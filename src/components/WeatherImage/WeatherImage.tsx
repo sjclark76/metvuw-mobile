@@ -15,37 +15,55 @@ export interface WeatherImageProps {
   isLazy: boolean
 }
 
-export const widthAndHeightMap: Record<
-  ChartType,
-  { width: number; height: number }
-> = {
-  Radar: radarImageDimensions,
-  Rain: rainImageDimensions,
-  Satellite: satelliteImageDimensions,
-  'Upper Air': upperAirImageDimensions,
+function extraImageAttribute(
+  chartType: ChartType,
+  imageSrc: string | undefined,
+) {
+  const smallImageSrc = imageSrc?.replace('images', 'small-images')
+
+  switch (chartType) {
+    case 'Satellite':
+      return {
+        srcSet: `${smallImageSrc} 300w, ${imageSrc} 840w`,
+        sizes: '(min-width: 900px) 840px, calc(93.1vw + 21px)',
+        ...satelliteImageDimensions,
+      }
+    case 'Upper Air':
+      return {
+        srcSet: `${smallImageSrc} 300w, ${imageSrc} 760w`,
+        sizes: '(min-width: 820px) 760px, calc(92vw + 24px)',
+        ...upperAirImageDimensions,
+      }
+    case 'Radar':
+      return radarImageDimensions
+    case 'Rain':
+      return rainImageDimensions
+    default:
+      return null
+  }
 }
+
 const WeatherImage = ({
   imageAlt,
   imageSrc,
   chartType,
   isLazy,
 }: WeatherImageProps) => {
-  const widthAndHeight = widthAndHeightMap[chartType]
   return (
     <div data-testid="weather-image">
       {isLazy ? (
         <LazyLoadImage
           alt={imageAlt}
-          {...widthAndHeight}
           src={imageSrc} // use normal <img> attributes as props
           threshold={500}
+          {...extraImageAttribute(chartType, imageSrc)}
         />
       ) : (
         <img
           fetchPriority="high"
           alt={imageAlt}
-          {...widthAndHeight}
           src={imageSrc}
+          {...extraImageAttribute(chartType, imageSrc)}
         />
       )}
     </div>

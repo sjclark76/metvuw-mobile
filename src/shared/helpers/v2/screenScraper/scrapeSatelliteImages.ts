@@ -11,11 +11,14 @@ export const scrapeSatelliteImages = async (): Promise<ScrapedImage[]> => {
     const transformedUrl = image.relativeUrl.replace('./small', 'satellite/big')
     const absoluteURL = new URL(transformedUrl, config.metvuwBaseUrl)
     const originalFileName = path.basename(absoluteURL.pathname)
+    const fileExtension = path.extname(originalFileName)
+    const newFileName = originalFileName.replace(fileExtension, '.webp')
     return {
       originalImageURL: absoluteURL,
       originalFileName: originalFileName,
-      imageFileName: 'images/satellite',
-      fullStoragePath: `images/satellite/${originalFileName}`,
+      imageFileName: newFileName,
+      fullStoragePath: `images/satellite/${newFileName}`,
+      smallImageStoragePath: `small-images/satellite/${newFileName}`,
     }
   })
 }

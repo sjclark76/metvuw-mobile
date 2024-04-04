@@ -14,13 +14,15 @@ export const scrapeRadarImages = async (): Promise<ScrapedImage[]> => {
     const transformedUrl = image.relativeUrl.replace('.', 'radar')
     const absoluteURL = new URL(transformedUrl, config.metvuwBaseUrl)
     const originalFileName = path.basename(absoluteURL.pathname)
+    const fileExtension = path.extname(originalFileName)
+    const newFileName = originalFileName.replace(fileExtension, '.webp')
     const radarCode =
       originalFileName.match(/\d+\w_(?<radar>\w+).gif/)?.groups?.radar ?? ''
     return {
       originalImageURL: absoluteURL,
       originalFileName: originalFileName,
-      fullStoragePath: `images/radar/${radarCode}/${originalFileName}`,
-      imageFileName: `images/radar/${radarCode}`,
+      fullStoragePath: `images/radar/${radarCode}/${newFileName}`,
+      imageFileName: newFileName,
     }
   })
 }

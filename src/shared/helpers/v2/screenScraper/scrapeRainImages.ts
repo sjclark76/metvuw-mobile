@@ -24,11 +24,13 @@ export const scrapeRainImages = async (
         /rain-(?<region>\w+)-thumb-(?<filename>\d+-\d+\.gif)/,
       )?.groups?.region ?? ''
 
+    const fileExtension = path.extname(originalFileName)
+    const newFileName = originalFileName.replace(fileExtension, '.webp')
     return {
       originalImageURL: absoluteURL,
       originalFileName: originalFileName,
-      fullStoragePath: `images/rain/${regionCode}/${originalFileName}`,
-      imageFileName: `images/rain/${regionCode}`,
+      fullStoragePath: `images/rain/${regionCode}/${newFileName}`,
+      imageFileName: newFileName,
     }
   })
 }

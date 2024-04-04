@@ -15,14 +15,16 @@ export const scrapeUpperAirImages = async (): Promise<ScrapedImage[]> => {
     const regex = /(?<date>\d+)\.(?<balloon>\d+).png/
     const absoluteURL = new URL(transformedUrl, config.metvuwBaseUrl)
     const originalFileName = path.basename(absoluteURL.pathname)
-
+    const fileExtension = path.extname(originalFileName)
+    const newFileName = originalFileName.replace(fileExtension, '.webp')
     const balloonCode = originalFileName.match(regex)?.groups?.balloon ?? ''
 
     return {
       originalImageURL: absoluteURL,
       originalFileName: originalFileName,
-      fullStoragePath: `images/upper-air/${balloonCode}/${originalFileName}`,
-      imageFileName: `images/upper-air/${balloonCode}`,
+      fullStoragePath: `images/upper-air/${balloonCode}/${newFileName}`,
+      imageFileName: `${newFileName}`,
+      smallImageStoragePath: `small-images/upper-air/${balloonCode}/${newFileName}`,
     }
   })
 }
