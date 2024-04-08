@@ -9,11 +9,15 @@ import serviceRoleDb from '@/shared/db/serviceRoleDb'
 import { downloadImageToBuffer } from '@/shared/helpers/v2/imageStorage/downloadImageToBuffer'
 import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
 
-function uploadImage(fullStoragePath: string, imageToUpload: Buffer) {
+export function uploadImage(
+  bucketId: string,
+  fullStoragePath: string,
+  imageToUpload: Buffer,
+) {
   const fileExtension = path.extname(fullStoragePath)
 
   return serviceRoleDb.storage
-    .from(config.supbabaseBucketName)
+    .from(bucketId)
     .upload(fullStoragePath.replace(fileExtension, '.webp'), imageToUpload, {
       contentType: 'image/webp',
     })
@@ -35,9 +39,17 @@ export async function uploadImagesToStorage(
 
         if (thumbnailTransformer && smallImageStoragePath) {
           const smallImage = await thumbnailTransformer(image.fileBuffer)
-          await uploadImage(smallImageStoragePath, smallImage)
+          await uploadImage(
+            config.supbabaseBucketName,
+            smallImageStoragePath,
+            smallImage,
+          )
         }
-        return uploadImage(fullStoragePath, imageToUpload)
+        return uploadImage(
+          config.supbabaseBucketName,
+          fullStoragePath,
+          imageToUpload,
+        )
       },
     ),
   )

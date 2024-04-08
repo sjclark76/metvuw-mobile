@@ -26,5 +26,5 @@ module.exports = {
     //   { caseSensitive: true, minKeys: 2, natural: false },
     // ],
   },
-  ignorePatterns: ['src/shared/db/databaseTypes.ts'],
+  ignorePatterns: ['src/shared/db/database.types.ts'],
 }

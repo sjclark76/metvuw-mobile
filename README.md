@@ -26,3 +26,9 @@ We suggest that you begin by typing:
 
     npx playwright test
 
+
+# supabase
+
+## deploy migrations
+supabase db push
+
