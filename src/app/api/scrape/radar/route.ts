@@ -1,39 +1,39 @@
 /* eslint-disable no-console */
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 
-import { compressRadarImage } from '@/shared/helpers/v2/imageCompression/compressRadarImage'
 import {
-  determineImagesToAdd,
-  removeImagesFromStorage,
+  addImagesToUploadQueue,
+  addToImageRemovalQueue,
+  calculateImagesToDownload,
+  calculateImagesToRemove,
   retrieveImagesFromStorage,
-  uploadImagesToStorage,
 } from '@/shared/helpers/v2/imageStorage'
+import { triggerJob } from '@/shared/helpers/v2/jobs'
 import { scrapeRadarImages } from '@/shared/helpers/v2/screenScraper'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(_request: NextRequest) {
-  const force = Boolean(_request.nextUrl.searchParams.get('force'))
-
+export async function GET() {
   const newImages = await scrapeRadarImages()
-  console.log('scrapeRadarImages completed')
   const existingImages = await retrieveImagesFromStorage('images/radar')
 
-  console.log('retrieveImagesFromStorage completed')
+  const toRemove = calculateImagesToRemove(newImages, existingImages)
 
-  const imagesToAdd = force
-    ? newImages
-    : determineImagesToAdd(newImages, existingImages)
+  console.table(toRemove)
 
-  console.log('images to add', { imagesToAdd })
+  await addToImageRemovalQueue(toRemove)
 
-  if (imagesToAdd.length > 0 || force) {
-    await removeImagesFromStorage(existingImages)
-    console.log('removeImagesFromStorage completed')
+  const toDownload = calculateImagesToDownload(newImages, existingImages)
+
+  console.table(toDownload)
+
+  await addImagesToUploadQueue(toDownload, 'Radar')
+
+  if (toRemove.length > 0) {
+    await triggerJob('remove_images')
+  } else {
+    await triggerJob('upload_images')
   }
 
-  const result = await uploadImagesToStorage(imagesToAdd, compressRadarImage)
-  console.log('uploadImagesToStorage completed')
-
-  return NextResponse.json(result)
+  return NextResponse.json({ ok: true })
 }

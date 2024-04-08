@@ -1,7 +1,7 @@
 export const config = {
   baseUrl: process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:3002',
+    : 'https://valid-factual-barnacle.ngrok-free.app',
   cloudFrontUrl: 'https://metvuw.com/',
   metvuwBaseUrl: 'https://metvuw.com/', //https://dpucyvo9dklo9.cloudfront.net',
   s3: {

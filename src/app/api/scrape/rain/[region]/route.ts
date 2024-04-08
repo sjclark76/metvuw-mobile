@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import compressRainImage from '@/shared/helpers/v2/imageCompression/compressRainImage'
 import {
-  determineImagesToAdd,
-  removeImagesFromStorage,
+  addImagesToUploadQueue,
+  addToImageRemovalQueue,
+  calculateImagesToDownload,
+  calculateImagesToRemove,
   retrieveImagesFromStorage,
-  uploadImagesToStorage,
 } from '@/shared/helpers/v2/imageStorage'
+import { triggerJob } from '@/shared/helpers/v2/jobs'
 import { scrapeRainImages } from '@/shared/helpers/v2/screenScraper'
 import { findRegionByCode } from '@/shared/types/region'
 
@@ -16,8 +17,6 @@ export async function GET(
   _request: NextRequest,
   { params }: { params: { region: string } },
 ) {
-  const force = Boolean(_request.nextUrl.searchParams.get('force'))
-
   const regionCode = params.region ?? 'nz'
 
   const region = findRegionByCode(regionCode)
@@ -28,20 +27,23 @@ export async function GET(
     })
 
   const newImages = await scrapeRainImages(region)
-
   const existingImages = await retrieveImagesFromStorage(
     `images/rain/${regionCode}`,
   )
 
-  const imagesToAdd = force
-    ? newImages
-    : determineImagesToAdd(newImages, existingImages)
+  const toRemove = calculateImagesToRemove(newImages, existingImages)
 
-  if (imagesToAdd.length > 0 || force) {
-    await removeImagesFromStorage(existingImages)
+  await addToImageRemovalQueue(toRemove)
+
+  const toDownload = calculateImagesToDownload(newImages, existingImages)
+
+  await addImagesToUploadQueue(toDownload, 'Rain')
+
+  if (toRemove.length > 0) {
+    await triggerJob('remove_images')
+  } else {
+    await triggerJob('upload_images')
   }
 
-  const result = await uploadImagesToStorage(imagesToAdd, compressRainImage)
-
-  return NextResponse.json(result)
+  return NextResponse.json({ ok: true })
 }

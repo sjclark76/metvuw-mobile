@@ -15,7 +15,7 @@
     "e2e:interactive": "npx playwright test --ui",
     "checkly:test": "npx checkly test",
     "checkly:deploy": "npx checkly deploy",
-    "db:local:generate:types": "supabase gen types typescript --local  > database.types.ts",
+    "db:local:generate:types": "supabase gen types typescript --local  > ./src/shared/db/database.types.ts ",
     "db:local:start": "supabase start",
     "db:local:stop": "supabase stop",
     "db:local:migrate": "supabase db reset"
@@ -47,7 +47,7 @@
     "@testing-library/jest-dom": "6.4.2",
     "@testing-library/react": "14.2.2",
     "@types/jest": "29.5.12",
-    "@types/node": "20.12.5",
+    "@types/node": "20.12.4",
     "@types/react": "18.2.74",
     "@types/react-lazy-load-image-component": "1.6.3",
     "autoprefixer": "10.4.19",
