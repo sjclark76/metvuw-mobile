@@ -30,5 +30,11 @@ We suggest that you begin by typing:
 # supabase
 
 ## deploy migrations
-supabase db push
+`supabase db push`
+
+
+# Checkly
+
+deploy latest tests
+`npx checkly deploy`
 
