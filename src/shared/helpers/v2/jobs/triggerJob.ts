@@ -2,10 +2,12 @@ import { config } from '@/config'
 import serviceRoleDb from '@/shared/db/serviceRoleDb'
 import { JobType } from '@/shared/helpers/v2/jobs/types'
 
-export function triggerJob(job: JobType) {
-  return serviceRoleDb
-    .from('trigger')
-    .insert({ operation_name: job, host_name: config.baseUrl })
+export function triggerJob(job: JobType, triggerKey: string) {
+  return serviceRoleDb.from('trigger').insert({
+    operation_name: job,
+    host_name: config.baseUrl,
+    trigger_key: triggerKey,
+  })
 }
 
 export async function markJobAsCompleted(id: number) {

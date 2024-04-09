@@ -12,22 +12,23 @@ import { scrapeSatelliteImages } from '@/shared/helpers/v2/screenScraper/scrapeS
 
 export const dynamic = 'force-dynamic'
 
+const triggerCode = 'Satelllite'
 export async function GET() {
   const newImages = await scrapeSatelliteImages()
   const existingImages = await retrieveImagesFromStorage('images/satellite')
 
   const toRemove = calculateImagesToRemove(newImages, existingImages)
 
-  await addToImageRemovalQueue(toRemove)
+  await addToImageRemovalQueue(toRemove, triggerCode)
 
   const toDownload = calculateImagesToDownload(newImages, existingImages)
 
-  await addImagesToUploadQueue(toDownload, 'Satellite')
+  await addImagesToUploadQueue(toDownload, 'Satellite', triggerCode)
 
   if (toRemove.length > 0) {
-    await triggerJob('remove_images')
+    await triggerJob('remove_images', triggerCode)
   } else {
-    await triggerJob('upload_images')
+    await triggerJob('upload_images', triggerCode)
   }
 
   return NextResponse.json({ ok: true })

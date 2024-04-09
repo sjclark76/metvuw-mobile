@@ -39,16 +39,19 @@ export type Database = {
           bucket_id: string
           created_at: string
           full_storage_path: string
+          trigger_key: string
         }
         Insert: {
           bucket_id: string
           created_at?: string
           full_storage_path: string
+          trigger_key: string
         }
         Update: {
           bucket_id?: string
           created_at?: string
           full_storage_path?: string
+          trigger_key?: string
         }
         Relationships: []
       }
@@ -60,6 +63,7 @@ export type Database = {
           full_storage_path: string
           original_image_url: string
           small_image_storagePath: string | null
+          trigger_key: string
         }
         Insert: {
           bucket_id: string
@@ -68,6 +72,7 @@ export type Database = {
           full_storage_path: string
           original_image_url: string
           small_image_storagePath?: string | null
+          trigger_key: string
         }
         Update: {
           bucket_id?: string
@@ -76,6 +81,7 @@ export type Database = {
           full_storage_path?: string
           original_image_url?: string
           small_image_storagePath?: string | null
+          trigger_key?: string
         }
         Relationships: []
       }
@@ -86,6 +92,7 @@ export type Database = {
           id: number
           is_completed: boolean
           operation_name: string
+          trigger_key: string
         }
         Insert: {
           created_at?: string
@@ -93,6 +100,7 @@ export type Database = {
           id?: number
           is_completed?: boolean
           operation_name: string
+          trigger_key: string
         }
         Update: {
           created_at?: string
@@ -100,6 +108,7 @@ export type Database = {
           id?: number
           is_completed?: boolean
           operation_name?: string
+          trigger_key?: string
         }
         Relationships: []
       }

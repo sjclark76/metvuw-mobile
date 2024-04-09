@@ -26,6 +26,7 @@ export async function GET(
       status: 404,
     })
 
+  const triggerCode = `rain-${regionCode}`
   const newImages = await scrapeRainImages(region)
   const existingImages = await retrieveImagesFromStorage(
     `images/rain/${regionCode}`,
@@ -33,16 +34,16 @@ export async function GET(
 
   const toRemove = calculateImagesToRemove(newImages, existingImages)
 
-  await addToImageRemovalQueue(toRemove)
+  await addToImageRemovalQueue(toRemove, triggerCode)
 
   const toDownload = calculateImagesToDownload(newImages, existingImages)
 
-  await addImagesToUploadQueue(toDownload, 'Rain')
+  await addImagesToUploadQueue(toDownload, 'Rain', triggerCode)
 
   if (toRemove.length > 0) {
-    await triggerJob('remove_images')
+    await triggerJob('remove_images', triggerCode)
   } else {
-    await triggerJob('upload_images')
+    await triggerJob('upload_images', triggerCode)
   }
 
   return NextResponse.json({ ok: true })

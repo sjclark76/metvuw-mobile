@@ -6,11 +6,12 @@ import {
   triggerJob,
 } from '@/shared/helpers/v2/jobs/triggerJob'
 
-export async function removeImagesJob(id: number) {
+export async function removeImagesJob(id: number, triggerKey: string) {
   const { data: images } = await serviceRoleDb
     .from('images_to_remove')
     .select('*')
     .eq('bucket_id', config.supbabaseBucketName)
+    .eq('trigger_key', triggerKey)
     .select()
 
   if (images != null) {
@@ -28,6 +29,7 @@ export async function removeImagesJob(id: number) {
       .from('images_to_remove')
       .delete()
       .eq('bucket_id', config.supbabaseBucketName)
+      .eq('trigger_key', triggerKey)
 
     if (deleteError) {
       console.error(deleteError)
@@ -39,6 +41,6 @@ export async function removeImagesJob(id: number) {
       console.error(updateJobError)
     }
 
-    await triggerJob('upload_images')
+    await triggerJob('upload_images', triggerKey)
   }
 }

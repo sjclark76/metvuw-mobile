@@ -29,8 +29,23 @@ We suggest that you begin by typing:
 
 # supabase
 
-## deploy migrations
-`supabase db push`
+## Migrations
+
+### Create New Migration
+``` bash
+supabase migration new MIGRATION_NAME
+```
+
+### Deploy Migration
+
+```
+supabase db push
+```
+
+### Create Auto Migration
+
+supabase db diff -f MIGRATION_NAME
+
 
 
 # Checkly
