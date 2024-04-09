@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+import { config } from '@/config'
 import {
   addImagesToUploadQueue,
   addToImageRemovalQueue,
@@ -26,7 +27,7 @@ export async function GET(
       status: 404,
     })
 
-  const triggerCode = `rain-${regionCode}`
+  const triggerCode = `${config.supbabaseBucketName}-rain-${regionCode}`
   const newImages = await scrapeRainImages(region)
   const existingImages = await retrieveImagesFromStorage(
     `images/rain/${regionCode}`,

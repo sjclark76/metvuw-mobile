@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 
+import { config } from '@/config'
 import {
   addImagesToUploadQueue,
   addToImageRemovalQueue,
@@ -12,7 +13,8 @@ import { scrapeUpperAirImages } from '@/shared/helpers/v2/screenScraper'
 
 export const dynamic = 'force-dynamic'
 
-const triggerCode = 'Upper-Air'
+const triggerCode = `${config.supbabaseBucketName}-Upper-Air`
+
 export async function GET() {
   const newImages = await scrapeUpperAirImages()
   const existingImages = await retrieveImagesFromStorage('images/upper-air')

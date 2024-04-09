@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { NextResponse } from 'next/server'
 
+import { config } from '@/config'
 import {
   addImagesToUploadQueue,
   addToImageRemovalQueue,
@@ -13,7 +14,7 @@ import { scrapeRadarImages } from '@/shared/helpers/v2/screenScraper'
 
 export const dynamic = 'force-dynamic'
 
-const triggerKey = 'Radar'
+const triggerKey = `${config.supbabaseBucketName}-Radar`
 export async function GET() {
   const newImages = await scrapeRadarImages()
   const existingImages = await retrieveImagesFromStorage('images/radar')
