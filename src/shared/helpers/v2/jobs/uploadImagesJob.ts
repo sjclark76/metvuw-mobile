@@ -9,11 +9,12 @@ import {
 import { markJobAsCompleted } from '@/shared/helpers/v2/jobs/triggerJob'
 import { ChartType } from '@/shared/types/ChartType'
 
-export async function uploadImagesJob(id: number) {
+export async function uploadImagesJob(id: number, triggerKey: string) {
   const { data: images } = await serviceRoleDb
     .from('images_to_upload')
     .select('*')
     .eq('bucket_id', config.supbabaseBucketName)
+    .eq('trigger_key', triggerKey)
     .select()
 
   if (images != null) {
@@ -53,6 +54,7 @@ export async function uploadImagesJob(id: number) {
       .from('images_to_upload')
       .delete()
       .eq('bucket_id', config.supbabaseBucketName)
+      .eq('trigger_key', triggerKey)
 
     if (deleteError) {
       console.error(deleteError)

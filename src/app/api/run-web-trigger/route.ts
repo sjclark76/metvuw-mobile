@@ -12,6 +12,7 @@ interface TableInsert {
     created_at: string
     is_completed: boolean
     operation_name: JobType
+    trigger_key: string
   }
 
   schema: string
@@ -21,14 +22,14 @@ interface TableInsert {
 export async function POST(_request: NextRequest) {
   const body: TableInsert = await _request.json()
 
-  const { operation_name, id } = body.record
+  const { operation_name, id, trigger_key } = body.record
 
   switch (operation_name) {
     case 'remove_images':
-      await removeImagesJob(id)
+      await removeImagesJob(id, trigger_key)
       break
     case 'upload_images':
-      await uploadImagesJob(id)
+      await uploadImagesJob(id, trigger_key)
       break
   }
 
