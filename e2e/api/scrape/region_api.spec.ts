@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 import { regions } from '@/shared/types/region'
 
-test.describe.skip('region api spec', () => {
+test.describe('region api spec', () => {
   test('requesting for a valid region should return a 200 response', async ({
     request,
   }) => {

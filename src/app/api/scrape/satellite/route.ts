@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { config } from '@/config'
+import generateTriggerCode from '@/shared/helpers/generateTriggerCode'
 import {
   addImagesToUploadQueue,
   addToImageRemovalQueue,
@@ -13,8 +13,9 @@ import { scrapeSatelliteImages } from '@/shared/helpers/v2/screenScraper/scrapeS
 
 export const dynamic = 'force-dynamic'
 
-const triggerKey = `${config.supbabaseBucketName}-Satellite`
 export async function GET() {
+  const triggerKey = generateTriggerCode(`Satellite`)
+
   const newImages = await scrapeSatelliteImages()
   const existingImages = await retrieveImagesFromStorage('images/satellite')
 
@@ -32,5 +33,12 @@ export async function GET() {
     await triggerJob('upload_images', triggerKey)
   }
 
-  return NextResponse.json({ ok: true })
+  return NextResponse.json({
+    ok: true,
+    toAdd: toDownload.map((img) => ({
+      fullStoragePath: img.fullStoragePath,
+      imageFileName: img.imageFileName,
+    })),
+    toRemove: toRemove,
+  })
 }

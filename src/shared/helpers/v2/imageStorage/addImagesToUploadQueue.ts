@@ -22,5 +22,5 @@ export async function addImagesToUploadQueue(
     .select()
 
   // eslint-disable-next-line no-console
-  if (error) console.error(error)
+  if (error) console.error('[addImagesToUploadQueue]', error)
 }
