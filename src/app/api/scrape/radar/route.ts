@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { NextResponse } from 'next/server'
 
-import { config } from '@/config'
+import generateTriggerCode from '@/shared/helpers/generateTriggerCode'
 import {
   addImagesToUploadQueue,
   addToImageRemovalQueue,
@@ -11,12 +11,13 @@ import {
 } from '@/shared/helpers/v2/imageStorage'
 import { triggerJob } from '@/shared/helpers/v2/jobs'
 import { scrapeRadarImages } from '@/shared/helpers/v2/screenScraper'
+import { ScrapeResult } from '@/shared/types/ScrapeResult'
 
 export const dynamic = 'force-dynamic'
 
-const triggerKey = `${config.supbabaseBucketName}-Radar`
-export async function GET() {
+export async function GET(): Promise<NextResponse<ScrapeResult>> {
   const newImages = await scrapeRadarImages()
+  const triggerKey = generateTriggerCode('Radar')
   const existingImages = await retrieveImagesFromStorage('images/radar')
 
   const toRemove = calculateImagesToRemove(newImages, existingImages)
@@ -33,5 +34,12 @@ export async function GET() {
     await triggerJob('upload_images', triggerKey)
   }
 
-  return NextResponse.json({ ok: true })
+  return NextResponse.json({
+    ok: true,
+    toAdd: toDownload.map((img) => ({
+      fullStoragePath: img.fullStoragePath,
+      imageFileName: img.imageFileName,
+    })),
+    toRemove: toRemove,
+  })
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { config } from '@/config'
+import generateTriggerCode from '@/shared/helpers/generateTriggerCode'
 import {
   addImagesToUploadQueue,
   addToImageRemovalQueue,
@@ -13,9 +13,9 @@ import { scrapeUpperAirImages } from '@/shared/helpers/v2/screenScraper'
 
 export const dynamic = 'force-dynamic'
 
-const triggerCode = `${config.supbabaseBucketName}-Upper-Air`
-
 export async function GET() {
+  const triggerCode = generateTriggerCode(`Upper-Air`)
+
   const newImages = await scrapeUpperAirImages()
   const existingImages = await retrieveImagesFromStorage('images/upper-air')
 
@@ -33,5 +33,12 @@ export async function GET() {
     await triggerJob('upload_images', triggerCode)
   }
 
-  return NextResponse.json({ ok: true })
+  return NextResponse.json({
+    ok: true,
+    toAdd: toDownload.map((img) => ({
+      fullStoragePath: img.fullStoragePath,
+      imageFileName: img.imageFileName,
+    })),
+    toRemove: toRemove,
+  })
 }

@@ -20,6 +20,7 @@ export function uploadImage(
     .from(bucketId)
     .upload(fullStoragePath.replace(fileExtension, '.webp'), imageToUpload, {
       contentType: 'image/webp',
+      upsert: false,
     })
 }
 

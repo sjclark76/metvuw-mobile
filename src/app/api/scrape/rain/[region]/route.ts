@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { config } from '@/config'
+import generateTriggerCode from '@/shared/helpers/generateTriggerCode'
 import {
   addImagesToUploadQueue,
   addToImageRemovalQueue,
@@ -27,7 +27,8 @@ export async function GET(
       status: 404,
     })
 
-  const triggerCode = `${config.supbabaseBucketName}-rain-${regionCode}`
+  const triggerCode = generateTriggerCode(`Rain-${regionCode}`)
+
   const newImages = await scrapeRainImages(region)
   const existingImages = await retrieveImagesFromStorage(
     `images/rain/${regionCode}`,
@@ -47,5 +48,12 @@ export async function GET(
     await triggerJob('upload_images', triggerCode)
   }
 
-  return NextResponse.json({ ok: true })
+  return NextResponse.json({
+    ok: true,
+    toAdd: toDownload.map((img) => ({
+      fullStoragePath: img.fullStoragePath,
+      imageFileName: img.imageFileName,
+    })),
+    toRemove: toRemove,
+  })
 }
