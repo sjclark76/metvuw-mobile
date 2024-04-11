@@ -41,5 +41,11 @@ export default async function Region({ params }: Props) {
 
   const rainChartData = constructRainChartData(existingImages)
 
-  return <RegionPage region={matchedRegion} rainChartData={rainChartData} />
+  const sortedCharts = rainChartData.sort((a, b) => {
+    return (
+      new Date(a.imageDateUTC).getTime() - new Date(b.imageDateUTC).getTime()
+    )
+  })
+
+  return <RegionPage region={matchedRegion} rainChartData={sortedCharts} />
 }
