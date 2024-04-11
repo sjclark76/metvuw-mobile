@@ -42,11 +42,7 @@ export async function GET(
 
   await addImagesToUploadQueue(toDownload, 'Rain', triggerCode)
 
-  if (toRemove.length > 0) {
-    await triggerJob('remove_images', triggerCode)
-  } else {
-    await triggerJob('upload_images', triggerCode)
-  }
+  await triggerJob('upload_images', triggerCode)
 
   return NextResponse.json({
     ok: true,

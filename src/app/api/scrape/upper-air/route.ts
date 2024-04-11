@@ -27,11 +27,7 @@ export async function GET() {
 
   await addImagesToUploadQueue(toDownload, 'Upper Air', triggerCode)
 
-  if (toRemove.length > 0) {
-    await triggerJob('remove_images', triggerCode)
-  } else {
-    await triggerJob('upload_images', triggerCode)
-  }
+  await triggerJob('upload_images', triggerCode)
 
   return NextResponse.json({
     ok: true,

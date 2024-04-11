@@ -27,11 +27,7 @@ export async function GET() {
 
   await addImagesToUploadQueue(toDownload, 'Satellite', triggerKey)
 
-  if (toRemove.length > 0) {
-    await triggerJob('remove_images', triggerKey)
-  } else {
-    await triggerJob('upload_images', triggerKey)
-  }
+  await triggerJob('upload_images', triggerKey)
 
   return NextResponse.json({
     ok: true,

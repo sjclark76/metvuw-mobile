@@ -1,10 +1,7 @@
 /* eslint-disable no-console */
 import { config } from '@/config'
 import serviceRoleDb from '@/shared/db/serviceRoleDb'
-import {
-  markJobAsCompleted,
-  triggerJob,
-} from '@/shared/helpers/v2/jobs/triggerJob'
+import { markJobAsCompleted } from '@/shared/helpers/v2/jobs/triggerJob'
 
 export async function removeImagesJob(id: number, triggerKey: string) {
   const { data: images } = await serviceRoleDb
@@ -40,7 +37,5 @@ export async function removeImagesJob(id: number, triggerKey: string) {
     if (updateJobError) {
       console.error(updateJobError)
     }
-
-    await triggerJob('upload_images', triggerKey)
   }
 }
