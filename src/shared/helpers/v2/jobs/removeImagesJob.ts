@@ -63,8 +63,7 @@ export async function removeImage(number: number) {
     const { error: deleteError } = await serviceRoleDb
       .from('images_to_remove')
       .delete()
-      .eq('bucket_id', config.supbabaseBucketName)
-      .eq('trigger_key', imageKeys)
+      .in('trigger_key', imageKeys)
 
     if (deleteError) {
       console.error(deleteError)

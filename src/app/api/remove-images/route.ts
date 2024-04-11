@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { removeImage } from '@/shared/helpers/v2/jobs'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(_request: NextRequest) {
   const numberParam = _request.nextUrl.searchParams.get('number')
 

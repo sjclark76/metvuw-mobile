@@ -6,10 +6,7 @@ import {
   downloadImageToBuffer,
   uploadImage,
 } from '@/shared/helpers/v2/imageStorage'
-import {
-  markJobAsCompleted,
-  triggerJob,
-} from '@/shared/helpers/v2/jobs/triggerJob'
+import { markJobAsCompleted } from '@/shared/helpers/v2/jobs/triggerJob'
 import { ChartType } from '@/shared/types/ChartType'
 
 export async function uploadImagesJob(id: number, triggerKey: string) {
@@ -73,7 +70,7 @@ export async function uploadImagesJob(id: number, triggerKey: string) {
         console.error(updateJobError)
       }
 
-      await triggerJob('remove_images', triggerKey)
+      // await triggerJob('remove_images', triggerKey)
     }
   }
 }
