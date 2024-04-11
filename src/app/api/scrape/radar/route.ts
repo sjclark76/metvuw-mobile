@@ -28,7 +28,7 @@ export async function GET(): Promise<NextResponse<ScrapeResult>> {
 
   await addImagesToUploadQueue(toDownload, 'Radar', triggerKey)
 
-  await triggerJob('upload_images', triggerKey)
+  triggerJob('upload_images', triggerKey)
 
   return NextResponse.json({
     ok: true,
