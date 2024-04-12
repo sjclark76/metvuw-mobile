@@ -28,11 +28,13 @@ export const minutePoller = inngest.createFunction(
     const toRemove = await step.run(
       'calculating images to remove',
       async () => {
+        // @ts-ignore
         return calculateImagesToRemove(newImages, existingImages)
       },
     )
 
     const toDownload = await step.run('calculating images to upload', () => {
+      // @ts-ignore
       return calculateImagesToDownload(newImages, existingImages)
     })
 
