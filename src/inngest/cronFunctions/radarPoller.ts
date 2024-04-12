@@ -1,6 +1,6 @@
 import { config } from '@/config'
 import { inngest } from '@/inngest/client'
-import { EventNames } from '@/inngest/functions'
+import { defaultPollerTime } from '@/inngest/cronFunctions/pollingCronSchedule'
 import {
   calculateImagesToDownload,
   calculateImagesToRemove,
@@ -8,9 +8,9 @@ import {
 } from '@/shared/helpers/v2/imageStorage'
 import { scrapeRadarImages } from '@/shared/helpers/v2/screenScraper'
 
-export const minutePoller = inngest.createFunction(
+export const radarPoller = inngest.createFunction(
   { id: 'radar-poller' }, // The name of your function, used for observability.
-  { cron: '*/5 * * * *' }, // The cron syntax for the function. TZ= is optional.
+  defaultPollerTime,
 
   // This function will be called on the schedule above
   async ({ step }) => {
@@ -38,21 +38,26 @@ export const minutePoller = inngest.createFunction(
       return calculateImagesToDownload(newImages, existingImages)
     })
 
-    await step.sendEvent('dispatch-remove-images-event', {
-      name: EventNames.removeImages,
-      data: {
-        bucket: config.supbabaseBucketName,
-        toRemove,
-      },
-    })
+    if (toRemove.length > 0) {
+      await step.sendEvent('dispatch-remove-images-event', {
+        name: 'images/remove',
+        data: {
+          bucket: config.supbabaseBucketName,
+          toRemove,
+        },
+      })
+    }
 
-    await step.sendEvent('dispatch-upload-images-event', {
-      name: EventNames.uploadImages,
-      data: {
-        bucket: config.supbabaseBucketName,
-        toDownload,
-      },
-    })
+    if (toDownload.length > 0) {
+      await step.sendEvent('dispatch-upload-images-event', {
+        name: 'images/upload',
+        data: {
+          bucket: config.supbabaseBucketName,
+          chartType: 'Radar',
+          toUpload: toDownload,
+        },
+      })
+    }
 
     return {
       toRemove,
