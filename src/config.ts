@@ -13,4 +13,5 @@ export const config = {
   supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY ?? '',
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
   supbabaseBucketName: process.env.SUPABASE_BUCKET_NAME ?? '',
+  inngestEventKey: process.env.INNGEST_EVENT_KEY ?? '',
 }
