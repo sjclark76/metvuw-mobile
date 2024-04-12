@@ -1,7 +1,5 @@
-export * from './addToImageRemovalQueue'
 export * from './defaults'
 export * from './determineImagesToAdd'
 export * from './retrieveImagesFromStorage'
 export * from './uploadImagesToStorage'
-export { addImagesToUploadQueue } from '@/shared/helpers/v2/imageStorage/addImagesToUploadQueue'
 export { downloadImageToBuffer } from '@/shared/helpers/v2/imageStorage/downloadImageToBuffer'
