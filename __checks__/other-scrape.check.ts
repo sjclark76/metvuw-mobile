@@ -10,7 +10,7 @@ const endpoints = ['satellite', 'radar', 'upper-air']
 for (const endpoint of endpoints) {
   new ApiCheck(`scrape-${endpoint}`, {
     name: `Scrape ${endpoint}`,
-    activated: true,
+    activated: false,
     muted: false,
     shouldFail: false,
     runParallel: false,

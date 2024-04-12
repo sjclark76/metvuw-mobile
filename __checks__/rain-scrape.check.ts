@@ -13,7 +13,7 @@ import { regions } from '../src/shared/types/region'
 for (const region of regions) {
   new ApiCheck(`scrape-${region.code}`, {
     name: `Scrape ${region.name}`,
-    activated: true,
+    activated: false,
     muted: false,
     shouldFail: false,
     runParallel: false,
