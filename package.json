@@ -18,7 +18,8 @@
     "db:local:generate:types": "supabase gen types typescript --local  > ./src/shared/db/database.types.ts ",
     "db:local:start": "supabase start",
     "db:local:stop": "supabase stop",
-    "db:local:migrate": "supabase db reset"
+    "db:local:migrate": "supabase db reset",
+    "inggest:dev" : "npx inngest-cli@latest dev"
   },
   "dependencies": {
     "@baselime/node-opentelemetry": "^0.4.0",
@@ -31,6 +32,7 @@
     "cheerio": "1.0.0-rc.12",
     "clsx": "^2.1.0",
     "date-fns": "3.6.0",
+    "inngest": "^3.16.1",
     "jotai": "2.8.0",
     "next": "14.1.4",
     "prop-types": "15.8.1",

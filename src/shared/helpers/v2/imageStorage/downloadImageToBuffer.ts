@@ -11,7 +11,7 @@ export async function downloadImageToBuffer(url: string) {
     }
   } catch (e) {
     // eslint-disable-next-line
-    console.error(`[downloadImageToBuffer] ${url}`)
+    console.error(`error [downloadImageToBuffer] ${url}`)
     throw e
   }
 }
