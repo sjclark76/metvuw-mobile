@@ -53,3 +53,8 @@ supabase db diff -f MIGRATION_NAME
 deploy latest tests
 `npx checkly deploy`
 
+
+# Inngest
+
+run dev server
+`npx inngest-cli@latest dev`
