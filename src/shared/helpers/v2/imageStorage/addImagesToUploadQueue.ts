@@ -12,7 +12,7 @@ export async function addImagesToUploadQueue(
     bucket_id: config.supbabaseBucketName,
     chart_type: chartType,
     full_storage_path: img.fullStoragePath,
-    original_image_url: img.originalImageURL.href,
+    original_image_url: img.originalImageURL,
     small_image_storagePath: img.smallImageStoragePath,
     trigger_key: triggerKey,
   }))

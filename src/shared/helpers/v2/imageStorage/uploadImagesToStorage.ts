@@ -32,7 +32,7 @@ export async function uploadImagesToStorage(
   return Promise.all(
     imagesToUpload.map(
       async ({ originalImageURL, fullStoragePath, smallImageStoragePath }) => {
-        const image = await downloadImageToBuffer(originalImageURL.href)
+        const image = await downloadImageToBuffer(originalImageURL)
 
         const imageToUpload = transformer
           ? await transformer(image.fileBuffer)

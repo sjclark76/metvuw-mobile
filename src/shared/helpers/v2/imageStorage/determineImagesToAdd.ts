@@ -8,7 +8,7 @@ function isMatch(existing: StorageImage, newImage: ScrapedImage) {
 export const calculateImagesToDownload = (
   newImages: ScrapedImage[],
   existingImages: StorageImage[],
-) =>
+): ScrapedImage[] =>
   newImages.filter(
     (newImage) =>
       !existingImages.some((existing) => isMatch(existing, newImage)),
@@ -17,7 +17,7 @@ export const calculateImagesToDownload = (
 export const calculateImagesToRemove = (
   newImages: ScrapedImage[],
   existingImages: StorageImage[],
-) =>
+): StorageImage[] =>
   existingImages.filter(
     (existing) => !newImages.some((newImage) => isMatch(existing, newImage)),
   )

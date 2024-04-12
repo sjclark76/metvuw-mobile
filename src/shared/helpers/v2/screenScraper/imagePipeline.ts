@@ -29,7 +29,7 @@ export function imagePipeline(
     )
 
     return {
-      originalImageURL,
+      originalImageURL: originalImageURL.href,
       originalFileName,
       imageFileName: newFileName,
       ...fullStoragePathGenerator(originalFileName, newFileName),
