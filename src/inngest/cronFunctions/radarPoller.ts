@@ -1,9 +1,6 @@
 import { config } from '@/config'
 import { inngest } from '@/inngest/client'
-import {
-  defaultPollerTime,
-  everyHalfHour,
-} from '@/inngest/cronFunctions/pollingCronSchedule'
+import { defaultPollerTime } from '@/inngest/cronFunctions/pollingCronSchedule'
 import {
   calculateImagesToDownload,
   calculateImagesToRemove,
