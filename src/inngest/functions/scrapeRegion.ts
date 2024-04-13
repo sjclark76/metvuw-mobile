@@ -15,32 +15,15 @@ export const scrapeRegion = inngest.createFunction(
   async ({ event, step }) => {
     const { bucket, region } = event.data
 
-    const newImages = await step.run(
-      `scraping rain images for ${region.name}`,
-      async () => {
-        return await scrapeRainImages(region)
-      },
+    const newImages = await scrapeRainImages(region)
+
+    const existingImages = await retrieveImagesFromStorage(
+      `images/rain/${region.code}`,
     )
 
-    const existingImages = await step.run(
-      'retrieving existing images',
-      async () => {
-        return await retrieveImagesFromStorage(`images/rain/${region.code}`)
-      },
-    )
+    const toRemove = calculateImagesToRemove(newImages, existingImages)
 
-    const toRemove = await step.run(
-      'calculating images to remove',
-      async () => {
-        // @ts-ignore
-        return calculateImagesToRemove(newImages, existingImages)
-      },
-    )
-
-    const toDownload = await step.run('calculating images to upload', () => {
-      // @ts-ignore
-      return calculateImagesToDownload(newImages, existingImages)
-    })
+    const toDownload = calculateImagesToDownload(newImages, existingImages)
 
     if (toRemove.length > 0) {
       await step.sendEvent('dispatch-remove-images-event', {
