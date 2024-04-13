@@ -2,7 +2,10 @@ import { inngest } from '@/inngest/client'
 import serviceRoleDb from '@/shared/db/serviceRoleDb'
 
 export const removeImages = inngest.createFunction(
-  { id: 'remove-images', concurrency: { scope: 'account', limit: 20 } },
+  {
+    id: 'remove-images',
+    concurrency: { scope: 'account', limit: 10, key: 'metvuw' },
+  },
   { event: 'images/remove' },
   async ({ event }) => {
     const { bucket, toRemove } = event.data

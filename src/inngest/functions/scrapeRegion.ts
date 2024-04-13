@@ -7,7 +7,10 @@ import {
 import { scrapeRainImages } from '@/shared/helpers/v2/screenScraper'
 
 export const scrapeRegion = inngest.createFunction(
-  { id: 'scrape-region', concurrency: { scope: 'account', limit: 20 } },
+  {
+    id: 'scrape-region',
+    concurrency: { scope: 'account', limit: 10, key: 'metvuw' },
+  },
   { event: 'scrape/region' },
   async ({ event, step }) => {
     const { bucket, region } = event.data
