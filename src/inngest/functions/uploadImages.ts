@@ -6,7 +6,7 @@ import {
 } from '@/shared/helpers/v2/imageStorage'
 
 export const uploadImages = inngest.createFunction(
-  { id: 'upload-images' },
+  { id: 'upload-images', concurrency: { scope: 'account', limit: 20 } },
   { event: 'images/upload' },
   async ({ event }) => {
     const { bucket, chartType, toUpload: images } = event.data
