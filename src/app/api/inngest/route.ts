@@ -7,7 +7,7 @@ import { satellitePoller } from '@/inngest/cronFunctions/satellitePoller'
 import { upperAirPoller } from '@/inngest/cronFunctions/upperAirPoller'
 import { removeImages } from '@/inngest/functions/removeImages'
 import { scrapeRegion } from '@/inngest/functions/scrapeRegion'
-import { uploadImages } from '@/inngest/functions/uploadImages'
+import { uploadImageFunc, uploadImages } from '@/inngest/functions/uploadImages'
 
 // Create an API that serves zero functions
 export const { GET, POST, PUT } = serve({
@@ -18,6 +18,7 @@ export const { GET, POST, PUT } = serve({
     satellitePoller,
     upperAirPoller,
     removeImages,
+    uploadImageFunc,
     uploadImages,
     scrapeRegion,
   ],

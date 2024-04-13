@@ -1,4 +1,4 @@
-import { inngest } from '@/inngest/client'
+import { Events, inngest } from '@/inngest/client'
 import {
   calculateImagesToDownload,
   calculateImagesToRemove,
@@ -37,7 +37,7 @@ export const scrapeRegion = inngest.createFunction(
       },
     )
 
-    const toDownload = await step.run('calculating images to upload', () => {
+    const toUpload = await step.run('calculating images to upload', () => {
       // @ts-ignore
       return calculateImagesToDownload(newImages, existingImages)
     })
@@ -52,20 +52,23 @@ export const scrapeRegion = inngest.createFunction(
       })
     }
 
-    if (toDownload.length > 0) {
-      await step.sendEvent('dispatch-upload-images-event', {
-        name: 'images/upload',
+    if (toUpload.length > 0) {
+      const events = toUpload.map<Events['image/upload']>((toUpload) => ({
+        name: 'image/upload',
         data: {
-          bucket: bucket,
+          bucket,
           chartType: 'Rain',
-          toUpload: toDownload,
+          toUpload,
         },
-      })
+      }))
+
+      // @ts-ignore
+      await step.sendEvent('upload-image', events)
     }
 
     return {
       toRemove,
-      toDownload,
+      toUpload,
     }
   },
 )

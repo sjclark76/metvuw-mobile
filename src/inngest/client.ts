@@ -12,11 +12,19 @@ type ImageRemoval = {
     toRemove: StorageImage[]
   }
 }
-type ImageUpload = {
+type ImagesUpload = {
   data: {
     bucket: string
     chartType: ChartType
     toUpload: ScrapedImage[]
+  }
+}
+
+type ImageUpload = {
+  data: {
+    bucket: string
+    chartType: ChartType
+    toUpload: ScrapedImage
   }
 }
 
@@ -29,7 +37,8 @@ export type RegionScrape = {
 
 export type Events = {
   'images/remove': ImageRemoval
-  'images/upload': ImageUpload
+  'images/upload': ImagesUpload
+  'image/upload': ImageUpload
   'scrape/region': RegionScrape
 }
 

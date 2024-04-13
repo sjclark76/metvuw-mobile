@@ -39,3 +39,31 @@ export const uploadImages = inngest.createFunction(
     return { event }
   },
 )
+
+export const uploadImageFunc = inngest.createFunction(
+  {
+    id: 'upload-image',
+    concurrency: { scope: 'account', limit: 10, key: 'metvuw' },
+  },
+  { event: 'image/upload' },
+  async ({ event }) => {
+    const { bucket, chartType, toUpload } = event.data
+    const { originalImageURL, smallImageStoragePath, fullStoragePath } =
+      toUpload
+
+    const image = await downloadImageToBuffer(originalImageURL)
+
+    const { primary, small } = getCompressorForChart(chartType)
+
+    const imageToUpload = await primary(image.fileBuffer)
+
+    await uploadImage(bucket, fullStoragePath, imageToUpload)
+
+    if (small && smallImageStoragePath) {
+      const smallImage = await small(image.fileBuffer)
+      await uploadImage(bucket, smallImageStoragePath, smallImage)
+    }
+
+    return { event }
+  },
+)
