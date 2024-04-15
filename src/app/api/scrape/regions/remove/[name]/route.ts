@@ -2,11 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { config } from '@/config'
 import {
-  calculateImagesToDownload,
   calculateImagesToRemove,
   retrieveImagesFromStorage,
 } from '@/shared/helpers/v2/imageStorage'
-import { downloadAndUpload } from '@/shared/helpers/v2/imageStorage/downloadAndUpload'
 import { removeImagesFromStorage } from '@/shared/helpers/v2/imageStorage/removeImagesFromStorage'
 import { scrapeRainImages } from '@/shared/helpers/v2/screenScraper'
 import { findRegionByCode } from '@/shared/types/region'
@@ -33,20 +31,9 @@ export async function POST(
 
   await removeImagesFromStorage(config.supbabaseBucketName, toRemove)
 
-  const toDownload = calculateImagesToDownload(newImages, existingImages)
-
-  await Promise.all(
-    toDownload.map(async (image) =>
-      downloadAndUpload(config.supbabaseBucketName, 'Rain', image),
-    ),
-  )
-
   return NextResponse.json({
     ok: true,
-    toAdd: toDownload.map((img) => ({
-      fullStoragePath: img.fullStoragePath,
-      imageFileName: img.imageFileName,
-    })),
+
     toRemove: toRemove,
   })
 }
