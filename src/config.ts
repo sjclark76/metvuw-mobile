@@ -14,4 +14,5 @@ export const config = {
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
   supbabaseBucketName: process.env.SUPABASE_BUCKET_NAME ?? '',
   inngestEventKey: process.env.INNGEST_EVENT_KEY ?? '',
+  environment: process.env.VERCEL_ENV,
 }
