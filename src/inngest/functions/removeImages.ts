@@ -1,5 +1,5 @@
 import { inngest } from '@/inngest/client'
-import serviceRoleDb from '@/shared/db/serviceRoleDb'
+import { removeImagesFromStorage } from '@/shared/helpers/v2/imageStorage/removeImagesFromStorage'
 
 export const removeImages = inngest.createFunction(
   {
@@ -13,12 +13,9 @@ export const removeImages = inngest.createFunction(
     if (toRemove.length === 0) {
       return { event, message: 'skipping' }
     }
-    const imagePaths = toRemove.map((img) => img.fullStoragePath)
 
-    const { error, data } = await serviceRoleDb.storage
-      .from(bucket)
-      .remove(imagePaths)
+    const result = await removeImagesFromStorage(bucket, toRemove)
 
-    return { event, error, data }
+    return { event, ...result }
   },
 )
