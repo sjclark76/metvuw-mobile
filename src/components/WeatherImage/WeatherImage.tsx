@@ -1,5 +1,3 @@
-import 'react-lazy-load-image-component/src/effects/black-and-white.css'
-
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 import {
@@ -57,9 +55,7 @@ const WeatherImage = ({
         <LazyLoadImage
           alt={imageAlt}
           src={imageSrc} // use normal <img> attributes as props
-          effect="black-and-white"
-          threshold={1000}
-          // placeholderSrc="http://127.0.0.1:54321/storage/v1/object/public/dev/images/rain/nz/rain-nz-thumb-2024041512-006.webp"
+          threshold={2000}
           {...extraImageAttribute(chartType, imageSrc)}
         />
       ) : (
