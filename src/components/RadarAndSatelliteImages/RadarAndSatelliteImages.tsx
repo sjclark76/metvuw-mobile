@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use client'
 import { format } from 'date-fns'
 
@@ -19,6 +20,15 @@ export function RadarAndSatelliteImages({ images, chartType }: Props) {
     )}`
   }
 
+  const safeFormat = (date: number, formatString: string) => {
+    try {
+      return format(date, formatString)
+    } catch (e) {
+      console.error(
+        `error formatting date date:${date} formatString:${formatString}`,
+      )
+    }
+  }
   return (
     <ul className="flex flex-col items-center">
       {images.map((image, index) => (
@@ -34,12 +44,12 @@ export function RadarAndSatelliteImages({ images, chartType }: Props) {
           }
           date={
             <span className="text-base font-semibold text-gray-700">
-              {format(image.imageDateUTC, 'PPPP')}
+              {safeFormat(image.imageDateUTC, 'PPPP')}
             </span>
           }
           time={
             <span className="w-20 transform rounded bg-gray-900 px-2 py-1 text-center text-xs font-semibold uppercase text-white transition-colors duration-200 hover:bg-gray-200 focus:bg-gray-400 focus:outline-none">
-              {format(image.imageDateUTC, 'hh:mm a')}
+              {safeFormat(image.imageDateUTC, 'hh:mm a')}
             </span>
           }
         />
