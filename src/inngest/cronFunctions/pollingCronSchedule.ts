@@ -1,6 +1,6 @@
 export const everyHalfHour = { cron: '*/30 * * * *' }
 export const everyTwoHours = { cron: '0 */2 * * *' }
 
-export const everyTwelveHours = { cron: '0 */12 * * *' }
+export const everyEightHours = { cron: '0 */8 * * *' }
 
-export const defaultPollerTime = everyTwelveHours
+export const defaultPollerTime = everyEightHours
