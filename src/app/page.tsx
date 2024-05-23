@@ -6,6 +6,8 @@ import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructR
 import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import { findRegionByCode } from '@/shared/types/region'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Page() {
   const matchedRegion = findRegionByCode('nz')
   if (!matchedRegion) {
