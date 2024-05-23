@@ -28,7 +28,7 @@
     "@types/cheerio": "0.22.35",
     "@types/react-lazyload": "3.2.3",
     "@vercel/analytics": "1.2.2",
-    "axios": "1.6.8",
+    "axios": "1.7.2",
     "cheerio": "1.0.0-rc.12",
     "clsx": "^2.1.0",
     "date-fns": "3.6.0",
