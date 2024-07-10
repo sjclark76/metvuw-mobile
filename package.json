@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@baselime/node-opentelemetry": "0.5.8",
-    "@heroicons/react": "2.1.4",
+    "@heroicons/react": "2.1.5",
     "@supabase/supabase-js": "^2.40.0",
     "@types/cheerio": "0.22.35",
     "@types/react-lazyload": "3.2.3",
