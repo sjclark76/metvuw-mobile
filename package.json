@@ -42,7 +42,7 @@
     "sharp": "^0.33.3"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.9.1",
+    "@axe-core/playwright": "4.10.0",
     "@playwright/test": "1.46.1",
     "@testing-library/jest-dom": "6.4.8",
     "@testing-library/react": "16.0.0",
