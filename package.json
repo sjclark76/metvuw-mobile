@@ -47,7 +47,7 @@
     "@testing-library/jest-dom": "6.5.0",
     "@testing-library/react": "16.0.1",
     "@types/jest": "29.5.13",
-    "@types/node": "20.16.7",
+    "@types/node": "20.16.9",
     "@types/react": "18.3.9",
     "@types/react-lazy-load-image-component": "1.6.4",
     "autoprefixer": "10.4.20",
