@@ -18,7 +18,10 @@ export const generateMetadata = async (): Promise<Metadata> =>
     url: new URL('radar', config.baseUrl).href,
   })
 
-export default async function Page({ params }: { params: { code: string } }) {
+export default async function Page(props: {
+  params: Promise<{ code: string }>
+}) {
+  const params = await props.params
   if (!isRadarCode(params.code)) {
     return notFound()
   }
