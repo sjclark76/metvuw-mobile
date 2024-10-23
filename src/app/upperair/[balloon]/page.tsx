@@ -18,11 +18,10 @@ export const generateMetadata = async (): Promise<Metadata> =>
     url: new URL('upperair', config.baseUrl).href,
   })
 
-export default async function Page({
-  params,
-}: {
-  params: { balloon: string }
+export default async function Page(props: {
+  params: Promise<{ balloon: string }>
 }) {
+  const params = await props.params
   if (!isBalloonLocationCode(params.balloon)) {
     // Redirect to a 404 page if the region is not found
     return notFound()
