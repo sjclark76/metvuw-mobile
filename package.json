@@ -46,7 +46,7 @@
     "@playwright/test": "1.48.1",
     "@testing-library/jest-dom": "6.6.2",
     "@testing-library/react": "16.0.1",
-    "@types/jest": "29.5.13",
+    "@types/jest": "29.5.14",
     "@types/node": "20.16.14",
     "@types/react": "18.3.11",
     "@types/react-lazy-load-image-component": "1.6.4",
