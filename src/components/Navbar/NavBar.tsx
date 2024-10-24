@@ -52,10 +52,10 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="flex flex-wrap items-center bg-gradient-to-r from-blue-300  to-blue-600 p-2 ">
-      <Link href="/" className="mr-4 inline-flex items-center p-2 ">
+    <nav className="flex flex-wrap items-center bg-gradient-to-r from-blue-300 to-blue-600 p-2">
+      <Link href="/" className="mr-4 inline-flex items-center p-2">
         <MetvuwMobileImage />
-        <span className="pl-2 text-xl font-bold uppercase tracking-wide text-white ">
+        <span className="pl-2 text-xl font-bold uppercase tracking-wide text-white">
           Metvuw Mobile
         </span>
       </Link>
@@ -69,9 +69,9 @@ const Navbar = () => {
       <div
         className={`${
           menuOpen ? '' : 'hidden'
-        }   w-full 2xl:inline-flex 2xl:w-auto 2xl:flex-grow`}
+        } w-full 2xl:inline-flex 2xl:w-auto 2xl:flex-grow`}
       >
-        <div className="flex w-full flex-col items-start 2xl:ml-auto 2xl:inline-flex 2xl:h-auto  2xl:w-auto 2xl:flex-row 2xl:items-center">
+        <div className="flex w-full flex-col items-start 2xl:ml-auto 2xl:inline-flex 2xl:h-auto 2xl:w-auto 2xl:flex-row 2xl:items-center">
           <DropDown heading="New Zealand" links={nzLinks} />
           <DropDown heading="Australia" links={australiaLinks} />
           <DropDown heading="Pacific" links={pacificLinks} />
