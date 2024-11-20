@@ -27,7 +27,7 @@
     "@supabase/supabase-js": "^2.40.0",
     "@types/cheerio": "0.22.35",
     "@types/react-lazyload": "3.2.3",
-    "@vercel/analytics": "1.4.0",
+    "@vercel/analytics": "1.4.1",
     "axios": "1.7.7",
     "cheerio": "1.0.0",
     "clsx": "^2.1.0",
