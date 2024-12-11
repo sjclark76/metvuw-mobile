@@ -48,7 +48,7 @@
     "@testing-library/react": "16.1.0",
     "@types/jest": "29.5.14",
     "@types/node": "20.17.9",
-    "@types/react": "18.3.14",
+    "@types/react": "18.3.15",
     "@types/react-lazy-load-image-component": "1.6.4",
     "autoprefixer": "10.4.20",
     "babel-jest": "29.7.0",
