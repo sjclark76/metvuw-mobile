@@ -4,8 +4,15 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 import { favouritePageAtom } from '@/components/Navbar/state/favouritePageAtom'
+import RegionPage from '@/components/RegionPage/region-page'
+import { SkinnyRainChartData } from '@/shared/types/rainChartData'
+import { Region } from '@/shared/types/region'
 
-export function HomePage() {
+interface Props {
+  region: Region
+  rainChartData: SkinnyRainChartData[]
+}
+export function HomePage(props: Props) {
   const favouritePage = useAtomValue(favouritePageAtom)
   const pathname = usePathname()
   const router = useRouter()
@@ -13,11 +20,11 @@ export function HomePage() {
     if (pathname === '/') {
       if (favouritePage !== undefined) {
         router.push(favouritePage)
-      } else {
-        router.push('/regions/nz')
       }
     }
   }, [pathname, favouritePage, router])
 
-  return null
+  return (
+    <RegionPage region={props.region} rainChartData={props.rainChartData} />
+  )
 }

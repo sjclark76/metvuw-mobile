@@ -58,3 +58,7 @@ deploy latest tests
 
 run dev server
 `npx inngest-cli@latest dev`
+
+# Docker
+colima start                                                                                          
+
