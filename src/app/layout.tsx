@@ -1,10 +1,11 @@
 'use client'
 import './globals.css'
 
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Provider } from 'jotai'
 import { Inter } from 'next/font/google'
 import React from 'react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
+
 import Footer from '@/components/Footer'
 import GoogleTag from '@/components/GoogleTag'
 import { config } from '@/config'
