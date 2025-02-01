@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react'
 import Favourite from '@/components/Favourite'
 import { MenuLink } from '@/components/Navbar/types'
 
-import styles from '../NavBar.module.css'
 interface DropDownProps {
   heading: string
   links: MenuLink[]
@@ -67,10 +66,13 @@ const DropDown = (props: DropDownProps) => {
       }
     }
   }
+  const headerText =
+    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-blue-600 focus:bg-blue-700'
+
   return (
     <div className="relative inline-flex" id="dropdown">
       <button
-        className={`${styles.headerText}`}
+        className={headerText}
         onClick={() => setIsOpen((prevState) => !prevState)}
         aria-expanded={isOpen}
       >
@@ -110,7 +112,7 @@ const DropDown = (props: DropDownProps) => {
                 index === currentItem
                   ? 'bg-emerald-50 text-blue-500'
                   : 'bg-none text-slate-500'
-              } flex items-start justify-between gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-none focus-visible:outline-none`}
+              } flex items-start justify-between gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-hidden focus-visible:outline-hidden`}
             >
               <a
                 href={item.href}

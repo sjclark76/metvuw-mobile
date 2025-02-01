@@ -18,7 +18,6 @@ import {
 } from '@/shared/types/region'
 
 import DropDown from './components/DropDown'
-import styles from './NavBar.module.css'
 import { MenuLink } from './types'
 
 export const mapRegionToMenuLink = (regions: Region[]): MenuLink[] =>
@@ -51,17 +50,19 @@ const Navbar = () => {
     setMenuOpen((prev) => !prev)
   }
 
+  const headerText =
+    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-blue-600 focus:bg-blue-700'
   return (
-    <nav className="flex flex-wrap items-center bg-gradient-to-r from-blue-300 to-blue-600 p-2">
+    <nav className="flex flex-wrap items-center bg-linear-to-r from-blue-300 to-blue-600 p-2">
       <Link href="/" className="mr-4 inline-flex items-center p-2">
         <MetvuwMobileImage />
-        <span className="pl-2 text-xl font-bold uppercase tracking-wide text-white">
+        <span className="pl-2 text-xl font-bold tracking-wide text-white uppercase">
           Metvuw Mobile
         </span>
       </Link>
       <button
         aria-label="Open Menu"
-        className="ml-auto inline-flex rounded p-3 text-white outline-none hover:bg-blue-600 hover:text-white 2xl:hidden"
+        className="ml-auto inline-flex rounded-xs p-3 text-white outline-hidden hover:bg-blue-600 hover:text-white 2xl:hidden"
         onClick={handleClick}
       >
         <HamburgerSvg />
@@ -69,7 +70,7 @@ const Navbar = () => {
       <div
         className={`${
           menuOpen ? '' : 'hidden'
-        } w-full 2xl:inline-flex 2xl:w-auto 2xl:flex-grow`}
+        } w-full 2xl:inline-flex 2xl:w-auto 2xl:grow`}
       >
         <div className="flex w-full flex-col items-start 2xl:ml-auto 2xl:inline-flex 2xl:h-auto 2xl:w-auto 2xl:flex-row 2xl:items-center">
           <DropDown heading="New Zealand" links={nzLinks} />
@@ -78,7 +79,7 @@ const Navbar = () => {
           <DropDown heading="Europe" links={europeLinks} />
           <DropDown heading="Rest Of World" links={worldLinks} />
           <DropDown heading="Oceans" links={oceanLinks} />
-          <div className={styles.headerText}>
+          <div className={headerText}>
             <Link
               href="/satellite"
               className="mr-1"
@@ -89,7 +90,7 @@ const Navbar = () => {
           </div>
           <DropDown heading="Radar" links={radarLinks} />
           <DropDown heading="Upper Air" links={balloonLinks} />
-          <div className={styles.headerText}>
+          <div className={headerText}>
             <a className="mr-1" href="mailto:metvuwmobile@gmail.com">
               Contact
             </a>
