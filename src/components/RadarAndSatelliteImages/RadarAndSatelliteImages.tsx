@@ -23,7 +23,7 @@ export function RadarAndSatelliteImages({ images, chartType }: Props) {
   const safeFormat = (date: number, formatString: string) => {
     try {
       return format(date, formatString)
-    } catch (e) {
+    } catch {
       console.error(
         `error formatting date date:${date} formatString:${formatString}`,
       )
