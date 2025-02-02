@@ -11,8 +11,9 @@ import { findRegionByCode } from '@/shared/types/region'
 
 export async function POST(
   _request: NextRequest,
-  { params }: { params: { name: string } },
+  props: { params: Promise<{ name: string }> },
 ) {
+  const params = await props.params
   const regionCode = params.name ?? 'nz'
 
   const region = findRegionByCode(regionCode)
