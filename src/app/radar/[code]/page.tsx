@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import NoForecast from '@/components/NoForecast'
@@ -7,7 +8,6 @@ import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import { isRadarCode } from '@/shared/types/radarRegions'
-import type { Metadata } from 'next'
 
 type Props = {
   params: Promise<{ code: string }>
