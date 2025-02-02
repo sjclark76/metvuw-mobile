@@ -1,4 +1,3 @@
-import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import NoForecast from '@/components/NoForecast'
@@ -8,16 +7,23 @@ import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import { isRadarCode } from '@/shared/types/radarRegions'
+import type { Metadata } from 'next'
 
+type Props = {
+  params: Promise<{ code: string }>
+}
 export const dynamic = 'force-dynamic'
 
-export const generateMetadata = async (): Promise<Metadata> =>
-  generateSEOMetadata({
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // read route params
+  const code = (await params).code
+
+  return generateSEOMetadata({
     title: `metvuw mobile | Radar`,
     description: `Radar charts. Optimized for mobile devices. Sourced from metvuw.com`,
-    url: new URL('radar', config.baseUrl).href,
+    url: new URL(`radar/${code}`, config.baseUrl).href,
   })
-
+}
 export default async function Page(props: {
   params: Promise<{ code: string }>
 }) {
