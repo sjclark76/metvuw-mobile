@@ -5,7 +5,7 @@ export function WeatherChartSkeleton(props: { width: number; height: number }) {
     <Card
       isLoading={true}
       weatherImage={
-        <div className="flex h-full w-full items-center justify-center rounded bg-gray-300 dark:bg-gray-700">
+        <div className="flex h-full w-full items-center justify-center rounded-xs bg-gray-300 dark:bg-gray-700">
           <div
             style={{ width: props.width, height: props.height }}
             className="flex items-center justify-center"

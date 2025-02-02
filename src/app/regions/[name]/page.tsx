@@ -10,7 +10,8 @@ import { findRegionByCode } from '@/shared/types/region'
 
 export const dynamic = 'force-dynamic'
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params
   // read route params
   const regionName = params.name
   return generateSEOMetadata({
@@ -21,10 +22,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 interface Props {
-  params: { name: string }
+  params: Promise<{ name: string }>
 }
 
-export default async function Region({ params }: Props) {
+export default async function Region(props: Props) {
+  const params = await props.params
   const matchedRegion = findRegionByCode(params.name)
 
   if (!matchedRegion) {
