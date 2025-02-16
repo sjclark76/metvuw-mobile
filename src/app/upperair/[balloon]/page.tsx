@@ -23,7 +23,6 @@ export default async function Page(props: {
 }) {
   const params = await props.params
 
-  console.log({ ballon: params.balloon })
   if (
     params.balloon !== null &&
     params.balloon !== undefined &&
