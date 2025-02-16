@@ -51,6 +51,7 @@ const nextConfig = {
   },
   poweredByHeader: false,
   images: {
+    unoptimized: true,
     domains: ['www.metvuw.com'],
   },
 }
