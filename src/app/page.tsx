@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import HomePage from '@/components/HomePage'
 import NoForecast from '@/components/NoForecast'
+import RegionPage from '@/components/RegionPage/region-page'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructRainChartData'
 import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
@@ -42,5 +42,5 @@ export default async function Page() {
     )
   })
 
-  return <HomePage region={matchedRegion} rainChartData={sortedCharts} />
+  return <RegionPage region={matchedRegion} rainChartData={sortedCharts} />
 }
