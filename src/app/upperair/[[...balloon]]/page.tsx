@@ -9,17 +9,20 @@ import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import { getsBalloonLocationCodeOrDefault } from '@/shared/types/balloonLocations'
 
 export const dynamic = 'force-dynamic'
-type Props = { balloon?: string[] }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params
   return generateSEOMetadata({
     title: `metvuw mobile | Upper Air Data`,
     description: `Upper Air Data Optimized for mobile devices. Sourced from metvuw.com`,
-    url: `upperair/${props.balloon?.at(0) ?? ''}`,
+    url: `upperair/${params.balloon?.at(0) ?? ''}`,
   })
 }
+interface Props {
+  params: Promise<{ balloon?: string[] }>
+}
 
-export default async function Page(props: { params: Promise<Props> }) {
+export default async function Page(props: Props) {
   const params = await props.params
 
   const balloonLocationCode = getsBalloonLocationCodeOrDefault(

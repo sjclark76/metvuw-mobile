@@ -3,11 +3,11 @@ import { notFound } from 'next/navigation'
 
 import NoForecast from '@/components/NoForecast'
 import RegionPage from '@/components/RegionPage/region-page'
+import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructRainChartData'
 import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import { findRegionByCode } from '@/shared/types/region'
-import { config } from '@/config'
 
 export const dynamic = 'force-dynamic'
 
