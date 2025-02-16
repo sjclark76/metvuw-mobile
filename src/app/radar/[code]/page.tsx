@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 
 import NoForecast from '@/components/NoForecast'
 import { RadarPage } from '@/components/RadarPage'
-import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
@@ -21,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return generateSEOMetadata({
     title: `metvuw mobile | Radar`,
     description: `Radar charts. Optimized for mobile devices. Sourced from metvuw.com`,
-    url: new URL(`radar/${code}`, config.baseUrl).href,
+    url: `radar/${code}`,
   })
 }
 export default async function Page(props: {

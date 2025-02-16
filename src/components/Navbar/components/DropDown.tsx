@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 
-import Favourite from '@/components/Favourite'
 import { MenuLink } from '@/components/Navbar/types'
 
 interface DropDownProps {
@@ -122,7 +121,6 @@ const DropDown = (props: DropDownProps) => {
                   <span className="truncate leading-5">{item.value}</span>
                 </span>
               </a>
-              <Favourite menuLink={item} />
             </li>
           )
         })}
