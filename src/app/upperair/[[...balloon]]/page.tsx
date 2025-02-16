@@ -3,24 +3,23 @@ import { notFound } from 'next/navigation'
 
 import NoForecast from '@/components/NoForecast'
 import { UpperAirPage } from '@/components/UpperAirPage'
-import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import { getsBalloonLocationCodeOrDefault } from '@/shared/types/balloonLocations'
 
 export const dynamic = 'force-dynamic'
+type Props = { balloon?: string[] }
 
-export const generateMetadata = async (): Promise<Metadata> =>
-  generateSEOMetadata({
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  return generateSEOMetadata({
     title: `metvuw mobile | Upper Air Data`,
     description: `Upper Air Data Optimized for mobile devices. Sourced from metvuw.com`,
-    url: new URL('upperair', config.baseUrl).href,
+    url: `upperair/${props.balloon?.at(0) ?? ''}`,
   })
+}
 
-export default async function Page(props: {
-  params: Promise<{ balloon?: string[] }>
-}) {
+export default async function Page(props: { params: Promise<Props> }) {
   const params = await props.params
 
   const balloonLocationCode = getsBalloonLocationCodeOrDefault(

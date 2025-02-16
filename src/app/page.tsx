@@ -7,6 +7,7 @@ import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructRainChartData'
 import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import { findRegionByCode } from '@/shared/types/region'
+import { config } from '@/config'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return generateSEOMetadata({
     title: `metvuw mobile | ${regionName}`,
     description: `metvuw ${regionName} wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
-    url: `regions/${regionName}`,
+    url: `${config.baseUrl}`,
   })
 }
 

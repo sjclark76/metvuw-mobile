@@ -10,7 +10,7 @@ describe('calculateImagesToDownload', () => {
     const newImages: ScrapedImage[] = [
       {
         originalFileName: 'image-to-add',
-        originalImageURL: new URL('https://metvuw.com'),
+        originalImageURL: new URL('https://metvuw.com').href,
         fullStoragePath: 'satellite/image-to-add.webp',
         imageFileName: 'image-to-add.webp',
       },
@@ -31,7 +31,7 @@ describe('calculateImagesToDownload', () => {
     const newImages: ScrapedImage[] = [
       {
         originalFileName: 'existing-image',
-        originalImageURL: new URL('https://metvuw.com'),
+        originalImageURL: new URL('https://metvuw.com').href,
         fullStoragePath: 'satellite/existing-image.webp',
         imageFileName: 'existing-image.webp',
       },
@@ -54,7 +54,7 @@ describe('calculateImagesToRemove', () => {
     const newImages: ScrapedImage[] = [
       {
         originalFileName: 'image-to-add',
-        originalImageURL: new URL('https://metvuw.com'),
+        originalImageURL: new URL('https://metvuw.com').href,
         fullStoragePath: 'satellite/image-to-add.webp',
         imageFileName: 'image-to-add.webp',
       },
@@ -75,7 +75,7 @@ describe('calculateImagesToRemove', () => {
     const newImages: ScrapedImage[] = [
       {
         originalFileName: 'existing-image',
-        originalImageURL: new URL('https://metvuw.com'),
+        originalImageURL: new URL('https://metvuw.com').href,
         fullStoragePath: 'satellite/existing-image.webp',
         imageFileName: 'existing-image.webp',
       },
