@@ -7,7 +7,7 @@ import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
-import { isBalloonLocationCode } from '@/shared/types/balloonLocations'
+import { getsBalloonLocationCodeOrDefault } from '@/shared/types/balloonLocations'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,23 +19,18 @@ export const generateMetadata = async (): Promise<Metadata> =>
   })
 
 export default async function Page(props: {
-  params: Promise<{ balloon: string }>
+  params: Promise<{ balloon?: string[] }>
 }) {
   const params = await props.params
 
-  if (
-    params.balloon !== null &&
-    params.balloon !== undefined &&
-    !isBalloonLocationCode(params.balloon)
-  ) {
+  const balloonLocationCode = getsBalloonLocationCodeOrDefault(
+    params.balloon?.at(0),
+  )
+
+  if (balloonLocationCode == false) {
     // Redirect to a 404 page if the region is not found
     return notFound()
   }
-
-  const balloonLocationCode =
-    params.balloon && isBalloonLocationCode(params.balloon)
-      ? params.balloon
-      : '93112'
 
   const path = `images/upper-air/${balloonLocationCode}`
 

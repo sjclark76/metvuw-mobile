@@ -17,3 +17,13 @@ export function isBalloonLocationCode(
 ): value is BalloonLocationCode {
   return ['93112', '93417', '93844'].includes(value as BalloonLocationCode)
 }
+
+export function getsBalloonLocationCodeOrDefault(
+  balloonLocationCode?: string,
+): BalloonLocationCode | false {
+  return !balloonLocationCode
+    ? '93112'
+    : isBalloonLocationCode(balloonLocationCode)
+      ? balloonLocationCode
+      : false
+}
