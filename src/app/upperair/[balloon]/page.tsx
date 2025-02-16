@@ -22,12 +22,23 @@ export default async function Page(props: {
   params: Promise<{ balloon: string }>
 }) {
   const params = await props.params
-  if (!isBalloonLocationCode(params.balloon)) {
+
+  console.log({ ballon: params.balloon })
+  if (
+    params.balloon !== null &&
+    params.balloon !== undefined &&
+    !isBalloonLocationCode(params.balloon)
+  ) {
     // Redirect to a 404 page if the region is not found
     return notFound()
   }
 
-  const path = `images/upper-air/${params.balloon}`
+  const balloonLocationCode =
+    params.balloon && isBalloonLocationCode(params.balloon)
+      ? params.balloon
+      : '93112'
+
+  const path = `images/upper-air/${balloonLocationCode}`
 
   const existingImages = await retrieveImagesFromStorage(path)
 
@@ -37,5 +48,7 @@ export default async function Page(props: {
     return <NoForecast />
   }
 
-  return <UpperAirPage balloonCode={params.balloon} chartData={chartData} />
+  return (
+    <UpperAirPage balloonCode={balloonLocationCode} chartData={chartData} />
+  )
 }
