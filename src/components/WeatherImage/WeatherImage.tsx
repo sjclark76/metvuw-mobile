@@ -55,7 +55,7 @@ const WeatherImage = ({
         <LazyLoadImage
           alt={imageAlt}
           src={imageSrc} // use normal <img> attributes as props
-          threshold={2000}
+          threshold={200}
           {...extraImageAttribute(chartType, imageSrc)}
         />
       ) : (

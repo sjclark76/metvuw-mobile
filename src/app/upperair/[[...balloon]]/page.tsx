@@ -15,7 +15,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return generateSEOMetadata({
     title: `metvuw mobile | Upper Air Data`,
     description: `Upper Air Data Optimized for mobile devices. Sourced from metvuw.com`,
-    url: `upperair/${params.balloon?.at(0) ?? ''}`,
+    url: `upperair/${getsBalloonLocationCodeOrDefault(params.balloon?.at(0))}`,
   })
 }
 interface Props {
