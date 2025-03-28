@@ -43,12 +43,12 @@ export function RadarAndSatelliteImages({ images, chartType }: Props) {
             />
           }
           date={
-            <span className="text-base font-semibold text-gray-700">
+            <span className="text-base font-semibold text-gray-700 dark:text-stone-100">
               {safeFormat(image.imageDateUTC, 'PPPP')}
             </span>
           }
           time={
-            <span className="w-20 transform rounded-xs bg-gray-900 px-2 py-1 text-center text-xs font-semibold text-white uppercase transition-colors duration-200 hover:bg-gray-200 focus:bg-gray-400 focus:outline-hidden">
+            <span className="w-20 transform rounded-xs bg-gray-900 px-2 py-1 text-center text-xs font-semibold text-white uppercase dark:bg-stone-200 dark:text-stone-700">
               {safeFormat(image.imageDateUTC, 'hh:mm a')}
             </span>
           }
