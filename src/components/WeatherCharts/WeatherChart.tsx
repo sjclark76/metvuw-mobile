@@ -30,7 +30,7 @@ export function WeatherChart(props: Props) {
         />
       }
       date={
-        <p className="text-base font-semibold text-gray-700">
+        <p className="text-base font-semibold text-gray-700 dark:text-stone-100">
           {format(forecastDate, 'PPPP')}
         </p>
       }

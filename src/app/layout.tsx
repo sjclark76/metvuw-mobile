@@ -27,7 +27,7 @@ export default function RootLayout({
       </head>
       <GoogleTag />
       <body className={inter.className}>
-        <main className="relative">
+        <main className="relative bg-white dark:bg-stone-600 dark:text-stone-100">
           <SpeedInsights />
           <Provider>
             <div className="sticky top-0 z-20">
