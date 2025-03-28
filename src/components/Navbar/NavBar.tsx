@@ -51,10 +51,10 @@ const Navbar = () => {
   }
 
   const headerText =
-    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-blue-600 focus:bg-blue-700'
+    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-slate-600 focus:bg-slate-700'
 
   return (
-    <nav className="flex flex-wrap items-center bg-linear-to-r from-sky-400 to-sky-500 p-2">
+    <nav className="flex flex-wrap items-center bg-linear-to-b from-slate-400 to-slate-500 p-2">
       <Link href="/" className="mr-4 inline-flex items-center p-2">
         <MetvuwMobileImage />
         <span className="pl-2 text-xl font-bold tracking-wide text-white uppercase">
@@ -63,7 +63,7 @@ const Navbar = () => {
       </Link>
       <button
         aria-label="Open Menu"
-        className="ml-auto inline-flex rounded-xs p-3 text-white outline-hidden hover:bg-sky-500 hover:text-white 2xl:hidden"
+        className="ml-auto inline-flex rounded-xs p-3 text-white outline-hidden hover:bg-slate-500 hover:text-white 2xl:hidden"
         onClick={handleClick}
       >
         <HamburgerSvg />

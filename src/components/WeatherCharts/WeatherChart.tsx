@@ -35,7 +35,7 @@ export function WeatherChart(props: Props) {
         </p>
       }
       time={
-        <p className="w-20 transform rounded-sm bg-gray-900 px-1 py-1 text-center text-xs font-semibold text-white uppercase dark:bg-stone-100 dark:text-stone-700">
+        <p className="w-20 transform rounded-sm bg-gray-900 px-1 py-1 text-center text-xs font-semibold text-white uppercase dark:bg-stone-200 dark:text-stone-700">
           {format(forecastDate, 'hh:mm a')}
         </p>
       }

@@ -66,7 +66,7 @@ const DropDown = (props: DropDownProps) => {
     }
   }
   const headerText =
-    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-sky-500 focus:bg-sky-600'
+    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-slate-500 focus:bg-slate-600'
 
   return (
     <div className="relative inline-flex" id="dropdown">
