@@ -13,7 +13,7 @@ export default function Card({
   isLoading?: boolean
 }) {
   const styling = clsx(
-    'mb-5 rounded-xl bg-white py-3 dark:bg-stone-700 pt-5 drop-shadow-2xl  filter ',
+    'mb-5 rounded-xl bg-white pb-3 dark:bg-stone-700 drop-shadow-2xl ',
     // 'sm:w-4/5 xl:w-5/12 2xl:w-1/2 ',
     isLoading && 'animate-pulse',
   )
