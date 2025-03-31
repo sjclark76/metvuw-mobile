@@ -23,11 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <title>Metvuw Mobile</title>
         <link rel="preconnect" href={config.supabaseUrl} />
       </head>
       <GoogleTag />
       <body className={inter.className}>
-        <main className="relative bg-white dark:bg-stone-600 dark:text-stone-100">
+        <main className="relative max-w-screen overflow-hidden bg-white dark:bg-stone-600 dark:text-stone-100">
           <SpeedInsights />
           <Provider>
             <div className="sticky top-0 z-20">
