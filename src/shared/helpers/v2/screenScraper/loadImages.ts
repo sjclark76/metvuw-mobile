@@ -22,7 +22,7 @@ export async function loadImages(
 
   const $ = cheerio.load(rawHtml)
 
-  const images: cheerio.Cheerio = $(imageSelector)
+  const images = $(imageSelector)
 
   return images.toArray().map((image: any) => ({
     relativeUrl: image.attribs.src as string,
