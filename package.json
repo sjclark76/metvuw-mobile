@@ -41,7 +41,7 @@
     "sharp": "^0.34.0"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.10.1",
+    "@axe-core/playwright": "4.10.2",
     "@playwright/test": "1.52.0",
     "@tailwindcss/postcss": "^4.0.0",
     "@testing-library/jest-dom": "6.6.3",
