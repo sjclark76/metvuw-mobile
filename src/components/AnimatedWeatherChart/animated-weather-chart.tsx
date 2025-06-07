@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { WeatherChart } from '@/components/WeatherCharts/WeatherChart'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
+import { useAtom } from 'jotai'
+import { isWeatherChartAnimatedAtom } from '@/components/WeatherCharts/WeatherCharts'
 
 interface AnimatedWeatherChartProps {
   region: Region
@@ -14,17 +16,19 @@ const AnimatedWeatherChart = ({
   charts,
 }: AnimatedWeatherChartProps) => {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [isWeatherChartAnimated, setIsWeatherChartAnimated] = useAtom(
+    isWeatherChartAnimatedAtom,
+  )
 
   useEffect(() => {
     let interval
-    if (isPlaying) {
+    if (isWeatherChartAnimated) {
       interval = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % charts.length)
-      }, 1000)
+      }, 250)
     }
     return () => clearInterval(interval)
-  }, [isPlaying, charts.length])
+  }, [isWeatherChartAnimated, charts.length])
 
   const handleProgressChange = (e) => {
     setCurrentIndex(Number(e.target.value))
@@ -40,10 +44,10 @@ const AnimatedWeatherChart = ({
 
       <div className="mt-5 flex items-center px-4">
         <button
-          onClick={() => setIsPlaying(!isPlaying)}
+          onClick={() => setIsWeatherChartAnimated((prev) => !prev)}
           className="mr-4 text-black"
         >
-          {isPlaying ? (
+          {isWeatherChartAnimated ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
