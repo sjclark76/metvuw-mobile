@@ -1,6 +1,6 @@
 'use client'
 import { useAtom } from 'jotai'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 import { WeatherChart } from '@/components/WeatherCharts/WeatherChart'
 import { isWeatherChartAnimatedAtom } from '@/components/WeatherCharts/WeatherCharts'
@@ -30,7 +30,7 @@ const AnimatedWeatherChart = ({
     return () => clearInterval(interval)
   }, [isWeatherChartAnimated, charts.length])
 
-  const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProgressChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentIndex(Number(e.target.value))
   }
 

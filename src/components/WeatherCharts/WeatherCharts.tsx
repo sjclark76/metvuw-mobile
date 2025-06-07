@@ -105,7 +105,11 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
         <button
           onClick={handleMasterPlay}
           className="fixed bottom-4 left-4 z-20 transform rounded-full bg-purple-600 p-4 text-white shadow-lg transition-all hover:scale-110 hover:bg-purple-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:outline-none"
-          aria-label={displayVideo ? "Show static weather chart list" : "Show animated weather chart"}
+          aria-label={
+            displayVideo
+              ? 'Show static weather chart list'
+              : 'Show animated weather chart'
+          }
         >
           {displayVideo ? (
             // X Icon
