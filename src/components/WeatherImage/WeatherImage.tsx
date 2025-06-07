@@ -56,15 +56,9 @@ const WeatherImage = ({
           alt={imageAlt}
           src={imageSrc} // use normal <img> attributes as props
           threshold={200}
-          {...extraImageAttribute(chartType, imageSrc)}
         />
       ) : (
-        <img
-          fetchPriority="high"
-          alt={imageAlt}
-          src={imageSrc}
-          {...extraImageAttribute(chartType, imageSrc)}
-        />
+        <img fetchPriority="high" alt={imageAlt} src={imageSrc} />
       )}
     </div>
   )
