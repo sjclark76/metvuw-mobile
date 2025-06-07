@@ -18,7 +18,7 @@ module.exports = {
     'prettier/prettier': ['error'],
     'react/jsx-curly-brace-presence': 'warn',
     'simple-import-sort/exports': 'error',
-
+    'no-unused-vars': 'warn',
     'simple-import-sort/imports': 'error',
     // 'sort-keys': [
     //   'error',

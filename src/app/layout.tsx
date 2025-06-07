@@ -6,7 +6,6 @@ import { Provider } from 'jotai'
 import { Inter } from 'next/font/google'
 import React from 'react'
 
-import Footer from '@/components/Footer'
 import GoogleTag from '@/components/GoogleTag'
 import { config } from '@/config'
 
@@ -21,24 +20,24 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-gray-100">
       <head>
         <title>Metvuw Mobile</title>
         <link rel="preconnect" href={config.supabaseUrl} />
       </head>
       <GoogleTag />
       <body className={inter.className}>
-        <main className="relative max-w-screen overflow-hidden bg-white dark:bg-stone-600 dark:text-stone-100">
+        <div className="font-sans text-gray-800">
           <SpeedInsights />
           <Provider>
-            <div className="sticky top-0 z-20">
+            <header className="sticky top-0 z-30 bg-white shadow-md">
               <Navbar />
-            </div>
-
-            {children}
-            <Footer />
+            </header>
+            <main className="mx-auto dark:bg-stone-600 dark:text-stone-100">
+              {children}
+            </main>
           </Provider>
-        </main>
+        </div>
       </body>
     </html>
   )
