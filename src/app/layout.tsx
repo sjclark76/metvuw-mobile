@@ -4,12 +4,12 @@ import './globals.css'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Provider } from 'jotai'
 import { Inter } from 'next/font/google'
+import React from 'react'
 
 import GoogleTag from '@/components/GoogleTag'
 import { config } from '@/config'
 
 import Navbar from '../components/Navbar'
-import React from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 export default function RootLayout({

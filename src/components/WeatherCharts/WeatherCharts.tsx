@@ -1,12 +1,13 @@
 'use client'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { atom, useSetAtom } from 'jotai'
+import { useCallback, useState } from 'react'
 
 import { AnimatedWeatherChart } from '@/components/AnimatedWeatherChart/animated-weather-chart'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
+
 import { WeatherChart } from './WeatherChart'
-import { useCallback, useState } from 'react'
 
 interface WeatherChartsProps {
   region: Region

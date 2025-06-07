@@ -1,11 +1,11 @@
 'use client'
+import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 
 import { WeatherChart } from '@/components/WeatherCharts/WeatherChart'
+import { isWeatherChartAnimatedAtom } from '@/components/WeatherCharts/WeatherCharts'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
-import { useAtom } from 'jotai'
-import { isWeatherChartAnimatedAtom } from '@/components/WeatherCharts/WeatherCharts'
 
 interface AnimatedWeatherChartProps {
   region: Region
