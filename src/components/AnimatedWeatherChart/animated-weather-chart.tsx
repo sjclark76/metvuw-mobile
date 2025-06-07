@@ -30,7 +30,7 @@ const AnimatedWeatherChart = ({
     return () => clearInterval(interval)
   }, [isWeatherChartAnimated, charts.length])
 
-  const handleProgressChange = (e) => {
+  const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentIndex(Number(e.target.value))
   }
 
