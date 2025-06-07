@@ -30,7 +30,7 @@ export default function RootLayout({
         <div className="font-sans text-gray-800">
           <SpeedInsights />
           <Provider>
-            <header className="sticky top-0 z-10 bg-white shadow-md">
+            <header className="sticky top-0 z-30 bg-white shadow-md">
               <Navbar />
             </header>
             <main className="mx-auto dark:bg-stone-600 dark:text-stone-100">
