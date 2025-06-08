@@ -3,6 +3,7 @@
 exports[`Weather Image it should render correctly 1`] = `
 <div>
   <div
+    class="w-full"
     data-testid="weather-image"
   >
     <img
@@ -10,7 +11,7 @@ exports[`Weather Image it should render correctly 1`] = `
       fetchpriority="high"
       height="396"
       src="baa"
-      style="max-width: 100%; height: auto;"
+      style="display: block; width: 100%; max-width: 100%; height: auto;"
       width="565"
     />
   </div>

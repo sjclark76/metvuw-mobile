@@ -26,28 +26,23 @@ function extraImageAttribute(
       return {
         srcSet: `${smallImageSrc} 300w, ${imageSrc} 840w`,
         sizes: '(min-width: 900px) 840px, calc(93.1vw + 21px)',
-        ...satelliteImageDimensions, // Contains width & height
+        ...satelliteImageDimensions,
       }
     case 'Upper Air':
       return {
         srcSet: `${smallImageSrc} 300w, ${imageSrc} 760w`,
         sizes: '(min-width: 820px) 760px, calc(92vw + 24px)',
-        ...upperAirImageDimensions, // Contains width & height
+        ...upperAirImageDimensions,
       }
     case 'Radar':
-      // Assuming radarImageDimensions contains { width, height }
-      // For true responsiveness, consider adding srcSet and sizes if variants exist
       return {
         ...radarImageDimensions,
       }
     case 'Rain':
-      // Assuming rainImageDimensions contains { width, height }
-      // For true responsiveness, consider adding srcSet and sizes if variants exist
       return {
         ...rainImageDimensions,
       }
     default:
-      // Return an empty object to prevent errors when spreading
       return {}
   }
 }
@@ -58,30 +53,23 @@ const WeatherImage = ({
   chartType,
   isLazy,
 }: WeatherImageProps) => {
-  // Get the dynamic attributes for the image
   const attributes = extraImageAttribute(chartType, imageSrc)
 
   if (!imageSrc) {
-    // Handle cases where imageSrc might be undefined
     return (
       <div data-testid="weather-image-placeholder">Image not available</div>
     )
   }
 
-  // Common properties for both lazy and eager loaded images
   const commonProps = {
+    alt: imageAlt, // Ensure alt is part of commonProps for both img types
     src: imageSrc,
-    ...attributes, // Spreads width, height, srcSet, sizes
-    // Crucial style for responsiveness:
-    // Ensures the image scales down within its container, maintaining aspect ratio.
-    // The `width` and `height` attributes (from `attributes`) help the browser
-    // calculate aspect ratio and reserve space, reducing layout shift.
-    // The `sizes` attribute (if present in `attributes`) guides the browser
-    // in selecting the correct image from `srcSet` and its intended rendered width.
+    ...attributes,
     style: {
-      maxWidth: '100%',
-      height: 'auto',
-      // If attributes.style exists, merge it. Useful if dimensions objects provide specific styles.
+      display: 'block', // Make image a block element
+      width: '100%', // Make image attempt to fill container width
+      maxWidth: '100%', // Ensure it doesn't overflow container
+      height: 'auto', // Maintain aspect ratio
       ...(attributes &&
       typeof attributes === 'object' &&
       'style' in attributes &&
@@ -92,16 +80,13 @@ const WeatherImage = ({
   }
 
   return (
-    <div data-testid="weather-image">
+    // Ensure this div takes full width of its parent, constraining the image
+    <div data-testid="weather-image" className="w-full">
       {isLazy ? (
-        <LazyLoadImage
-          {...commonProps}
-          threshold={200}
-          // The `width` and `height` from `commonProps` will be passed through,
-          // helping `LazyLoadImage` reserve space.
-        />
+        <LazyLoadImage {...commonProps} threshold={200} />
       ) : (
-        <img alt={imageAlt} {...commonProps} fetchPriority="high" />
+        // alt is already in commonProps, no need to repeat
+        <img {...commonProps} fetchPriority="high" alt="weather image" />
       )}
     </div>
   )

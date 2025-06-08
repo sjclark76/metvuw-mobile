@@ -79,7 +79,7 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
           ) : (
             <motion.ul
               key="static-list" // Unique key
-              className="flex flex-col items-center"
+              className="mx-auto flex w-full max-w-2xl flex-col items-center px-2"
               variants={containerVariants}
               initial="hidden"
               animate="visible"
