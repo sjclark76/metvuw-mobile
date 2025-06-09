@@ -1,14 +1,14 @@
 'use client'
 
 import { format } from 'date-fns'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { FooterControl } from '@/components/FooterControl'
+import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
 import SubHeader from '@/components/SubHeader'
 import WeatherCharts from '@/components/WeatherCharts'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
-import { preloadImage } from '@/shared/helpers/images'
 
 interface RegionPageProps {
   region: Region
@@ -24,15 +24,7 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
         )} for ${region.name}`
       : ''
 
-  useEffect(() => {
-    if (rainChartData && rainChartData.length > 0) {
-      rainChartData.forEach((chart) => {
-        if (chart.url) {
-          preloadImage(chart.url)
-        }
-      })
-    }
-  }, [rainChartData])
+  usePreloadedImages(rainChartData)
 
   return (
     // This outer div will manage the layout for content and the sticky footer.

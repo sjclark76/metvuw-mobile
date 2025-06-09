@@ -3,6 +3,7 @@
 import { format } from 'date-fns'
 
 import Card from '@/components/Card'
+import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
 import WeatherImage from '@/components/WeatherImage'
 import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { ChartType } from '@/shared/types/ChartType'
@@ -20,6 +21,8 @@ export function RadarAndSatelliteImages({ images, chartType }: Props) {
     )}`
   }
 
+  usePreloadedImages(images)
+
   const safeFormat = (date: number, formatString: string) => {
     try {
       return format(date, formatString)
@@ -29,6 +32,7 @@ export function RadarAndSatelliteImages({ images, chartType }: Props) {
       )
     }
   }
+
   return (
     <ul className="flex flex-col items-center">
       {images.map((image, index) => (

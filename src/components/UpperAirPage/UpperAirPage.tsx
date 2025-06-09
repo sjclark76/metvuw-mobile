@@ -1,3 +1,4 @@
+import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
 import RadarAndSatelliteImages from '@/components/RadarAndSatelliteImages'
 import SubHeader from '@/components/SubHeader'
 import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
@@ -10,6 +11,7 @@ export function UpperAirPage({
   chartData: SkinnyChartData[]
   balloonCode: string
 }) {
+  usePreloadedImages(chartData)
   return (
     <>
       <SubHeader

@@ -62,7 +62,6 @@ const WeatherImage = ({
   }
 
   const commonProps = {
-    alt: imageAlt, // Ensure alt is part of commonProps for both img types
     src: imageSrc,
     ...attributes,
     style: {
@@ -83,10 +82,10 @@ const WeatherImage = ({
     // Ensure this div takes full width of its parent, constraining the image
     <div data-testid="weather-image" className="w-full">
       {isLazy ? (
-        <LazyLoadImage {...commonProps} threshold={200} />
+        <LazyLoadImage alt={imageAlt} {...commonProps} threshold={200} />
       ) : (
-        // alt is already in commonProps, no need to repeat
-        <img {...commonProps} fetchPriority="high" alt="weather image" />
+        // eslint-disable-next-line jsx-a11y/alt-text
+        <img alt={imageAlt} {...commonProps} fetchPriority="high" />
       )}
     </div>
   )
