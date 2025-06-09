@@ -78,7 +78,7 @@ function FooterControl({ charts }: { charts: SkinnyRainChartData[] }) {
 
   return (
     <footer className="sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 p-3 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <div className="container mx-auto flex flex-row items-center justify-start gap-5 space-x-4">
+      <div className="container mx-auto flex flex-row items-center justify-start space-x-4 lg:gap-5">
         <button
           onClick={handleMasterPlay}
           className="transform rounded-full bg-slate-700 p-4 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none"
