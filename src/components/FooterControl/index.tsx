@@ -13,7 +13,7 @@ function PlayIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="size-6"
+      className="size-4"
       viewBox="0 0 24 24"
       fill="currentColor"
     >
@@ -26,7 +26,7 @@ function CrossIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="size-6"
+      className="size-4"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -44,7 +44,7 @@ function PauseIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="size-6"
+      className="size-4"
       viewBox="0 0 24 24"
       fill="currentColor"
     >
@@ -78,7 +78,7 @@ function FooterControl({ charts }: { charts: SkinnyRainChartData[] }) {
 
   return (
     <footer className="sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 p-3 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <div className="container mx-auto flex flex-row items-center justify-start space-x-4">
+      <div className="container mx-auto flex flex-row items-center justify-start gap-5 space-x-4">
         <button
           onClick={handleMasterPlay}
           className="transform rounded-full bg-slate-700 p-4 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none"
@@ -97,7 +97,6 @@ function FooterControl({ charts }: { charts: SkinnyRainChartData[] }) {
               className="transform rounded-full bg-slate-700 p-4 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none"
               aria-label={playAnimation ? 'Pause animation' : 'Play animation'}
             >
-              {/* Use the new PauseIcon and existing PlayIcon */}
               {playAnimation ? <PauseIcon /> : <PlayIcon />}
             </button>
             <input
@@ -106,7 +105,7 @@ function FooterControl({ charts }: { charts: SkinnyRainChartData[] }) {
               max={max}
               value={animatedChartIndex}
               onChange={handleProgressChange}
-              className="w-full text-sky-400"
+              className="w-1/4 text-sky-400"
             />
           </>
         )}
