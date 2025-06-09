@@ -105,7 +105,7 @@ function FooterControl({ charts }: { charts: SkinnyRainChartData[] }) {
               max={max}
               value={animatedChartIndex}
               onChange={handleProgressChange}
-              className="w-1/4 text-sky-400"
+              className="w-3/4 text-sky-400"
             />
           </>
         )}
