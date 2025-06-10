@@ -23,7 +23,7 @@ function AnimatedRadarAndSatelliteImageCard({ images, chartType }: Props) {
     if (playAnimation) {
       interval = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
-      }, 500)
+      }, 1000)
     }
     return () => clearInterval(interval)
   }, [playAnimation, images.length, setCurrentIndex])
