@@ -1,6 +1,7 @@
 import SubHeader from '@/components/SubHeader'
 import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { radarRegions } from '@/shared/types/radarRegions'
+
 import RadarAndSatelliteImages from '../RadarAndSatelliteImages/RadarAndSatelliteImages'
 
 export function RadarPage({
