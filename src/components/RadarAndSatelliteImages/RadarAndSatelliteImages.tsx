@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
 'use client'
-import { format } from 'date-fns'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useAtomValue } from 'jotai/index'
 
-import Card from '@/components/Card'
-import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
-import WeatherImage from '@/components/WeatherImage'
+import { displayAnimatedChartAtom } from '@/components/Atoms/GlobalState'
+import { AnimatedRadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/AnimatedRadarAndSatelliteImageCard'
+import { RadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/RadarAndSatelliteImageCard'
 import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { ChartType } from '@/shared/types/ChartType'
 
@@ -13,51 +14,85 @@ interface Props {
   chartType: Extract<ChartType, 'Radar' | 'Satellite' | 'Upper Air'>
 }
 
-export function RadarAndSatelliteImages({ images, chartType }: Props) {
-  const createImgAlt = (image: SkinnyChartData) => {
-    return `${chartType.toLowerCase()} chart for ${format(
-      new Date(image.imageDateUTC),
-      'PPPPp',
-    )}`
-  }
+// Variants for the container of the static chart list to orchestrate staggered animations
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1, // Each child will animate 0.1s after the previous one
+    },
+  },
+}
 
-  usePreloadedImages(images)
+// Variants for each individual static chart item
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      ease: 'easeOut',
+      duration: 0.5,
+    },
+  },
+}
 
-  const safeFormat = (date: number, formatString: string) => {
-    try {
-      return format(date, formatString)
-    } catch {
-      console.error(
-        `error formatting date date:${date} formatString:${formatString}`,
-      )
-    }
-  }
+// Variants for the fade transition when switching between static and animated views
+const viewSwitchVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1, transition: { duration: 0.5 } },
+  exit: { opacity: 0, transition: { duration: 0.3 } },
+}
+
+export default function Foo({ images, chartType }: Props) {
+  const displayAnimatedChart = useAtomValue(displayAnimatedChartAtom)
 
   return (
-    <ul className="flex flex-col items-center">
-      {images.map((image, index) => (
-        <Card
-          key={image.imageDateUTC}
-          weatherImage={
-            <WeatherImage
-              imageSrc={image.url}
-              imageAlt={createImgAlt(image)}
-              chartType={chartType}
-              isLazy={index > 1}
-            />
-          }
-          date={
-            <span className="text-base font-semibold text-gray-700 dark:text-stone-100">
-              {safeFormat(image.imageDateUTC, 'PPPP')}
-            </span>
-          }
-          time={
-            <span className="w-20 transform rounded-xs bg-gray-900 px-2 py-1 text-center text-xs font-semibold text-white uppercase dark:bg-stone-200 dark:text-stone-700">
-              {safeFormat(image.imageDateUTC, 'hh:mm a')}
-            </span>
-          }
-        />
-      ))}
-    </ul>
+    <>
+      <div className="relative flex h-full flex-1 flex-col items-center justify-center gap-2 pt-2">
+        {/* AnimatePresence handles the transition between the two views */}
+        <AnimatePresence mode="wait">
+          {displayAnimatedChart ? (
+            <motion.div
+              key="animated-view" // Unique key is crucial for AnimatePresence
+              variants={viewSwitchVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="flex h-full w-full flex-col items-center"
+            >
+              <AnimatedRadarAndSatelliteImageCard
+                images={images}
+                chartType={chartType}
+              />
+            </motion.div>
+          ) : (
+            <motion.ul
+              key="static-list" // Unique key
+              className="mx-auto flex w-full max-w-2xl flex-col items-center px-2"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {images.map((image, index) => (
+                // Each list item has its own animation variant
+                <motion.li
+                  key={image.url}
+                  variants={itemVariants}
+                  className="w-full"
+                >
+                  <RadarAndSatelliteImageCard
+                    image={image}
+                    chartType={chartType}
+                    isLazy={index > 1}
+                  />
+                </motion.li>
+              ))}
+            </motion.ul>
+          )}
+        </AnimatePresence>
+      </div>
+    </>
   )
 }

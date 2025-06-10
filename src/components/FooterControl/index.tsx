@@ -7,13 +7,13 @@ import {
   displayAnimatedChartAtom,
   playAnimationAtom,
 } from '@/components/Atoms/GlobalState'
-import { SkinnyRainChartData } from '@/shared/types/rainChartData'
+import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 
 function PlayIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="lg-size-5 size-3"
+      className="lg-size-5 size-5"
       viewBox="0 0 24 24"
       fill="currentColor"
     >
@@ -26,7 +26,7 @@ function CrossIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="lg-size-5 size-3"
+      className="lg-size-5 size-5"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -44,7 +44,7 @@ function PauseIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="lg-size-5 size-3"
+      className="lg-size-5 size-5"
       viewBox="0 0 24 24"
       fill="currentColor"
     >
@@ -53,7 +53,7 @@ function PauseIcon() {
   )
 }
 
-function FooterControl({ charts }: { charts: SkinnyRainChartData[] }) {
+function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
   const [playAnimation, setPlayAnimation] = useAtom(playAnimationAtom)
   const [displayAnimatedChart, setDisplayAnimatedChart] = useAtom(
     displayAnimatedChartAtom,
@@ -63,9 +63,20 @@ function FooterControl({ charts }: { charts: SkinnyRainChartData[] }) {
   )
 
   const handleMasterPlay = useCallback(() => {
+    if (displayAnimatedChart) {
+      // We are turning off.
+      setPlayAnimation(false)
+      setAnimatedChartIndex(0)
+    } else {
+      setPlayAnimation(true)
+    }
     setDisplayAnimatedChart((prev) => !prev)
-    setPlayAnimation((prevState) => !prevState)
-  }, [setPlayAnimation, setDisplayAnimatedChart])
+  }, [
+    displayAnimatedChart,
+    setPlayAnimation,
+    setDisplayAnimatedChart,
+    setAnimatedChartIndex,
+  ])
 
   const handleProgressChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAnimatedChartIndex(Number(e.target.value))
