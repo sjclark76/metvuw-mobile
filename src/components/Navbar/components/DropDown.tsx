@@ -88,7 +88,6 @@ const DropDown = (props: DropDownProps) => {
             role="graphics-symbol"
           >
             <title id="t-01">Button icon</title>
-            <desc id="d-01">An icon describing the buttons usage</desc>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
