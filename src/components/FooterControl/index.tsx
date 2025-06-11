@@ -1,7 +1,7 @@
 'use client'
+import { AnimatePresence, motion } from 'framer-motion' // Import framer-motion
 import { useAtom } from 'jotai/index'
 import { ChangeEvent, useCallback, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion' // Import framer-motion
 
 import {
   animatedChartIndexAtom,
