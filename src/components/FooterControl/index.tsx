@@ -116,6 +116,7 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
               max={max}
               value={animatedChartIndex}
               onChange={handleProgressChange}
+              aria-label="progress bar"
               className="w-3/4 text-sky-400"
             />
           </>
