@@ -18,12 +18,12 @@ export default function Card({
     isLoading && 'animate-pulse',
   )
   return (
-    <li className={styling}>
+    <div className={styling}>
       {weatherImage}
       <div className="flex items-center justify-around rounded-b-lg pt-3">
         {date}
         {time}
       </div>
-    </li>
+    </div>
   )
 }

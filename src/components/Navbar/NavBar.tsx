@@ -1,6 +1,7 @@
 'use client'
 import { useAtom } from 'jotai'
 import Link from 'next/link'
+import { useEffect, useRef } from 'react' // Import useEffect and useRef
 
 import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
 import { HamburgerSvg } from '@/components/Navbar/components/HamburgerSvg'
@@ -46,18 +47,46 @@ const balloonLinks: MenuLink[] = Object.keys(balloonLocations).map((key) => ({
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useAtom(isMenuOpenAtom)
+  const navRef = useRef<HTMLElement>(null) // Create a ref for the nav element
+
   const handleClick = () => {
     setMenuOpen((prev) => !prev)
   }
+
+  // Effect to handle clicks outside the navbar
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuOpen &&
+        navRef.current &&
+        !navRef.current.contains(event.target as Node)
+      ) {
+        setMenuOpen(false)
+      }
+    }
+
+    // Add event listener when the menu is open
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    // Cleanup function to remove event listener
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [menuOpen, setMenuOpen]) // Re-run effect if menuOpen or setMenuOpen changes
 
   const headerText =
     'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-slate-600 focus:bg-slate-700'
 
   return (
-    <nav className="flex flex-wrap items-center bg-linear-to-b from-slate-400 to-slate-500 p-2">
+    <nav
+      ref={navRef} // Attach the ref to the nav element
+      className="flex flex-wrap items-center bg-linear-to-b from-slate-400 to-slate-500 p-2"
+    >
       <Link href="/" className="mr-4 inline-flex items-center p-2">
         <MetvuwMobileImage />
-        <span className="pl-2 text-xl font-bold tracking-wide text-white uppercase">
+        <span className="pl-2 text-lg font-bold tracking-wide text-white uppercase md:text-xl">
           Metvuw Mobile
         </span>
       </Link>

@@ -1,17 +1,17 @@
-/* eslint-disable no-console */
 'use client'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useAtomValue } from 'jotai/index'
+import { useAtomValue } from 'jotai'
 
+import { AnimatedWeatherChart } from '@/components/AnimatedWeatherChart/animated-weather-chart'
 import { displayAnimatedChartAtom } from '@/components/Atoms/GlobalState'
-import { AnimatedRadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/AnimatedRadarAndSatelliteImageCard'
-import { RadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/RadarAndSatelliteImageCard'
-import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
-import { ChartType } from '@/shared/types/ChartType'
+import { SkinnyRainChartData } from '@/shared/types/rainChartData'
+import { Region } from '@/shared/types/region'
 
-interface Props {
-  images: SkinnyChartData[]
-  chartType: Extract<ChartType, 'Radar' | 'Satellite' | 'Upper Air'>
+import { WeatherChart } from './WeatherChart'
+
+interface WeatherChartsProps {
+  region: Region
+  charts: SkinnyRainChartData[]
 }
 
 // Variants for the container of the static chart list to orchestrate staggered animations
@@ -45,9 +45,8 @@ const viewSwitchVariants = {
   exit: { opacity: 0, transition: { duration: 0.3 } },
 }
 
-export default function Foo({ images, chartType }: Props) {
+const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
   const displayAnimatedChart = useAtomValue(displayAnimatedChartAtom)
-
   return (
     <>
       <div className="relative flex h-full flex-1 flex-col items-center justify-center gap-2 pt-2">
@@ -62,9 +61,9 @@ export default function Foo({ images, chartType }: Props) {
               exit="exit"
               className="flex h-full w-full flex-col items-center"
             >
-              <AnimatedRadarAndSatelliteImageCard
-                images={images}
-                chartType={chartType}
+              <AnimatedWeatherChart
+                region={props.region}
+                charts={props.charts}
               />
             </motion.div>
           ) : (
@@ -75,17 +74,17 @@ export default function Foo({ images, chartType }: Props) {
               initial="hidden"
               animate="visible"
             >
-              {images.map((image, index) => (
+              {props.charts.map((chart, index) => (
                 // Each list item has its own animation variant
                 <motion.li
-                  key={image.url}
+                  key={chart.forecastDate}
                   variants={itemVariants}
                   className="w-full"
                 >
-                  <RadarAndSatelliteImageCard
-                    image={image}
-                    chartType={chartType}
-                    isLazy={index > 1}
+                  <WeatherChart
+                    chart={chart}
+                    region={props.region}
+                    index={index}
                   />
                 </motion.li>
               ))}
@@ -96,3 +95,5 @@ export default function Foo({ images, chartType }: Props) {
     </>
   )
 }
+
+export default WeatherChartsWithAnimation

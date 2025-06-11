@@ -35,11 +35,15 @@ function extraImageAttribute(
         ...upperAirImageDimensions,
       }
     case 'Radar':
-      return radarImageDimensions
+      return {
+        ...radarImageDimensions,
+      }
     case 'Rain':
-      return rainImageDimensions
+      return {
+        ...rainImageDimensions,
+      }
     default:
-      return null
+      return {}
   }
 }
 
@@ -49,22 +53,39 @@ const WeatherImage = ({
   chartType,
   isLazy,
 }: WeatherImageProps) => {
+  const attributes = extraImageAttribute(chartType, imageSrc)
+
+  if (!imageSrc) {
+    return (
+      <div data-testid="weather-image-placeholder">Image not available</div>
+    )
+  }
+
+  const commonProps = {
+    src: imageSrc,
+    ...attributes,
+    style: {
+      display: 'block', // Make image a block element
+      width: '100%', // Make image attempt to fill container width
+      maxWidth: '100%', // Ensure it doesn't overflow container
+      height: 'auto', // Maintain aspect ratio
+      ...(attributes &&
+      typeof attributes === 'object' &&
+      'style' in attributes &&
+      typeof attributes.style === 'object'
+        ? attributes.style
+        : {}),
+    },
+  }
+
   return (
-    <div data-testid="weather-image">
+    // Ensure this div takes full width of its parent, constraining the image
+    <div data-testid="weather-image" className="w-full">
       {isLazy ? (
-        <LazyLoadImage
-          alt={imageAlt}
-          src={imageSrc} // use normal <img> attributes as props
-          threshold={200}
-          {...extraImageAttribute(chartType, imageSrc)}
-        />
+        <LazyLoadImage alt={imageAlt} {...commonProps} threshold={200} />
       ) : (
-        <img
-          fetchPriority="high"
-          alt={imageAlt}
-          src={imageSrc}
-          {...extraImageAttribute(chartType, imageSrc)}
-        />
+        // eslint-disable-next-line jsx-a11y/alt-text
+        <img alt={imageAlt} {...commonProps} fetchPriority="high" />
       )}
     </div>
   )

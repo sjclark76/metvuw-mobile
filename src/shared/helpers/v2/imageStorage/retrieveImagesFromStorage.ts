@@ -23,6 +23,15 @@ function isDirectory(file: FileObject): boolean {
 export async function retrieveImagesFromStorage(
   path: string,
 ): Promise<StorageImage[]> {
+  const bucket = await serviceRoleDb.storage.getBucket(
+    config.supbabaseBucketName,
+  )
+
+  if (bucket.data === null) {
+    await serviceRoleDb.storage.createBucket(config.supbabaseBucketName, {
+      public: true,
+    })
+  }
   // Retrieve the list of files (or directories) from the given path
   const { data } = await serviceRoleDb.storage
     .from(config.supbabaseBucketName)
