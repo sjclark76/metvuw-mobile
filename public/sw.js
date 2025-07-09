@@ -1,6 +1,7 @@
-const CACHE_NAME = 'metvuw-mobile-cache-v8'; // Updated cache name
+const CACHE_NAME = 'metvuw-mobile-cache-v9'; // Updated cache name
 const TEN_DAYS_IN_MS = 10 * 24 * 60 * 60 * 1000;
-const APP_SHELL_URLS = ['/'];
+// Add the offline page to the app shell
+const APP_SHELL_URLS = ['/', '/offline'];
 
 // --- Cache Cleanup Function ---
 const cleanupCache = async () => {
@@ -61,7 +62,7 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // 1. Navigation requests: Cache-first, falling back to network, with a final app shell fallback.
+  // 1. Navigation requests: Cache-first, falling back to network, with a final OFFLINE page fallback.
   if (event.request.mode === 'navigate') {
     event.respondWith(
       caches.match(event.request)
@@ -79,8 +80,8 @@ self.addEventListener('fetch', (event) => {
           });
         })
         .catch(() => {
-          // If all else fails (offline and not in cache), return the main app shell.
-          return caches.match('/');
+          // If all else fails (offline and not in cache), return the dedicated offline page.
+          return caches.match('/offline');
         })
     );
   } 
@@ -109,6 +110,7 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
+
 
 
 
