@@ -1,10 +1,9 @@
-const CACHE_NAME = 'metvuw-mobile-cache-v14';
+const CACHE_NAME = 'metvuw-mobile-cache-v15';
 const OFFLINE_URL = '/offline';
 const APP_SHELL_URLS = ['/', OFFLINE_URL];
 
 // --- Event Listeners ---
 
-// On install, cache the fundamental app shell pages.
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -14,7 +13,6 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// On activate, delete old caches to prevent conflicts.
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -30,7 +28,6 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Listen for messages from the client to pre-cache critical assets.
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'CACHE_ASSETS') {
     event.waitUntil(
@@ -50,44 +47,45 @@ self.addEventListener('message', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
-  // 1. Navigation Requests: Network falling back to Cache, then Offline page.
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
         .then(response => {
-          // If network is available, cache the response for offline use.
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(request, responseToCache));
           return response;
         })
-        .catch(() => {
-          // If network fails, try to get the page from the cache.
-          return caches.match(request).then(response => {
-            // If it's in the cache, serve it. Otherwise, serve the offline page.
-            return response || caches.match(OFFLINE_URL);
-          });
-        })
+        .catch(() => caches.match(request).then(response => response || caches.match(OFFLINE_URL)))
     );
     return;
   }
 
-  // 2. All Other Requests (CSS, JS, Images, API): Stale-While-Revalidate.
   event.respondWith(
     caches.open(CACHE_NAME).then(cache => {
       return cache.match(request).then(response => {
-        // Fetch in the background to update the cache for next time.
         const fetchPromise = fetch(request).then(networkResponse => {
-          if (networkResponse.ok) {
+          // --- START DEBUG LOGGING ---
+          if (request.destination === 'image') {
+            console.log(
+              'SW: Fetched image:', request.url, 
+              '| Status:', networkResponse.status, 
+              '| Type:', networkResponse.type,
+              '| OK:', networkResponse.ok
+            );
+          }
+          // --- END DEBUG LOGGING ---
+          // We will now cache the image even if it's an opaque response.
+          if (networkResponse.status === 200 || networkResponse.type === 'opaque') {
             cache.put(request, networkResponse.clone());
           }
           return networkResponse;
         });
-        // Return the cached version immediately (if available), otherwise wait for the network.
         return response || fetchPromise;
       });
     })
   );
 });
+
 
 
 
