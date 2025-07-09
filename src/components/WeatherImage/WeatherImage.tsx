@@ -64,6 +64,7 @@ const WeatherImage = ({
   const commonProps = {
     src: imageSrc,
     ...attributes,
+    crossOrigin: 'anonymous',
     style: {
       display: 'block', // Make image a block element
       width: '100%', // Make image attempt to fill container width
