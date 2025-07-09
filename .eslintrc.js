@@ -27,4 +27,12 @@ module.exports = {
     // ],
   },
   ignorePatterns: ['src/shared/db/database.types.ts'],
+  overrides: [
+    {
+      files: ['public/sw.js'],
+      rules: {
+        'no-console': 'off',
+      },
+    },
+  ],
 }
