@@ -4,7 +4,7 @@ import './globals.css'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Provider } from 'jotai'
 import { Inter } from 'next/font/google'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import GoogleTag from '@/components/GoogleTag'
 import { config } from '@/config'
@@ -19,10 +19,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((registration) => console.log('scope is: ', registration.scope))
+    }
+  }, [])
   return (
     <html lang="en" className="bg-gray-100">
       <head>
         <title>Metvuw Mobile</title>
+        <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href={config.supabaseUrl} />
       </head>
       <GoogleTag />
