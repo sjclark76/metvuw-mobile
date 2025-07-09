@@ -21,15 +21,23 @@ export default function RootLayout({
 }) {
   useEffect(() => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(registration => {
-        console.log('Service Worker registered with scope:', registration.scope)
-        // Post message to the service worker to trigger cleanup
-        if (navigator.serviceWorker.controller) {
-          navigator.serviceWorker.controller.postMessage({ type: 'CLEANUP_CACHE' });
-        }
-      }).catch(error => {
-        console.error('Service Worker registration failed:', error);
-      });
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((registration) => {
+          console.log(
+            'Service Worker registered with scope:',
+            registration.scope,
+          )
+          // Post message to the service worker to trigger cleanup
+          if (navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+              type: 'CLEANUP_CACHE',
+            })
+          }
+        })
+        .catch((error) => {
+          console.error('Service Worker registration failed:', error)
+        })
     }
   }, [])
   return (

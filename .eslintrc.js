@@ -29,7 +29,7 @@ module.exports = {
   ignorePatterns: ['src/shared/db/database.types.ts'],
   overrides: [
     {
-      files: ['public/sw.js'],
+      files: ['public/sw.js', 'src/app/layout.tsx'],
       rules: {
         'no-console': 'off',
       },
