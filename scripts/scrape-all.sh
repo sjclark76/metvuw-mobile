@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Base URL for the API
-BASE_URL="http://localhost:3000/api/scrape"
+BASE_URL="http://localhost:3002/api/scrape"
 
 # List of all region codes
 REGIONS=(
