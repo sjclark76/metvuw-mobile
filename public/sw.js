@@ -1,6 +1,6 @@
-const CACHE_NAME = 'metvuw-mobile-cache-v10'; // Updated cache name
-const TEN_DAYS_IN_MS = 10 * 24 * 60 * 60 * 1000;
-const APP_SHELL_URLS = ['/', '/offline'];
+const CACHE_NAME = 'metvuw-mobile-cache-v11';
+const OFFLINE_URL = '/offline';
+const APP_SHELL_URLS = ['/', OFFLINE_URL];
 
 // --- Event Listeners ---
 
@@ -8,16 +8,25 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('Opened cache and caching app shell');
-      return cache.addAll(APP_SHELL_URLS);
+      // Also cache the Next.js build manifest to get asset URLs
+      return Promise.all([
+        cache.addAll(APP_SHELL_URLS),
+        fetch('/_next/build-manifest.json')
+          .then(res => res.json())
+          .then(manifest => {
+            const cssFiles = Object.values(manifest.pages['/'] || []);
+            console.log('Caching critical CSS:', cssFiles);
+            return cache.addAll(cssFiles);
+          })
+      ]);
     })
   );
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    (async () => {
-      const cacheNames = await caches.keys();
-      await Promise.all(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
             console.log('Deleting old cache:', cacheName);
@@ -25,99 +34,50 @@ self.addEventListener('activate', (event) => {
           }
         })
       );
-    })()
+    })
   );
-});
-
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'CLEANUP_CACHE') {
-    console.log('Received cleanup message from client.');
-    event.waitUntil(cleanupCache());
-  }
 });
 
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
-  // 1. Navigation requests: Cache-first, then network, then offline page.
+  // 1. Navigation requests: Network-first, then cache, then offline page.
   if (request.mode === 'navigate') {
     event.respondWith(
-      caches.match(request)
-        .then(response => response || fetch(request).then(fetchResponse => {
-          if (fetchResponse.ok) {
-            const responseToCache = fetchResponse.clone();
+      fetch(request)
+        .then(response => {
+          // If we get a good response, cache it.
+          if (response.ok) {
+            const responseToCache = response.clone();
             caches.open(CACHE_NAME).then(cache => cache.put(request, responseToCache));
           }
-          return fetchResponse;
-        }))
-        .catch(() => caches.match('/offline'))
-    );
-    return;
-  }
-
-  // 2. Asset requests (CSS, JS, Fonts, etc.): Stale-while-revalidate.
-  if (request.destination === 'style' || request.destination === 'script' || request.destination === 'font') {
-    event.respondWith(
-      caches.open(CACHE_NAME).then(cache => 
-        cache.match(request).then(response => {
-          const fetchPromise = fetch(request).then(networkResponse => {
-            if (networkResponse.ok) {
-              cache.put(request, networkResponse.clone());
-            }
-            return networkResponse;
-          });
-          return response || fetchPromise;
+          return response;
         })
-      )
+        .catch(() => {
+          // If network fails, try the cache.
+          return caches.match(request).then(response => response || caches.match(OFFLINE_URL));
+        })
     );
     return;
   }
 
-  // 3. Image and API requests: Stale-while-revalidate with timestamping.
+  // 2. All other requests (CSS, JS, images, API): Stale-while-revalidate.
   event.respondWith(
-    caches.open(CACHE_NAME).then(async (cache) => {
-      const cachedResponse = await cache.match(request);
-      
-      const fetchPromise = fetch(request).then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
-          const headers = new Headers(networkResponse.headers);
-          headers.set('x-cache-timestamp', Date.now());
-          const responseToCache = new Response(networkResponse.clone().body, {
-            status: networkResponse.status,
-            statusText: networkResponse.statusText,
-            headers: headers
-          });
-          cache.put(request, responseToCache);
-        }
-        return networkResponse;
-      });
-
-      return cachedResponse || fetchPromise;
-    })
+    caches.open(CACHE_NAME).then(cache => 
+      cache.match(request).then(response => {
+        const fetchPromise = fetch(request).then(networkResponse => {
+          if (networkResponse.ok) {
+            cache.put(request, networkResponse.clone());
+          }
+          return networkResponse;
+        });
+        // Return cached response immediately, and update cache in background.
+        return response || fetchPromise;
+      })
+    )
   );
 });
 
-// --- Cache Cleanup Function (remains the same) ---
-const cleanupCache = async () => {
-  const cache = await caches.open(CACHE_NAME);
-  const keys = await cache.keys();
-  
-  console.log('Running cache cleanup for items older than 10 days...');
-
-  for (const request of keys) {
-    const response = await cache.match(request);
-    if (response) {
-      const timestampHeader = response.headers.get('x-cache-timestamp');
-      if (timestampHeader) {
-        const timestamp = parseInt(timestampHeader, 10);
-        if (Date.now() - timestamp > TEN_DAYS_IN_MS) {
-          console.log('Deleting expired cache entry:', request.url);
-          await cache.delete(request);
-        }
-      }
-    }
-  }
-};
 
 
 
