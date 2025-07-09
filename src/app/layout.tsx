@@ -21,10 +21,6 @@ export default function RootLayout({
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').then(registration => {
         console.log('Service Worker registered with scope:', registration.scope)
-        // Send a message to the service worker to trigger cache cleanup.
-        if (registration.active) {
-          registration.active.postMessage({ type: 'CLEANUP_CACHE' });
-        }
       }).catch(error => {
         console.error('Service Worker registration failed:', error);
       });
