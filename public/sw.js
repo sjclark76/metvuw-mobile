@@ -1,4 +1,4 @@
-const CACHE_NAME = 'metvuw-mobile-cache-v4'; // Updated cache name
+const CACHE_NAME = 'metvuw-mobile-cache-v5'; // Updated cache name
 const TEN_DAYS_IN_MS = 10 * 24 * 60 * 60 * 1000;
 const APP_SHELL_URLS = ['/'];
 
@@ -26,7 +26,6 @@ const cleanupCache = async () => {
 
 // --- Event Listeners ---
 
-// On install, cache the app shell
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -36,11 +35,9 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// On activate, clean up old cache versions and run the new cleanup routine
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
-      // 1. Delete old versions of the cache
       const cacheNames = await caches.keys();
       await Promise.all(
         cacheNames.map((cacheName) => {
@@ -50,33 +47,26 @@ self.addEventListener('activate', (event) => {
           }
         })
       );
-      // 2. Clean up expired items in the current cache
-      await cleanupCache();
+      await cleanupCache(); // Also run on activation as a fallback
     })()
   );
 });
 
+// Listen for messages from the client to trigger cleanup
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'CLEANUP_CACHE') {
+    console.log('Received cleanup message from client.');
+    event.waitUntil(cleanupCache());
+  }
+});
+
 self.addEventListener('fetch', (event) => {
-  // 1. Navigation requests: Network-first, fallback to cache
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
-        .then((response) => {
-          // If we get a valid response, cache it and return it
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-          return response;
-        })
-        .catch(() => {
-          // If the network fails, serve the main app shell from cache
-          return caches.match('/');
-        })
+        .catch(() => caches.match('/'))
     );
-  }
-  // 2. Other requests (images, API): Stale-while-revalidate with timestamping
-  else {
+  } else {
     event.respondWith(
       caches.open(CACHE_NAME).then(async (cache) => {
         const cachedResponse = await cache.match(event.request);
@@ -100,6 +90,7 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
+
 
 
 
