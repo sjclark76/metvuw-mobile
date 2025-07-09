@@ -1,4 +1,4 @@
-const CACHE_NAME = 'metvuw-mobile-cache-v15';
+const CACHE_NAME = 'metvuw-mobile-cache-v16';
 const OFFLINE_URL = '/offline';
 const APP_SHELL_URLS = ['/', OFFLINE_URL];
 
@@ -47,44 +47,47 @@ self.addEventListener('message', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
+  // Strategy 1: Navigation Requests (HTML pages)
+  // Network falling back to cache. Tries network first, then cache, then offline page.
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
         .then(response => {
+          // If network is available, cache the response for offline use.
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(request, responseToCache));
           return response;
         })
-        .catch(() => caches.match(request).then(response => response || caches.match(OFFLINE_URL)))
+        .catch(() => {
+          // If network fails, try to get the page from the cache.
+          return caches.match(request).then(response => {
+            return response || caches.match(OFFLINE_URL);
+          });
+        })
     );
     return;
   }
 
+  // Strategy 2: All Other Requests (CSS, JS, Images, API)
+  // Stale-while-revalidate. Serves from cache first, then updates cache in background.
   event.respondWith(
     caches.open(CACHE_NAME).then(cache => {
       return cache.match(request).then(response => {
         const fetchPromise = fetch(request).then(networkResponse => {
-          // --- START DEBUG LOGGING ---
-          if (request.destination === 'image') {
-            console.log(
-              'SW: Fetched image:', request.url, 
-              '| Status:', networkResponse.status, 
-              '| Type:', networkResponse.type,
-              '| OK:', networkResponse.ok
-            );
-          }
-          // --- END DEBUG LOGGING ---
-          // We will now cache the image even if it's an opaque response.
-          if (networkResponse.status === 200 || networkResponse.type === 'opaque') {
+          // If the network request is successful (including opaque responses for images),
+          // update the cache.
+          if (networkResponse && (networkResponse.ok || networkResponse.type === 'opaque')) {
             cache.put(request, networkResponse.clone());
           }
           return networkResponse;
         });
+        // Return the cached version immediately (if available), otherwise wait for the network.
         return response || fetchPromise;
       });
     })
   );
 });
+
 
 
 
