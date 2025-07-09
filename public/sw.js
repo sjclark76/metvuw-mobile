@@ -1,4 +1,4 @@
-const CACHE_NAME = 'metvuw-mobile-cache-v6'; // Updated cache name
+const CACHE_NAME = 'metvuw-mobile-cache-v7'; // Updated cache name
 const TEN_DAYS_IN_MS = 10 * 24 * 60 * 60 * 1000;
 const APP_SHELL_URLS = ['/'];
 
@@ -61,28 +61,17 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // 1. Navigation requests: Network-first, with a more intelligent cache fallback
+  // 1. Navigation requests: Network-first, falling back to the cached app shell.
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          // If we get a valid response, cache it for offline use and return it
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-          return response;
-        })
-        .catch(() => {
-          // If network fails, try to serve the specific page from the cache
-          return caches.match(event.request).then((cachedResponse) => {
-            // If the page is in the cache, serve it. Otherwise, serve the main app shell.
-            return cachedResponse || caches.match('/');
-          });
-        })
+      fetch(event.request).catch(() => {
+        // If the network fails, always serve the main app shell.
+        // The client-side router will handle rendering the correct page.
+        return caches.match('/');
+      })
     );
   } 
-  // 2. Other requests (images, API): Stale-while-revalidate
+  // 2. Other requests (JS, CSS, JSON, images, API): Stale-while-revalidate
   else {
     event.respondWith(
       caches.open(CACHE_NAME).then(async (cache) => {
@@ -107,4 +96,5 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
+
 
