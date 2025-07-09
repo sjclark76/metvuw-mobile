@@ -21,6 +21,10 @@ export default function RootLayout({
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').then(registration => {
         console.log('Service Worker registered with scope:', registration.scope)
+        // Send a message to the service worker to trigger cache cleanup.
+        if (registration.active) {
+          registration.active.postMessage({ type: 'CLEANUP_CACHE' });
+        }
       }).catch(error => {
         console.error('Service Worker registration failed:', error);
       });
@@ -34,7 +38,7 @@ export default function RootLayout({
         <link rel="preconnect" href={config.supabaseUrl} />
       </head>
       <GoogleTag />
-      <body className={inter.className}>
+      <body className="font-sans text-gray-800">
         <div className="font-sans text-gray-800">
           <SpeedInsights />
           <Provider>
@@ -50,3 +54,4 @@ export default function RootLayout({
     </html>
   )
 }
+
