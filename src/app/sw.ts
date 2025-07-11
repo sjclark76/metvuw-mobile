@@ -1,6 +1,6 @@
 import { defaultCache } from '@serwist/next/worker'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
-import { CacheFirst, StaleWhileRevalidate } from 'serwist'
+import { CacheableResponsePlugin, StaleWhileRevalidate } from 'serwist'
 import { Serwist } from 'serwist'
 
 // This declares the value of `self.__SW_MANIFEST`.
@@ -33,16 +33,17 @@ const serwist = new Serwist({
   navigationPreload: false,
   runtimeCaching: [
     {
-      handler: new CacheFirst(),
-      matcher({ request }) {
-        return request.destination === 'document'
-      },
-    },
-    {
-      handler: new StaleWhileRevalidate(),
       matcher({ request }) {
         return request.mode === 'navigate'
       },
+      handler: new StaleWhileRevalidate({
+        cacheName: 'pages',
+        plugins: [
+          new CacheableResponsePlugin({
+            statuses: [200],
+          }),
+        ],
+      }),
     },
     ...defaultCache,
   ],
