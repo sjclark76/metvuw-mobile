@@ -43,3 +43,4 @@ yarn-error.log*
 /playwright/.cache/
 /.idea/*
 reports/
+/public/sw.js
