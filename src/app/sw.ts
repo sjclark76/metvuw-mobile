@@ -27,10 +27,6 @@ const serwist = new Serwist({
       url: '/',
       revision: null,
     },
-    {
-      url: '/nz',
-      revision: null,
-    },
   ),
   skipWaiting: true,
   clientsClaim: true,
