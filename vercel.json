@@ -10,7 +10,7 @@
       ]
     },
     {
-      "source": "/offline",
+      "source": "/((?!api/.*).*)",
       "headers": [
         {
           "key": "Cache-Control",
