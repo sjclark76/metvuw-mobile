@@ -1,6 +1,10 @@
 import { defaultCache } from '@serwist/next/worker'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
-import { CacheableResponsePlugin, StaleWhileRevalidate } from 'serwist'
+import {
+  CacheableResponsePlugin,
+  ExpirationPlugin,
+  StaleWhileRevalidate,
+} from 'serwist'
 import { Serwist } from 'serwist'
 
 // This declares the value of `self.__SW_MANIFEST`.
@@ -42,26 +46,32 @@ const serwist = new Serwist({
           new CacheableResponsePlugin({
             statuses: [200],
           }),
+          {
+            handlerDidError: async () => {
+              const cache = await caches.open('pages')
+              const fallbackResponse = await cache.match('/offline')
+              return fallbackResponse || Response.error()
+            },
+          },
+        ],
+      }),
+    },
+    {
+      matcher({ request }) {
+        return request.destination === 'image'
+      },
+      handler: new StaleWhileRevalidate({
+        cacheName: 'images',
+        plugins: [
+          new ExpirationPlugin({
+            maxEntries: 60,
+            maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+          }),
         ],
       }),
     },
     ...defaultCache,
   ],
-  fallbacks: {
-    entries: [
-      {
-        url: '/offline',
-        matcher({ request }) {
-          const isNavigate = request.mode === 'navigate'
-          // eslint-disable-next-line no-console
-          console.log(
-            `[SW] Matching fallback for ${request.url}. Mode: ${request.mode}. Is navigation? ${isNavigate}`,
-          )
-          return isNavigate
-        },
-      },
-    ],
-  },
 })
 
 serwist.addEventListeners()
