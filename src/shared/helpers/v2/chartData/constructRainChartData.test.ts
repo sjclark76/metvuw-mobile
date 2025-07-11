@@ -1,4 +1,22 @@
+import { vi } from 'vitest'
+
 import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructRainChartData'
+
+vi.mock('@/shared/db/supabase', () => {
+  return {
+    supabase: {
+      storage: {
+        from: () => ({
+          getPublicUrl: (path: string) => ({
+            data: {
+              publicUrl: `http://127.0.0.1:54321/storage/v1/object/public/dev/${path}`,
+            },
+          }),
+        }),
+      },
+    },
+  }
+})
 
 describe('constructRainChartData', () => {
   test('should construct correctly for rain', () => {

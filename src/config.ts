@@ -10,8 +10,9 @@ export const config = {
     region: process.env.S3_REGION,
     secret: process.env.SECRET_KEY,
   },
-  supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY ?? '',
-  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+  supabaseServiceRoleKey:
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? 'your-service-role-key',
+  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://localhost:54321',
   supbabaseBucketName: process.env.SUPABASE_BUCKET_NAME ?? 'dev',
   inngestEventKey: process.env.INNGEST_EVENT_KEY ?? '',
   environment: process.env.VERCEL_ENV,

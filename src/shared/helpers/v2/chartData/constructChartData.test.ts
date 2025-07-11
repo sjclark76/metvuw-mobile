@@ -1,4 +1,22 @@
+import { vi } from 'vitest'
+
 import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+
+vi.mock('@/shared/db/supabase', () => {
+  return {
+    supabase: {
+      storage: {
+        from: () => ({
+          getPublicUrl: (path: string) => ({
+            data: {
+              publicUrl: `http://127.0.0.1:54321/storage/v1/object/public/dev/${path}`,
+            },
+          }),
+        }),
+      },
+    },
+  }
+})
 
 describe('constructChartData', () => {
   test('should construct correctly for satellite', () => {
