@@ -2,8 +2,6 @@ import { vi } from 'vitest'
 
 import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 
-process.env.NEXT_PUBLIC_SUPABASE_URL = 'http://localhost:54321'
-
 vi.mock('@/shared/db/supabase', () => {
   return {
     supabase: {
@@ -11,7 +9,7 @@ vi.mock('@/shared/db/supabase', () => {
         from: () => ({
           getPublicUrl: (path: string) => ({
             data: {
-              publicUrl: `http://localhost:54321/storage/v1/object/public/dev/${path}`,
+              publicUrl: `http://127.0.0.1:54321/storage/v1/object/public/dev/${path}`,
             },
           }),
         }),
@@ -32,7 +30,7 @@ describe('constructChartData', () => {
     expect(chartData).toMatchObject([
       {
         imageDateUTC: 1711713600000,
-        url: 'http://localhost:54321/storage/v1/object/public/dev/images/satellite/202403291200.jpg',
+        url: 'http://127.0.0.1:54321/storage/v1/object/public/dev/images/satellite/202403291200.jpg',
       },
     ])
   })
@@ -48,7 +46,7 @@ describe('constructChartData', () => {
     expect(chartData).toMatchObject([
       {
         imageDateUTC: 1711746000000,
-        url: 'http://localhost:54321/storage/v1/object/public/dev/images/radar/ak/202403292100Z_ak.gif',
+        url: 'http://127.0.0.1:54321/storage/v1/object/public/dev/images/radar/ak/202403292100Z_ak.gif',
       },
     ])
   })
@@ -64,7 +62,7 @@ describe('constructChartData', () => {
     expect(chartData).toMatchObject([
       {
         imageDateUTC: 1710936000000,
-        url: 'http://localhost:54321/storage/v1/object/public/dev/images/upper-air/93112/202403201200.93112.webp',
+        url: 'http://127.0.0.1:54321/storage/v1/object/public/dev/images/upper-air/93112/202403201200.93112.webp',
       },
     ])
 

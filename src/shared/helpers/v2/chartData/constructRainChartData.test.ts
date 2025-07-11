@@ -2,8 +2,6 @@ import { vi } from 'vitest'
 
 import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructRainChartData'
 
-process.env.NEXT_PUBLIC_SUPABASE_URL = 'http://localhost:54321'
-
 vi.mock('@/shared/db/supabase', () => {
   return {
     supabase: {
@@ -11,7 +9,7 @@ vi.mock('@/shared/db/supabase', () => {
         from: () => ({
           getPublicUrl: (path: string) => ({
             data: {
-              publicUrl: `http://localhost:54321/storage/v1/object/public/dev/${path}`,
+              publicUrl: `http://127.0.0.1:54321/storage/v1/object/public/dev/${path}`,
             },
           }),
         }),
@@ -33,7 +31,7 @@ describe('constructRainChartData', () => {
     expect(chartData).toMatchObject([
       {
         imageDateUTC: 1711821600000,
-        url: 'http://localhost:54321/storage/v1/object/public/dev/images/region/nzsi/rain-nzsi-thumb-2024033018-006.webp',
+        url: 'http://127.0.0.1:54321/storage/v1/object/public/dev/images/region/nzsi/rain-nzsi-thumb-2024033018-006.webp',
       },
     ])
   })
