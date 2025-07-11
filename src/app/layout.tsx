@@ -3,29 +3,18 @@ import './globals.css'
 
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Provider } from 'jotai'
-import { Inter } from 'next/font/google'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import GoogleTag from '@/components/GoogleTag'
 import { config } from '@/config'
 
 import Navbar from '../components/Navbar'
 
-const inter = Inter({ subsets: ['latin'] })
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(registration => {
-        console.log('Service Worker registered with scope:', registration.scope)
-      }).catch(error => {
-        console.error('Service Worker registration failed:', error);
-      });
-    }
-  }, [])
   return (
     <html lang="en" className="bg-gray-100">
       <head>
@@ -50,4 +39,3 @@ export default function RootLayout({
     </html>
   )
 }
-

@@ -1,3 +1,11 @@
+const withSerwistInit = require("@serwist/next").default;
+
+const withSerwist = withSerwistInit({
+  swSrc: "src/app/sw.ts",
+  swDest: "public/sw.js",
+  disable: process.env.NODE_ENV === 'development',
+});
+
 const securityHeaders = function () {
   // if (process.env.NODE_ENV !== 'production') {
   //   const index = headers.findIndex(
@@ -39,12 +47,26 @@ const securityHeaders = function () {
 }
 
 const nextConfig = {
+  webpack: (config, { dev, isServer }) => {
+    if (dev && !isServer) {
+      const ignored = Array.isArray(config.watchOptions.ignored)
+        ? config.watchOptions.ignored
+        : [config.watchOptions.ignored].filter(Boolean);
+
+      config.watchOptions.ignored = [
+        ...ignored,
+        "**/public/sw.js",
+        "**/public/sw.js.map",
+      ];
+    }
+    return config;
+  },
   /* config options here */
   async headers() {
     return [
       {
         // Apply these headers to all routes in your application.
-        source: '/(.*)',
+        source: '/((?!offline).*)',
         headers: securityHeaders(),
       },
     ]
@@ -56,4 +78,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+module.exports = withSerwist(nextConfig);

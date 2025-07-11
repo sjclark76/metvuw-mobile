@@ -29,6 +29,12 @@ module.exports = {
   ignorePatterns: ['src/shared/db/database.types.ts'],
   overrides: [
     {
+      files: ['src/app/sw.ts'],
+      env: {
+        serviceworker: true,
+      },
+    },
+    {
       files: ['public/sw.js', 'src/app/layout.tsx'],
       rules: {
         'no-console': 'off',
