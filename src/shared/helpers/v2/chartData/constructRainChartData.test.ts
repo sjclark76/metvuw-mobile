@@ -1,5 +1,6 @@
-import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructRainChartData'
 import { vi } from 'vitest'
+
+import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructRainChartData'
 
 vi.mock('@/shared/db/supabase', () => {
   return {
