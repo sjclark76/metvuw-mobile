@@ -1,5 +1,6 @@
-import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { vi } from 'vitest'
+
+import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 
 process.env.NEXT_PUBLIC_SUPABASE_URL = 'http://localhost:54321'
 
