@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 'use client'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { useAtomValue } from 'jotai/index'
 
 import { displayAnimatedChartAtom } from '@/components/Atoms/GlobalState'
@@ -26,7 +26,7 @@ const containerVariants = {
 }
 
 // Variants for each individual static chart item
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
