@@ -1,10 +1,6 @@
 import { defaultCache } from '@serwist/next/worker'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
-import {
-  CacheableResponsePlugin,
-  ExpirationPlugin,
-  StaleWhileRevalidate,
-} from 'serwist'
+import { ExpirationPlugin, NetworkOnly, StaleWhileRevalidate } from 'serwist'
 import { Serwist } from 'serwist'
 
 // This declares the value of `self.__SW_MANIFEST`.
@@ -40,14 +36,7 @@ const serwist = new Serwist({
       matcher({ request }) {
         return request.mode === 'navigate'
       },
-      handler: new StaleWhileRevalidate({
-        cacheName: 'pages',
-        plugins: [
-          new CacheableResponsePlugin({
-            statuses: [200],
-          }),
-        ],
-      }),
+      handler: new NetworkOnly(),
     },
     {
       matcher({ request }) {
@@ -65,16 +54,20 @@ const serwist = new Serwist({
     },
     ...defaultCache,
   ],
-  fallbacks: {
-    entries: [
-      {
-        url: '/offline',
-        matcher({ request }) {
-          return request.destination === 'document'
-        },
-      },
-    ],
-  },
+})
+
+serwist.setCatchHandler(async ({ request }) => {
+  if (request.destination === 'document') {
+    const cachedResponse = await caches.match(request.url)
+    if (cachedResponse) {
+      return cachedResponse
+    }
+    const offlinePage = await caches.match('/offline')
+    if (offlinePage) {
+      return offlinePage
+    }
+  }
+  return Response.error()
 })
 
 serwist.addEventListeners()
