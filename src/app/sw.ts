@@ -8,11 +8,11 @@ import { Serwist } from 'serwist'
 declare global {
   // eslint-disable-next-line no-unused-vars
   interface WorkerGlobalScope extends SerwistGlobalConfig {
-    __SW_MANIFEST: PrecacheEntry[] | undefined
+    __SW_MANIFEST: (PrecacheEntry | string)[] | undefined
   }
 }
 
-declare const self: WorkerGlobalScope
+declare const self: ServiceWorkerGlobalScope
 
 // eslint-disable-next-line no-console
 console.log('Service worker script loaded.')
@@ -30,57 +30,64 @@ const serwist = new Serwist({
   ),
   skipWaiting: true,
   clientsClaim: true,
-  navigationPreload: false,
-  runtimeCaching: [
-    {
-      matcher({ request }) {
-        return request.mode === 'navigate'
-      },
-      handler: new NetworkFirst({
-        cacheName: 'pages',
-        matchOptions: {
-          ignoreSearch: true,
-        },
-      }),
-    },
-    {
-      matcher({ request }) {
-        return request.destination === 'image'
-      },
-      handler: new StaleWhileRevalidate({
-        cacheName: 'images',
-        plugins: [
-          new ExpirationPlugin({
-            maxEntries: 60,
-            maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
-          }),
-        ],
-      }),
-    },
-    ...defaultCache,
-  ],
+  navigationPreload: true,
+  runtimeCaching: defaultCache,
+  // runtimeCaching: [
+  //   {
+  //     matcher({ request }) {
+  //       return request.mode === 'navigate'
+  //     },
+  //     handler: new NetworkFirst({
+  //       cacheName: 'pages',
+  //       matchOptions: {
+  //         ignoreSearch: true,
+  //       },
+  //     }),
+  //   },
+  //   {
+  //     matcher({ request }) {
+  //       return request.destination === 'image'
+  //     },
+  //     handler: new StaleWhileRevalidate({
+  //       cacheName: 'images',
+  //       plugins: [
+  //         new ExpirationPlugin({
+  //           maxEntries: 60,
+  //           maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+  //         }),
+  //       ],
+  //     }),
+  //   },
+  //   ...defaultCache,
+  // ],
 })
-
-serwist.setCatchHandler(async ({ request }) => {
-  const url = new URL(request.url);
-  url.search = ''; // Normalize URL by removing search parameters
-
-  if (request.destination === 'document' || request.destination === 'empty' || request.destination === 'script') {
-    const cachedResponse = await caches.match(url.toString(), { ignoreSearch: true });
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-  }
-
-  // Fallback for document requests to the offline page
-  if (request.destination === 'document') {
-    const offlinePage = await caches.match('/offline');
-    if (offlinePage) {
-      return offlinePage;
-    }
-  }
-
-  return Response.error();
-});
+//
+// serwist.setCatchHandler(async ({ request }) => {
+//   const url = new URL(request.url)
+//   url.search = '' // Normalize URL by removing search parameters
+//
+//   if (
+//     request.destination === 'document' ||
+//     request.destination === '' ||
+//     request.destination === 'script'
+//   ) {
+//     const cachedResponse = await caches.match(url.toString(), {
+//       ignoreSearch: true,
+//     })
+//     if (cachedResponse) {
+//       return cachedResponse
+//     }
+//   }
+//
+//   // Fallback for document requests to the offline page
+//   if (request.destination === 'document') {
+//     const offlinePage = await caches.match('/offline')
+//     if (offlinePage) {
+//       return offlinePage
+//     }
+//   }
+//
+//   return Response.error()
+// })
 
 serwist.addEventListeners()

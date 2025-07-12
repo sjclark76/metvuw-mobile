@@ -1,25 +1,26 @@
-const withSerwistInit = require("@serwist/next").default;
+import type { NextConfig } from 'next'
+import withSerwistInit from '@serwist/next'
 
 const withSerwist = withSerwistInit({
-  swSrc: "src/app/sw.ts",
-  swDest: "public/sw.js",
+  swSrc: 'src/app/sw.ts',
+  swDest: 'public/sw.js',
   disable: process.env.NODE_ENV === 'development',
-});
+})
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   webpack: (config, { dev, isServer }) => {
     if (dev && !isServer) {
       const ignored = Array.isArray(config.watchOptions.ignored)
         ? config.watchOptions.ignored
-        : [config.watchOptions.ignored].filter(Boolean);
+        : [config.watchOptions.ignored].filter(Boolean)
 
       config.watchOptions.ignored = [
         ...ignored,
-        "**/public/sw.js",
-        "**/public/sw.js.map",
-      ];
+        '**/public/sw.js',
+        '**/public/sw.js.map',
+      ]
     }
-    return config;
+    return config
   },
   poweredByHeader: false,
   images: {
@@ -37,8 +38,8 @@ const nextConfig = {
           },
         ],
       },
-    ];
+    ]
   },
 }
 
-module.exports = withSerwist(nextConfig);
+export default withSerwist(nextConfig)

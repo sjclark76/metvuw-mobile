@@ -5,7 +5,11 @@
       "dom",
       "dom.iterable",
       "esnext",
-      "WebWorker"
+      "webworker"
+    ],
+    "types": [
+      // This allows Serwist to type `window.serwist`.
+      "@serwist/next/typings"
     ],
     "allowJs": true,
     "skipLibCheck": true,
