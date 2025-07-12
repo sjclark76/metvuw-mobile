@@ -1,5 +1,5 @@
 import { defaultCache } from '@serwist/next/worker'
-import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
+import { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
 import { Serwist } from 'serwist'
 
 // This declares the value of `self.__SW_MANIFEST`.
@@ -29,34 +29,20 @@ const serwist = new Serwist({
   ),
   skipWaiting: true,
   clientsClaim: true,
-  navigationPreload: true,
+  navigationPreload: false,
   runtimeCaching: defaultCache,
   // runtimeCaching: [
-  //   {
-  //     matcher({ request }) {
-  //       return request.mode === 'navigate'
-  //     },
-  //     handler: new NetworkFirst({
-  //       cacheName: 'pages',
-  //       matchOptions: {
-  //         ignoreSearch: true,
-  //       },
-  //     }),
-  //   },
-  //   {
-  //     matcher({ request }) {
-  //       return request.destination === 'image'
-  //     },
-  //     handler: new StaleWhileRevalidate({
-  //       cacheName: 'images',
-  //       plugins: [
-  //         new ExpirationPlugin({
-  //           maxEntries: 60,
-  //           maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
-  //         }),
-  //       ],
-  //     }),
-  //   },
+  //   // {
+  //   //   matcher({ request }) {
+  //   //     return request.mode === 'navigate'
+  //   //   },
+  //   //   handler: new NetworkFirst({
+  //   //     cacheName: 'pages',
+  //   //     matchOptions: {
+  //   //       ignoreSearch: true,
+  //   //     },
+  //   //   }),
+  //   // },
   //   ...defaultCache,
   // ],
 })
