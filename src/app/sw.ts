@@ -36,7 +36,12 @@ const serwist = new Serwist({
       matcher({ request }) {
         return request.mode === 'navigate'
       },
-      handler: new NetworkOnly(),
+      handler: new NetworkFirst({
+        cacheName: 'pages',
+        cacheQueryOptions: {
+          ignoreSearch: true,
+        },
+      }),
     },
     {
       matcher({ request }) {
@@ -58,7 +63,9 @@ const serwist = new Serwist({
 
 serwist.setCatchHandler(async ({ request }) => {
   if (request.destination === 'document') {
-    const cachedResponse = await caches.match(request.url)
+    const url = new URL(request.url);
+    url.search = '';
+    const cachedResponse = await caches.match(url.toString(), { ignoreSearch: true });
     if (cachedResponse) {
       return cachedResponse
     }
