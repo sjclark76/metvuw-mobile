@@ -5,21 +5,35 @@ const withSerwist = withSerwistInit({
   swSrc: 'src/app/sw.ts',
   swDest: 'public/sw.js',
   reloadOnOnline: true,
-  disable: process.env.NODE_ENV === 'development',
+  // disable: process.env.NODE_ENV === 'development',
 })
 
 const nextConfig: NextConfig = {
   webpack: (config, { dev, isServer }) => {
+    // This modification is to prevent the development server from
+    // watching the generated service worker files, which can cause infinite loops.
     if (dev && !isServer) {
-      const ignored = Array.isArray(config.watchOptions.ignored)
-        ? config.watchOptions.ignored
-        : [config.watchOptions.ignored].filter(Boolean)
+      // Get existing ignored paths, defaulting to an empty array.
+      const existingIgnored = config.watchOptions.ignored ?? []
+      const ignoredAsArray = Array.isArray(existingIgnored)
+        ? existingIgnored
+        : [existingIgnored]
 
-      config.watchOptions.ignored = [
-        ...ignored,
-        '**/public/sw.js',
-        '**/public/sw.js.map',
-      ]
+      // Filter out any invalid values to satisfy the Webpack schema.
+      // This prevents errors from empty strings or non-string values.
+      const validIgnoredPaths = ignoredAsArray.filter(
+        (path) => typeof path === 'string' && path.length > 0,
+      )
+
+      // Create a new watchOptions object with the combined valid paths.
+      config.watchOptions = {
+        ...config.watchOptions,
+        ignored: [
+          ...validIgnoredPaths,
+          '**/public/sw.js',
+          '**/public/sw.js.map',
+        ],
+      }
     }
     return config
   },
