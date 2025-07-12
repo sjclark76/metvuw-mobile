@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { defaultCache } from '@serwist/next/worker'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
 import { Serwist } from 'serwist'
@@ -33,12 +34,12 @@ serwist.setCatchHandler(async ({ request }) => {
   if (request.destination === 'document') {
     const offlinePage = await caches.match('/offline')
     if (offlinePage) {
-      // Wait for all clients to be matched.
-      const clients = await self.clients.matchAll()
-      // Send a message to each client to let them know the app is offline.
-      clients.forEach((client) => {
-        client.postMessage({ type: 'OFFLINE' })
-      })
+      // // Wait for all clients to be matched.
+      // const clients = await self.clients.matchAll()
+      // // Send a message to each client to let them know the app is offline.
+      // clients.forEach((client) => {
+      //   client.postMessage({ type: 'OFFLINE' })
+      // })
       // Correctly return the offline page from the async handler.
       return offlinePage
     }
