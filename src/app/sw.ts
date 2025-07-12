@@ -33,7 +33,7 @@ const serwist = new Serwist({
   ),
   skipWaiting: true,
   clientsClaim: true,
-  navigationPreload: false,
+  navigationPreload: true,
   runtimeCaching: defaultCache,
   // runtimeCaching: [
   //   // {
