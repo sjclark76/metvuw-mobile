@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3002",
+    "prod": "rm -rf ./.next && npm run build && npm run start",
     "build": "next build",
     "start": "next start -p 3002",
     "lint": "next lint",
@@ -24,9 +25,8 @@
   "dependencies": {
     "@baselime/node-opentelemetry": "0.5.8",
     "@heroicons/react": "2.2.0",
+    "@serwist/next": "^9.0.15",
     "@supabase/supabase-js": "^2.40.0",
-    "@vercel/analytics": "1.5.0",
-    "@vercel/speed-insights": "^1.1.0",
     "axios": "1.10.0",
     "cheerio": "1.1.0",
     "clsx": "^2.1.0",
@@ -39,7 +39,9 @@
     "react": "19.1.0",
     "react-aria-components": "^1.7.1",
     "react-dom": "19.1.0",
+    "react-hot-toast": "^2.5.2",
     "react-lazy-load-image-component": "1.6.3",
+    "serwist": "^9.0.15",
     "sharp": "^0.34.0"
   },
   "devDependencies": {
