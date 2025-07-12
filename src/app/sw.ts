@@ -1,6 +1,6 @@
 import { defaultCache } from '@serwist/next/worker'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
-import { ExpirationPlugin, NetworkOnly, StaleWhileRevalidate } from 'serwist'
+import { ExpirationPlugin, NetworkFirst, StaleWhileRevalidate } from 'serwist'
 import { Serwist } from 'serwist'
 
 // This declares the value of `self.__SW_MANIFEST`.
@@ -38,7 +38,7 @@ const serwist = new Serwist({
       },
       handler: new NetworkFirst({
         cacheName: 'pages',
-        cacheQueryOptions: {
+        matchOptions: {
           ignoreSearch: true,
         },
       }),
@@ -62,19 +62,25 @@ const serwist = new Serwist({
 })
 
 serwist.setCatchHandler(async ({ request }) => {
-  if (request.destination === 'document') {
-    const url = new URL(request.url);
-    url.search = '';
+  const url = new URL(request.url);
+  url.search = ''; // Normalize URL by removing search parameters
+
+  if (request.destination === 'document' || request.destination === 'empty' || request.destination === 'script') {
     const cachedResponse = await caches.match(url.toString(), { ignoreSearch: true });
     if (cachedResponse) {
-      return cachedResponse
-    }
-    const offlinePage = await caches.match('/offline')
-    if (offlinePage) {
-      return offlinePage
+      return cachedResponse;
     }
   }
-  return Response.error()
-})
+
+  // Fallback for document requests to the offline page
+  if (request.destination === 'document') {
+    const offlinePage = await caches.match('/offline');
+    if (offlinePage) {
+      return offlinePage;
+    }
+  }
+
+  return Response.error();
+});
 
 serwist.addEventListeners()
