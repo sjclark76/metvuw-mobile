@@ -46,13 +46,6 @@ const serwist = new Serwist({
           new CacheableResponsePlugin({
             statuses: [200],
           }),
-          {
-            handlerDidError: async () => {
-              const cache = await caches.open('pages')
-              const fallbackResponse = await cache.match('/offline')
-              return fallbackResponse || Response.error()
-            },
-          },
         ],
       }),
     },
@@ -72,6 +65,16 @@ const serwist = new Serwist({
     },
     ...defaultCache,
   ],
+  fallbacks: {
+    entries: [
+      {
+        url: '/offline',
+        matcher({ request }) {
+          return request.destination === 'document'
+        },
+      },
+    ],
+  },
 })
 
 serwist.addEventListeners()
