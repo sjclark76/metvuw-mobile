@@ -89,7 +89,7 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
   )
 
   return (
-    <footer className="m:p-2 sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 pt-1 pb-4 shadow-lg lg:p-3 dark:border-slate-700 dark:bg-slate-800">
+    <footer className="m:p-2 sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 px-4 pt-2 pb-5 shadow-lg lg:p-3 dark:border-slate-700 dark:bg-slate-800">
       <div
         className={`container mx-auto flex flex-row items-center ${
           displayAnimatedChart
