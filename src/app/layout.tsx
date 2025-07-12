@@ -1,7 +1,6 @@
 'use client'
 import './globals.css'
 
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Provider } from 'jotai'
 import React from 'react'
 
@@ -25,7 +24,6 @@ export default function RootLayout({
       <GoogleTag />
       <body className="font-sans text-gray-800">
         <div className="font-sans text-gray-800">
-          <SpeedInsights />
           <Provider>
             <header className="sticky top-0 z-30 bg-white shadow-md">
               <Navbar />
