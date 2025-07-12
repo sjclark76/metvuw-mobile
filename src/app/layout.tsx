@@ -2,7 +2,8 @@
 import './globals.css'
 
 import { Provider } from 'jotai'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { toast, Toaster } from 'react-hot-toast'
 
 import GoogleTag from '@/components/GoogleTag'
 import { config } from '@/config'
@@ -14,6 +15,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      const handleMessage = (event: MessageEvent) => {
+        if (event.data && event.data.type === 'OFFLINE') {
+          toast.error('You are offline. Showing cached page.')
+        }
+      }
+      navigator.serviceWorker.addEventListener('message', handleMessage)
+      return () => {
+        navigator.serviceWorker.removeEventListener('message', handleMessage)
+      }
+    }
+  }, [])
+
   return (
     <html lang="en" className="bg-gray-100">
       <head>
@@ -23,6 +38,7 @@ export default function RootLayout({
       </head>
       <GoogleTag />
       <body className="font-sans text-gray-800">
+        <Toaster />
         <div className="font-sans text-gray-800">
           <Provider>
             <header className="sticky top-0 z-30 bg-white shadow-md">

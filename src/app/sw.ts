@@ -1,5 +1,5 @@
 import { defaultCache } from '@serwist/next/worker'
-import { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
+import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
 import { Serwist } from 'serwist'
 
 // This declares the value of `self.__SW_MANIFEST`.
@@ -16,35 +16,35 @@ declare const self: ServiceWorkerGlobalScope
 console.log('Service worker script loaded.')
 
 const serwist = new Serwist({
-  precacheEntries: (self.__SW_MANIFEST || []).concat(
-    {
-      url: '/offline',
-      revision: null,
-    },
-    {
-      url: '/',
-      revision: null,
-    },
-    {
-      url: '/nz',
-      revision: null,
-    },
-  ),
+  precacheEntries: [
+    ...(self.__SW_MANIFEST || []),
+    { url: '/offline', revision: null },
+    { url: '/', revision: null },
+    { url: '/regions/nz', revision: null },
+  ],
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: false,
   runtimeCaching: defaultCache,
 })
-//
+
 serwist.setCatchHandler(async ({ request }) => {
-  // Fallback for document requests to the offline page
+  // Fallback for document requests to the offline page.
   if (request.destination === 'document') {
     const offlinePage = await caches.match('/offline')
     if (offlinePage) {
+      // Wait for all clients to be matched.
+      const clients = await self.clients.matchAll()
+      // Send a message to each client to let them know the app is offline.
+      clients.forEach((client) => {
+        client.postMessage({ type: 'OFFLINE' })
+      })
+      // Correctly return the offline page from the async handler.
       return offlinePage
     }
   }
 
+  // For any other request, return a standard network error.
   return Response.error()
 })
 
