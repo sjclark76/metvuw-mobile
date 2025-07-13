@@ -20,8 +20,8 @@ const serwist = new Serwist({
   precacheEntries: [
     ...(self.__SW_MANIFEST || []),
     { url: '/offline', revision: null },
-    { url: '/', revision: null },
-    { url: '/regions/nz', revision: null },
+    // { url: '/', revision: null },
+    // { url: '/regions/nz', revision: null },
   ],
   skipWaiting: true,
   clientsClaim: true,
@@ -34,13 +34,6 @@ serwist.setCatchHandler(async ({ request }) => {
   if (request.destination === 'document') {
     const offlinePage = await caches.match('/offline')
     if (offlinePage) {
-      // // Wait for all clients to be matched.
-      // const clients = await self.clients.matchAll()
-      // // Send a message to each client to let them know the app is offline.
-      // clients.forEach((client) => {
-      //   client.postMessage({ type: 'OFFLINE' })
-      // })
-      // Correctly return the offline page from the async handler.
       return offlinePage
     }
   }
