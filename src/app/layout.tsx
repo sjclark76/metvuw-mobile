@@ -6,6 +6,7 @@ import React from 'react'
 import { Toaster } from 'react-hot-toast'
 
 import GoogleTag from '@/components/GoogleTag'
+import InstallPWA from '@/components/InstallPWA'
 import { config } from '@/config'
 
 import Navbar from '../components/Navbar'
@@ -33,6 +34,7 @@ export default function RootLayout({
             <main className="mx-auto dark:bg-stone-600 dark:text-stone-100">
               {children}
             </main>
+            <InstallPWA />
           </Provider>
         </div>
       </body>
