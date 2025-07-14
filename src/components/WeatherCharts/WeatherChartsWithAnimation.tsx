@@ -49,7 +49,8 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
   const displayAnimatedChart = useAtomValue(displayAnimatedChartAtom)
   return (
     <>
-      <div className="relative flex h-full flex-1 flex-col items-center justify-center gap-2 pt-2">
+      {/* This container no longer needs to be relative for the animated view */}
+      <div className="flex flex-1 flex-col items-center justify-center gap-2 pt-2">
         {/* AnimatePresence handles the transition between the two views */}
         <AnimatePresence mode="wait">
           {displayAnimatedChart ? (
@@ -59,12 +60,16 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="flex h-full w-full flex-col items-center"
+              // This creates a fixed overlay that covers the viewport and centers its content.
+              className="fixed inset-0 z-10 flex items-center justify-center"
             >
-              <AnimatedWeatherChart
-                region={props.region}
-                charts={props.charts}
-              />
+              {/* This inner div constrains the width of the chart */}
+              <div className="w-full max-w-2xl px-2">
+                <AnimatedWeatherChart
+                  region={props.region}
+                  charts={props.charts}
+                />
+              </div>
             </motion.div>
           ) : (
             <motion.ul
