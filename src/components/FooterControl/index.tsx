@@ -116,7 +116,7 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
           {displayAnimatedChart && (
             <motion.div
               key="additional-controls"
-              className="flex flex-row items-center space-x-4 lg:gap-5"
+              className="flex w-2/3 flex-row items-center space-x-4 lg:gap-5"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               // Define a specific, quick transition for when the controls exit
