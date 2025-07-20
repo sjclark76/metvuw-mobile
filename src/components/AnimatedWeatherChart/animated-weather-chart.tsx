@@ -32,13 +32,11 @@ const AnimatedWeatherChart = ({
   }, [playAnimation, charts.length, setCurrentIndex])
 
   return (
-    <div>
-      <WeatherChart
-        region={region}
-        chart={charts[currentIndex]}
-        index={currentIndex}
-      />
-    </div>
+    <WeatherChart
+      region={region}
+      chart={charts[currentIndex]}
+      index={currentIndex}
+    />
   )
 }
 export { AnimatedWeatherChart }
