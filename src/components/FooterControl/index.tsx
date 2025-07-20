@@ -1,8 +1,8 @@
 'use client'
+import clsx from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion' // Import framer-motion
 import { useAtom } from 'jotai/index'
 import { ChangeEvent, useCallback, useMemo } from 'react'
-import clsx from 'clsx'
 
 import {
   animatedChartIndexAtom,
