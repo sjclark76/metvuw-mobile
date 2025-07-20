@@ -2,12 +2,14 @@
 import { AnimatePresence, motion } from 'framer-motion' // Import framer-motion
 import { useAtom } from 'jotai/index'
 import { ChangeEvent, useCallback, useMemo } from 'react'
+import clsx from 'clsx'
 
 import {
   animatedChartIndexAtom,
   displayAnimatedChartAtom,
   playAnimationAtom,
 } from '@/components/Atoms/GlobalState'
+import { useIsStandalone } from '@/components/Hooks/useIsStandalone'
 import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 
 // Icon components (PlayIcon, CrossIcon, PauseIcon) remain the same
@@ -63,6 +65,7 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
   const [animatedChartIndex, setAnimatedChartIndex] = useAtom(
     animatedChartIndexAtom,
   )
+  const isStandalone = useIsStandalone()
 
   const handleMasterPlay = useCallback(() => {
     if (displayAnimatedChart) {
@@ -88,9 +91,16 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
     [charts],
   )
 
+  const footerClasses = clsx(
+    'sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 shadow-lg lg:p-3 dark:border-slate-700 dark:bg-slate-800',
+    {
+      'm:p-2 px-5 pt-3 pb-6': isStandalone,
+      'p-2': !isStandalone,
+    },
+  )
+
   return (
-    <footer className="sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 p-2 shadow-lg lg:p-3 dark:border-slate-700 dark:bg-slate-800">
-      {/*<footer className="m:p-2 sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 px-5 pt-3 pb-6 shadow-lg lg:p-3 dark:border-slate-700 dark:bg-slate-800">*/}
+    <footer className={footerClasses}>
       <div
         className={`container mx-auto flex flex-row items-center ${
           displayAnimatedChart
