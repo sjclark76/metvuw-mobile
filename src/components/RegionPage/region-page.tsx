@@ -45,7 +45,7 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
     // It takes at least the height of the viewport minus the main navbar's height (approx. 4rem or h-16).
     <div className="flex min-h-[calc(100vh-4rem)] flex-col">
       {/* This div will contain your main page content and grow to fill available space */}
-      <div className="flex-grow">
+      <div className="flex flex-grow flex-col">
         <SubHeader submenuText={submenuText} />
         <WeatherChartsWithAnimation region={region} charts={rainChartData} />
       </div>

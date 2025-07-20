@@ -49,7 +49,7 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
   const displayAnimatedChart = useAtomValue(displayAnimatedChartAtom)
   return (
     <>
-      <div className="relative flex h-full flex-1 flex-col items-center justify-center gap-2 pt-2">
+      <div className="relative flex h-full flex-1 flex-col gap-2">
         {/* AnimatePresence handles the transition between the two views */}
         <AnimatePresence mode="wait">
           {displayAnimatedChart ? (
@@ -59,7 +59,7 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="flex h-full w-full flex-col items-center"
+              className="flex w-full flex-grow flex-col items-center justify-center"
             >
               <AnimatedWeatherChart
                 region={props.region}
@@ -69,7 +69,7 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
           ) : (
             <motion.ul
               key="static-list" // Unique key
-              className="mx-auto flex w-full max-w-2xl flex-col items-center px-2"
+              className="mx-auto flex w-full max-w-2xl flex-col items-center px-2 pt-2"
               variants={containerVariants}
               initial="hidden"
               animate="visible"
