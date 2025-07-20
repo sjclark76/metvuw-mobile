@@ -31,12 +31,13 @@ export function WeatherChart(props: Props) {
         />
       }
       date={
-        <div className="flex items-center justify-center gap-x-1 text-sm font-semibold text-gray-700 sm:text-base dark:text-stone-100">
-          <span className="w-30 text-left">
-            {format(forecastDate, 'MMMM do')}
-          </span>
-          <span className="text-left">{format(forecastDate, 'yyyy')}</span>
-        </div>
+        <span className="text-left text-sm font-semibold text-gray-700 sm:text-base dark:text-stone-100">
+          {format(forecastDate, 'dd/MM/yyyy')}
+        </span>
+        // <div className="flex items-center justify-center gap-x-1 text-sm font-semibold text-gray-700 sm:text-base dark:text-stone-100">
+        //
+        //   <span className="text-left">{format(forecastDate, 'yyyy')}</span>
+        // </div>
       }
       time={
         <div className="flex items-center justify-center gap-x-1 text-center text-xs font-semibold text-white">
