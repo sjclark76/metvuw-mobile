@@ -32,10 +32,10 @@ export function WeatherChart(props: Props) {
       }
       date={
         <div className="flex items-center justify-center gap-x-1 text-sm font-semibold text-gray-700 sm:text-base dark:text-stone-100">
-          <span className="w-20 text-left">
+          <span className="w-30 text-left">
             {format(forecastDate, 'MMMM do')}
           </span>
-          <span className="w-12 text-left">{format(forecastDate, 'yyyy')}</span>
+          <span className="text-left">{format(forecastDate, 'yyyy')}</span>
         </div>
       }
       time={
