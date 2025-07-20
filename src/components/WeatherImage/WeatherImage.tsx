@@ -1,5 +1,7 @@
-import { LazyLoadImage } from 'react-lazy-load-image-component'
+import { useSetAtom } from 'jotai/index'
+import { useEffect, useRef } from 'react'
 
+import { loadedImageStateAtom } from '@/app/regions/[name]/state'
 import {
   radarImageDimensions,
   rainImageDimensions,
@@ -12,7 +14,7 @@ export interface WeatherImageProps {
   chartType: ChartType
   imageAlt: string
   imageSrc: string | undefined
-  isLazy: boolean
+  isHighPriority: boolean
 }
 
 function extraImageAttribute(
@@ -51,8 +53,35 @@ const WeatherImage = ({
   imageAlt,
   imageSrc,
   chartType,
-  isLazy,
+  isHighPriority,
 }: WeatherImageProps) => {
+  const setLoadedImageState = useSetAtom(loadedImageStateAtom)
+  const imgRef = useRef<HTMLImageElement>(null)
+
+  useEffect(() => {
+    const imageElement = imgRef.current
+
+    const handleLoad = () => {
+      if (imageElement?.src) {
+        setLoadedImageState((prev) => new Map(prev).set(imageElement.src, true))
+      }
+    }
+
+    if (imageElement) {
+      if (imageElement.complete) {
+        handleLoad()
+      } else {
+        imageElement.addEventListener('load', handleLoad)
+      }
+    }
+
+    return () => {
+      if (imageElement) {
+        imageElement.removeEventListener('load', handleLoad)
+      }
+    }
+  }, [imageSrc, setLoadedImageState])
+
   const attributes = extraImageAttribute(chartType, imageSrc)
 
   if (!imageSrc) {
@@ -65,10 +94,10 @@ const WeatherImage = ({
     src: imageSrc,
     ...attributes,
     style: {
-      display: 'block', // Make image a block element
-      width: '100%', // Make image attempt to fill container width
-      maxWidth: '100%', // Ensure it doesn't overflow container
-      height: 'auto', // Maintain aspect ratio
+      display: 'block',
+      width: '100%',
+      maxWidth: '100%',
+      height: 'auto',
       ...(attributes &&
       typeof attributes === 'object' &&
       'style' in attributes &&
@@ -79,14 +108,13 @@ const WeatherImage = ({
   }
 
   return (
-    // Ensure this div takes full width of its parent, constraining the image
     <div data-testid="weather-image" className="w-full">
-      {isLazy ? (
-        <LazyLoadImage alt={imageAlt} {...commonProps} threshold={200} />
-      ) : (
-        // eslint-disable-next-line jsx-a11y/alt-text
-        <img alt={imageAlt} {...commonProps} fetchPriority="high" />
-      )}
+      <img
+        ref={imgRef}
+        alt={imageAlt}
+        {...commonProps}
+        fetchPriority={isHighPriority ? 'high' : 'low'}
+      />
     </div>
   )
 }

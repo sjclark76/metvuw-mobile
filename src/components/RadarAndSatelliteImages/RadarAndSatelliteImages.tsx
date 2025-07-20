@@ -85,7 +85,7 @@ export default function Foo({ images, chartType }: Props) {
                   <RadarAndSatelliteImageCard
                     image={image}
                     chartType={chartType}
-                    isLazy={index > 1}
+                    isHighPriority={index == 0}
                   />
                 </motion.li>
               ))}
