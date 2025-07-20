@@ -33,7 +33,7 @@ function AnimatedRadarAndSatelliteImageCard({ images, chartType }: Props) {
       <RadarAndSatelliteImageCard
         image={images[currentIndex]}
         chartType={chartType}
-        isLazy={true}
+        isHighPriority={true}
       />
     </div>
   )

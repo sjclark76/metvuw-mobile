@@ -10,7 +10,7 @@ import { ChartType } from '@/shared/types/ChartType'
 type Props = {
   image: SkinnyChartData
   chartType: Extract<ChartType, 'Radar' | 'Satellite' | 'Upper Air'>
-  isLazy: boolean
+  isHighPriority: boolean
 }
 
 const safeFormat = (date: number, formatString: string) => {
@@ -23,7 +23,11 @@ const safeFormat = (date: number, formatString: string) => {
   }
 }
 
-function RadarAndSatelliteImageCard({ image, chartType, isLazy }: Props) {
+function RadarAndSatelliteImageCard({
+  image,
+  chartType,
+  isHighPriority,
+}: Props) {
   const createImgAlt = (image: SkinnyChartData) => {
     return `${chartType.toLowerCase()} chart for ${format(
       new Date(image.imageDateUTC),
@@ -39,7 +43,7 @@ function RadarAndSatelliteImageCard({ image, chartType, isLazy }: Props) {
           imageSrc={image.url}
           imageAlt={createImgAlt(image)}
           chartType={chartType}
-          isLazy={isLazy}
+          isHighPriority={isHighPriority}
         />
       }
       date={
