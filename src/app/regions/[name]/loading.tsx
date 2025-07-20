@@ -7,18 +7,18 @@ export default function Loading() {
     <>
       <SubHeader submenuText="Loading forecast data" />
       <ul className="flex flex-col items-center">
-        <WeatherChartSkeleton
-          width={rainImageDimensions.width}
-          height={rainImageDimensions.height}
-        />
-        <WeatherChartSkeleton
-          width={rainImageDimensions.width}
-          height={rainImageDimensions.height}
-        />
-        <WeatherChartSkeleton
-          width={rainImageDimensions.width}
-          height={rainImageDimensions.height}
-        />
+        {/*<WeatherChartSkeleton*/}
+        {/*  width={rainImageDimensions.width}*/}
+        {/*  height={rainImageDimensions.height}*/}
+        {/*/>*/}
+        {/*<WeatherChartSkeleton*/}
+        {/*  width={rainImageDimensions.width}*/}
+        {/*  height={rainImageDimensions.height}*/}
+        {/*/>*/}
+        {/*<WeatherChartSkeleton*/}
+        {/*  width={rainImageDimensions.width}*/}
+        {/*  height={rainImageDimensions.height}*/}
+        {/*/>*/}
       </ul>
     </>
   )

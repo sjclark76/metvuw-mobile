@@ -27,7 +27,7 @@ export function WeatherChart(props: Props) {
           imageSrc={props.chart.url}
           imageAlt={altTag}
           chartType="Rain"
-          isLazy={props.index > 1}
+          isHighPriority={props.index === 0}
         />
       }
       date={

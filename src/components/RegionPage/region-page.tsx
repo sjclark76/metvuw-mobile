@@ -1,8 +1,10 @@
 'use client'
 
 import { format } from 'date-fns'
+import { useSetAtom } from 'jotai'
 import React from 'react'
 
+import { loadedImageStateAtom } from '@/app/regions/[name]/state'
 import { FooterControl } from '@/components/FooterControl'
 import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
 import SubHeader from '@/components/SubHeader'
@@ -16,6 +18,8 @@ interface RegionPageProps {
 }
 
 export default function RegionPage({ region, rainChartData }: RegionPageProps) {
+  const setLoadedImageState = useSetAtom(loadedImageStateAtom)
+
   const submenuText =
     rainChartData.length > 0
       ? `Forecast issued at ${format(
@@ -25,6 +29,16 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
       : ''
 
   usePreloadedImages(rainChartData)
+
+  setLoadedImageState(
+    rainChartData.reduce(
+      (acc: Map<string, boolean>, chart: SkinnyRainChartData) => {
+        acc.set(chart.url, false)
+        return acc
+      },
+      new Map<string, boolean>(),
+    ),
+  )
 
   return (
     // This outer div will manage the layout for content and the sticky footer.
