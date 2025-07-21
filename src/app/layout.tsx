@@ -27,7 +27,7 @@ export default function RootLayout({
         <Toaster />
         <div className="font-sans text-gray-800">
           <Provider>
-            <header className="sticky top-0 z-30 bg-white shadow-md">
+            <header className="sticky top-0 z-30 bg-white shadow-md print:hidden">
               <Navbar />
             </header>
             <main className="mx-auto dark:bg-stone-600 dark:text-stone-100">

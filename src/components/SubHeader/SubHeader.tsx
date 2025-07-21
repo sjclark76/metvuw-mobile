@@ -16,7 +16,9 @@ export function SubHeader({ submenuText }: { submenuText: string }) {
   const progress = totalCount > 0 ? (loadedCount / totalCount) * 100 : 0
 
   const styling = clsx(
-    'sticky z-10',
+    // For screen: apply sticky positioning with a z-index.
+    // For print: override to use static positioning, removing sticky behavior.
+    'sticky print:static z-10 print:z-auto',
     menuOpen && 'top-[29rem]',
     !menuOpen && 'top-16',
   )

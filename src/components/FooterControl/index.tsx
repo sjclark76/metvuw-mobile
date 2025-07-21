@@ -92,7 +92,7 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
   )
 
   const footerClasses = clsx(
-    'sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 shadow-lg lg:p-3 dark:border-slate-700 dark:bg-slate-800',
+    'sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 shadow-lg lg:p-3 dark:border-slate-700 dark:bg-slate-800 print:hidden',
     {
       'm:p-2 px-5 pt-3 pb-6': isStandalone,
       'p-2': !isStandalone,
