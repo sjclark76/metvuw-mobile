@@ -27,7 +27,7 @@
     "@heroicons/react": "2.2.0",
     "@serwist/next": "^9.0.15",
     "@supabase/supabase-js": "^2.40.0",
-    "axios": "1.10.0",
+    "axios": "1.11.0",
     "cheerio": "1.1.2",
     "clsx": "^2.1.0",
     "date-fns": "4.1.0",
