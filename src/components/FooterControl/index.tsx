@@ -57,6 +57,50 @@ function PauseIcon() {
   )
 }
 
+function BackwardIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="lg-size-5 size-5"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fillRule="evenodd"
+        d="M15.79 5.293a1 1 0 0 1 0 1.414L11.414 11l4.376 4.293a1 1 0 0 1-1.414 1.414l-5-5a1 1 0 0 1 0-1.414l5-5a1 1 0 0 1 1.414 0Z"
+        clipRule="evenodd"
+      />
+      <path
+        fillRule="evenodd"
+        d="M10.79 5.293a1 1 0 0 1 0 1.414L6.414 11l4.376 4.293a1 1 0 0 1-1.414 1.414l-5-5a1 1 0 0 1 0-1.414l5-5a1 1 0 0 1 1.414 0Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+
+function ForwardIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="lg-size-5 size-5"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fillRule="evenodd"
+        d="M10.21 5.293a1 1 0 0 1 1.414 0l5 5a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414-1.414L14.586 11 10.21 6.707a1 1 0 0 1 0-1.414Z"
+        clipRule="evenodd"
+      />
+      <path
+        fillRule="evenodd"
+        d="M5.21 5.293a1 1 0 0 1 1.414 0l5 5a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414-1.414L9.586 11 5.21 6.707a1 1 0 0 1 0-1.414Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+
 function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
   const [playAnimation, setPlayAnimation] = useAtom(playAnimationAtom)
   const [displayAnimatedChart, setDisplayAnimatedChart] = useAtom(
@@ -90,6 +134,16 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
     () => (charts && charts.length > 0 ? charts.length - 1 : 0),
     [charts],
   )
+
+  const handleForward = () => {
+    setPlayAnimation(false)
+    setAnimatedChartIndex((prev) => Math.min(prev + 1, max))
+  }
+
+  const handleBackward = () => {
+    setPlayAnimation(false)
+    setAnimatedChartIndex((prev) => Math.max(prev - 1, 0))
+  }
 
   const footerClasses = clsx(
     'sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 shadow-lg lg:p-3 dark:border-slate-700 dark:bg-slate-800',
@@ -160,6 +214,20 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
                 aria-label="progress bar"
                 className="w-full text-sky-400"
               />
+              <button
+                onClick={handleBackward}
+                className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
+                aria-label={'Step backward'}
+              >
+                <BackwardIcon />
+              </button>
+              <button
+                onClick={handleForward}
+                className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
+                aria-label={'Step forward'}
+              >
+                <ForwardIcon />
+              </button>
             </motion.div>
           )}
         </AnimatePresence>
