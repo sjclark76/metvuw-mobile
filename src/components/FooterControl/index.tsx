@@ -10,96 +10,12 @@ import {
   playAnimationAtom,
 } from '@/components/Atoms/GlobalState'
 import { useIsStandalone } from '@/components/Hooks/useIsStandalone'
+import { BackwardIcon } from '@/components/icons/BackwardIcon'
+import { CrossIcon } from '@/components/icons/CrossIcon'
+import { ForwardIcon } from '@/components/icons/ForwardIcon'
+import { PauseIcon } from '@/components/icons/PauseIcon'
+import { PlayIcon } from '@/components/icons/PlayIcon'
 import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
-
-// Icon components (PlayIcon, CrossIcon, PauseIcon) remain the same
-function PlayIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="lg-size-5 size-5"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-    >
-      <path d="M8 5v14l11-7z"></path>
-    </svg>
-  )
-}
-
-function CrossIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="lg-size-5 size-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M6 18L18 6M6 6l12 12"
-      />
-    </svg>
-  )
-}
-function PauseIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="lg-size-5 size-5"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-    >
-      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
-    </svg>
-  )
-}
-
-function BackwardIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="lg-size-5 size-5"
-      viewBox="0 0 20 20"
-      fill="currentColor"
-    >
-      <path
-        fillRule="evenodd"
-        d="M15.79 5.293a1 1 0 0 1 0 1.414L11.414 11l4.376 4.293a1 1 0 0 1-1.414 1.414l-5-5a1 1 0 0 1 0-1.414l5-5a1 1 0 0 1 1.414 0Z"
-        clipRule="evenodd"
-      />
-      <path
-        fillRule="evenodd"
-        d="M10.79 5.293a1 1 0 0 1 0 1.414L6.414 11l4.376 4.293a1 1 0 0 1-1.414 1.414l-5-5a1 1 0 0 1 0-1.414l5-5a1 1 0 0 1 1.414 0Z"
-        clipRule="evenodd"
-      />
-    </svg>
-  )
-}
-
-function ForwardIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="lg-size-5 size-5"
-      viewBox="0 0 20 20"
-      fill="currentColor"
-    >
-      <path
-        fillRule="evenodd"
-        d="M10.21 5.293a1 1 0 0 1 1.414 0l5 5a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414-1.414L14.586 11 10.21 6.707a1 1 0 0 1 0-1.414Z"
-        clipRule="evenodd"
-      />
-      <path
-        fillRule="evenodd"
-        d="M5.21 5.293a1 1 0 0 1 1.414 0l5 5a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414-1.414L9.586 11 5.21 6.707a1 1 0 0 1 0-1.414Z"
-        clipRule="evenodd"
-      />
-    </svg>
-  )
-}
 
 function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
   const [playAnimation, setPlayAnimation] = useAtom(playAnimationAtom)
@@ -217,14 +133,14 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
               <button
                 onClick={handleBackward}
                 className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
-                aria-label={'Step backward'}
+                aria-label="Step backward"
               >
                 <BackwardIcon />
               </button>
               <button
                 onClick={handleForward}
                 className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
-                aria-label={'Step forward'}
+                aria-label="Step forward"
               >
                 <ForwardIcon />
               </button>
