@@ -5,6 +5,8 @@ import { useAtomValue } from 'jotai'
 import { loadedImageStateAtom } from '@/app/regions/[name]/state'
 import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
 
+import { RefreshButton } from '../RefreshButton/RefreshButton'
+
 export function SubHeader({ submenuText }: { submenuText: string }) {
   const menuOpen = useAtomValue(isMenuOpenAtom)
   const loadedImageState = useAtomValue(loadedImageStateAtom)
@@ -30,11 +32,12 @@ export function SubHeader({ submenuText }: { submenuText: string }) {
           style={{ width: `${progress}%` }}
         />
       </div>
-      <div className="flex flex-row justify-center">
-        <div className="w-full bg-gray-50 px-2 filter dark:bg-stone-700">
-          <h1 className="my-4 text-center text-sm font-medium text-gray-800 dark:text-stone-100">
-            {submenuText}
-          </h1>
+      <div className="relative flex h-14 items-center justify-center bg-gray-50 px-4 filter dark:bg-stone-700">
+        <h1 className="text-center text-sm font-medium text-gray-800 dark:text-stone-100">
+          {submenuText}
+        </h1>
+        <div className="absolute top-1/2 right-4 -translate-y-1/2 transform">
+          <RefreshButton />
         </div>
       </div>
     </div>
