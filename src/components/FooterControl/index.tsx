@@ -48,7 +48,7 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
       setPlayAnimation(false)
       setAnimatedChartIndex(0)
     } else {
-      setPlayAnimation(true)
+      setPlayAnimation(false)
     }
     setDisplayAnimatedChart((prev) => !prev)
   }, [

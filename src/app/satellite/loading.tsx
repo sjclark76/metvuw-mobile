@@ -8,20 +8,6 @@ export default function Loading() {
   return (
     <>
       <SubHeader submenuText="Loading satellite data" />
-      <ul className="flex flex-col items-center">
-        <WeatherChartSkeleton
-          width={satelliteImageDimensions.width}
-          height={satelliteImageDimensions.height}
-        />
-        <WeatherChartSkeleton
-          width={satelliteImageDimensions.width}
-          height={satelliteImageDimensions.height}
-        />
-        <WeatherChartSkeleton
-          width={satelliteImageDimensions.width}
-          height={satelliteImageDimensions.height}
-        />
-      </ul>
     </>
   )
 }

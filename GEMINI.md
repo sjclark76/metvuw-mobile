@@ -2,6 +2,10 @@
 
 This document provides an overview of the Metvuw Mobile project to help AI assistants understand its structure and purpose.
 
+## Initial Setup
+
+At the beginning of each session, you **MUST** review the `repomix-output.xml` file. This file contains a complete and up-to-date representation of the entire repository and is essential for understanding the project context.
+
 ## Overview
 
 This project is a mobile-friendly web application for viewing weather information, primarily from Metvuw. It is built with Next.js and TypeScript, and it scrapes, processes, and displays weather images.
