@@ -5,6 +5,7 @@ import { Provider } from 'jotai'
 import React from 'react'
 import { Toaster } from 'react-hot-toast'
 
+import FavoritePageRedirect from '@/components/FavoritePageRedirect/FavoritePageRedirect'
 import GoogleTag from '@/components/GoogleTag'
 import { config } from '@/config'
 
@@ -30,6 +31,7 @@ export default function RootLayout({
             <header className="sticky top-0 z-30 bg-white shadow-md print:hidden">
               <Navbar />
             </header>
+            <FavoritePageRedirect />
             <main className="mx-auto dark:bg-stone-600 dark:text-stone-100">
               {children}
             </main>
