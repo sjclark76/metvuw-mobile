@@ -22,11 +22,11 @@ const AnimatedWeatherChart = ({
   const playAnimation = useAtomValue(playAnimationAtom)
 
   useEffect(() => {
-    let interval
+    let interval: any
     if (playAnimation) {
       interval = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % charts.length)
-      }, 250)
+      }, 500)
     }
     return () => clearInterval(interval)
   }, [playAnimation, charts.length, setCurrentIndex])

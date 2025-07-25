@@ -59,7 +59,7 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="flex w-full flex-grow flex-col items-center justify-center"
+              className="mx-auto flex w-full max-w-2xl flex-grow flex-col items-center justify-center"
             >
               <AnimatedWeatherChart
                 region={props.region}
