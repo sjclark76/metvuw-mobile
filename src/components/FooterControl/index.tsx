@@ -17,6 +17,22 @@ import { PauseIcon } from '@/components/icons/PauseIcon'
 import { PlayIcon } from '@/components/icons/PlayIcon'
 import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 
+const motionProps = {
+  initial: { opacity: 0, x: -20 },
+  animate: { opacity: 1, x: 0 },
+  // Define a specific, quick transition for when the controls exit
+  exit: {
+    opacity: 0,
+    x: -20,
+    transition: { duration: 0.2 }, // Adjust duration as needed for exit
+  },
+  // This transition applies to the "enter" animation (initial to animate)
+  transition: {
+    delay: 0.5, // Wait for the master button's 0.5s animation
+    duration: 0.3, // Duration for these controls to fade/slide in
+  },
+}
+
 function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
   const [playAnimation, setPlayAnimation] = useAtom(playAnimationAtom)
   const [displayAnimatedChart, setDisplayAnimatedChart] = useAtom(
@@ -50,15 +66,14 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
     () => (charts && charts.length > 0 ? charts.length - 1 : 0),
     [charts],
   )
+  const handleBackward = () => {
+    setPlayAnimation(false)
+    setAnimatedChartIndex((prev) => Math.max(prev - 1, 0))
+  }
 
   const handleForward = () => {
     setPlayAnimation(false)
     setAnimatedChartIndex((prev) => Math.min(prev + 1, max))
-  }
-
-  const handleBackward = () => {
-    setPlayAnimation(false)
-    setAnimatedChartIndex((prev) => Math.max(prev - 1, 0))
   }
 
   const footerClasses = clsx(
@@ -71,48 +86,33 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
 
   return (
     <footer className={footerClasses}>
-      <div
-        className={`container mx-auto flex flex-row items-center ${
-          displayAnimatedChart
-            ? 'justify-start space-x-4 lg:gap-5'
-            : 'justify-center'
-        }`}
-      >
-        <motion.button
-          layout // This enables smooth animation when layout changes
-          // For more control over the animation, you can add a transition prop:
-          transition={{ type: 'tween', ease: 'easeInOut', duration: 0.5 }}
-          onClick={handleMasterPlay}
-          className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
-          aria-label={
+      <AnimatePresence>
+        <div
+          className={`container mx-auto flex flex-row items-center ${
             displayAnimatedChart
-              ? 'Show static weather chart list'
-              : 'Show animated weather chart'
-          }
+              ? 'justify-start space-x-4 lg:gap-5'
+              : 'justify-center'
+          }`}
         >
-          {displayAnimatedChart ? <CrossIcon /> : <PlayIcon />}
-        </motion.button>
+          <motion.button
+            layout // This enables smooth animation when layout changes
+            // For more control over the animation, you can add a transition prop:
+            transition={{ type: 'tween', ease: 'easeInOut', duration: 0.5 }}
+            onClick={handleMasterPlay}
+            className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
+            aria-label={
+              displayAnimatedChart
+                ? 'Show static weather chart list'
+                : 'Show animated weather chart'
+            }
+          >
+            {displayAnimatedChart ? <CrossIcon /> : <PlayIcon />}
+          </motion.button>
 
-        <AnimatePresence>
           {displayAnimatedChart && (
-            <motion.div
-              key="additional-controls"
-              className="flex w-2/3 flex-row items-center space-x-4 lg:gap-5"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              // Define a specific, quick transition for when the controls exit
-              exit={{
-                opacity: 0,
-                x: -20,
-                transition: { duration: 0.2 }, // Adjust duration as needed for exit
-              }}
-              // This transition applies to the "enter" animation (initial to animate)
-              transition={{
-                delay: 0.5, // Wait for the master button's 0.5s animation
-                duration: 0.3, // Duration for these controls to fade/slide in
-              }}
-            >
-              <button
+            <>
+              <motion.button
+                {...motionProps}
                 onClick={() => setPlayAnimation((prev) => !prev)}
                 className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
                 aria-label={
@@ -120,8 +120,9 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
                 }
               >
                 {playAnimation ? <PauseIcon /> : <PlayIcon />}
-              </button>
-              <input
+              </motion.button>
+              <motion.input
+                {...motionProps}
                 type="range"
                 min="0"
                 max={max}
@@ -130,24 +131,26 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
                 aria-label="progress bar"
                 className="w-full text-sky-400"
               />
-              <button
+              <motion.button
+                {...motionProps}
                 onClick={handleBackward}
                 className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
                 aria-label="Step backward"
               >
                 <BackwardIcon />
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                {...motionProps}
                 onClick={handleForward}
                 className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
                 aria-label="Step forward"
               >
                 <ForwardIcon />
-              </button>
-            </motion.div>
+              </motion.button>
+            </>
           )}
-        </AnimatePresence>
-      </div>
+        </div>
+      </AnimatePresence>
     </footer>
   )
 }
