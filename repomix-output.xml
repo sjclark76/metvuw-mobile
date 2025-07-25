@@ -122,9 +122,6 @@ src/
       animated-weather-chart.tsx
     Atoms/
       GlobalState.ts
-    Footer/
-      Footer.tsx
-      index.ts
     FooterControl/
       index.tsx
     GeneralError/
@@ -136,6 +133,13 @@ src/
     Hooks/
       useIsStandalone.ts
       usePreloadedImages.ts
+    icons/
+      BackwardIcon.tsx
+      CrossIcon.tsx
+      ForwardIcon.tsx
+      PauseIcon.tsx
+      PlayIcon.tsx
+      RefreshIcon.tsx
     Navbar/
       components/
         DropDown.test.tsx
@@ -153,6 +157,8 @@ src/
     RadarPage/
       index.ts
       RadarPage.tsx
+    RefreshButton/
+      RefreshButton.tsx
     RegionPage/
       region-page.tsx
     SatellitePage/
@@ -1428,12 +1434,6 @@ export default async function Page() {
 
   return <RegionPage region={matchedRegion} rainChartData={sortedCharts} />
 }
-</file>
-
-<file path="src/components/Footer/index.ts">
-import { Footer } from './Footer'
-
-export default Footer
 </file>
 
 <file path="src/components/GeneralError/GeneralError.tsx">
@@ -5631,76 +5631,6 @@ const config = defineConfig({
 export default config
 </file>
 
-<file path="GEMINI.md">
-# Metvuw Mobile Project
-
-This document provides an overview of the Metvuw Mobile project to help AI assistants understand its structure and purpose.
-
-## Overview
-
-This project is a mobile-friendly web application for viewing weather information, primarily from Metvuw. It is built with Next.js and TypeScript, and it scrapes, processes, and displays weather images.
-
-**Important:** When working with this project, you should always refer to the `repomix-output.xml` file as it contains a summarized detail of the entire project. This file provides the most comprehensive context for any task.
-
-## Key Technologies
-
-*   **Framework:** Next.js
-*   **Language:** TypeScript
-*   **Styling:** Tailwind CSS
-*   **Backend & APIs:** Next.js API Routes
-*   **Background Jobs:** Inngest
-*   **Database & Storage:** Supabase (Postgres and Storage)
-*   **Testing:**
-    *   E2E: Playwright
-    *   Unit/Component: Jest and Vitest
-    *   Monitoring: Checkly
-*   **Deployment:** Vercel
-
-## Project Structure
-
-The project follows a structure typical for a Next.js application:
-
-*   `src/app`: Contains the core application, including pages, API routes, and layouts.
-    *   `api/scrape`: Endpoints for scraping weather data.
-    *   `api/inngest`: Endpoint for managing Inngest background jobs.
-    *   `regions/[name]`: Page for displaying regional weather forecasts.
-    *   `radar/[code]`: Page for displaying weather radar.
-    *   `satellite`: Page for displaying satellite imagery.
-    *   `upperair`: Page for displaying upper air data.
-*   `src/components`: Contains reusable React components used throughout the application.
-*   `src/inngest`: Defines Inngest functions and cron jobs for periodic data scraping.
-*   `src/shared`: Contains shared utilities, types, and helpers.
-    *   `helpers/v2/screenScraper`: Logic for scraping images from the source website.
-    *   `helpers/v2/imageStorage`: Functions for managing image uploads and removals from Supabase Storage.
-*   `supabase`: Configuration and migration files for the Supabase database.
-*   `e2e`: End-to-end tests written with Playwright.
-*   `__checks__`: Checkly configuration for synthetic monitoring and API checks.
-
-## Core Functionality
-
-The application's primary function is to scrape weather images from an external source, process them, and display them in a user-friendly, mobile-first interface.
-
-*   **Scraping:** The scraping logic is located in `src/shared/helpers/v2/screenScraper`.
-*   **Background Jobs:** Inngest cron jobs in `src/inngest/cronFunctions` trigger the scraping process periodically to keep the data up-to-date.
-*   **Image Processing:** Scraped images are compressed and optimized before being stored.
-*   **Storage:** Processed images are stored in Supabase Storage.
-*   **Data Display:** The frontend retrieves the images from Supabase Storage and displays them on the relevant pages.
-
-The application handles several types of weather data:
-*   Regional rain forecasts
-*   Radar imagery
-*   Satellite imagery
-*   Upper air soundings
-
-## Development and Testing
-
-*   **Running Tests:**
-    *   Unit/Component Tests: `npm test`
-    *   E2E Tests: `npx playwright test` (requires a running instance of the application, with the base URL set via the `PLAYWRIGHT_TEST_BASE_URL` environment variable).
-*   **Building the Project:**
-    *   `npm run build`
-</file>
-
 <file path="importJestDOM.ts">
 // import '@testing-library/jest-dom'
 require('@testing-library/jest-dom')
@@ -6394,19 +6324,6 @@ export {
 }
 </file>
 
-<file path="src/components/Footer/Footer.tsx">
-import React from 'react'
-
-export const Footer = () => (
-  // Remove "fixed bottom-0 left-0 z-10 w-full" to allow the flexbox layout to control the footer's position.
-  <footer className="bg-gray-50 px-0.5 py-1.5 shadow-inner filter dark:bg-stone-700">
-    <h2 className="text-center text-sm font-medium text-gray-800 dark:text-stone-100">
-      &copy; metvuw.com
-    </h2>
-  </footer>
-)
-</file>
-
 <file path="src/components/Hooks/useIsStandalone.ts">
 'use client'
 import { useEffect, useState } from 'react'
@@ -6458,6 +6375,125 @@ function usePreloadedImages(imageData: SkinnyChartData[]) {
 }
 
 export { usePreloadedImages }
+</file>
+
+<file path="src/components/icons/BackwardIcon.tsx">
+function BackwardIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="lg-size-5 size-5"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fillRule="evenodd"
+        d="M15.79 5.293a1 1 0 0 1 0 1.414L11.414 11l4.376 4.293a1 1 0 0 1-1.414 1.414l-5-5a1 1 0 0 1 0-1.414l5-5a1 1 0 0 1 1.414 0Z"
+        clipRule="evenodd"
+      />
+      <path
+        fillRule="evenodd"
+        d="M10.79 5.293a1 1 0 0 1 0 1.414L6.414 11l4.376 4.293a1 1 0 0 1-1.414 1.414l-5-5a1 1 0 0 1 0-1.414l5-5a1 1 0 0 1 1.414 0Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+export { BackwardIcon }
+</file>
+
+<file path="src/components/icons/CrossIcon.tsx">
+function CrossIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="lg-size-5 size-5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M6 18L18 6M6 6l12 12"
+      />
+    </svg>
+  )
+}
+export { CrossIcon }
+</file>
+
+<file path="src/components/icons/ForwardIcon.tsx">
+function ForwardIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="lg-size-5 size-5"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fillRule="evenodd"
+        d="M10.21 5.293a1 1 0 0 1 1.414 0l5 5a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414-1.414L14.586 11 10.21 6.707a1 1 0 0 1 0-1.414Z"
+        clipRule="evenodd"
+      />
+      <path
+        fillRule="evenodd"
+        d="M5.21 5.293a1 1 0 0 1 1.414 0l5 5a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414-1.414L9.586 11 5.21 6.707a1 1 0 0 1 0-1.414Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+export { ForwardIcon }
+</file>
+
+<file path="src/components/icons/PauseIcon.tsx">
+function PauseIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="lg-size-5 size-5"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
+    </svg>
+  )
+}
+export { PauseIcon }
+</file>
+
+<file path="src/components/icons/PlayIcon.tsx">
+function PlayIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="lg-size-5 size-5"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M8 5v14l11-7z"></path>
+    </svg>
+  )
+}
+export { PlayIcon }
+</file>
+
+<file path="src/components/icons/RefreshIcon.tsx">
+import React from 'react'
+
+export const RefreshIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    {...props}
+  >
+    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
+  </svg>
+)
 </file>
 
 <file path="src/components/Navbar/components/DropDown.tsx">
@@ -6787,49 +6823,6 @@ export function SatellitePage({
 }
 </file>
 
-<file path="src/components/SubHeader/SubHeader.tsx">
-'use client'
-import clsx from 'clsx'
-import { useAtomValue } from 'jotai'
-
-import { loadedImageStateAtom } from '@/app/regions/[name]/state'
-import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
-
-export function SubHeader({ submenuText }: { submenuText: string }) {
-  const menuOpen = useAtomValue(isMenuOpenAtom)
-  const loadedImageState = useAtomValue(loadedImageStateAtom)
-
-  const loadedCount = Array.from(loadedImageState.values()).filter(
-    Boolean,
-  ).length
-  const totalCount = loadedImageState.size
-  const progress = totalCount > 0 ? (loadedCount / totalCount) * 100 : 0
-
-  const styling = clsx(
-    'sticky z-10',
-    menuOpen && 'top-[29rem]',
-    !menuOpen && 'top-16',
-  )
-  return (
-    <div className={styling}>
-      <div className="w-full bg-gray-200 dark:bg-gray-700">
-        <div
-          className="h-1 bg-sky-400 transition-all duration-500 ease-out"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-      <div className="flex flex-row justify-center">
-        <div className="w-full bg-gray-50 px-2 filter dark:bg-stone-700">
-          <h1 className="my-4 text-center text-sm font-medium text-gray-800 dark:text-stone-100">
-            {submenuText}
-          </h1>
-        </div>
-      </div>
-    </div>
-  )
-}
-</file>
-
 <file path="src/components/UpperAirPage/UpperAirPage.tsx">
 import SubHeader from '@/components/SubHeader'
 import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
@@ -6879,38 +6872,6 @@ export function UpperAirPage({
 test('foo', () => {
   expect(true).toBeTruthy()
 })
-</file>
-
-<file path="src/components/Card.tsx">
-import clsx from 'clsx'
-import { ReactNode } from 'react'
-
-export default function Card({
-  weatherImage,
-  date,
-  time,
-  isLoading = false,
-}: {
-  weatherImage: ReactNode
-  date: ReactNode
-  time: ReactNode
-  isLoading?: boolean
-}) {
-  const styling = clsx(
-    'mb-5 rounded-xl bg-white pb-3 dark:bg-stone-700 drop-shadow-2xl ',
-    // 'sm:w-4/5 xl:w-5/12 2xl:w-1/2 ',
-    isLoading && 'animate-pulse',
-  )
-  return (
-    <div className={styling}>
-      {weatherImage}
-      <div className="flex items-center justify-around rounded-b-lg pt-3">
-        {date}
-        {time}
-      </div>
-    </div>
-  )
-}
 </file>
 
 <file path="src/components/NoForecast.tsx">
@@ -7162,6 +7123,76 @@ export const config = {
 }
 </file>
 
+<file path="GEMINI.md">
+# Metvuw Mobile Project
+
+This document provides an overview of the Metvuw Mobile project to help AI assistants understand its structure and purpose.
+
+## Overview
+
+This project is a mobile-friendly web application for viewing weather information, primarily from Metvuw. It is built with Next.js and TypeScript, and it scrapes, processes, and displays weather images.
+
+**Important:** When working with this project, you should always refer to the `repomix-output.xml` file as it contains a summarized detail of the entire project. This file provides the most comprehensive context for any task.
+
+## Key Technologies
+
+*   **Framework:** Next.js
+*   **Language:** TypeScript
+*   **Styling:** Tailwind CSS
+*   **Backend & APIs:** Next.js API Routes
+*   **Background Jobs:** Inngest
+*   **Database & Storage:** Supabase (Postgres and Storage)
+*   **Testing:**
+    *   E2E: Playwright
+    *   Unit/Component: Jest and Vitest
+    *   Monitoring: Checkly
+*   **Deployment:** Vercel
+
+## Project Structure
+
+The project follows a structure typical for a Next.js application:
+
+*   `src/app`: Contains the core application, including pages, API routes, and layouts.
+    *   `api/scrape`: Endpoints for scraping weather data.
+    *   `api/inngest`: Endpoint for managing Inngest background jobs.
+    *   `regions/[name]`: Page for displaying regional weather forecasts.
+    *   `radar/[code]`: Page for displaying weather radar.
+    *   `satellite`: Page for displaying satellite imagery.
+    *   `upperair`: Page for displaying upper air data.
+*   `src/components`: Contains reusable React components used throughout the application.
+*   `src/inngest`: Defines Inngest functions and cron jobs for periodic data scraping.
+*   `src/shared`: Contains shared utilities, types, and helpers.
+    *   `helpers/v2/screenScraper`: Logic for scraping images from the source website.
+    *   `helpers/v2/imageStorage`: Functions for managing image uploads and removals from Supabase Storage.
+*   `supabase`: Configuration and migration files for the Supabase database.
+*   `e2e`: End-to-end tests written with Playwright.
+*   `__checks__`: Checkly configuration for synthetic monitoring and API checks.
+
+## Core Functionality
+
+The application's primary function is to scrape weather images from an external source, process them, and display them in a user-friendly, mobile-first interface.
+
+*   **Scraping:** The scraping logic is located in `src/shared/helpers/v2/screenScraper`.
+*   **Background Jobs:** Inngest cron jobs in `src/inngest/cronFunctions` trigger the scraping process periodically to keep the data up-to-date.
+*   **Image Processing:** Scraped images are compressed and optimized before being stored.
+*   **Storage:** Processed images are stored in Supabase Storage.
+*   **Data Display:** The frontend retrieves the images from Supabase Storage and displays them on the relevant pages.
+
+The application handles several types of weather data:
+*   Regional rain forecasts
+*   Radar imagery
+*   Satellite imagery
+*   Upper air soundings
+
+## Development and Testing
+
+*   **Running Tests:**
+    *   Unit/Component Tests: `npm test`
+    *   E2E Tests: `npx playwright test` (requires a running instance of the application, with the base URL set via the `PLAYWRIGHT_TEST_BASE_URL` environment variable).
+*   **Building the Project:**
+    *   `npm run build`
+</file>
+
 <file path="jest.config.mjs">
 import nextJest from 'next/jest.js';
 
@@ -7346,51 +7377,6 @@ serwist.setCatchHandler(async ({ request }) => {
 serwist.addEventListeners()
 </file>
 
-<file path="src/components/AnimatedWeatherChart/animated-weather-chart.tsx">
-'use client'
-import { useAtom, useAtomValue } from 'jotai'
-import { useEffect } from 'react'
-
-import {
-  animatedChartIndexAtom,
-  playAnimationAtom,
-} from '@/components/Atoms/GlobalState'
-import { WeatherChart } from '@/components/WeatherCharts/WeatherChart'
-import { SkinnyRainChartData } from '@/shared/types/rainChartData'
-import { Region } from '@/shared/types/region'
-
-interface AnimatedWeatherChartProps {
-  region: Region
-  charts: SkinnyRainChartData[]
-}
-const AnimatedWeatherChart = ({
-  region,
-  charts,
-}: AnimatedWeatherChartProps) => {
-  const [currentIndex, setCurrentIndex] = useAtom(animatedChartIndexAtom)
-  const playAnimation = useAtomValue(playAnimationAtom)
-
-  useEffect(() => {
-    let interval
-    if (playAnimation) {
-      interval = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % charts.length)
-      }, 250)
-    }
-    return () => clearInterval(interval)
-  }, [playAnimation, charts.length, setCurrentIndex])
-
-  return (
-    <WeatherChart
-      region={region}
-      chart={charts[currentIndex]}
-      index={currentIndex}
-    />
-  )
-}
-export { AnimatedWeatherChart }
-</file>
-
 <file path="src/components/RadarAndSatelliteImages/AnimatedRadarAndSatelliteImageCard.tsx">
 import { useAtom, useAtomValue } from 'jotai/index'
 import { useEffect } from 'react'
@@ -7500,6 +7486,35 @@ function RadarAndSatelliteImageCard({
 }
 
 export { RadarAndSatelliteImageCard }
+</file>
+
+<file path="src/components/RefreshButton/RefreshButton.tsx">
+'use client'
+
+import { useIsStandalone } from '../Hooks/useIsStandalone'
+import { RefreshIcon } from '../icons/RefreshIcon'
+
+export const RefreshButton = () => {
+  const isStandalone = useIsStandalone()
+
+  const handleRefresh = () => {
+    window.location.reload()
+  }
+
+  if (!isStandalone) {
+    return null
+  }
+
+  return (
+    <button
+      onClick={handleRefresh}
+      className="hidden h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 shadow-sm hover:bg-gray-200 focus:outline-none md:flex dark:bg-stone-600 dark:text-stone-200 dark:hover:bg-stone-500"
+      aria-label="Refresh page"
+    >
+      <RefreshIcon className="h-6 w-6" />
+    </button>
+  )
+}
 </file>
 
 <file path="src/components/RegionPage/region-page.tsx">
@@ -7741,6 +7756,38 @@ const WeatherImage = ({
 export default WeatherImage
 </file>
 
+<file path="src/components/Card.tsx">
+import clsx from 'clsx'
+import { ReactNode } from 'react'
+
+export default function Card({
+  weatherImage,
+  date,
+  time,
+  isLoading = false,
+}: {
+  weatherImage: ReactNode
+  date: ReactNode
+  time: ReactNode
+  isLoading?: boolean
+}) {
+  const styling = clsx(
+    'mb-5 rounded-xl bg-white pb-3 dark:bg-stone-700 drop-shadow-2xl w-full ',
+    // 'sm:w-4/5 xl:w-5/12 2xl:w-1/2 ',
+    isLoading && 'animate-pulse',
+  )
+  return (
+    <div className={styling}>
+      {weatherImage}
+      <div className="flex items-center justify-around rounded-b-lg pt-3">
+        {date}
+        {time}
+      </div>
+    </div>
+  )
+}
+</file>
+
 <file path=".eslintrc.js">
 module.exports = {
   env: {
@@ -7900,177 +7947,49 @@ const nextConfig: NextConfig = {
 export default withSerwist(nextConfig)
 </file>
 
-<file path="src/components/FooterControl/index.tsx">
+<file path="src/components/AnimatedWeatherChart/animated-weather-chart.tsx">
 'use client'
-import clsx from 'clsx'
-import { AnimatePresence, motion } from 'framer-motion' // Import framer-motion
-import { useAtom } from 'jotai/index'
-import { ChangeEvent, useCallback, useMemo } from 'react'
+import { useAtom, useAtomValue } from 'jotai'
+import { useEffect } from 'react'
 
 import {
   animatedChartIndexAtom,
-  displayAnimatedChartAtom,
   playAnimationAtom,
 } from '@/components/Atoms/GlobalState'
-import { useIsStandalone } from '@/components/Hooks/useIsStandalone'
-import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+import { WeatherChart } from '@/components/WeatherCharts/WeatherChart'
+import { SkinnyRainChartData } from '@/shared/types/rainChartData'
+import { Region } from '@/shared/types/region'
 
-// Icon components (PlayIcon, CrossIcon, PauseIcon) remain the same
-function PlayIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="lg-size-5 size-5"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-    >
-      <path d="M8 5v14l11-7z"></path>
-    </svg>
-  )
+interface AnimatedWeatherChartProps {
+  region: Region
+  charts: SkinnyRainChartData[]
 }
+const AnimatedWeatherChart = ({
+  region,
+  charts,
+}: AnimatedWeatherChartProps) => {
+  const [currentIndex, setCurrentIndex] = useAtom(animatedChartIndexAtom)
+  const playAnimation = useAtomValue(playAnimationAtom)
 
-function CrossIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="lg-size-5 size-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M6 18L18 6M6 6l12 12"
-      />
-    </svg>
-  )
-}
-function PauseIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="lg-size-5 size-5"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-    >
-      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
-    </svg>
-  )
-}
-
-function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
-  const [playAnimation, setPlayAnimation] = useAtom(playAnimationAtom)
-  const [displayAnimatedChart, setDisplayAnimatedChart] = useAtom(
-    displayAnimatedChartAtom,
-  )
-  const [animatedChartIndex, setAnimatedChartIndex] = useAtom(
-    animatedChartIndexAtom,
-  )
-  const isStandalone = useIsStandalone()
-
-  const handleMasterPlay = useCallback(() => {
-    if (displayAnimatedChart) {
-      setPlayAnimation(false)
-      setAnimatedChartIndex(0)
-    } else {
-      setPlayAnimation(true)
+  useEffect(() => {
+    let interval: any
+    if (playAnimation) {
+      interval = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % charts.length)
+      }, 500)
     }
-    setDisplayAnimatedChart((prev) => !prev)
-  }, [
-    displayAnimatedChart,
-    setPlayAnimation,
-    setDisplayAnimatedChart,
-    setAnimatedChartIndex,
-  ])
-
-  const handleProgressChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAnimatedChartIndex(Number(e.target.value))
-  }
-
-  const max = useMemo(
-    () => (charts && charts.length > 0 ? charts.length - 1 : 0),
-    [charts],
-  )
-
-  const footerClasses = clsx(
-    'sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 shadow-lg lg:p-3 dark:border-slate-700 dark:bg-slate-800',
-    {
-      'm:p-2 px-5 pt-3 pb-6': isStandalone,
-      'p-2': !isStandalone,
-    },
-  )
+    return () => clearInterval(interval)
+  }, [playAnimation, charts.length, setCurrentIndex])
 
   return (
-    <footer className={footerClasses}>
-      <div
-        className={`container mx-auto flex flex-row items-center ${
-          displayAnimatedChart
-            ? 'justify-start space-x-4 lg:gap-5'
-            : 'justify-center'
-        }`}
-      >
-        <motion.button
-          layout // This enables smooth animation when layout changes
-          // For more control over the animation, you can add a transition prop:
-          transition={{ type: 'tween', ease: 'easeInOut', duration: 0.5 }}
-          onClick={handleMasterPlay}
-          className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
-          aria-label={
-            displayAnimatedChart
-              ? 'Show static weather chart list'
-              : 'Show animated weather chart'
-          }
-        >
-          {displayAnimatedChart ? <CrossIcon /> : <PlayIcon />}
-        </motion.button>
-
-        <AnimatePresence>
-          {displayAnimatedChart && (
-            <motion.div
-              key="additional-controls"
-              className="flex w-2/3 flex-row items-center space-x-4 lg:gap-5"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              // Define a specific, quick transition for when the controls exit
-              exit={{
-                opacity: 0,
-                x: -20,
-                transition: { duration: 0.2 }, // Adjust duration as needed for exit
-              }}
-              // This transition applies to the "enter" animation (initial to animate)
-              transition={{
-                delay: 0.5, // Wait for the master button's 0.5s animation
-                duration: 0.3, // Duration for these controls to fade/slide in
-              }}
-            >
-              <button
-                onClick={() => setPlayAnimation((prev) => !prev)}
-                className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
-                aria-label={
-                  playAnimation ? 'Pause animation' : 'Play animation'
-                }
-              >
-                {playAnimation ? <PauseIcon /> : <PlayIcon />}
-              </button>
-              <input
-                type="range"
-                min="0"
-                max={max}
-                value={animatedChartIndex}
-                onChange={handleProgressChange}
-                aria-label="progress bar"
-                className="w-full text-sky-400"
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </footer>
+    <WeatherChart
+      region={region}
+      chart={charts[currentIndex]}
+      index={currentIndex}
+    />
   )
 }
-export { FooterControl }
+export { AnimatedWeatherChart }
 </file>
 
 <file path="src/components/RadarAndSatelliteImages/RadarAndSatelliteImages.tsx">
@@ -8174,6 +8093,76 @@ export default function Foo({ images, chartType }: Props) {
 }
 </file>
 
+<file path="src/components/SubHeader/SubHeader.tsx">
+'use client'
+import clsx from 'clsx'
+import { useAtomValue } from 'jotai'
+
+import { loadedImageStateAtom } from '@/app/regions/[name]/state'
+import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
+
+import { RefreshButton } from '../RefreshButton/RefreshButton'
+
+export function SubHeader({ submenuText }: { submenuText: string }) {
+  const menuOpen = useAtomValue(isMenuOpenAtom)
+  const loadedImageState = useAtomValue(loadedImageStateAtom)
+
+  const loadedCount = Array.from(loadedImageState.values()).filter(
+    Boolean,
+  ).length
+  const totalCount = loadedImageState.size
+  const progress = totalCount > 0 ? (loadedCount / totalCount) * 100 : 0
+
+  const styling = clsx(
+    // For screen: apply sticky positioning with a z-index.
+    // For print: override to use static positioning, removing sticky behavior.
+    'sticky print:static z-10 print:z-auto',
+    menuOpen && 'top-[29rem]',
+    !menuOpen && 'top-16',
+  )
+  return (
+    <div className={styling}>
+      <div className="w-full bg-gray-200 dark:bg-gray-700">
+        <div
+          className="h-1 bg-sky-400 transition-all duration-500 ease-out"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+      <div className="relative flex h-14 items-center justify-center bg-gray-50 px-4 filter dark:bg-stone-700">
+        <h1 className="text-center text-sm font-medium text-gray-800 dark:text-stone-100">
+          {submenuText}
+        </h1>
+        <div className="absolute top-1/2 right-4 -translate-y-1/2 transform">
+          <RefreshButton />
+        </div>
+      </div>
+    </div>
+  )
+}
+</file>
+
+<file path="src/components/WeatherImage/__snapshots__/WeatherImage.test.tsx.snap">
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Weather Image > it should render correctly 1`] = `
+<div>
+  <div
+    class="w-full"
+    data-testid="weather-image"
+  >
+    <img
+      alt="foo"
+      fetchpriority="low"
+      height="396"
+      src="baa"
+      style="display: block; width: 100%; max-width: 100%; height: auto;"
+      width="565"
+    />
+  </div>
+</div>
+`;
+</file>
+
 <file path="src/components/WeatherCharts/WeatherChartsWithAnimation.tsx">
 'use client'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
@@ -8236,7 +8225,7 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="flex w-full flex-grow flex-col items-center justify-center"
+              className="mx-auto flex w-full max-w-2xl flex-grow flex-col items-center justify-center"
             >
               <AnimatedWeatherChart
                 region={props.region}
@@ -8276,26 +8265,164 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
 export default WeatherChartsWithAnimation
 </file>
 
-<file path="src/components/WeatherImage/__snapshots__/WeatherImage.test.tsx.snap">
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+<file path="src/components/FooterControl/index.tsx">
+'use client'
+import clsx from 'clsx'
+import { AnimatePresence, motion } from 'framer-motion' // Import framer-motion
+import { useAtom } from 'jotai/index'
+import { ChangeEvent, useCallback, useMemo } from 'react'
 
-exports[`Weather Image > it should render correctly 1`] = `
-<div>
-  <div
-    class="w-full"
-    data-testid="weather-image"
-  >
-    <img
-      alt="foo"
-      fetchpriority="low"
-      height="396"
-      src="baa"
-      style="display: block; width: 100%; max-width: 100%; height: auto;"
-      width="565"
-    />
-  </div>
-</div>
-`;
+import {
+  animatedChartIndexAtom,
+  displayAnimatedChartAtom,
+  playAnimationAtom,
+} from '@/components/Atoms/GlobalState'
+import { useIsStandalone } from '@/components/Hooks/useIsStandalone'
+import { BackwardIcon } from '@/components/icons/BackwardIcon'
+import { CrossIcon } from '@/components/icons/CrossIcon'
+import { ForwardIcon } from '@/components/icons/ForwardIcon'
+import { PauseIcon } from '@/components/icons/PauseIcon'
+import { PlayIcon } from '@/components/icons/PlayIcon'
+import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+
+const motionProps = {
+  initial: { opacity: 0, x: -20 },
+  animate: { opacity: 1, x: 0 },
+  // Define a specific, quick transition for when the controls exit
+  exit: {
+    opacity: 0,
+    x: -20,
+    transition: { duration: 0.2 }, // Adjust duration as needed for exit
+  },
+  // This transition applies to the "enter" animation (initial to animate)
+  transition: {
+    delay: 0.5, // Wait for the master button's 0.5s animation
+    duration: 0.3, // Duration for these controls to fade/slide in
+  },
+}
+
+function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
+  const [playAnimation, setPlayAnimation] = useAtom(playAnimationAtom)
+  const [displayAnimatedChart, setDisplayAnimatedChart] = useAtom(
+    displayAnimatedChartAtom,
+  )
+  const [animatedChartIndex, setAnimatedChartIndex] = useAtom(
+    animatedChartIndexAtom,
+  )
+  const isStandalone = useIsStandalone()
+
+  const handleMasterPlay = useCallback(() => {
+    if (displayAnimatedChart) {
+      setPlayAnimation(false)
+      setAnimatedChartIndex(0)
+    } else {
+      setPlayAnimation(true)
+    }
+    setDisplayAnimatedChart((prev) => !prev)
+  }, [
+    displayAnimatedChart,
+    setPlayAnimation,
+    setDisplayAnimatedChart,
+    setAnimatedChartIndex,
+  ])
+
+  const handleProgressChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setAnimatedChartIndex(Number(e.target.value))
+  }
+
+  const max = useMemo(
+    () => (charts && charts.length > 0 ? charts.length - 1 : 0),
+    [charts],
+  )
+  const handleBackward = () => {
+    setPlayAnimation(false)
+    setAnimatedChartIndex((prev) => Math.max(prev - 1, 0))
+  }
+
+  const handleForward = () => {
+    setPlayAnimation(false)
+    setAnimatedChartIndex((prev) => Math.min(prev + 1, max))
+  }
+
+  const footerClasses = clsx(
+    'sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 shadow-lg lg:p-3 dark:border-slate-700 dark:bg-slate-800 print:hidden',
+    {
+      'm:p-2 px-5 pt-3 pb-6': isStandalone,
+      'p-2': !isStandalone,
+    },
+  )
+
+  return (
+    <footer className={footerClasses}>
+      <AnimatePresence>
+        <div
+          className={`container mx-auto flex flex-row items-center ${
+            displayAnimatedChart
+              ? 'justify-start space-x-4 lg:gap-5'
+              : 'justify-center'
+          }`}
+        >
+          <motion.button
+            layout // This enables smooth animation when layout changes
+            // For more control over the animation, you can add a transition prop:
+            transition={{ type: 'tween', ease: 'easeInOut', duration: 0.5 }}
+            onClick={handleMasterPlay}
+            className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
+            aria-label={
+              displayAnimatedChart
+                ? 'Show static weather chart list'
+                : 'Show animated weather chart'
+            }
+          >
+            {displayAnimatedChart ? <CrossIcon /> : <PlayIcon />}
+          </motion.button>
+
+          {displayAnimatedChart && (
+            <>
+              <motion.button
+                {...motionProps}
+                onClick={() => setPlayAnimation((prev) => !prev)}
+                className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
+                aria-label={
+                  playAnimation ? 'Pause animation' : 'Play animation'
+                }
+              >
+                {playAnimation ? <PauseIcon /> : <PlayIcon />}
+              </motion.button>
+              <motion.input
+                {...motionProps}
+                type="range"
+                min="0"
+                max={max}
+                value={animatedChartIndex}
+                onChange={handleProgressChange}
+                aria-label="progress bar"
+                className="w-full text-sky-400"
+              />
+              <motion.button
+                {...motionProps}
+                onClick={handleBackward}
+                className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
+                aria-label="Step backward"
+              >
+                <BackwardIcon />
+              </motion.button>
+              <motion.button
+                {...motionProps}
+                onClick={handleForward}
+                className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
+                aria-label="Step forward"
+              >
+                <ForwardIcon />
+              </motion.button>
+            </>
+          )}
+        </div>
+      </AnimatePresence>
+    </footer>
+  )
+}
+export { FooterControl }
 </file>
 
 <file path="src/app/layout.tsx">
@@ -8328,7 +8455,7 @@ export default function RootLayout({
         <Toaster />
         <div className="font-sans text-gray-800">
           <Provider>
-            <header className="sticky top-0 z-30 bg-white shadow-md">
+            <header className="sticky top-0 z-30 bg-white shadow-md print:hidden">
               <Navbar />
             </header>
             <main className="mx-auto dark:bg-stone-600 dark:text-stone-100">
@@ -8372,14 +8499,14 @@ export default function RootLayout({
     "@heroicons/react": "2.2.0",
     "@serwist/next": "^9.0.15",
     "@supabase/supabase-js": "^2.40.0",
-    "axios": "1.10.0",
-    "cheerio": "1.1.1",
+    "axios": "1.11.0",
+    "cheerio": "1.1.2",
     "clsx": "^2.1.0",
     "date-fns": "4.1.0",
     "framer-motion": "^12.16.0",
     "inngest": "^3.16.1",
     "jotai": "2.12.5",
-    "next": "15.4.2",
+    "next": "15.4.4",
     "prop-types": "15.8.1",
     "react": "19.1.0",
     "react-aria-components": "^1.7.1",
@@ -8402,17 +8529,17 @@ export default function RootLayout({
     "@types/react-lazyload": "3.2.3",
     "@vitejs/plugin-react": "^4.6.0",
     "@vitest/ui": "^3.2.4",
-    "babel-jest": "30.0.4",
+    "babel-jest": "30.0.5",
     "checkly": "^6.0.0",
     "dotenv": "^17.2.0",
     "eslint": "9.31.0",
-    "eslint-config-next": "15.4.2",
+    "eslint-config-next": "15.4.4",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.3",
     "eslint-plugin-simple-import-sort": "^12.0.0",
     "identity-obj-proxy": "3.0.0",
-    "jest": "30.0.4",
-    "jest-environment-jsdom": "30.0.4",
+    "jest": "30.0.5",
+    "jest-environment-jsdom": "30.0.5",
     "jest-junit": "16.0.0",
     "jsdom": "^26.1.0",
     "postcss": "8.5.6",
