@@ -95,7 +95,7 @@ const Navbar = () => {
         <SetHomePageIcon />
         <button
           aria-label="Open Menu"
-          className="inline-flex rounded-xs p-3 text-white outline-hidden hover:bg-slate-500 hover:text-white 2xl:hidden"
+          className="inline-flex rounded-xs px-1 py-3 text-white outline-hidden hover:bg-slate-500 hover:text-white 2xl:hidden"
           onClick={handleClick}
         >
           <HamburgerSvg />
