@@ -87,7 +87,7 @@ const Navbar = () => {
     >
       <Link href="/" className="mr-4 inline-flex items-center p-2">
         <MetvuwMobileImage />
-        <span className="pl-2 text-lg font-bold tracking-wide text-white uppercase md:text-xl">
+        <span className="pl-2 text-base font-bold tracking-wide text-white uppercase sm:text-lg md:text-xl">
           Metvuw Mobile
         </span>
       </Link>
