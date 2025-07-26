@@ -20,7 +20,7 @@ export default function Card({
   return (
     <div className={styling}>
       {weatherImage}
-      <div className="flex items-center justify-around rounded-b-lg pt-3">
+      <div className="flex items-center justify-around rounded-lg pt-3">
         {date}
         {time}
       </div>

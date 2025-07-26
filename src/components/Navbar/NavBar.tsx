@@ -18,6 +18,7 @@ import {
   worldRegions,
 } from '@/shared/types/region'
 
+import SetHomePageIcon from '../SetHomePageIcon/SetHomePageIcon'
 import DropDown from './components/DropDown'
 import { MenuLink } from './types'
 
@@ -86,17 +87,20 @@ const Navbar = () => {
     >
       <Link href="/" className="mr-4 inline-flex items-center p-2">
         <MetvuwMobileImage />
-        <span className="pl-2 text-lg font-bold tracking-wide text-white uppercase md:text-xl">
+        <span className="pl-2 text-base font-bold tracking-wide text-white uppercase sm:text-lg md:text-xl">
           Metvuw Mobile
         </span>
       </Link>
-      <button
-        aria-label="Open Menu"
-        className="ml-auto inline-flex rounded-xs p-3 text-white outline-hidden hover:bg-slate-500 hover:text-white 2xl:hidden"
-        onClick={handleClick}
-      >
-        <HamburgerSvg />
-      </button>
+      <div className="ml-auto flex items-center">
+        <SetHomePageIcon />
+        <button
+          aria-label="Open Menu"
+          className="inline-flex rounded-xs px-1 py-3 text-white outline-hidden hover:bg-slate-500 hover:text-white 2xl:hidden"
+          onClick={handleClick}
+        >
+          <HamburgerSvg />
+        </button>
+      </div>
       <div
         className={`${
           menuOpen ? '' : 'hidden'

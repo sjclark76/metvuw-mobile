@@ -122,6 +122,10 @@ src/
       animated-weather-chart.tsx
     Atoms/
       GlobalState.ts
+    FavoriteIcon/
+      FavoriteIcon.tsx
+    FavoritePageRedirect/
+      FavoritePageRedirect.tsx
     FooterControl/
       index.tsx
     GeneralError/
@@ -140,6 +144,8 @@ src/
       PauseIcon.tsx
       PlayIcon.tsx
       RefreshIcon.tsx
+      StarIconFilled.tsx
+      StarIconOutlined.tsx
     Navbar/
       components/
         DropDown.test.tsx
@@ -1087,34 +1093,6 @@ export async function POST() {
 }
 </file>
 
-<file path="src/app/radar/[code]/loading.tsx">
-import SubHeader from '@/components/SubHeader'
-import { WeatherChartSkeleton } from '@/components/WeatherCharts/Skeleton'
-import { radarImageDimensions } from '@/shared/helpers/v2/imageCompression/imageDimensions'
-
-export default function Loading() {
-  return (
-    <>
-      <SubHeader submenuText="Loading radar data" />
-      <ul className="flex flex-col items-center">
-        <WeatherChartSkeleton
-          width={radarImageDimensions.width}
-          height={radarImageDimensions.height}
-        />
-        <WeatherChartSkeleton
-          width={radarImageDimensions.width}
-          height={radarImageDimensions.height}
-        />
-        <WeatherChartSkeleton
-          width={radarImageDimensions.width}
-          height={radarImageDimensions.height}
-        />
-      </ul>
-    </>
-  )
-}
-</file>
-
 <file path="src/app/radar/[code]/page.tsx">
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -1235,36 +1213,6 @@ export default async function Region(props: Props) {
 }
 </file>
 
-<file path="src/app/satellite/loading.tsx">
-// import { WeatherChartSkeleton } from '@/components/WeatherCharts/Skeleton'
-
-import SubHeader from '@/components/SubHeader'
-import { WeatherChartSkeleton } from '@/components/WeatherCharts/Skeleton'
-import { satelliteImageDimensions } from '@/shared/helpers/v2/imageCompression/imageDimensions'
-
-export default function Loading() {
-  return (
-    <>
-      <SubHeader submenuText="Loading satellite data" />
-      <ul className="flex flex-col items-center">
-        <WeatherChartSkeleton
-          width={satelliteImageDimensions.width}
-          height={satelliteImageDimensions.height}
-        />
-        <WeatherChartSkeleton
-          width={satelliteImageDimensions.width}
-          height={satelliteImageDimensions.height}
-        />
-        <WeatherChartSkeleton
-          width={satelliteImageDimensions.width}
-          height={satelliteImageDimensions.height}
-        />
-      </ul>
-    </>
-  )
-}
-</file>
-
 <file path="src/app/satellite/page.tsx">
 import { Metadata } from 'next'
 
@@ -1296,34 +1244,6 @@ export default async function Page() {
   const satelliteData = constructChartData(existingImages)
 
   return <SatellitePage satelliteData={satelliteData} />
-}
-</file>
-
-<file path="src/app/upperair/[[...balloon]]/loading.tsx">
-import SubHeader from '@/components/SubHeader'
-import { WeatherChartSkeleton } from '@/components/WeatherCharts/Skeleton'
-import { upperAirImageDimensions } from '@/shared/helpers/v2/imageCompression/imageDimensions'
-
-export default function Loading() {
-  return (
-    <>
-      <SubHeader submenuText="Loading upper air data" />
-      <ul className="flex flex-col items-center">
-        <WeatherChartSkeleton
-          width={upperAirImageDimensions.width}
-          height={upperAirImageDimensions.height}
-        />
-        <WeatherChartSkeleton
-          width={upperAirImageDimensions.width}
-          height={upperAirImageDimensions.height}
-        />
-        <WeatherChartSkeleton
-          width={upperAirImageDimensions.width}
-          height={upperAirImageDimensions.height}
-        />
-      </ul>
-    </>
-  )
 }
 </file>
 
@@ -1436,6 +1356,70 @@ export default async function Page() {
 }
 </file>
 
+<file path="src/components/FavoriteIcon/FavoriteIcon.tsx">
+'use client'
+
+import { useAtom } from 'jotai'
+import { usePathname } from 'next/navigation'
+import React from 'react'
+
+import { favoritePageAtom } from '../Atoms/GlobalState'
+import StarIconFilled from '../icons/StarIconFilled'
+import StarIconOutlined from '../icons/StarIconOutlined'
+
+const FavoriteIcon = () => {
+  const [favoritePage, setFavoritePage] = useAtom(favoritePageAtom)
+  const pathname = usePathname()
+
+  const isFavorite = favoritePage === pathname
+
+  const handleClick = () => {
+    if (isFavorite) {
+      setFavoritePage(null)
+    } else {
+      setFavoritePage(pathname)
+    }
+  }
+  return (
+    <button onClick={handleClick} className="p-2">
+      {isFavorite ? (
+        <StarIconFilled className="h-6 w-6 text-yellow-500" />
+      ) : (
+        <StarIconOutlined className="h-6 w-6 text-gray-500" />
+      )}
+    </button>
+  )
+}
+
+export default FavoriteIcon
+</file>
+
+<file path="src/components/FavoritePageRedirect/FavoritePageRedirect.tsx">
+'use client'
+
+import { useAtom } from 'jotai'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+
+import { favoritePageAtom } from '@/components/Atoms/GlobalState'
+
+const FavoritePageRedirect = () => {
+  const [favoritePage] = useAtom(favoritePageAtom)
+  const router = useRouter()
+  const pathname = usePathname()
+
+  useEffect(() => {
+    if (pathname === '/' && favoritePage) {
+      router.replace(favoritePage)
+    }
+  }, [favoritePage, pathname, router])
+
+  return null
+}
+
+export default FavoritePageRedirect
+</file>
+
 <file path="src/components/GeneralError/GeneralError.tsx">
 'use client' // Error components must be Client Components
 
@@ -1501,6 +1485,46 @@ export function GoogleTag() {
 <file path="src/components/GoogleTag/index.ts">
 import { GoogleTag } from './GoogleTag'
 export default GoogleTag
+</file>
+
+<file path="src/components/icons/StarIconFilled.tsx">
+import React from 'react'
+
+const StarIconFilled = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    viewBox="0 0 20 20"
+    fill="currentColor"
+  >
+    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.52 4.674c.3.921-.755 1.688-1.539 1.118l-3.976-2.888a1 1 0 00-1.175 0l-3.976 2.888c-.783.57-1.838-.197-1.539-1.118l1.52-4.674a1 1 0 00-.363-1.118L2.05 10.1c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.95-.69l1.52-4.674z" />
+  </svg>
+)
+
+export default StarIconFilled
+</file>
+
+<file path="src/components/icons/StarIconOutlined.tsx">
+import React from 'react'
+
+const StarIconOutlined = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.52 4.674c.3.921-.755 1.688-1.539 1.118l-3.976-2.888a1 1 0 00-1.175 0l-3.976 2.888c-.783.57-1.838-.197-1.539-1.118l1.52-4.674a1 1 0 00-.363-1.118L2.05 10.1c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.95-.69l1.52-4.674z"
+    />
+  </svg>
+)
+
+export default StarIconOutlined
 </file>
 
 <file path="src/components/Navbar/components/DropDown.test.tsx">
@@ -6273,27 +6297,15 @@ export default function OfflinePage() {
 }
 </file>
 
-<file path="src/app/regions/[name]/loading.tsx">
+<file path="src/app/radar/[code]/loading.tsx">
 import SubHeader from '@/components/SubHeader'
+import { WeatherChartSkeleton } from '@/components/WeatherCharts/Skeleton'
+import { radarImageDimensions } from '@/shared/helpers/v2/imageCompression/imageDimensions'
 
 export default function Loading() {
   return (
     <>
-      <SubHeader submenuText="Loading forecast data" />
-      <ul className="flex flex-col items-center">
-        {/*<WeatherChartSkeleton*/}
-        {/*  width={rainImageDimensions.width}*/}
-        {/*  height={rainImageDimensions.height}*/}
-        {/*/>*/}
-        {/*<WeatherChartSkeleton*/}
-        {/*  width={rainImageDimensions.width}*/}
-        {/*  height={rainImageDimensions.height}*/}
-        {/*/>*/}
-        {/*<WeatherChartSkeleton*/}
-        {/*  width={rainImageDimensions.width}*/}
-        {/*  height={rainImageDimensions.height}*/}
-        {/*/>*/}
-      </ul>
+      <SubHeader submenuText="Loading radar data" />
     </>
   )
 }
@@ -6305,8 +6317,39 @@ import { atom } from 'jotai/index'
 export const loadedImageStateAtom = atom<Map<string, boolean>>(new Map())
 </file>
 
+<file path="src/app/satellite/loading.tsx">
+// import { WeatherChartSkeleton } from '@/components/WeatherCharts/Skeleton'
+
+import SubHeader from '@/components/SubHeader'
+import { WeatherChartSkeleton } from '@/components/WeatherCharts/Skeleton'
+import { satelliteImageDimensions } from '@/shared/helpers/v2/imageCompression/imageDimensions'
+
+export default function Loading() {
+  return (
+    <>
+      <SubHeader submenuText="Loading satellite data" />
+    </>
+  )
+}
+</file>
+
+<file path="src/app/upperair/[[...balloon]]/loading.tsx">
+import SubHeader from '@/components/SubHeader'
+import { WeatherChartSkeleton } from '@/components/WeatherCharts/Skeleton'
+import { upperAirImageDimensions } from '@/shared/helpers/v2/imageCompression/imageDimensions'
+
+export default function Loading() {
+  return (
+    <>
+      <SubHeader submenuText="Loading upper air data" />
+    </>
+  )
+}
+</file>
+
 <file path="src/components/Atoms/GlobalState.ts">
 import { atom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 
 const isMenuOpenAtom = atom(false)
 
@@ -6316,9 +6359,12 @@ const displayAnimatedChartAtom = atom(false)
 
 const animatedChartIndexAtom = atom(0)
 
+const favoritePageAtom = atomWithStorage<string | null>('favoritePage', null)
+
 export {
   animatedChartIndexAtom,
   displayAnimatedChartAtom,
+  favoritePageAtom,
   isMenuOpenAtom,
   playAnimationAtom,
 }
@@ -6651,6 +6697,7 @@ import {
   worldRegions,
 } from '@/shared/types/region'
 
+import FavoriteIcon from '../FavoriteIcon/FavoriteIcon'
 import DropDown from './components/DropDown'
 import { MenuLink } from './types'
 
@@ -6723,13 +6770,16 @@ const Navbar = () => {
           Metvuw Mobile
         </span>
       </Link>
-      <button
-        aria-label="Open Menu"
-        className="ml-auto inline-flex rounded-xs p-3 text-white outline-hidden hover:bg-slate-500 hover:text-white 2xl:hidden"
-        onClick={handleClick}
-      >
-        <HamburgerSvg />
-      </button>
+      <div className="ml-auto flex items-center">
+        <FavoriteIcon />
+        <button
+          aria-label="Open Menu"
+          className="inline-flex rounded-xs p-3 text-white outline-hidden hover:bg-slate-500 hover:text-white 2xl:hidden"
+          onClick={handleClick}
+        >
+          <HamburgerSvg />
+        </button>
+      </div>
       <div
         className={`${
           menuOpen ? '' : 'hidden'
@@ -7123,76 +7173,6 @@ export const config = {
 }
 </file>
 
-<file path="GEMINI.md">
-# Metvuw Mobile Project
-
-This document provides an overview of the Metvuw Mobile project to help AI assistants understand its structure and purpose.
-
-## Overview
-
-This project is a mobile-friendly web application for viewing weather information, primarily from Metvuw. It is built with Next.js and TypeScript, and it scrapes, processes, and displays weather images.
-
-**Important:** When working with this project, you should always refer to the `repomix-output.xml` file as it contains a summarized detail of the entire project. This file provides the most comprehensive context for any task.
-
-## Key Technologies
-
-*   **Framework:** Next.js
-*   **Language:** TypeScript
-*   **Styling:** Tailwind CSS
-*   **Backend & APIs:** Next.js API Routes
-*   **Background Jobs:** Inngest
-*   **Database & Storage:** Supabase (Postgres and Storage)
-*   **Testing:**
-    *   E2E: Playwright
-    *   Unit/Component: Jest and Vitest
-    *   Monitoring: Checkly
-*   **Deployment:** Vercel
-
-## Project Structure
-
-The project follows a structure typical for a Next.js application:
-
-*   `src/app`: Contains the core application, including pages, API routes, and layouts.
-    *   `api/scrape`: Endpoints for scraping weather data.
-    *   `api/inngest`: Endpoint for managing Inngest background jobs.
-    *   `regions/[name]`: Page for displaying regional weather forecasts.
-    *   `radar/[code]`: Page for displaying weather radar.
-    *   `satellite`: Page for displaying satellite imagery.
-    *   `upperair`: Page for displaying upper air data.
-*   `src/components`: Contains reusable React components used throughout the application.
-*   `src/inngest`: Defines Inngest functions and cron jobs for periodic data scraping.
-*   `src/shared`: Contains shared utilities, types, and helpers.
-    *   `helpers/v2/screenScraper`: Logic for scraping images from the source website.
-    *   `helpers/v2/imageStorage`: Functions for managing image uploads and removals from Supabase Storage.
-*   `supabase`: Configuration and migration files for the Supabase database.
-*   `e2e`: End-to-end tests written with Playwright.
-*   `__checks__`: Checkly configuration for synthetic monitoring and API checks.
-
-## Core Functionality
-
-The application's primary function is to scrape weather images from an external source, process them, and display them in a user-friendly, mobile-first interface.
-
-*   **Scraping:** The scraping logic is located in `src/shared/helpers/v2/screenScraper`.
-*   **Background Jobs:** Inngest cron jobs in `src/inngest/cronFunctions` trigger the scraping process periodically to keep the data up-to-date.
-*   **Image Processing:** Scraped images are compressed and optimized before being stored.
-*   **Storage:** Processed images are stored in Supabase Storage.
-*   **Data Display:** The frontend retrieves the images from Supabase Storage and displays them on the relevant pages.
-
-The application handles several types of weather data:
-*   Regional rain forecasts
-*   Radar imagery
-*   Satellite imagery
-*   Upper air soundings
-
-## Development and Testing
-
-*   **Running Tests:**
-    *   Unit/Component Tests: `npm test`
-    *   E2E Tests: `npx playwright test` (requires a running instance of the application, with the base URL set via the `PLAYWRIGHT_TEST_BASE_URL` environment variable).
-*   **Building the Project:**
-    *   `npm run build`
-</file>
-
 <file path="jest.config.mjs">
 import nextJest from 'next/jest.js';
 
@@ -7327,6 +7307,18 @@ import '@testing-library/jest-dom'
 process.env.NEXT_PUBLIC_SUPABASE_URL = 'http://127.0.0.1:54321'
 process.env.SUPABASE_SERVICE_ROLE_KEY = 'value'
 process.env.SUPABASE_BUCKET_NAME = 'dev'
+</file>
+
+<file path="src/app/regions/[name]/loading.tsx">
+import SubHeader from '@/components/SubHeader'
+
+export default function Loading() {
+  return (
+    <>
+      <SubHeader submenuText="Loading forecast data" />
+    </>
+  )
+}
 </file>
 
 <file path="src/app/sw.ts">
@@ -7495,15 +7487,15 @@ import { useIsStandalone } from '../Hooks/useIsStandalone'
 import { RefreshIcon } from '../icons/RefreshIcon'
 
 export const RefreshButton = () => {
-  const isStandalone = useIsStandalone()
+  // const isStandalone = useIsStandalone()
 
   const handleRefresh = () => {
     window.location.reload()
   }
 
-  if (!isStandalone) {
-    return null
-  }
+  // if (!isStandalone) {
+  //   return null
+  // }
 
   return (
     <button
@@ -7756,38 +7748,6 @@ const WeatherImage = ({
 export default WeatherImage
 </file>
 
-<file path="src/components/Card.tsx">
-import clsx from 'clsx'
-import { ReactNode } from 'react'
-
-export default function Card({
-  weatherImage,
-  date,
-  time,
-  isLoading = false,
-}: {
-  weatherImage: ReactNode
-  date: ReactNode
-  time: ReactNode
-  isLoading?: boolean
-}) {
-  const styling = clsx(
-    'mb-5 rounded-xl bg-white pb-3 dark:bg-stone-700 drop-shadow-2xl w-full ',
-    // 'sm:w-4/5 xl:w-5/12 2xl:w-1/2 ',
-    isLoading && 'animate-pulse',
-  )
-  return (
-    <div className={styling}>
-      {weatherImage}
-      <div className="flex items-center justify-around rounded-b-lg pt-3">
-        {date}
-        {time}
-      </div>
-    </div>
-  )
-}
-</file>
-
 <file path=".eslintrc.js">
 module.exports = {
   env: {
@@ -7882,6 +7842,80 @@ yarn-error.log*
 /.idea/*
 reports/
 /public/sw.js
+</file>
+
+<file path="GEMINI.md">
+# Metvuw Mobile Project
+
+This document provides an overview of the Metvuw Mobile project to help AI assistants understand its structure and purpose.
+
+## Initial Setup
+
+At the beginning of each session, you **MUST** review the `repomix-output.xml` file. This file contains a complete and up-to-date representation of the entire repository and is essential for understanding the project context.
+
+## Overview
+
+This project is a mobile-friendly web application for viewing weather information, primarily from Metvuw. It is built with Next.js and TypeScript, and it scrapes, processes, and displays weather images.
+
+**Important:** When working with this project, you should always refer to the `repomix-output.xml` file as it contains a summarized detail of the entire project. This file provides the most comprehensive context for any task.
+
+## Key Technologies
+
+*   **Framework:** Next.js
+*   **Language:** TypeScript
+*   **Styling:** Tailwind CSS
+*   **Backend & APIs:** Next.js API Routes
+*   **Background Jobs:** Inngest
+*   **Database & Storage:** Supabase (Postgres and Storage)
+*   **Testing:**
+    *   E2E: Playwright
+    *   Unit/Component: Jest and Vitest
+    *   Monitoring: Checkly
+*   **Deployment:** Vercel
+
+## Project Structure
+
+The project follows a structure typical for a Next.js application:
+
+*   `src/app`: Contains the core application, including pages, API routes, and layouts.
+    *   `api/scrape`: Endpoints for scraping weather data.
+    *   `api/inngest`: Endpoint for managing Inngest background jobs.
+    *   `regions/[name]`: Page for displaying regional weather forecasts.
+    *   `radar/[code]`: Page for displaying weather radar.
+    *   `satellite`: Page for displaying satellite imagery.
+    *   `upperair`: Page for displaying upper air data.
+*   `src/components`: Contains reusable React components used throughout the application.
+*   `src/inngest`: Defines Inngest functions and cron jobs for periodic data scraping.
+*   `src/shared`: Contains shared utilities, types, and helpers.
+    *   `helpers/v2/screenScraper`: Logic for scraping images from the source website.
+    *   `helpers/v2/imageStorage`: Functions for managing image uploads and removals from Supabase Storage.
+*   `supabase`: Configuration and migration files for the Supabase database.
+*   `e2e`: End-to-end tests written with Playwright.
+*   `__checks__`: Checkly configuration for synthetic monitoring and API checks.
+
+## Core Functionality
+
+The application's primary function is to scrape weather images from an external source, process them, and display them in a user-friendly, mobile-first interface.
+
+*   **Scraping:** The scraping logic is located in `src/shared/helpers/v2/screenScraper`.
+*   **Background Jobs:** Inngest cron jobs in `src/inngest/cronFunctions` trigger the scraping process periodically to keep the data up-to-date.
+*   **Image Processing:** Scraped images are compressed and optimized before being stored.
+*   **Storage:** Processed images are stored in Supabase Storage.
+*   **Data Display:** The frontend retrieves the images from Supabase Storage and displays them on the relevant pages.
+
+The application handles several types of weather data:
+*   Regional rain forecasts
+*   Radar imagery
+*   Satellite imagery
+*   Upper air soundings
+
+## Development and Testing
+
+*   **Running Tests:**
+    *   Unit/Component Tests: `npm test`
+    *   E2E Tests: `npx playwright test` (requires a running instance of the application, with the base URL set via the `PLAYWRIGHT_TEST_BASE_URL` environment variable).
+*   **Building the Project:**
+    *   `npm run build`
 </file>
 
 <file path="next.config.ts">
@@ -8163,6 +8197,38 @@ exports[`Weather Image > it should render correctly 1`] = `
 `;
 </file>
 
+<file path="src/components/Card.tsx">
+import clsx from 'clsx'
+import { ReactNode } from 'react'
+
+export default function Card({
+  weatherImage,
+  date,
+  time,
+  isLoading = false,
+}: {
+  weatherImage: ReactNode
+  date: ReactNode
+  time: ReactNode
+  isLoading?: boolean
+}) {
+  const styling = clsx(
+    'mb-5 rounded-xl bg-white pb-3 dark:bg-stone-700 drop-shadow-2xl w-full ',
+    // 'sm:w-4/5 xl:w-5/12 2xl:w-1/2 ',
+    isLoading && 'animate-pulse',
+  )
+  return (
+    <div className={styling}>
+      {weatherImage}
+      <div className="flex items-center justify-around rounded-lg pt-3">
+        {date}
+        {time}
+      </div>
+    </div>
+  )
+}
+</file>
+
 <file path="src/components/WeatherCharts/WeatherChartsWithAnimation.tsx">
 'use client'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
@@ -8265,6 +8331,52 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
 export default WeatherChartsWithAnimation
 </file>
 
+<file path="src/app/layout.tsx">
+'use client'
+import './globals.css'
+
+import { Provider } from 'jotai'
+import React from 'react'
+import { Toaster } from 'react-hot-toast'
+
+import FavoritePageRedirect from '@/components/FavoritePageRedirect/FavoritePageRedirect'
+import GoogleTag from '@/components/GoogleTag'
+import { config } from '@/config'
+
+import Navbar from '../components/Navbar'
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en" className="bg-gray-100">
+      <head>
+        <title>Metvuw Mobile</title>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="preconnect" href={config.supabaseUrl} />
+      </head>
+      <GoogleTag />
+      <body className="font-sans text-gray-800">
+        <Toaster />
+        <div className="font-sans text-gray-800">
+          <Provider>
+            <header className="sticky top-0 z-30 bg-white shadow-md print:hidden">
+              <Navbar />
+            </header>
+            <FavoritePageRedirect />
+            <main className="mx-auto dark:bg-stone-600 dark:text-stone-100">
+              {children}
+            </main>
+          </Provider>
+        </div>
+      </body>
+    </html>
+  )
+}
+</file>
+
 <file path="src/components/FooterControl/index.tsx">
 'use client'
 import clsx from 'clsx'
@@ -8316,7 +8428,7 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
       setPlayAnimation(false)
       setAnimatedChartIndex(0)
     } else {
-      setPlayAnimation(true)
+      setPlayAnimation(false)
     }
     setDisplayAnimatedChart((prev) => !prev)
   }, [
@@ -8425,50 +8537,6 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
 export { FooterControl }
 </file>
 
-<file path="src/app/layout.tsx">
-'use client'
-import './globals.css'
-
-import { Provider } from 'jotai'
-import React from 'react'
-import { Toaster } from 'react-hot-toast'
-
-import GoogleTag from '@/components/GoogleTag'
-import { config } from '@/config'
-
-import Navbar from '../components/Navbar'
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
-    <html lang="en" className="bg-gray-100">
-      <head>
-        <title>Metvuw Mobile</title>
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="preconnect" href={config.supabaseUrl} />
-      </head>
-      <GoogleTag />
-      <body className="font-sans text-gray-800">
-        <Toaster />
-        <div className="font-sans text-gray-800">
-          <Provider>
-            <header className="sticky top-0 z-30 bg-white shadow-md print:hidden">
-              <Navbar />
-            </header>
-            <main className="mx-auto dark:bg-stone-600 dark:text-stone-100">
-              {children}
-            </main>
-          </Provider>
-        </div>
-      </body>
-    </html>
-  )
-}
-</file>
-
 <file path="package.json">
 {
   "name": "metvuw-mobile",
@@ -8504,8 +8572,11 @@ export default function RootLayout({
     "clsx": "^2.1.0",
     "date-fns": "4.1.0",
     "framer-motion": "^12.16.0",
+    "immer": "^10.1.1",
     "inngest": "^3.16.1",
     "jotai": "2.12.5",
+    "jotai-immer": "^0.4.1",
+    "jotai-optics": "^0.4.0",
     "next": "15.4.4",
     "prop-types": "15.8.1",
     "react": "19.1.0",
@@ -8532,7 +8603,7 @@ export default function RootLayout({
     "babel-jest": "30.0.5",
     "checkly": "^6.0.0",
     "dotenv": "^17.2.0",
-    "eslint": "9.31.0",
+    "eslint": "9.32.0",
     "eslint-config-next": "15.4.4",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.3",

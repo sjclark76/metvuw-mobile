@@ -1,17 +1,10 @@
 'use client'
 
-import { useIsStandalone } from '../Hooks/useIsStandalone'
 import { RefreshIcon } from '../icons/RefreshIcon'
 
 export const RefreshButton = () => {
-  const isStandalone = useIsStandalone()
-
   const handleRefresh = () => {
     window.location.reload()
-  }
-
-  if (!isStandalone) {
-    return null
   }
 
   return (
