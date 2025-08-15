@@ -54,7 +54,7 @@
     "@testing-library/jest-dom": "6.7.0",
     "@testing-library/react": "16.3.0",
     "@types/jest": "30.0.0",
-    "@types/node": "22.17.1",
+    "@types/node": "22.17.2",
     "@types/react": "19.1.10",
     "@types/react-lazy-load-image-component": "1.6.4",
     "@types/react-lazyload": "3.2.3",
