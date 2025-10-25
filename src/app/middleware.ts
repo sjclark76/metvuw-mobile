@@ -2,19 +2,11 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-interface VercelNextRequest extends NextRequest {
-  geo?: {
-    city?: string
-    country?: string
-    region?: string
-    latitude?: string
-    longitude?: string
-  }
-}
-
 export function middleware(request: NextRequest) {
-  const vercelRequest = request as VercelNextRequest
-  const country = vercelRequest.geo?.country || 'UNKNOWN'
+  // Vercel provides country in this header
+  const country = request.headers.get('x-vercel-ip-country') || 'UNKNOWN'
+
+  console.log('Detected country:', country)
 
   const response = NextResponse.next()
   response.headers.set('x-user-country', country)
