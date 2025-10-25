@@ -25,7 +25,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Page() {
   const headersList = await headers()
   const country = headersList.get('x-user-country')
-
   const matchedRegion = findRegionByCode('nz')
   if (!matchedRegion) {
     // Redirect to a 404 page if the region is not found
