@@ -5,10 +5,11 @@ const withSerwist = withSerwistInit({
   swSrc: 'src/app/sw.ts',
   swDest: 'public/sw.js',
   reloadOnOnline: true,
-  // disable: process.env.NODE_ENV === 'development',
+  disable: process.env.NODE_ENV !== 'production',
 })
 
 const nextConfig: NextConfig = {
+  output: 'standalone', // This can help avoid some Vercel-specific optimizations
   webpack: (config, { dev, isServer }) => {
     // This modification is to prevent the development server from
     // watching the generated service worker files, which can cause infinite loops.
@@ -40,7 +41,14 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
     unoptimized: true,
-    domains: ['www.metvuw.com'],
+    loader: 'custom',
+    loaderFile: './src/image-loader.ts',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.metvuw.com',
+      },
+    ],
   },
   async headers() {
     return [
