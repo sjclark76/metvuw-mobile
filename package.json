@@ -58,7 +58,7 @@
     "@types/jest": "30.0.0",
     "@types/node": "22.19.1",
     "@types/react": "19.2.6",
-    "@types/react-lazy-load-image-component": "1.6.4",
+    "@types/react-lazy-load-image-component": "1.6.5",
     "@types/react-lazyload": "3.2.3",
     "@vitejs/plugin-react": "^5.0.0",
     "@vitest/ui": "^4.0.0",
