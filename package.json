@@ -34,7 +34,7 @@
     "clsx": "^2.1.0",
     "date-fns": "4.1.0",
     "framer-motion": "^12.16.0",
-    "immer": "^10.1.1",
+    "immer": "^11.0.0",
     "inngest": "^3.16.1",
     "jotai": "2.15.1",
     "jotai-immer": "^0.4.1",
