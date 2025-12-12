@@ -39,7 +39,7 @@
     "jotai": "2.16.0",
     "jotai-immer": "^0.4.1",
     "jotai-optics": "^0.4.0",
-    "next": "16.0.8",
+    "next": "16.0.10",
     "prop-types": "15.8.1",
     "react": "19.2.3",
     "react-aria-components": "^1.7.1",
