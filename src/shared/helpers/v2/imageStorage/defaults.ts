@@ -1,4 +1,4 @@
-import { SearchOptions } from '@supabase/storage-js/src/lib/types'
+import { SearchOptions } from '@supabase/storage-js'
 
 export const defaultSearchOptions: SearchOptions = {
   limit: 200,
