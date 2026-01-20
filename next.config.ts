@@ -41,14 +41,11 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
     unoptimized: true,
-    loader: 'custom',
-    loaderFile: './src/image-loader.ts',
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'www.metvuw.com',
-      },
-    ],
+    domains: [],
+    deviceSizes: [],
+    imageSizes: [],
+    dangerouslyAllowSVG: false,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   async headers() {
     return [

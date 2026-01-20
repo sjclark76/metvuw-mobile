@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { defaultCache } from '@serwist/next/worker'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
 import { Serwist } from 'serwist'
 
@@ -13,8 +12,28 @@ declare global {
 
 declare const self: ServiceWorkerGlobalScope
 
-// eslint-disable-next-line no-console
+// eslint-disable-next-console
 console.log('Service worker script loaded.')
+
+// Custom runtime caching that excludes images to prevent Vercel image optimization issues
+const customRuntimeCaching = [
+  {
+    urlPattern: /^https?.*\.(html|css|js)$/i,
+    handler: 'StaleWhileRevalidate',
+    options: {
+      cacheName: 'static-resources',
+    },
+  },
+  {
+    urlPattern: /^https?.*\/api\//,
+    handler: 'NetworkFirst',
+    options: {
+      cacheName: 'api-cache',
+    },
+  },
+  // Explicitly exclude image files to prevent interference with Vercel optimization
+  // Images will be handled directly by the browser without service worker intervention
+]
 
 const serwist = new Serwist({
   precacheEntries: [
@@ -26,7 +45,7 @@ const serwist = new Serwist({
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: false,
-  runtimeCaching: defaultCache,
+  runtimeCaching: customRuntimeCaching,
 })
 
 serwist.setCatchHandler(async ({ request }) => {
