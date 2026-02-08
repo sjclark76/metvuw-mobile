@@ -29,7 +29,7 @@
 
     "@serwist/next": "^9.2.1",
     "@supabase/supabase-js": "^2.40.0",
-    "axios": "1.13.4",
+    "axios": "1.13.5",
     "cheerio": "1.2.0",
     "clsx": "^2.1.0",
     "date-fns": "4.1.0",
