@@ -63,7 +63,7 @@
     "@vitejs/plugin-react": "^5.0.0",
     "@vitest/ui": "^4.0.0",
     "babel-jest": "30.2.0",
-    "checkly": "^6.0.0",
+    "checkly": "^7.0.0",
     "dotenv": "^17.2.0",
     "eslint": "9.39.2",
     "eslint-config-next": "16.1.6",
