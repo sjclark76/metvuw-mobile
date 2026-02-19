@@ -7,6 +7,7 @@ import React from 'react'
 import { loadedImageStateAtom } from '@/app/regions/[name]/state'
 import { FooterControl } from '@/components/FooterControl'
 import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
+import { RainfallLegendSection } from '@/components/RainfallLegend'
 import SubHeader from '@/components/SubHeader'
 import WeatherChartsWithAnimation from '@/components/WeatherCharts/WeatherChartsWithAnimation'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
@@ -49,6 +50,7 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
         <SubHeader submenuText={submenuText} />
         <WeatherChartsWithAnimation region={region} charts={rainChartData} />
       </div>
+      <RainfallLegendSection />
       <FooterControl charts={rainChartData} />
     </div>
   )
