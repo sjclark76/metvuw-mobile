@@ -68,7 +68,8 @@ METVUW_DIRECT_SOURCE_MODE=true
 ```
 
 With this flag enabled:
-- Weather pages scrape Metvuw on request and render direct `metvuw.com` image URLs.
+- Weather pages scrape Metvuw on request and render through an internal image proxy sourced from `metvuw.com`.
+- Fallback images are served through `/api/fallback-image`, which applies existing crop/compression logic so borders are removed consistently.
 - `/api/inngest` serves zero functions.
 - `/api/scrape/*` routes no longer upload/remove files in Supabase Storage.
 

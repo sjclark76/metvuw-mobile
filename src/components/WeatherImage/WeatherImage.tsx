@@ -8,6 +8,10 @@ import {
   satelliteImageDimensions,
   upperAirImageDimensions,
 } from '@/shared/helpers/v2/imageCompression/imageDimensions'
+import {
+  isFallbackImageProxyUrl,
+  withFallbackImageProxyVariant,
+} from '@/shared/helpers/v2/dataSource/fallbackImageProxyUrl'
 import { ChartType } from '@/shared/types/ChartType'
 
 export interface WeatherImageProps {
@@ -25,8 +29,12 @@ function extraImageAttribute(
     imageSrc != null &&
     imageSrc.includes('/storage/v1/object/public/') &&
     imageSrc.includes('/images/')
+  const canUseSmallProxyVariant =
+    imageSrc != null && isFallbackImageProxyUrl(imageSrc)
   const smallImageSrc = canUseSmallStorageVariant
     ? imageSrc.replace('/images/', '/small-images/')
+    : canUseSmallProxyVariant
+      ? withFallbackImageProxyVariant(imageSrc, 'small')
     : undefined
 
   switch (chartType) {

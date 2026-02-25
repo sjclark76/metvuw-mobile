@@ -38,7 +38,7 @@ describe('getWeatherChartData fallback mode', () => {
     config.directSourceMode = originalDirectSourceMode
   })
 
-  test('rain provider uses scraper and returns sorted direct-source data', async () => {
+  test('rain provider uses scraper and returns sorted proxy chart urls', async () => {
     const region = findRegionByCode('nz')
     if (!region) {
       throw new Error('expected nz region')
@@ -64,8 +64,15 @@ describe('getWeatherChartData fallback mode', () => {
     const result = await getRainChartDataForRegion(region)
 
     expect(result).toHaveLength(2)
-    expect(result[0].url).toContain('2024033012')
-    expect(result[1].url).toContain('2024033018')
+    expect(result[0].url).toContain('/api/fallback-image?')
+    expect(result[0].url).toContain('chartType=Rain')
+    expect(result[0].url).toContain('variant=primary')
+    expect(decodeURIComponent(result[0].url)).toContain(
+      'rain-nz-thumb-2024033012-006.gif',
+    )
+    expect(decodeURIComponent(result[1].url)).toContain(
+      'rain-nz-thumb-2024033018-006.gif',
+    )
     expect(retrieveImagesFromStorage).not.toHaveBeenCalled()
   })
 
@@ -88,11 +95,13 @@ describe('getWeatherChartData fallback mode', () => {
     const result = await getRadarChartDataForCode('ak')
 
     expect(result).toHaveLength(1)
-    expect(result[0].url).toContain('_ak.gif')
+    expect(result[0].url).toContain('/api/fallback-image?')
+    expect(result[0].url).toContain('chartType=Radar')
+    expect(decodeURIComponent(result[0].url)).toContain('_ak.gif')
     expect(retrieveImagesFromStorage).not.toHaveBeenCalled()
   })
 
-  test('satellite provider returns direct-source urls in fallback mode', async () => {
+  test('satellite provider returns proxy urls in fallback mode', async () => {
     vi.mocked(scrapeSatelliteImages).mockResolvedValue([
       {
         imageFileName: '202403291200.webp',
@@ -105,7 +114,9 @@ describe('getWeatherChartData fallback mode', () => {
     const result = await getSatelliteChartData()
 
     expect(result).toHaveLength(1)
-    expect(result[0].url).toContain('metvuw.com/satellite/big')
+    expect(result[0].url).toContain('/api/fallback-image?')
+    expect(result[0].url).toContain('chartType=Satellite')
+    expect(decodeURIComponent(result[0].url)).toContain('metvuw.com/satellite/big')
     expect(retrieveImagesFromStorage).not.toHaveBeenCalled()
   })
 
@@ -128,7 +139,9 @@ describe('getWeatherChartData fallback mode', () => {
     const result = await getUpperAirChartDataForCode('93112')
 
     expect(result).toHaveLength(1)
-    expect(result[0].url).toContain('93112')
+    expect(result[0].url).toContain('/api/fallback-image?')
+    expect(result[0].url).toContain('chartType=Upper+Air')
+    expect(decodeURIComponent(result[0].url)).toContain('93112')
     expect(retrieveImagesFromStorage).not.toHaveBeenCalled()
   })
 })
