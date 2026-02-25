@@ -4,8 +4,7 @@ import NoForecast from '@/components/NoForecast'
 import { SatellitePage } from '@/components/SatellitePage'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
-import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
+import { getSatelliteChartData } from '@/shared/helpers/v2/dataSource/getWeatherChartData'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,15 +16,10 @@ export const generateMetadata = async (): Promise<Metadata> =>
   })
 
 export default async function Page() {
-  const path = 'images/satellite'
-
-  const existingImages = await retrieveImagesFromStorage(path)
-
-  if (existingImages.length === 0) {
+  const satelliteData = await getSatelliteChartData()
+  if (satelliteData.length === 0) {
     return <NoForecast />
   }
-
-  const satelliteData = constructChartData(existingImages)
 
   return <SatellitePage satelliteData={satelliteData} />
 }

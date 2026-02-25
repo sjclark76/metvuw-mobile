@@ -16,4 +16,6 @@ export const config = {
   supbabaseBucketName: process.env.SUPABASE_BUCKET_NAME ?? 'dev',
   inngestEventKey: process.env.INNGEST_EVENT_KEY ?? '',
   environment: process.env.VERCEL_ENV,
+  directSourceMode:
+    (process.env.METVUW_DIRECT_SOURCE_MODE ?? '').toLowerCase() === 'true',
 }

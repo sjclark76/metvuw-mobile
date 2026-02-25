@@ -12,6 +12,17 @@ import { scrapeUpperAirImages } from '@/shared/helpers/v2/screenScraper'
 
 export async function POST() {
   const newImages = await scrapeUpperAirImages()
+  if (config.directSourceMode) {
+    return NextResponse.json({
+      ok: true,
+      mode: 'direct-source',
+      toAdd: newImages.map((img) => ({
+        fullStoragePath: img.fullStoragePath,
+        imageFileName: img.imageFileName,
+      })),
+      toRemove: [],
+    })
+  }
 
   const existingImages = await retrieveImagesFromStorage('images/upper-air')
 

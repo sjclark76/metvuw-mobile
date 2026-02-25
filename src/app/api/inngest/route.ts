@@ -11,7 +11,7 @@ import { scrapeRegion } from '@/inngest/functions/scrapeRegion'
 import { uploadImages } from '@/inngest/functions/uploadImages'
 
 const functions =
-  config.environment === 'preview'
+  config.environment === 'preview' || config.directSourceMode
     ? []
     : [
         rainPoller,
