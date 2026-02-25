@@ -4,8 +4,7 @@ import { notFound } from 'next/navigation'
 import NoForecast from '@/components/NoForecast'
 import { UpperAirPage } from '@/components/UpperAirPage'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
-import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
+import { getUpperAirChartDataForCode } from '@/shared/helpers/v2/dataSource/getWeatherChartData'
 import { getsBalloonLocationCodeOrDefault } from '@/shared/types/balloonLocations'
 
 export const dynamic = 'force-dynamic'
@@ -34,13 +33,8 @@ export default async function Page(props: Props) {
     return notFound()
   }
 
-  const path = `images/upper-air/${balloonLocationCode}`
-
-  const existingImages = await retrieveImagesFromStorage(path)
-
-  const chartData = constructChartData(existingImages)
-
-  if (existingImages.length === 0) {
+  const chartData = await getUpperAirChartDataForCode(balloonLocationCode)
+  if (chartData.length === 0) {
     return <NoForecast />
   }
 

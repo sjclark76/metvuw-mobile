@@ -4,8 +4,7 @@ import { notFound } from 'next/navigation'
 import NoForecast from '@/components/NoForecast'
 import { RadarPage } from '@/components/RadarPage'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { constructChartData } from '@/shared/helpers/v2/chartData/constructChartData'
-import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
+import { getRadarChartDataForCode } from '@/shared/helpers/v2/dataSource/getWeatherChartData'
 import { isRadarCode } from '@/shared/types/radarRegions'
 
 type Props = {
@@ -31,15 +30,10 @@ export default async function Page(props: {
     return notFound()
   }
 
-  const path = `images/radar/${params.code}`
-
-  const existingImages = await retrieveImagesFromStorage(path)
-
-  if (existingImages.length === 0) {
+  const radarData = await getRadarChartDataForCode(params.code)
+  if (radarData.length === 0) {
     return <NoForecast />
   }
-
-  const radarData = constructChartData(existingImages)
 
   return <RadarPage radarData={radarData} radarCode={params.code} />
 }

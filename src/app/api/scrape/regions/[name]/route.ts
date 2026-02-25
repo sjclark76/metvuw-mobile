@@ -26,6 +26,18 @@ export async function POST(
     })
 
   const newImages = await scrapeRainImages(region)
+  if (config.directSourceMode) {
+    return NextResponse.json({
+      ok: true,
+      mode: 'direct-source',
+      toAdd: newImages.map((img) => ({
+        fullStoragePath: img.fullStoragePath,
+        imageFileName: img.imageFileName,
+      })),
+      toRemove: [],
+    })
+  }
+
   const existingImages = await retrieveImagesFromStorage(
     `images/rain/${regionCode}`,
   )

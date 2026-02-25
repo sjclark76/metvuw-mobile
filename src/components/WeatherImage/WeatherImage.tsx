@@ -21,16 +21,32 @@ function extraImageAttribute(
   chartType: ChartType,
   imageSrc: string | undefined,
 ) {
-  const smallImageSrc = imageSrc?.replace('images', 'small-images')
+  const canUseSmallStorageVariant =
+    imageSrc != null &&
+    imageSrc.includes('/storage/v1/object/public/') &&
+    imageSrc.includes('/images/')
+  const smallImageSrc = canUseSmallStorageVariant
+    ? imageSrc.replace('/images/', '/small-images/')
+    : undefined
 
   switch (chartType) {
     case 'Satellite':
+      if (!smallImageSrc) {
+        return {
+          ...satelliteImageDimensions,
+        }
+      }
       return {
         srcSet: `${smallImageSrc} 300w, ${imageSrc} 840w`,
         sizes: '(min-width: 900px) 840px, calc(93.1vw + 21px)',
         ...satelliteImageDimensions,
       }
     case 'Upper Air':
+      if (!smallImageSrc) {
+        return {
+          ...upperAirImageDimensions,
+        }
+      }
       return {
         srcSet: `${smallImageSrc} 300w, ${imageSrc} 760w`,
         sizes: '(min-width: 820px) 760px, calc(92vw + 24px)',

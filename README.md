@@ -59,6 +59,20 @@ deploy latest tests
 run dev server
 `npx inngest-cli@latest dev`
 
+# Fallback mode (no Inngest/Supabase writes)
+
+When free-tier quotas are exhausted, enable direct-source fallback mode:
+
+```bash
+METVUW_DIRECT_SOURCE_MODE=true
+```
+
+With this flag enabled:
+- Weather pages scrape Metvuw on request and render direct `metvuw.com` image URLs.
+- `/api/inngest` serves zero functions.
+- `/api/scrape/*` routes no longer upload/remove files in Supabase Storage.
+
+Unset `METVUW_DIRECT_SOURCE_MODE` (or set it to `false`) to return to normal mode.
+
 # Docker
 colima start                                                                                          
-

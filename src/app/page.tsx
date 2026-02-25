@@ -5,8 +5,7 @@ import NoForecast from '@/components/NoForecast'
 import RegionPage from '@/components/RegionPage/region-page'
 import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { constructRainChartData } from '@/shared/helpers/v2/chartData/constructRainChartData'
-import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
+import { getRainChartDataForRegion } from '@/shared/helpers/v2/dataSource/getWeatherChartData'
 import { findRegionByCode } from '@/shared/types/region'
 
 export const dynamic = 'force-dynamic'
@@ -27,15 +26,10 @@ export default async function Page() {
     // Redirect to a 404 page if the region is not found
     return notFound()
   }
-  const path = `images/rain/nz`
-
-  const existingImages = await retrieveImagesFromStorage(path)
-
-  if (existingImages.length === 0) {
+  const rainChartData = await getRainChartDataForRegion(matchedRegion)
+  if (rainChartData.length === 0) {
     return <NoForecast />
   }
-
-  const rainChartData = constructRainChartData(existingImages)
 
   const sortedCharts = rainChartData.sort((a, b) => {
     return (
