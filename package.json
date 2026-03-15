@@ -60,7 +60,7 @@
     "@types/react": "19.2.14",
     "@types/react-lazy-load-image-component": "1.6.5",
     "@types/react-lazyload": "3.2.3",
-    "@vitejs/plugin-react": "^5.0.0",
+    "@vitejs/plugin-react": "^6.0.0",
     "@vitest/ui": "^4.0.0",
     "babel-jest": "30.3.0",
     "checkly": "^7.0.0",
