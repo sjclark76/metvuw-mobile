@@ -2,7 +2,10 @@
 'use client'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { useAtomValue } from 'jotai/index'
+import React from 'react'
 
+import { AdCard } from '@/components/AdCard'
+import { showAdsAtom } from '@/components/Atoms/AdState'
 import { displayAnimatedChartAtom } from '@/components/Atoms/GlobalState'
 import { AnimatedRadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/AnimatedRadarAndSatelliteImageCard'
 import { RadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/RadarAndSatelliteImageCard'
@@ -45,8 +48,11 @@ const viewSwitchVariants = {
   exit: { opacity: 0, transition: { duration: 0.3 } },
 }
 
+const AD_POSITION = 2
+
 export default function Foo({ images, chartType }: Props) {
   const displayAnimatedChart = useAtomValue(displayAnimatedChartAtom)
+  const showAds = useAtomValue(showAdsAtom)
 
   return (
     <>
@@ -76,18 +82,27 @@ export default function Foo({ images, chartType }: Props) {
               animate="visible"
             >
               {images.map((image, index) => (
-                // Each list item has its own animation variant
-                <motion.li
-                  key={image.url}
-                  variants={itemVariants}
-                  className="w-full"
-                >
-                  <RadarAndSatelliteImageCard
-                    image={image}
-                    chartType={chartType}
-                    isHighPriority={index == 0}
-                  />
-                </motion.li>
+                <React.Fragment key={image.url}>
+                  {showAds && index === AD_POSITION && (
+                    <motion.li
+                      key="ad-card"
+                      variants={itemVariants}
+                      className="w-full"
+                    >
+                      <AdCard />
+                    </motion.li>
+                  )}
+                  <motion.li
+                    variants={itemVariants}
+                    className="w-full"
+                  >
+                    <RadarAndSatelliteImageCard
+                      image={image}
+                      chartType={chartType}
+                      isHighPriority={index == 0}
+                    />
+                  </motion.li>
+                </React.Fragment>
               ))}
             </motion.ul>
           )}

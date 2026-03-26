@@ -1,8 +1,11 @@
 'use client'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { useAtomValue } from 'jotai'
+import React from 'react'
 
+import { AdCard } from '@/components/AdCard'
 import { AnimatedWeatherChart } from '@/components/AnimatedWeatherChart/animated-weather-chart'
+import { showAdsAtom } from '@/components/Atoms/AdState'
 import { displayAnimatedChartAtom } from '@/components/Atoms/GlobalState'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
@@ -45,8 +48,11 @@ const viewSwitchVariants = {
   exit: { opacity: 0, transition: { duration: 0.3 } },
 }
 
+const AD_POSITION = 2
+
 const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
   const displayAnimatedChart = useAtomValue(displayAnimatedChartAtom)
+  const showAds = useAtomValue(showAdsAtom)
   return (
     <>
       <div className="relative flex h-full flex-1 flex-col gap-2">
@@ -75,18 +81,27 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
               animate="visible"
             >
               {props.charts.map((chart, index) => (
-                // Each list item has its own animation variant
-                <motion.li
-                  key={chart.forecastDate}
-                  variants={itemVariants}
-                  className="w-full"
-                >
-                  <WeatherChart
-                    chart={chart}
-                    region={props.region}
-                    index={index}
-                  />
-                </motion.li>
+                <React.Fragment key={chart.forecastDate}>
+                  {showAds && index === AD_POSITION && (
+                    <motion.li
+                      key="ad-card"
+                      variants={itemVariants}
+                      className="w-full"
+                    >
+                      <AdCard />
+                    </motion.li>
+                  )}
+                  <motion.li
+                    variants={itemVariants}
+                    className="w-full"
+                  >
+                    <WeatherChart
+                      chart={chart}
+                      region={props.region}
+                      index={index}
+                    />
+                  </motion.li>
+                </React.Fragment>
               ))}
             </motion.ul>
           )}
