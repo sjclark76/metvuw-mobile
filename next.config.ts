@@ -38,6 +38,7 @@ const nextConfig: NextConfig = {
     }
     return config
   },
+  turbopack: {},
   poweredByHeader: false,
   images: {
     unoptimized: true,
