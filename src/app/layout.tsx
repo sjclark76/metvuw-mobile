@@ -24,15 +24,15 @@ export default function RootLayout({
         <title>Metvuw Mobile</title>
         <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href={config.supabaseUrl} />
+        {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
+          <Script
+            strategy="afterInteractive"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}`}
+            crossOrigin="anonymous"
+          />
+        )}
       </head>
       <GoogleTag />
-      {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
-        <Script
-          strategy="afterInteractive"
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}`}
-          crossOrigin="anonymous"
-        />
-      )}
       <body className="font-sans text-gray-800">
         <Toaster />
         <div className="font-sans text-gray-800">
