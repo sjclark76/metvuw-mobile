@@ -19,7 +19,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-gray-100">
       <head>
-        <title>Metvuw Mobile</title>
         <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href={config.supabaseUrl} />
         <meta name="google-adsense-account" content="ca-pub-9572839501955022" />
