@@ -5,8 +5,8 @@ export const removeImages = inngest.createFunction(
   {
     id: 'remove-images',
     concurrency: { scope: 'account', limit: 10, key: 'metvuw' },
+    triggers: [{ event: 'images/remove' }],
   },
-  { event: 'images/remove' },
   async ({ event }) => {
     const { bucket, toRemove } = event.data
 

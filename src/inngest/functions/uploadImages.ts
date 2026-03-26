@@ -5,8 +5,8 @@ export const uploadImages = inngest.createFunction(
   {
     id: 'upload-images',
     concurrency: { scope: 'account', limit: 10, key: 'metvuw' },
+    triggers: [{ event: 'images/upload' }],
   },
-  { event: 'images/upload' },
   async ({ event }) => {
     const { bucket, chartType, toUpload: images } = event.data
     if (images != null) {

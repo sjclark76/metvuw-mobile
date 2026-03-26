@@ -9,10 +9,7 @@ import {
 import { scrapeRadarImages } from '@/shared/helpers/v2/screenScraper'
 
 export const radarPoller = inngest.createFunction(
-  { id: 'radar-poller' }, // The name of your function, used for observability.
-  defaultPollerTime,
-
-  // This function will be called on the schedule above
+  { id: 'radar-poller', triggers: [defaultPollerTime] },
   async ({ step }) => {
     const newImages = await scrapeRadarImages()
 

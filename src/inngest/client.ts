@@ -1,4 +1,4 @@
-import { EventSchemas, Inngest } from 'inngest'
+import { Inngest } from 'inngest'
 
 import { config } from '@/config'
 import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
@@ -36,5 +36,4 @@ export type Events = {
 export const inngest = new Inngest({
   id: 'metvuw-mobile',
   eventKey: config.inngestEventKey,
-  schemas: new EventSchemas().fromRecord<Events>(),
 })

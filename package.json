@@ -35,7 +35,7 @@
     "date-fns": "4.1.0",
     "framer-motion": "^12.16.0",
     "immer": "^11.0.0",
-    "inngest": "^3.16.1",
+    "inngest": "^4.0.0",
     "jotai": "2.19.0",
     "jotai-immer": "^0.4.1",
     "jotai-optics": "^0.4.0",
