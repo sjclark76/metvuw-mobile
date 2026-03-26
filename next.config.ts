@@ -38,12 +38,11 @@ const nextConfig: NextConfig = {
     }
     return config
   },
+  turbopack: {},
   poweredByHeader: false,
   images: {
     unoptimized: true,
     domains: [],
-    deviceSizes: [],
-    imageSizes: [],
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
