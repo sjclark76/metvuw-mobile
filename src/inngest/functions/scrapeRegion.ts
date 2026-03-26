@@ -10,8 +10,8 @@ export const scrapeRegion = inngest.createFunction(
   {
     id: 'scrape-region',
     concurrency: { scope: 'account', limit: 10, key: 'metvuw' },
+    triggers: [{ event: 'scrape/region' }],
   },
-  { event: 'scrape/region' },
   async ({ event, step }) => {
     const { bucket, region } = event.data
 

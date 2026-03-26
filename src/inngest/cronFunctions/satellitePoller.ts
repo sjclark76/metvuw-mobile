@@ -9,10 +9,7 @@ import {
 import { scrapeSatelliteImages } from '@/shared/helpers/v2/screenScraper'
 
 export const satellitePoller = inngest.createFunction(
-  { id: 'satellite-poller' }, // The name of your function, used for observability.
-  defaultPollerTime,
-
-  // This function will be called on the schedule above
+  { id: 'satellite-poller', triggers: [defaultPollerTime] },
   async ({ step }) => {
     const newImages = await scrapeSatelliteImages()
 

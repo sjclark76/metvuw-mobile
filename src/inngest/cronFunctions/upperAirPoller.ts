@@ -9,10 +9,7 @@ import {
 import { scrapeUpperAirImages } from '@/shared/helpers/v2/screenScraper'
 
 export const upperAirPoller = inngest.createFunction(
-  { id: 'upper-air-poller' }, // The name of your function, used for observability.
-  defaultPollerTime,
-
-  // This function will be called on the schedule above
+  { id: 'upper-air-poller', triggers: [defaultPollerTime] },
   async ({ step }) => {
     const newImages = await scrapeUpperAirImages()
 
