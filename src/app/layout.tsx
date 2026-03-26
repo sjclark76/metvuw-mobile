@@ -5,8 +5,6 @@ import { Provider } from 'jotai'
 import React from 'react'
 import { Toaster } from 'react-hot-toast'
 
-import Script from 'next/script'
-
 import FavoritePageRedirect from '@/components/FavoritePageRedirect/FavoritePageRedirect'
 import GoogleTag from '@/components/GoogleTag'
 import { config } from '@/config'
@@ -25,8 +23,8 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href={config.supabaseUrl} />
         {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
-          <Script
-            strategy="afterInteractive"
+          <script
+            async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}`}
             crossOrigin="anonymous"
           />
