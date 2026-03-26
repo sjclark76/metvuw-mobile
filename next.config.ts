@@ -42,8 +42,6 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
     domains: [],
-    deviceSizes: [],
-    imageSizes: [],
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
