@@ -22,6 +22,7 @@ export default function RootLayout({
         <title>Metvuw Mobile</title>
         <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href={config.supabaseUrl} />
+        <meta name="google-adsense-account" content="ca-pub-9572839501955022" />
         {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
           <script
             async
