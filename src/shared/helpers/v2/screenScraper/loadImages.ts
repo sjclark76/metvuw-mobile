@@ -17,14 +17,21 @@ export async function loadImages(
   url: string,
   imageSelector: string,
 ): Promise<{ relativeUrl: string }[]> {
-  const response = await axios.get(new URL(url, config.metvuwBaseUrl).href)
-  const rawHtml = response.data
+  try {
+    const response = await axios.get(new URL(url, config.metvuwBaseUrl).href, {
+      timeout: 10000,
+    })
+    const rawHtml = response.data
 
-  const $ = cheerio.load(rawHtml)
+    const $ = cheerio.load(rawHtml)
 
-  const images = $(imageSelector)
+    const images = $(imageSelector)
 
-  return images.toArray().map((image: any) => ({
-    relativeUrl: image.attribs.src as string,
-  }))
+    return images.toArray().map((image: any) => ({
+      relativeUrl: image.attribs.src as string,
+    }))
+  } catch (error) {
+    console.error(`Failed to load images from ${url}:`, error instanceof Error ? error.message : error)
+    return []
+  }
 }
