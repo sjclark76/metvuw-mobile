@@ -86,8 +86,8 @@ const WeatherImage = ({
     const imageElement = imgRef.current
 
     const handleLoad = () => {
-      if (imageElement?.src) {
-        setLoadedImageState((prev) => new Map(prev).set(imageElement.src, true))
+      if (imageSrc) {
+        setLoadedImageState((prev) => new Map(prev).set(imageSrc, true))
       }
     }
 
