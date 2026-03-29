@@ -2,6 +2,7 @@
 import './globals.css'
 
 import { Provider } from 'jotai'
+import Script from 'next/script'
 import React from 'react'
 import { Toaster } from 'react-hot-toast'
 
@@ -23,10 +24,11 @@ export default function RootLayout({
         <link rel="preconnect" href={config.supabaseUrl} />
         <meta name="google-adsense-account" content="ca-pub-9572839501955022" />
         {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
-          <script
+          <Script
             async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}`}
             crossOrigin="anonymous"
+            strategy="afterInteractive"
           />
         )}
       </head>
