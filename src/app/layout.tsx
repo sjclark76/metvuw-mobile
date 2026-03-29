@@ -24,9 +24,9 @@ export default function RootLayout({
         <link rel="preconnect" href={config.supabaseUrl} />
         <meta name="google-adsense-account" content="ca-pub-9572839501955022" />
       </head>
-      <GoogleTag />
-      <GoogleAdSense />
       <body className="font-sans text-gray-800">
+        <GoogleTag />
+        <GoogleAdSense />
         <Toaster />
         <div className="font-sans text-gray-800">
           <Provider>
