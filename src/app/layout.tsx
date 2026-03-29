@@ -2,11 +2,11 @@
 import './globals.css'
 
 import { Provider } from 'jotai'
-import Script from 'next/script'
 import React from 'react'
 import { Toaster } from 'react-hot-toast'
 
 import FavoritePageRedirect from '@/components/FavoritePageRedirect/FavoritePageRedirect'
+import { GoogleAdSense } from '@/components/GoogleAdSense'
 import GoogleTag from '@/components/GoogleTag'
 import { config } from '@/config'
 
@@ -23,16 +23,9 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href={config.supabaseUrl} />
         <meta name="google-adsense-account" content="ca-pub-9572839501955022" />
-        {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
-          <Script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}`}
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
-        )}
       </head>
       <GoogleTag />
+      <GoogleAdSense />
       <body className="font-sans text-gray-800">
         <Toaster />
         <div className="font-sans text-gray-800">

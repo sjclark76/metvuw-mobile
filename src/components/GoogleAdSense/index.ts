@@ -1,0 +1,1 @@
+export { GoogleAdSense } from './GoogleAdSense'
