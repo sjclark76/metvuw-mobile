@@ -46,7 +46,7 @@ export function AdCard() {
 
   if (adFilled === false) return null
 
-  const clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID
+  const clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ?? 'ca-pub-9572839501955022'
   const slotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID
 
   return (

@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai/index'
 import React from 'react'
 
 import { AdCard } from '@/components/AdCard'
-import { showAdsAtom } from '@/components/Atoms/AdState'
+import { showAdsAtom, useInitShowAds } from '@/components/Atoms/AdState'
 import { displayAnimatedChartAtom } from '@/components/Atoms/GlobalState'
 import { AnimatedRadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/AnimatedRadarAndSatelliteImageCard'
 import { RadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/RadarAndSatelliteImageCard'
@@ -53,6 +53,7 @@ const AD_POSITION = 2
 export default function Foo({ images, chartType }: Props) {
   const displayAnimatedChart = useAtomValue(displayAnimatedChartAtom)
   const showAds = useAtomValue(showAdsAtom)
+  useInitShowAds()
 
   return (
     <>

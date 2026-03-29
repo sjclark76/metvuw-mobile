@@ -1,16 +1,22 @@
 import { atom } from 'jotai'
-
-function getCookie(name: string): string | null {
-  if (typeof document === 'undefined') return null
-  const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`))
-  return match ? match[2] : null
-}
+import { useSetAtom } from 'jotai'
+import { useEffect } from 'react'
 
 /**
- * Read-only atom that determines whether ads should be shown.
- * Reads from the 'show-ads' cookie set by edge middleware.
- * Returns true for non-NZ/AU users. Defaults to false if cookie is missing.
+ * Writable atom that determines whether ads should be shown.
+ * Initialized to false to match server render, then updated
+ * client-side from the 'show-ads' cookie to avoid hydration mismatch.
  */
-export const showAdsAtom = atom<boolean>(() => {
-  return getCookie('show-ads') === '1'
-})
+export const showAdsAtom = atom<boolean>(false)
+
+/**
+ * Hook to sync the showAds atom with the 'show-ads' cookie after mount.
+ * Must be called in a client component within a jotai Provider.
+ */
+export function useInitShowAds() {
+  const setShowAds = useSetAtom(showAdsAtom)
+  useEffect(() => {
+    const match = document.cookie.match(/(^| )show-ads=([^;]+)/)
+    setShowAds(match?.[2] === '1')
+  }, [setShowAds])
+}

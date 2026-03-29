@@ -5,6 +5,7 @@ import { useSetAtom } from 'jotai'
 import React from 'react'
 
 import { loadedImageStateAtom } from '@/app/regions/[name]/state'
+import { useInitShowAds } from '@/components/Atoms/AdState'
 import { FooterControl } from '@/components/FooterControl'
 import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
 import { RainfallLegendSection } from '@/components/RainfallLegend'
@@ -29,6 +30,7 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
         )} for ${region.name}`
       : ''
 
+  useInitShowAds()
   usePreloadedImages(rainChartData)
 
   setLoadedImageState(
