@@ -46,13 +46,14 @@ export function AdCard() {
 
   if (adFilled === false) return null
 
-  const clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ?? 'ca-pub-9572839501955022'
+  const clientId =
+    process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ?? 'ca-pub-9572839501955022'
   const slotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID
 
   return (
     <div
       className="mb-5 w-full rounded-xl bg-white pb-3 drop-shadow-2xl dark:bg-stone-700"
-      // style={{ display: adFilled === null ? 'none' : undefined }}
+      style={{ display: adFilled === null ? 'none' : undefined }}
     >
       <div className="flex min-h-50 items-center justify-center rounded-t-xl p-4">
         <ins
