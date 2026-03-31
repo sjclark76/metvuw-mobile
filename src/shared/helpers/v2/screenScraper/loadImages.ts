@@ -1,27 +1,19 @@
-import axios from 'axios'
 import * as cheerio from 'cheerio'
 
 import { config } from '@/config'
 
-/**
- * This function is used to load images from a given URL.
- * It uses axios to make a GET request to the URL and cheerio to parse the HTML response.
- *
- * @param {string} url - The URL from which to load the images.
- * @param {string} imageSelector - The CSS selector to use to select the images from the HTML.
- *
- * @returns {Promise<{ relativeUrl: string; width: number; height: number }[]>} - A promise that resolves to an array of objects.
- * Each object represents an image and has properties for the image's relative URL, width, and height.
- */
 export async function loadImages(
   url: string,
   imageSelector: string,
 ): Promise<{ relativeUrl: string }[]> {
   try {
-    const response = await axios.get(new URL(url, config.metvuwBaseUrl).href, {
-      timeout: 10000,
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 10000)
+    const response = await fetch(new URL(url, config.metvuwBaseUrl).href, {
+      signal: controller.signal,
     })
-    const rawHtml = response.data
+    clearTimeout(timeoutId)
+    const rawHtml = await response.text()
 
     const $ = cheerio.load(rawHtml)
 

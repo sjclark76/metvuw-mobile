@@ -1,13 +1,10 @@
-import axios from 'axios'
-
 export async function downloadImageToBuffer(url: string) {
   try {
-    const { data, headers } = await axios.get(url, {
-      responseType: 'arraybuffer',
-    })
+    const response = await fetch(url)
+    const arrayBuffer = await response.arrayBuffer()
     return {
-      fileBuffer: Buffer.from(data, 'binary'),
-      contentType: headers['content-type'],
+      fileBuffer: Buffer.from(arrayBuffer),
+      contentType: response.headers.get('content-type') ?? undefined,
     }
   } catch (e) {
     // eslint-disable-next-line
