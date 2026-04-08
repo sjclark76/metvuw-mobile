@@ -72,7 +72,7 @@
     "jest-environment-jsdom": "30.3.0",
     "jest-junit": "16.0.0",
     "jsdom": "^29.0.0",
-    "postcss": "8.5.8",
+    "postcss": "8.5.9",
     "prettier": "3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.0",
     "supabase": "^2.24.3",
