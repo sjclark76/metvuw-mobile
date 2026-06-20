@@ -7,7 +7,7 @@ import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { getUpperAirChartDataForCode } from '@/shared/helpers/v2/dataSource/getWeatherChartData'
 import { getsBalloonLocationCodeOrDefault } from '@/shared/types/balloonLocations'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params

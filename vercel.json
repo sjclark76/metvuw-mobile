@@ -1,12 +1,1 @@
-{
-  "crons": [
-    {
-      "path": "/api/cache/refresh",
-      "schedule": "0 7 * * *"
-    },
-    {
-      "path": "/api/cache/refresh",
-      "schedule": "0 8 * * *"
-    }
-  ]
-}
+{}
