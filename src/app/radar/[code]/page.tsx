@@ -10,7 +10,7 @@ import { isRadarCode } from '@/shared/types/radarRegions'
 type Props = {
   params: Promise<{ code: string }>
 }
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // read route params
