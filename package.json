@@ -30,7 +30,7 @@
     "cheerio": "1.2.0",
     "clsx": "^2.1.0",
     "date-fns": "4.4.0",
-    "framer-motion": "^12.16.0",
+    "motion": "^12.16.0",
     "immer": "^11.0.0",
     "inngest": "^4.0.0",
     "jotai": "2.20.1",
