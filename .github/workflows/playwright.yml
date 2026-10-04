@@ -10,6 +10,9 @@ env:
   SECRET_KEY: ${{ secrets.SECRET_KEY }}
   SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
   NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+  # Scrape charts straight from metvuw.com so the pages have data without
+  # depending on the Supabase image store being populated.
+  METVUW_DIRECT_SOURCE_MODE: 'true'
 jobs:
   test_e2e:
     timeout-minutes: 60
