@@ -4,36 +4,36 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+env:
+  ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+  S3_REGION: ${{ secrets.S3_REGION }}
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+  NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+  # Scrape charts straight from metvuw.com so the pages have data without
+  # depending on the Supabase image store being populated.
+  METVUW_DIRECT_SOURCE_MODE: 'true'
 jobs:
-  test_setup:
-    name: Test setup
-    runs-on: ubuntu-latest
-    outputs:
-      preview_url: ${{ steps.waitForVercelPreviewDeployment.outputs.url }}
-    steps:
-      - name: Wait for Vercel preview deployment to be ready
-        uses: patrickedqvist/wait-for-vercel-preview@v1.3.3
-        id: waitForVercelPreviewDeployment
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          max_timeout: 600
   test_e2e:
-    needs: test_setup
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
     - uses: actions/setup-node@v6
       with:
-        node-version: lts/*
+        node-version: 24.x
+        cache: 'npm'
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+    - name: Build app
+      run: npm run build
+    # playwright.config.ts starts the app with `npm run start` (webServer), so the
+    # tests run against this build rather than a Vercel preview (which Attack Mode
+    # challenges, blocking the runner).
     - name: Run Playwright tests
       run: npx playwright test
-      env:
-        PLAYWRIGHT_TEST_BASE_URL: ${{ needs.test_setup.outputs.preview_url }}
     - uses: actions/upload-artifact@v7
       if: always()
       with:
