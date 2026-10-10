@@ -73,7 +73,7 @@
     "identity-obj-proxy": "3.0.0",
     "jest": "30.5.2",
     "jest-environment-jsdom": "30.5.2",
-    "jest-junit": "16.0.0",
+    "jest-junit": "17.0.0",
     "jsdom": "^29.0.0",
     "postcss": "8.5.29",
     "prettier": "3.9.10",
