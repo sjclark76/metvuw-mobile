@@ -1,4 +1,4 @@
-import { isAllowedSourceUrl } from '@/shared/helpers/v2/dataSource/allowedSourceUrl'
+import { allowedOriginFor } from '@/shared/helpers/v2/dataSource/allowedSourceUrl'
 
 const DEFAULT_TIMEOUT_MS = 10_000
 const DEFAULT_MAX_BYTES = 5 * 1024 * 1024
@@ -44,6 +44,16 @@ async function readBodyWithLimit(response: Response, maxBytes: number) {
   return Buffer.concat(chunks)
 }
 
+// The request URL is built from our configured origin plus only the path and
+// query of the caller-supplied URL, so the host being fetched is never
+// attacker-controlled. Returns undefined when the URL isn't allowed.
+function requestUrlFor(url: URL): string | undefined {
+  const origin = allowedOriginFor(url)
+  return origin === undefined
+    ? undefined
+    : `${origin}${url.pathname}${url.search}`
+}
+
 /**
  * Downloads an image from an allowed source URL. Redirects are never followed
  * implicitly: each hop is re-checked against the allowlist (up to
@@ -60,12 +70,13 @@ export async function downloadImageToBuffer(
 ) {
   try {
     let current = new URL(url)
-    if (!isAllowedSourceUrl(current)) {
+    let requestUrl = requestUrlFor(current)
+    if (requestUrl === undefined) {
       throw new UpstreamImageError('source url not allowed')
     }
 
     const signal = AbortSignal.timeout(timeoutMs)
-    let response = await fetch(current.href, { redirect: 'manual', signal })
+    let response = await fetch(requestUrl, { redirect: 'manual', signal })
 
     for (let hops = 0; REDIRECT_STATUSES.has(response.status); hops++) {
       const location = response.headers.get('location')
@@ -73,13 +84,14 @@ export async function downloadImageToBuffer(
         throw new UpstreamImageError('too many redirects', response.status)
       }
       current = new URL(location, current)
-      if (!isAllowedSourceUrl(current)) {
+      requestUrl = requestUrlFor(current)
+      if (requestUrl === undefined) {
         throw new UpstreamImageError(
           'redirect target not allowed',
           response.status,
         )
       }
-      response = await fetch(current.href, { redirect: 'manual', signal })
+      response = await fetch(requestUrl, { redirect: 'manual', signal })
     }
 
     if (!response.ok) {
