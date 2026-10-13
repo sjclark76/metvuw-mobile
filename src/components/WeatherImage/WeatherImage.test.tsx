@@ -16,6 +16,47 @@ describe('Weather Image', () => {
     expect(container).toMatchSnapshot()
   })
 
+  test('decodes images asynchronously', () => {
+    const { container } = render(
+      <WeatherImage
+        chartType="Rain"
+        imageAlt="foo"
+        imageSrc="baa"
+        isHighPriority={false}
+      />,
+    )
+
+    expect(container.querySelector('img')).toHaveAttribute('decoding', 'async')
+  })
+
+  test('passes the loading strategy through to the img', () => {
+    const { container } = render(
+      <WeatherImage
+        chartType="Rain"
+        imageAlt="foo"
+        imageSrc="baa"
+        isHighPriority={false}
+        loading="lazy"
+      />,
+    )
+
+    expect(container.querySelector('img')).toHaveAttribute('loading', 'lazy')
+  })
+
+  // The animated viewers swap the src of one image, so they must stay eager.
+  test('leaves loading unset by default', () => {
+    const { container } = render(
+      <WeatherImage
+        chartType="Rain"
+        imageAlt="foo"
+        imageSrc="baa"
+        isHighPriority={false}
+      />,
+    )
+
+    expect(container.querySelector('img')).not.toHaveAttribute('loading')
+  })
+
   test('satellite proxy image uses small variant srcset', () => {
     const { container } = render(
       <WeatherImage

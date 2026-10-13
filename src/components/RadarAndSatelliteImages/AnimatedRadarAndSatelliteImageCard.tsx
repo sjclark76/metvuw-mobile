@@ -5,6 +5,7 @@ import {
   animatedChartIndexAtom,
   playAnimationAtom,
 } from '@/components/Atoms/GlobalState'
+import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
 import { RadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/RadarAndSatelliteImageCard'
 import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { ChartType } from '@/shared/types/ChartType'
@@ -17,6 +18,8 @@ type Props = {
 function AnimatedRadarAndSatelliteImageCard({ images, chartType }: Props) {
   const [currentIndex, setCurrentIndex] = useAtom(animatedChartIndexAtom)
   const playAnimation = useAtomValue(playAnimationAtom)
+  // The viewer swaps one image's src, so warm the cache for the whole loop.
+  usePreloadedImages(images)
 
   useEffect(() => {
     let interval

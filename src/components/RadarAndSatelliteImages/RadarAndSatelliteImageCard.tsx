@@ -11,6 +11,7 @@ type Props = {
   image: SkinnyChartData
   chartType: Extract<ChartType, 'Radar' | 'Satellite' | 'Upper Air'>
   isHighPriority: boolean
+  loading?: 'eager' | 'lazy'
 }
 
 const safeFormat = (date: number, formatString: string) => {
@@ -27,6 +28,7 @@ function RadarAndSatelliteImageCard({
   image,
   chartType,
   isHighPriority,
+  loading,
 }: Props) {
   const createImgAlt = (image: SkinnyChartData) => {
     return `${chartType.toLowerCase()} chart for ${format(
@@ -44,6 +46,7 @@ function RadarAndSatelliteImageCard({
           imageAlt={createImgAlt(image)}
           chartType={chartType}
           isHighPriority={isHighPriority}
+          loading={loading}
         />
       }
       date={

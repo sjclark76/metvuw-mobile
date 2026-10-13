@@ -11,6 +11,7 @@ interface Props {
   chart: SkinnyRainChartData
   region: Region
   index: number
+  loading?: 'eager' | 'lazy'
 }
 
 export function WeatherChart(props: Props) {
@@ -28,6 +29,7 @@ export function WeatherChart(props: Props) {
           imageAlt={altTag}
           chartType="Rain"
           isHighPriority={props.index === 0}
+          loading={props.loading}
         />
       }
       date={
