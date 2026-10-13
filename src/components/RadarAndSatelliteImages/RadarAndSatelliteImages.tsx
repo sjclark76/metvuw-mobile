@@ -1,6 +1,6 @@
 'use client'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useAtomValue } from 'jotai/index'
+import { useAtomValue } from 'jotai'
 import React from 'react'
 
 import { AdCard } from '@/components/AdCard'

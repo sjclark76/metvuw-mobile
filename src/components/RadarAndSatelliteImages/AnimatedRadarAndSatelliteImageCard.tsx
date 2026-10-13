@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue } from 'jotai/index'
+import { useAtom, useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 
 import {
