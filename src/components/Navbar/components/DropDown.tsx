@@ -10,27 +10,6 @@ const DropDown = (props: DropDownProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [currentItem, setCurrentItem] = useState<number | undefined>(undefined)
   const menuRef = useRef<HTMLUListElement>(null)
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown)
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  })
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setIsOpen(false)
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [menuRef])
-
   const handleKeyDown = (e: KeyboardEvent) => {
     if (isOpen) {
       e.preventDefault()
@@ -65,6 +44,28 @@ const DropDown = (props: DropDownProps) => {
       }
     }
   }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  })
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [menuRef])
+
   const headerText =
     'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-slate-500 focus:bg-slate-600'
 

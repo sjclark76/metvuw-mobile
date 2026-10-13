@@ -21,9 +21,13 @@ describe('RainfallLegendSection', () => {
     expect(screen.getByText('> 200.0 mm')).toBeInTheDocument()
     expect(screen.queryByText('Pale Lavender')).not.toBeInTheDocument()
     expect(screen.queryByText('#FF0000')).not.toBeInTheDocument()
-    expect(screen.getByTestId('rainfall-legend-toggle-icon')).toBeInTheDocument()
+    expect(
+      screen.getByTestId('rainfall-legend-toggle-icon'),
+    ).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: /hide rainfall legend/i }))
+    fireEvent.click(
+      screen.getByRole('button', { name: /hide rainfall legend/i }),
+    )
 
     await waitFor(() => {
       expect(screen.queryByText('0.1 - 0.5 mm')).not.toBeInTheDocument()

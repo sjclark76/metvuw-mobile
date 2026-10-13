@@ -24,7 +24,10 @@ export async function loadImages(
       relativeUrl: image.attribs.src as string,
     }))
   } catch (error) {
-    console.error(`Failed to load images from ${url}:`, error instanceof Error ? error.message : error)
+    console.error(
+      `Failed to load images from ${url}:`,
+      error instanceof Error ? error.message : error,
+    )
     return []
   }
 }

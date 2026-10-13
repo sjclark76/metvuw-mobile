@@ -16,7 +16,9 @@ import { ChartType } from '@/shared/types/ChartType'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
 
-function sortByImageDateUTC<T extends { imageDateUTC: number }>(charts: T[]): T[] {
+function sortByImageDateUTC<T extends { imageDateUTC: number }>(
+  charts: T[],
+): T[] {
   return [...charts].sort((a, b) => a.imageDateUTC - b.imageDateUTC)
 }
 
@@ -39,11 +41,16 @@ export async function getRainChartDataForRegion(
 ): Promise<SkinnyRainChartData[]> {
   if (config.directSourceMode) {
     const scrapedImages = await scrapeRainImages(region)
-    const directSourceCharts = constructRainChartDataFromScrapedImages(scrapedImages)
-    return sortByImageDateUTC(mapToFallbackProxyUrls(directSourceCharts, 'Rain'))
+    const directSourceCharts =
+      constructRainChartDataFromScrapedImages(scrapedImages)
+    return sortByImageDateUTC(
+      mapToFallbackProxyUrls(directSourceCharts, 'Rain'),
+    )
   }
 
-  const existingImages = await retrieveImagesFromStorage(`images/rain/${region.code}`)
+  const existingImages = await retrieveImagesFromStorage(
+    `images/rain/${region.code}`,
+  )
   return sortByImageDateUTC(constructRainChartData(existingImages))
 }
 
@@ -56,18 +63,24 @@ export async function getRadarChartDataForCode(
       image.fullStoragePath.startsWith(`images/radar/${radarCode}/`),
     )
 
-    const directSourceCharts = constructChartDataFromScrapedImages(filteredImages)
-    return sortByImageDateUTC(mapToFallbackProxyUrls(directSourceCharts, 'Radar'))
+    const directSourceCharts =
+      constructChartDataFromScrapedImages(filteredImages)
+    return sortByImageDateUTC(
+      mapToFallbackProxyUrls(directSourceCharts, 'Radar'),
+    )
   }
 
-  const existingImages = await retrieveImagesFromStorage(`images/radar/${radarCode}`)
+  const existingImages = await retrieveImagesFromStorage(
+    `images/radar/${radarCode}`,
+  )
   return sortByImageDateUTC(constructChartData(existingImages))
 }
 
 export async function getSatelliteChartData(): Promise<SkinnyChartData[]> {
   if (config.directSourceMode) {
     const scrapedImages = await scrapeSatelliteImages()
-    const directSourceCharts = constructChartDataFromScrapedImages(scrapedImages)
+    const directSourceCharts =
+      constructChartDataFromScrapedImages(scrapedImages)
     return sortByImageDateUTC(
       mapToFallbackProxyUrls(directSourceCharts, 'Satellite'),
     )
@@ -86,7 +99,8 @@ export async function getUpperAirChartDataForCode(
       image.fullStoragePath.startsWith(`images/upper-air/${balloonCode}/`),
     )
 
-    const directSourceCharts = constructChartDataFromScrapedImages(filteredImages)
+    const directSourceCharts =
+      constructChartDataFromScrapedImages(filteredImages)
     return sortByImageDateUTC(
       mapToFallbackProxyUrls(directSourceCharts, 'Upper Air'),
     )

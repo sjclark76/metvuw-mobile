@@ -1,13 +1,5 @@
 export type RadarCode =
-  | 'nl'
-  | 'ak'
-  | 'bp'
-  | 'mh'
-  | 'np'
-  | 'wn'
-  | 'ch'
-  | 'wl'
-  | 'nv'
+  'nl' | 'ak' | 'bp' | 'mh' | 'np' | 'wn' | 'ch' | 'wl' | 'nv'
 
 export type RadarRegion =
   | 'Northland'

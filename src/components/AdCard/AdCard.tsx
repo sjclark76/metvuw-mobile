@@ -19,6 +19,8 @@ export function AdCard() {
         ;(window.adsbygoogle = window.adsbygoogle || []).push({})
         adPushed.current = true
       } catch {
+        // adsbygoogle can only be pushed to after mount, so a failure is only known here.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setAdFilled(false)
         return
       }
