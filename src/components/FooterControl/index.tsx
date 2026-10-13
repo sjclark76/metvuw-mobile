@@ -1,7 +1,7 @@
 'use client'
 import clsx from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion' // Import framer-motion
-import { useAtom } from 'jotai/index'
+import { useAtom } from 'jotai'
 import { ChangeEvent, useCallback, useMemo } from 'react'
 
 import {
