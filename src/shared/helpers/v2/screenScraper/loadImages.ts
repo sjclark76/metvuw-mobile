@@ -1,35 +1,50 @@
 import * as cheerio from 'cheerio'
 
 import { config } from '@/config'
+import { ScrapeError } from '@/shared/helpers/v2/screenScraper/scrapeError'
 
+const TIMEOUT_MS = 10_000
+
+/**
+ * Fetches a metvuw page and returns the `src` of every image matching the
+ * selector. Throws a ScrapeError if the page can't be fetched (network error,
+ * timeout, non-2xx) or contains no matching images, which means the structure
+ * changed or we were served an error page.
+ */
 export async function loadImages(
   url: string,
   imageSelector: string,
 ): Promise<{ relativeUrl: string }[]> {
+  const target = new URL(url, config.metvuwBaseUrl).href
+
+  let rawHtml: string
   try {
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 10000)
-    const response = await fetch(new URL(url, config.metvuwBaseUrl).href, {
-      signal: controller.signal,
+    // The signal covers reading the body as well as the request itself.
+    const response = await fetch(target, {
+      signal: AbortSignal.timeout(TIMEOUT_MS),
       next: { revalidate: 3600 },
     })
-    clearTimeout(timeoutId)
-    const rawHtml = await response.text()
-
-    const $ = cheerio.load(rawHtml)
-
-    const images = $(imageSelector)
-
-    return images.toArray().map((image: any) => ({
-      relativeUrl: image.attribs.src as string,
-    }))
+    if (!response.ok) {
+      throw new ScrapeError(`${target} responded ${response.status}`)
+    }
+    rawHtml = await response.text()
   } catch (error) {
-    // Scrape failures are logged and treated as "no images".
-    // eslint-disable-next-line no-console
-    console.error(
-      `Failed to load images from ${url}:`,
-      error instanceof Error ? error.message : error,
+    if (error instanceof ScrapeError) throw error
+    throw new ScrapeError(
+      `failed to load ${target}: ${error instanceof Error ? error.message : error}`,
+      { cause: error },
     )
-    return []
   }
+
+  const $ = cheerio.load(rawHtml)
+  const sources = $(imageSelector)
+    .toArray()
+    .map((element) => $(element).attr('src'))
+    .filter((src): src is string => Boolean(src))
+
+  if (sources.length === 0) {
+    throw new ScrapeError(`no images matched "${imageSelector}" on ${target}`)
+  }
+
+  return sources.map((relativeUrl) => ({ relativeUrl }))
 }

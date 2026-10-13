@@ -17,9 +17,10 @@ export function imagePipeline(
   fullStoragePathGenerator: (
     originalFileName: string,
     newFileName: string,
-  ) => Pick<ScrapedImage, 'fullStoragePath' | 'smallImageStoragePath'>,
+  ) =>
+    Pick<ScrapedImage, 'fullStoragePath' | 'smallImageStoragePath'> | undefined,
 ) {
-  return (image: { relativeUrl: string }) => {
+  return (image: { relativeUrl: string }): ScrapedImage | undefined => {
     const transformedUrl = relativeUrlTransformer(image.relativeUrl)
     const originalImageURL = new URL(transformedUrl, config.metvuwBaseUrl)
     // Scraped markup is untrusted: an absolute src must not point us elsewhere.
@@ -32,11 +33,15 @@ export function imagePipeline(
       '.webp',
     )
 
+    // The generator returns undefined for a filename it doesn't recognise.
+    const storagePaths = fullStoragePathGenerator(originalFileName, newFileName)
+    if (!storagePaths) return undefined
+
     return {
       originalImageURL: originalImageURL.href,
       originalFileName,
       imageFileName: newFileName,
-      ...fullStoragePathGenerator(originalFileName, newFileName),
+      ...storagePaths,
     }
   }
 }

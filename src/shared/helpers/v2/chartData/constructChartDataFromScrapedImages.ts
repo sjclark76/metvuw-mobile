@@ -1,20 +1,40 @@
+import { parseUtcDate } from '@/shared/helpers/v2/chartData/parseUtcDate'
 import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
+import { ScrapeError } from '@/shared/helpers/v2/screenScraper/scrapeError'
 
 import { SkinnyChartData } from './constructChartData'
 
+const fileNamePattern =
+  /^(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})(?<hour>\d{2})/
+
+/**
+ * Builds chart data from scraped radar, satellite and upper-air images, which
+ * are named `YYYYMMDDHH...`. A filename without a valid date is reported and
+ * skipped instead of becoming a NaN date. If images were scraped but none can
+ * be parsed, the naming scheme has changed, so this throws.
+ */
 export function constructChartDataFromScrapedImages(
   images: ScrapedImage[],
 ): SkinnyChartData[] {
-  return images.map((image) => {
-    const fileName = image.imageFileName
-    const year = +fileName.slice(0, 4)
-    const month = +fileName.slice(4, 6) - 1
-    const day = +fileName.slice(6, 8)
-    const hour = +fileName.slice(8, 10)
+  const charts = images.flatMap((image): SkinnyChartData[] => {
+    const groups = image.imageFileName.match(fileNamePattern)?.groups
+    const imageDateUTC =
+      groups &&
+      parseUtcDate(+groups.year, +groups.month, +groups.day, +groups.hour)
 
-    return {
-      imageDateUTC: Date.UTC(year, month, day, hour),
-      url: image.originalImageURL,
+    if (imageDateUTC === undefined) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `skipping chart with unparseable name: ${image.imageFileName}`,
+      )
+      return []
     }
+
+    return [{ imageDateUTC, url: image.originalImageURL }]
   })
+
+  if (images.length > 0 && charts.length === 0) {
+    throw new ScrapeError('none of the scraped charts have a parseable name')
+  }
+  return charts
 }

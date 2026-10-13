@@ -1,3 +1,4 @@
+import { collectScrapedImages } from '@/shared/helpers/v2/screenScraper/collectScrapedImages'
 import { imagePipeline } from '@/shared/helpers/v2/screenScraper/imagePipeline'
 import { loadImages } from '@/shared/helpers/v2/screenScraper/loadImages'
 import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
@@ -8,16 +9,22 @@ export const scrapeRadarImages = async (): Promise<ScrapedImage[]> => {
     'img[src*=images]',
   )
 
-  return images.map((image) => {
-    return imagePipeline(
-      (relativeUrl) => relativeUrl.replace('.', 'radar'),
-      (originalFileName, newFileName) => {
-        const radarCode =
-          originalFileName.match(/\d+\w_(?<radar>\w+).gif/)?.groups?.radar ?? ''
-        return {
-          fullStoragePath: `images/radar/${radarCode}/${newFileName}`,
-        }
-      },
-    )(image)
-  })
+  return collectScrapedImages(
+    images.map((image) =>
+      imagePipeline(
+        (relativeUrl) => relativeUrl.replace('.', 'radar'),
+        (originalFileName, newFileName) => {
+          const radarCode = originalFileName.match(/\d+\w_(?<radar>\w+).gif/)
+            ?.groups?.radar
+          if (!radarCode) return undefined
+
+          return {
+            fullStoragePath: `images/radar/${radarCode}/${newFileName}`,
+          }
+        },
+      )(image),
+    ),
+    images,
+    'radar',
+  )
 }
