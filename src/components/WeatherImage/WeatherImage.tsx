@@ -3,15 +3,15 @@ import { useEffect, useRef } from 'react'
 
 import { loadedImageStateAtom } from '@/app/regions/[name]/state'
 import {
+  isFallbackImageProxyUrl,
+  withFallbackImageProxyVariant,
+} from '@/shared/helpers/v2/dataSource/fallbackImageProxyUrl'
+import {
   radarImageDimensions,
   rainImageDimensions,
   satelliteImageDimensions,
   upperAirImageDimensions,
 } from '@/shared/helpers/v2/imageCompression/imageDimensions'
-import {
-  isFallbackImageProxyUrl,
-  withFallbackImageProxyVariant,
-} from '@/shared/helpers/v2/dataSource/fallbackImageProxyUrl'
 import { ChartType } from '@/shared/types/ChartType'
 
 export interface WeatherImageProps {
@@ -35,7 +35,7 @@ function extraImageAttribute(
     ? imageSrc.replace('/images/', '/small-images/')
     : canUseSmallProxyVariant
       ? withFallbackImageProxyVariant(imageSrc, 'small')
-    : undefined
+      : undefined
 
   switch (chartType) {
     case 'Satellite':

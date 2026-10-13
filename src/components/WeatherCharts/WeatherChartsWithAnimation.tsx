@@ -91,10 +91,7 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
                       <AdCard />
                     </motion.li>
                   )}
-                  <motion.li
-                    variants={itemVariants}
-                    className="w-full"
-                  >
+                  <motion.li variants={itemVariants} className="w-full">
                     <WeatherChart
                       chart={chart}
                       region={props.region}

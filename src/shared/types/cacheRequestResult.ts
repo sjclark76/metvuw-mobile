@@ -5,8 +5,10 @@ export interface CacheRequestResult {
   reason?: string
 }
 
-export interface CacheRefreshResult
-  extends Omit<CacheRequestResult, 'fileName'> {
+export interface CacheRefreshResult extends Omit<
+  CacheRequestResult,
+  'fileName'
+> {
   refreshTime: string
   results: CacheRequestResult[]
 }

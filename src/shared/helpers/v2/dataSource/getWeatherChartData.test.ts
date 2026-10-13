@@ -1,5 +1,4 @@
 import { config } from '@/config'
-
 import {
   getRadarChartDataForCode,
   getRainChartDataForRegion,
@@ -82,13 +81,15 @@ describe('getWeatherChartData fallback mode', () => {
         imageFileName: '202403292100Z_ak.webp',
         fullStoragePath: 'images/radar/ak/202403292100Z_ak.webp',
         originalFileName: '202403292100Z_ak.gif',
-        originalImageURL: 'https://metvuw.com/radar/images/202403292100Z_ak.gif',
+        originalImageURL:
+          'https://metvuw.com/radar/images/202403292100Z_ak.gif',
       },
       {
         imageFileName: '202403292100Z_nl.webp',
         fullStoragePath: 'images/radar/nl/202403292100Z_nl.webp',
         originalFileName: '202403292100Z_nl.gif',
-        originalImageURL: 'https://metvuw.com/radar/images/202403292100Z_nl.gif',
+        originalImageURL:
+          'https://metvuw.com/radar/images/202403292100Z_nl.gif',
       },
     ])
 
@@ -116,7 +117,9 @@ describe('getWeatherChartData fallback mode', () => {
     expect(result).toHaveLength(1)
     expect(result[0].url).toContain('/api/fallback-image?')
     expect(result[0].url).toContain('chartType=Satellite')
-    expect(decodeURIComponent(result[0].url)).toContain('metvuw.com/satellite/big')
+    expect(decodeURIComponent(result[0].url)).toContain(
+      'metvuw.com/satellite/big',
+    )
     expect(retrieveImagesFromStorage).not.toHaveBeenCalled()
   })
 

@@ -4,6 +4,7 @@ import { GoogleAdSense } from './GoogleAdSense'
 
 vi.mock('next/script', () => ({
   default: ({ src }: { src: string }) => (
+    // eslint-disable-next-line @next/next/no-sync-scripts -- test double for next/script
     <script data-testid="adsense" src={src} />
   ),
 }))

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 'use client'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { useAtomValue } from 'jotai/index'
@@ -93,10 +92,7 @@ export default function Foo({ images, chartType }: Props) {
                       <AdCard />
                     </motion.li>
                   )}
-                  <motion.li
-                    variants={itemVariants}
-                    className="w-full"
-                  >
+                  <motion.li variants={itemVariants} className="w-full">
                     <RadarAndSatelliteImageCard
                       image={image}
                       chartType={chartType}

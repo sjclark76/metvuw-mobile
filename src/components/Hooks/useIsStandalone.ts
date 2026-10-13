@@ -8,6 +8,8 @@ export const useIsStandalone = () => {
     // This check only runs on the client where `window` is available.
     if (typeof window !== 'undefined' && window.matchMedia) {
       const mediaQuery = window.matchMedia('(display-mode: standalone)')
+      // Browser-only value read after mount so the server render and hydration match.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsStandalone(mediaQuery.matches)
 
       // Listen for changes in display mode

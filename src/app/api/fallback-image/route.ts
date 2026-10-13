@@ -58,7 +58,10 @@ export async function GET(request: NextRequest) {
 
   const sourceUrl = new URL(sourceUrlParam)
   const allowedHosts = getAllowedSourceHosts()
-  if (sourceUrl.protocol !== 'https:' || !allowedHosts.has(sourceUrl.hostname)) {
+  if (
+    sourceUrl.protocol !== 'https:' ||
+    !allowedHosts.has(sourceUrl.hostname)
+  ) {
     return NextResponse.json(
       { ok: false, message: 'source host not allowed' },
       { status: 403 },
@@ -84,7 +87,8 @@ export async function GET(request: NextRequest) {
     status: 200,
     headers: {
       'Content-Type': 'image/webp',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+      'Cache-Control':
+        'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
     },
   })
 }

@@ -12,6 +12,8 @@ export function GoogleAdSense() {
   const [showAds, setShowAds] = useState(false)
 
   useEffect(() => {
+    // Cookie read after mount to keep the server render and hydration identical.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setShowAds(/(^| )show-ads=1(;|$)/.test(document.cookie))
   }, [])
 
