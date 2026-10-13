@@ -44,3 +44,13 @@ yarn-error.log*
 /.idea/*
 reports/
 /public/sw.js
+
+# Android / Play Store signing material and built packages — never commit these
+*.keystore
+*.jks
+*.p12
+*.pfx
+signing-key-info.txt
+*.apk
+*.aab
+/apps/android/
