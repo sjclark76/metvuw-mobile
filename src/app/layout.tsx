@@ -6,6 +6,7 @@ import React from 'react'
 import { Toaster } from 'react-hot-toast'
 
 import FavoritePageRedirect from '@/components/FavoritePageRedirect/FavoritePageRedirect'
+import { favoritePageRedirectScript } from '@/components/FavoritePageRedirect/favoritePageRedirectScript'
 import { GoogleAdSense } from '@/components/GoogleAdSense'
 import GoogleTag from '@/components/GoogleTag'
 import { config } from '@/config'
@@ -23,6 +24,13 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href={config.supabaseUrl} />
         <meta name="google-adsense-account" content="ca-pub-9572839501955022" />
+        {/* A plain inline script blocks parsing, so it runs before the page
+            paints. next/script's beforeInteractive only queues the script for
+            Next's runtime, which runs after the page can already be visible. */}
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: favoritePageRedirectScript }}
+        />
       </head>
       <body className="font-sans text-gray-800">
         <GoogleTag />
