@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import path from 'node:path'
 
 import { config } from '@/config'

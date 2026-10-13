@@ -24,6 +24,8 @@ export async function loadImages(
       relativeUrl: image.attribs.src as string,
     }))
   } catch (error) {
+    // Scrape failures are logged and treated as "no images".
+    // eslint-disable-next-line no-console
     console.error(
       `Failed to load images from ${url}:`,
       error instanceof Error ? error.message : error,

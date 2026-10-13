@@ -1,4 +1,3 @@
-import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 
 test.describe('upper air page', () => {

@@ -32,11 +32,19 @@ export default defineConfig([
     },
   },
   {
+    // The base rule can't see TypeScript-only usage (e.g. `declare global`).
+    files: ['**/*.{ts,tsx,mts,cts}'],
+    rules: {
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'warn',
+    },
+  },
+  {
     files: ['src/app/sw.ts'],
     languageOptions: { globals: globals.serviceworker },
   },
   {
-    files: ['public/sw.js', 'src/app/layout.tsx'],
+    files: ['public/sw.js', 'server.js', 'src/app/layout.tsx'],
     rules: { 'no-console': 'off' },
   },
 ])
