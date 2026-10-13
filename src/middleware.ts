@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const DOMESTIC_COUNTRIES = new Set(['AU'])
+const DOMESTIC_COUNTRIES = new Set(['NZ'])
 
 export function middleware(request: NextRequest) {
   const country = request.headers.get('x-vercel-ip-country')

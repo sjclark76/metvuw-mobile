@@ -11,6 +11,7 @@ export async function loadImages(
     const timeoutId = setTimeout(() => controller.abort(), 10000)
     const response = await fetch(new URL(url, config.metvuwBaseUrl).href, {
       signal: controller.signal,
+      next: { revalidate: 3600 },
     })
     clearTimeout(timeoutId)
     const rawHtml = await response.text()

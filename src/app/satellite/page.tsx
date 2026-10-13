@@ -6,7 +6,7 @@ import { config } from '@/config'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { getSatelliteChartData } from '@/shared/helpers/v2/dataSource/getWeatherChartData'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 export const generateMetadata = async (): Promise<Metadata> =>
   generateSEOMetadata({

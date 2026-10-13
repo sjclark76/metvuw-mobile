@@ -68,10 +68,13 @@ export default defineConfig({
     // },
   ],
 
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://127.0.0.1:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  /* Serve the production build (run `npm run build` first) unless a deployed URL is supplied. */
+  webServer: process.env.PLAYWRIGHT_TEST_BASE_URL
+    ? undefined
+    : {
+        command: 'npm run start',
+        url: 'http://localhost:3002',
+        reuseExistingServer: !process.env.CI,
+        timeout: 120_000,
+      },
 })

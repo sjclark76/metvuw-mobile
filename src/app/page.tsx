@@ -8,7 +8,7 @@ import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { getRainChartDataForRegion } from '@/shared/helpers/v2/dataSource/getWeatherChartData'
 import { findRegionByCode } from '@/shared/types/region'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
   // read route params

@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
     status: 200,
     headers: {
       'Content-Type': 'image/webp',
-      'Cache-Control': 'public, max-age=600, s-maxage=1800, stale-while-revalidate=86400',
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
     },
   })
 }
