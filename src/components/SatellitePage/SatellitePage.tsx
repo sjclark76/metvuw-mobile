@@ -2,7 +2,6 @@
 import React from 'react'
 
 import { FooterControl } from '@/components/FooterControl'
-import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
 import SubHeader from '@/components/SubHeader'
 import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 
@@ -13,8 +12,6 @@ export function SatellitePage({
 }: {
   satelliteData: SkinnyChartData[]
 }) {
-  usePreloadedImages(satelliteData)
-
   return (
     // This outer div will manage the layout for content and the sticky footer.
     // It takes at least the height of the viewport minus the main navbar's height (approx. 4rem or h-16).

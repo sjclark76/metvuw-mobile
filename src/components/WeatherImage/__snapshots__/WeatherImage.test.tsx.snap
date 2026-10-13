@@ -8,6 +8,7 @@ exports[`Weather Image > it should render correctly 1`] = `
   >
     <img
       alt="foo"
+      decoding="async"
       fetchpriority="low"
       height="396"
       src="baa"

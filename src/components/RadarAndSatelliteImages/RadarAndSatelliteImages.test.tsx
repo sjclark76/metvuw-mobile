@@ -22,6 +22,24 @@ describe('<RadarAndSatelliteImages />', () => {
     expect(html.match(/<img/g)).toHaveLength(images.length)
   })
 
+  test('loads the first two images eagerly and the rest lazily', () => {
+    const many = [0, 1, 2, 3].map((hour) => ({
+      imageDateUTC: Date.UTC(2026, 9, 1, hour),
+      url: `https://example.com/radar-${hour}.webp`,
+    }))
+    const html = renderToString(
+      <RadarAndSatelliteImages images={many} chartType="Radar" />,
+    )
+
+    const imgs = html.match(/<img[^>]*>/g)!
+    expect(imgs.map((img) => img.match(/loading="(\w+)"/)?.[1])).toEqual([
+      'eager',
+      'eager',
+      'lazy',
+      'lazy',
+    ])
+  })
+
   test('fades in only the first three images, staggered', () => {
     const many = [0, 1, 2, 3, 4].map((hour) => ({
       imageDateUTC: Date.UTC(2026, 9, 1, hour),

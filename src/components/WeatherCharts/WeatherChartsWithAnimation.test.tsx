@@ -26,6 +26,23 @@ describe('<WeatherChartsWithAnimation />', () => {
     expect(html.match(/<img/g)).toHaveLength(charts.length)
   })
 
+  // Phones show two or three charts at a time, so only the first two load
+  // eagerly and the rest wait until they are close to the viewport.
+  test('loads the first two charts eagerly and the rest lazily', () => {
+    const html = renderToString(
+      <WeatherChartsWithAnimation region={region} charts={charts} />,
+    )
+
+    const images = html.match(/<img[^>]*>/g)!
+    expect(images.map((img) => img.match(/loading="(\w+)"/)?.[1])).toEqual([
+      'eager',
+      'eager',
+      'lazy',
+      'lazy',
+    ])
+    expect(images.every((img) => img.includes('decoding="async"'))).toBe(true)
+  })
+
   // The fade is a CSS animation limited to the first few items, so the rest of
   // the (long) list isn't animated and nothing waits on JavaScript.
   test('fades in only the first three charts, staggered', () => {

@@ -6,6 +6,7 @@ import {
   animatedChartIndexAtom,
   playAnimationAtom,
 } from '@/components/Atoms/GlobalState'
+import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
 import { WeatherChart } from '@/components/WeatherCharts/WeatherChart'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
@@ -20,6 +21,8 @@ const AnimatedWeatherChart = ({
 }: AnimatedWeatherChartProps) => {
   const [currentIndex, setCurrentIndex] = useAtom(animatedChartIndexAtom)
   const playAnimation = useAtomValue(playAnimationAtom)
+  // The viewer swaps one image's src, so warm the cache for the whole loop.
+  usePreloadedImages(charts)
 
   useEffect(() => {
     let interval: any

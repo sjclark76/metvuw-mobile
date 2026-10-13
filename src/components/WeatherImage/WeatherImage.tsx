@@ -19,6 +19,7 @@ export interface WeatherImageProps {
   imageAlt: string
   imageSrc: string | undefined
   isHighPriority: boolean
+  loading?: 'eager' | 'lazy'
 }
 
 function extraImageAttribute(
@@ -78,6 +79,7 @@ const WeatherImage = ({
   imageSrc,
   chartType,
   isHighPriority,
+  loading,
 }: WeatherImageProps) => {
   const setLoadedImageState = useSetAtom(loadedImageStateAtom)
   const imgRef = useRef<HTMLImageElement>(null)
@@ -138,6 +140,8 @@ const WeatherImage = ({
         alt={imageAlt}
         {...commonProps}
         fetchPriority={isHighPriority ? 'high' : 'low'}
+        loading={loading}
+        decoding="async"
       />
     </div>
   )

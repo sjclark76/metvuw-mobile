@@ -7,10 +7,10 @@ import React from 'react'
 import { loadedImageStateAtom } from '@/app/regions/[name]/state'
 import { useInitShowAds } from '@/components/Atoms/AdState'
 import { FooterControl } from '@/components/FooterControl'
-import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
 import { RainfallLegendSection } from '@/components/RainfallLegend'
 import SubHeader from '@/components/SubHeader'
 import WeatherChartsWithAnimation from '@/components/WeatherCharts/WeatherChartsWithAnimation'
+import { EAGER_IMAGE_COUNT } from '@/shared/helpers/imageLoading'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
 
@@ -31,16 +31,16 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
       : ''
 
   useInitShowAds()
-  usePreloadedImages(rainChartData)
 
+  // Only the eagerly loaded charts count towards the progress bar; lazy ones
+  // add themselves as they load, so the bar still reaches 100%.
   setLoadedImageState(
-    rainChartData.reduce(
-      (acc: Map<string, boolean>, chart: SkinnyRainChartData) => {
+    rainChartData
+      .slice(0, EAGER_IMAGE_COUNT)
+      .reduce((acc: Map<string, boolean>, chart: SkinnyRainChartData) => {
         acc.set(chart.url, false)
         return acc
-      },
-      new Map<string, boolean>(),
-    ),
+      }, new Map<string, boolean>()),
   )
 
   return (

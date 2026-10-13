@@ -8,6 +8,7 @@ import { AnimatedWeatherChart } from '@/components/AnimatedWeatherChart/animated
 import { showAdsAtom } from '@/components/Atoms/AdState'
 import { displayAnimatedChartAtom } from '@/components/Atoms/GlobalState'
 import { fadeInProps } from '@/shared/helpers/fadeIn'
+import { imageLoadingFor } from '@/shared/helpers/imageLoading'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
 
@@ -66,6 +67,7 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
                       chart={chart}
                       region={props.region}
                       index={index}
+                      loading={imageLoadingFor(index)}
                     />
                   </li>
                 </React.Fragment>
