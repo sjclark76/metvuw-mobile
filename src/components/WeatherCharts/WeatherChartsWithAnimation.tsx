@@ -7,6 +7,7 @@ import { AdCard } from '@/components/AdCard'
 import { AnimatedWeatherChart } from '@/components/AnimatedWeatherChart/animated-weather-chart'
 import { showAdsAtom } from '@/components/Atoms/AdState'
 import { displayAnimatedChartAtom } from '@/components/Atoms/GlobalState'
+import { fadeInProps } from '@/shared/helpers/fadeIn'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
 
@@ -60,7 +61,7 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
                       <AdCard />
                     </li>
                   )}
-                  <li className="w-full">
+                  <li {...fadeInProps(index, 'w-full')}>
                     <WeatherChart
                       chart={chart}
                       region={props.region}

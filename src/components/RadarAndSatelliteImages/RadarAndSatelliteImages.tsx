@@ -8,6 +8,7 @@ import { showAdsAtom, useInitShowAds } from '@/components/Atoms/AdState'
 import { displayAnimatedChartAtom } from '@/components/Atoms/GlobalState'
 import { AnimatedRadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/AnimatedRadarAndSatelliteImageCard'
 import { RadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/RadarAndSatelliteImageCard'
+import { fadeInProps } from '@/shared/helpers/fadeIn'
 import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { ChartType } from '@/shared/types/ChartType'
 
@@ -61,7 +62,7 @@ export default function Foo({ images, chartType }: Props) {
                       <AdCard />
                     </li>
                   )}
-                  <li className="w-full">
+                  <li {...fadeInProps(index, 'w-full')}>
                     <RadarAndSatelliteImageCard
                       image={image}
                       chartType={chartType}

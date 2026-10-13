@@ -25,4 +25,24 @@ describe('<WeatherChartsWithAnimation />', () => {
     expect(html.match(/<li[\s>]/g)).toHaveLength(charts.length)
     expect(html.match(/<img/g)).toHaveLength(charts.length)
   })
+
+  // The fade is a CSS animation limited to the first few items, so the rest of
+  // the (long) list isn't animated and nothing waits on JavaScript.
+  test('fades in only the first three charts, staggered', () => {
+    const html = renderToString(
+      <WeatherChartsWithAnimation region={region} charts={charts} />,
+    )
+
+    const items = html.match(/<li[\s>][^>]*>/g)!
+    expect(items).toHaveLength(charts.length)
+    expect(items.map((li) => li.includes('animate-fade-in-up'))).toEqual([
+      true,
+      true,
+      true,
+      false,
+    ])
+    expect(items[0]).toContain('animation-delay:0ms')
+    expect(items[1]).toContain('animation-delay:100ms')
+    expect(items[2]).toContain('animation-delay:200ms')
+  })
 })
