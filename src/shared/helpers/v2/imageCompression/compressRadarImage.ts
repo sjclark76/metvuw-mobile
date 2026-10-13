@@ -1,9 +1,10 @@
 import sharp from 'sharp'
 
 import { radarImageDimensions } from '@/shared/helpers/v2/imageCompression/imageDimensions'
+import { sharpInputOptions } from '@/shared/helpers/v2/imageCompression/sharpInput'
 
 export function compressRadarImage(image: Buffer): Promise<Buffer> {
-  return sharp(image)
+  return sharp(image, sharpInputOptions)
     .webp({ quality: 100 })
     .sharpen()
     .resize({ width: 565 })
