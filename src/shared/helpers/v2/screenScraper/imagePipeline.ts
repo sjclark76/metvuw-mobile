@@ -1,6 +1,7 @@
 import path from 'node:path'
 
 import { config } from '@/config'
+import { isAllowedSourceUrl } from '@/shared/helpers/v2/dataSource/allowedSourceUrl'
 import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
 
 /**
@@ -21,6 +22,10 @@ export function imagePipeline(
   return (image: { relativeUrl: string }) => {
     const transformedUrl = relativeUrlTransformer(image.relativeUrl)
     const originalImageURL = new URL(transformedUrl, config.metvuwBaseUrl)
+    // Scraped markup is untrusted: an absolute src must not point us elsewhere.
+    if (!isAllowedSourceUrl(originalImageURL)) {
+      throw new Error(`scraped image url not allowed: ${originalImageURL.href}`)
+    }
     const originalFileName = path.basename(originalImageURL.pathname)
     const newFileName = originalFileName.replace(
       path.extname(originalFileName),

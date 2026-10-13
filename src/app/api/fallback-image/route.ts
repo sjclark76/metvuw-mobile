@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { config } from '@/config'
+import { isAllowedSourceUrl } from '@/shared/helpers/v2/dataSource/allowedSourceUrl'
 import { getCompressorForChart } from '@/shared/helpers/v2/imageCompression/getCompressorForChart'
 import { downloadImageToBuffer } from '@/shared/helpers/v2/imageStorage/downloadImageToBuffer'
 import { ChartType } from '@/shared/types/ChartType'
@@ -16,13 +16,6 @@ function isChartType(value: string | null): value is ChartType {
 
 function isVariant(value: string): value is FallbackImageVariant {
   return validVariants.includes(value as FallbackImageVariant)
-}
-
-function getAllowedSourceHosts() {
-  return new Set([
-    new URL(config.metvuwBaseUrl).hostname,
-    new URL(config.cloudFrontUrl).hostname,
-  ])
 }
 
 export async function GET(request: NextRequest) {
@@ -57,20 +50,14 @@ export async function GET(request: NextRequest) {
   }
 
   const sourceUrl = new URL(sourceUrlParam)
-  const allowedHosts = getAllowedSourceHosts()
-  if (
-    sourceUrl.protocol !== 'https:' ||
-    !allowedHosts.has(sourceUrl.hostname)
-  ) {
+  if (!isAllowedSourceUrl(sourceUrl)) {
     return NextResponse.json(
       { ok: false, message: 'source host not allowed' },
       { status: 403 },
     )
   }
 
-  const sourceImage = await downloadImageToBuffer(sourceUrl.href)
   const { primary, small } = getCompressorForChart(chartTypeParam)
-
   if (variantParam === 'small' && !small) {
     return NextResponse.json(
       { ok: false, message: 'small variant not available for chart type' },
@@ -78,17 +65,31 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const transformedImage =
-    variantParam === 'small' && small
-      ? await small(sourceImage.fileBuffer)
-      : await primary(sourceImage.fileBuffer)
+  try {
+    const sourceImage = await downloadImageToBuffer(sourceUrl.href)
+    const transformedImage =
+      variantParam === 'small' && small
+        ? await small(sourceImage.fileBuffer)
+        : await primary(sourceImage.fileBuffer)
 
-  return new NextResponse(new Uint8Array(transformedImage), {
-    status: 200,
-    headers: {
-      'Content-Type': 'image/webp',
-      'Cache-Control':
-        'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
-    },
-  })
+    return new NextResponse(new Uint8Array(transformedImage), {
+      status: 200,
+      headers: {
+        'Content-Type': 'image/webp',
+        'Cache-Control':
+          'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+      },
+    })
+  } catch {
+    // The upstream was unreachable, slow, not an image or too large (the
+    // downloader logs the cause). A short shared-cache lifetime keeps an
+    // outage from hammering the origin without outliving the outage.
+    return NextResponse.json(
+      { ok: false, message: 'unable to fetch source image' },
+      {
+        status: 502,
+        headers: { 'Cache-Control': 'public, max-age=0, s-maxage=30' },
+      },
+    )
+  }
 }
