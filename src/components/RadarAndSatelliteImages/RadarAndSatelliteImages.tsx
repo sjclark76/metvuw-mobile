@@ -10,7 +10,7 @@ import { AnimatedRadarAndSatelliteImageCard } from '@/components/RadarAndSatelli
 import { RadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/RadarAndSatelliteImageCard'
 import { fadeInProps } from '@/shared/helpers/fadeIn'
 import { imageLoadingFor } from '@/shared/helpers/imageLoading'
-import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+import { SkinnyChartData } from '@/shared/types/chartData'
 import { ChartType } from '@/shared/types/ChartType'
 
 interface Props {

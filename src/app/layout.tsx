@@ -9,7 +9,6 @@ import FavoritePageRedirect from '@/components/FavoritePageRedirect/FavoritePage
 import { favoritePageRedirectScript } from '@/components/FavoritePageRedirect/favoritePageRedirectScript'
 import { GoogleAdSense } from '@/components/GoogleAdSense'
 import GoogleTag from '@/components/GoogleTag'
-import { config } from '@/config'
 
 import Navbar from '../components/Navbar'
 
@@ -22,7 +21,6 @@ export default function RootLayout({
     <html lang="en" className="bg-gray-100">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <link rel="preconnect" href={config.supabaseUrl} />
         <meta name="google-adsense-account" content="ca-pub-9572839501955022" />
         {/* A plain inline script blocks parsing, so it runs before the page
             paints. next/script's beforeInteractive only queues the script for

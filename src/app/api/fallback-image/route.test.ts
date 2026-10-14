@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server'
 
 import { getCompressorForChart } from '@/shared/helpers/v2/imageCompression/getCompressorForChart'
-import { downloadImageToBuffer } from '@/shared/helpers/v2/imageStorage/downloadImageToBuffer'
+import { downloadImageToBuffer } from '@/shared/helpers/v2/imageDownload/downloadImageToBuffer'
 
 import { GET } from './route'
 
-vi.mock('@/shared/helpers/v2/imageStorage/downloadImageToBuffer', () => ({
+vi.mock('@/shared/helpers/v2/imageDownload/downloadImageToBuffer', () => ({
   downloadImageToBuffer: vi.fn(),
 }))
 

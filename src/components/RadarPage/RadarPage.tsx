@@ -1,5 +1,5 @@
 import SubHeader from '@/components/SubHeader'
-import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+import { SkinnyChartData } from '@/shared/types/chartData'
 import { radarRegions } from '@/shared/types/radarRegions'
 
 import RadarAndSatelliteImages from '../RadarAndSatelliteImages/RadarAndSatelliteImages'

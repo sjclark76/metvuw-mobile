@@ -1,6 +1,6 @@
 import SubHeader from '@/components/SubHeader'
-import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
 import { balloonLocations } from '@/shared/types/balloonLocations'
+import { SkinnyChartData } from '@/shared/types/chartData'
 
 import RadarAndSatelliteImages from '../RadarAndSatelliteImages/RadarAndSatelliteImages'
 

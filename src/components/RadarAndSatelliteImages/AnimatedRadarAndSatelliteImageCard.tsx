@@ -7,7 +7,7 @@ import {
 } from '@/components/Atoms/GlobalState'
 import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
 import { RadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/RadarAndSatelliteImageCard'
-import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+import { SkinnyChartData } from '@/shared/types/chartData'
 import { ChartType } from '@/shared/types/ChartType'
 
 type Props = {

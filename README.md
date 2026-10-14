@@ -27,53 +27,14 @@ We suggest that you begin by typing:
     npx playwright test
 
 
-# supabase
-
-## Migrations
-
-### Create New Migration
-``` bash
-supabase migration new MIGRATION_NAME
-```
-
-### Deploy Migration
-
-```
-supabase db push
-```
-
-### Create Auto Migration
-
-supabase db diff -f MIGRATION_NAME
-
-
-
 # Checkly
 
 deploy latest tests
 `npx checkly deploy`
 
+# How it works
 
-# Inngest
-
-run dev server
-`npx inngest-cli@latest dev`
-
-# Fallback mode (no Inngest/Supabase writes)
-
-When free-tier quotas are exhausted, enable direct-source fallback mode:
-
-```bash
-METVUW_DIRECT_SOURCE_MODE=true
-```
-
-With this flag enabled:
-- Weather pages scrape Metvuw on request and render through an internal image proxy sourced from `metvuw.com`.
-- Fallback images are served through `/api/fallback-image`, which applies existing crop/compression logic so borders are removed consistently.
-- `/api/inngest` serves zero functions.
-- `/api/scrape/*` routes no longer upload/remove files in Supabase Storage.
-
-Unset `METVUW_DIRECT_SOURCE_MODE` (or set it to `false`) to return to normal mode.
+Charts are scraped from metvuw.com when a page is built or revalidated (hourly), and chart images are served through `/api/fallback-image`, which downloads them from `metvuw.com`, crops and compresses them, and caches the result. Nothing is stored on our side: there is no database, background job runner or object storage.
 
 # Docker
 colima start                                                                                          

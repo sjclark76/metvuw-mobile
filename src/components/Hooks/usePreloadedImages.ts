@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 
 import { preloadImage } from '@/shared/helpers/images'
-import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+import { SkinnyChartData } from '@/shared/types/chartData'
 
 function usePreloadedImages(imageData: SkinnyChartData[]) {
   useEffect(() => {
