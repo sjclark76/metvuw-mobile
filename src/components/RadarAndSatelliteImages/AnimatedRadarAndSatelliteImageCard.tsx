@@ -22,7 +22,7 @@ function AnimatedRadarAndSatelliteImageCard({ images, chartType }: Props) {
   usePreloadedImages(images)
 
   useEffect(() => {
-    let interval
+    let interval: ReturnType<typeof setInterval> | undefined
     if (playAnimation) {
       interval = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
