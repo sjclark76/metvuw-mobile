@@ -1,11 +1,9 @@
-import { config } from '@/config'
 import {
   getRadarChartDataForCode,
   getRainChartDataForRegion,
   getSatelliteChartData,
   getUpperAirChartDataForCode,
 } from '@/shared/helpers/v2/dataSource/getWeatherChartData'
-import { retrieveImagesFromStorage } from '@/shared/helpers/v2/imageStorage'
 import {
   scrapeRadarImages,
   scrapeRainImages,
@@ -21,20 +19,9 @@ vi.mock('@/shared/helpers/v2/screenScraper', () => ({
   scrapeUpperAirImages: vi.fn(),
 }))
 
-vi.mock('@/shared/helpers/v2/imageStorage', () => ({
-  retrieveImagesFromStorage: vi.fn(),
-}))
-
-describe('getWeatherChartData fallback mode', () => {
-  const originalDirectSourceMode = config.directSourceMode
-
+describe('getWeatherChartData', () => {
   beforeEach(() => {
-    config.directSourceMode = true
     vi.clearAllMocks()
-  })
-
-  afterAll(() => {
-    config.directSourceMode = originalDirectSourceMode
   })
 
   test('rain provider uses scraper and returns sorted proxy chart urls', async () => {
@@ -72,10 +59,9 @@ describe('getWeatherChartData fallback mode', () => {
     expect(decodeURIComponent(result[1].url)).toContain(
       'rain-nz-thumb-2024033018-006.gif',
     )
-    expect(retrieveImagesFromStorage).not.toHaveBeenCalled()
   })
 
-  test('radar provider filters by code in fallback mode', async () => {
+  test('radar provider filters by code', async () => {
     vi.mocked(scrapeRadarImages).mockResolvedValue([
       {
         imageFileName: '202403292100Z_ak.webp',
@@ -99,10 +85,9 @@ describe('getWeatherChartData fallback mode', () => {
     expect(result[0].url).toContain('/api/fallback-image?')
     expect(result[0].url).toContain('chartType=Radar')
     expect(decodeURIComponent(result[0].url)).toContain('_ak.gif')
-    expect(retrieveImagesFromStorage).not.toHaveBeenCalled()
   })
 
-  test('satellite provider returns proxy urls in fallback mode', async () => {
+  test('satellite provider returns proxy urls', async () => {
     vi.mocked(scrapeSatelliteImages).mockResolvedValue([
       {
         imageFileName: '202403291200.webp',
@@ -120,10 +105,9 @@ describe('getWeatherChartData fallback mode', () => {
     expect(decodeURIComponent(result[0].url)).toContain(
       'metvuw.com/satellite/big',
     )
-    expect(retrieveImagesFromStorage).not.toHaveBeenCalled()
   })
 
-  test('upper-air provider filters by balloon code in fallback mode', async () => {
+  test('upper-air provider filters by balloon code', async () => {
     vi.mocked(scrapeUpperAirImages).mockResolvedValue([
       {
         imageFileName: '202403201200.93112.webp',
@@ -145,6 +129,5 @@ describe('getWeatherChartData fallback mode', () => {
     expect(result[0].url).toContain('/api/fallback-image?')
     expect(result[0].url).toContain('chartType=Upper+Air')
     expect(decodeURIComponent(result[0].url)).toContain('93112')
-    expect(retrieveImagesFromStorage).not.toHaveBeenCalled()
   })
 })

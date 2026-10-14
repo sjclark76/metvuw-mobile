@@ -1,6 +1,6 @@
 import { renderToString } from 'react-dom/server'
 
-import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+import { SkinnyChartData } from '@/shared/types/chartData'
 
 import RadarAndSatelliteImages from './RadarAndSatelliteImages'
 

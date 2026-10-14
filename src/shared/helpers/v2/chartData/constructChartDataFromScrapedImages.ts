@@ -1,8 +1,7 @@
 import { parseUtcDate } from '@/shared/helpers/v2/chartData/parseUtcDate'
 import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
 import { ScrapeError } from '@/shared/helpers/v2/screenScraper/scrapeError'
-
-import { SkinnyChartData } from './constructChartData'
+import { SkinnyChartData } from '@/shared/types/chartData'
 
 const fileNamePattern =
   /^(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})(?<hour>\d{2})/

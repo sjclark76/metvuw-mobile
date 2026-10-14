@@ -4,18 +4,4 @@ export const config = {
     : 'https://valid-factual-barnacle.ngrok-free.app',
   cloudFrontUrl: 'https://metvuw.com/',
   metvuwBaseUrl: 'https://metvuw.com/', //https://dpucyvo9dklo9.cloudfront.net',
-  s3: {
-    accessKey: process.env.ACCESS_KEY,
-    bucketName: process.env.BUCKET_NAME ?? 'metvuw-mobile',
-    region: process.env.S3_REGION,
-    secret: process.env.SECRET_KEY,
-  },
-  supabaseServiceRoleKey:
-    process.env.SUPABASE_SERVICE_ROLE_KEY ?? 'your-service-role-key',
-  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://localhost:54321',
-  supbabaseBucketName: process.env.SUPABASE_BUCKET_NAME ?? 'dev',
-  inngestEventKey: process.env.INNGEST_EVENT_KEY ?? '',
-  environment: process.env.VERCEL_ENV,
-  directSourceMode:
-    (process.env.METVUW_DIRECT_SOURCE_MODE ?? '').toLowerCase() === 'true',
 }

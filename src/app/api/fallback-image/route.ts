@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { isAllowedSourceUrl } from '@/shared/helpers/v2/dataSource/allowedSourceUrl'
 import { getCompressorForChart } from '@/shared/helpers/v2/imageCompression/getCompressorForChart'
-import { downloadImageToBuffer } from '@/shared/helpers/v2/imageStorage/downloadImageToBuffer'
+import { downloadImageToBuffer } from '@/shared/helpers/v2/imageDownload/downloadImageToBuffer'
 import { ChartType } from '@/shared/types/ChartType'
 
 type FallbackImageVariant = 'primary' | 'small'

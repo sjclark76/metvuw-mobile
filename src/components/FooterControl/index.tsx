@@ -15,7 +15,7 @@ import { CrossIcon } from '@/components/icons/CrossIcon'
 import { ForwardIcon } from '@/components/icons/ForwardIcon'
 import { PauseIcon } from '@/components/icons/PauseIcon'
 import { PlayIcon } from '@/components/icons/PlayIcon'
-import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+import { SkinnyChartData } from '@/shared/types/chartData'
 
 const motionProps = {
   initial: { opacity: 0, x: -20 },

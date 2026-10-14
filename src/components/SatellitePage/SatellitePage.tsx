@@ -3,7 +3,7 @@ import React from 'react'
 
 import { FooterControl } from '@/components/FooterControl'
 import SubHeader from '@/components/SubHeader'
-import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+import { SkinnyChartData } from '@/shared/types/chartData'
 
 import RadarAndSatelliteImages from '../RadarAndSatelliteImages/RadarAndSatelliteImages'
 

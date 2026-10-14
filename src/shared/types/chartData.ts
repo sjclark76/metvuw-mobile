@@ -11,3 +11,5 @@ export interface ChartData {
   imageDateUTC: number
   imageDateISO: string
 }
+
+export type SkinnyChartData = Pick<ChartData, 'imageDateUTC' | 'url'>

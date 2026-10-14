@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 
 import { preloadImage } from '@/shared/helpers/images'
-import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+import { SkinnyChartData } from '@/shared/types/chartData'
 
 import { AnimatedRadarAndSatelliteImageCard } from './AnimatedRadarAndSatelliteImageCard'
 

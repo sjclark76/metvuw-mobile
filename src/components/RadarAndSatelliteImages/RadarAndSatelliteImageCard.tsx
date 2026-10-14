@@ -4,7 +4,7 @@ import { format } from 'date-fns'
 
 import Card from '@/components/Card'
 import WeatherImage from '@/components/WeatherImage'
-import { SkinnyChartData } from '@/shared/helpers/v2/chartData/constructChartData'
+import { SkinnyChartData } from '@/shared/types/chartData'
 import { ChartType } from '@/shared/types/ChartType'
 
 type Props = {
