@@ -54,3 +54,6 @@ signing-key-info.txt
 *.apk
 *.aab
 /apps/android/
+
+# TypeScript incremental build cache
+*.tsbuildinfo
