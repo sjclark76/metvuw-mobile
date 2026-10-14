@@ -1,12 +1,12 @@
 'use client'
 
-import { format } from 'date-fns'
 import { useSetAtom } from 'jotai'
 import React from 'react'
 
 import { loadedImageStateAtom } from '@/app/regions/[name]/state'
 import { useInitShowAds } from '@/components/Atoms/AdState'
 import { FooterControl } from '@/components/FooterControl'
+import { useFormatDate } from '@/components/Hooks/useFormatDate'
 import { RainfallLegendSection } from '@/components/RainfallLegend'
 import SubHeader from '@/components/SubHeader'
 import WeatherChartsWithAnimation from '@/components/WeatherCharts/WeatherChartsWithAnimation'
@@ -21,11 +21,12 @@ interface RegionPageProps {
 
 export default function RegionPage({ region, rainChartData }: RegionPageProps) {
   const setLoadedImageState = useSetAtom(loadedImageStateAtom)
+  const formatDate = useFormatDate()
 
   const submenuText =
     rainChartData.length > 0
-      ? `Forecast issued at ${format(
-          new Date(rainChartData[0].imageDateUTC),
+      ? `Forecast issued at ${formatDate(
+          rainChartData[0].imageDateUTC,
           'PPPPp',
         )} for ${region.name}`
       : ''
