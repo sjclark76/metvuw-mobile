@@ -1,7 +1,6 @@
-import { useSetAtom } from 'jotai'
 import { useEffect, useRef } from 'react'
 
-import { loadedImageStateAtom } from '@/app/regions/[name]/state'
+import { useMarkImageLoaded } from '@/components/ImageProgress/ImageProgress'
 import {
   isFallbackImageProxyUrl,
   withFallbackImageProxyVariant,
@@ -81,7 +80,7 @@ const WeatherImage = ({
   isHighPriority,
   loading,
 }: WeatherImageProps) => {
-  const setLoadedImageState = useSetAtom(loadedImageStateAtom)
+  const markLoaded = useMarkImageLoaded()
   const imgRef = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
@@ -89,7 +88,7 @@ const WeatherImage = ({
 
     const handleLoad = () => {
       if (imageSrc) {
-        setLoadedImageState((prev) => new Map(prev).set(imageSrc, true))
+        markLoaded(imageSrc)
       }
     }
 
@@ -106,7 +105,7 @@ const WeatherImage = ({
         imageElement.removeEventListener('load', handleLoad)
       }
     }
-  }, [imageSrc, setLoadedImageState])
+  }, [imageSrc, markLoaded])
 
   const attributes = extraImageAttribute(chartType, imageSrc)
 

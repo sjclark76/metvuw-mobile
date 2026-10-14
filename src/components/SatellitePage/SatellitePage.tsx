@@ -2,7 +2,9 @@
 import React from 'react'
 
 import { FooterControl } from '@/components/FooterControl'
+import { ImageProgressProvider } from '@/components/ImageProgress/ImageProgress'
 import SubHeader from '@/components/SubHeader'
+import { expectedLoadedImages } from '@/shared/helpers/imageLoading'
 import { SkinnyChartData } from '@/shared/types/chartData'
 
 import RadarAndSatelliteImages from '../RadarAndSatelliteImages/RadarAndSatelliteImages'
@@ -13,15 +15,22 @@ export function SatellitePage({
   satelliteData: SkinnyChartData[]
 }) {
   return (
-    // This outer div will manage the layout for content and the sticky footer.
-    // It takes at least the height of the viewport minus the main navbar's height (approx. 4rem or h-16).
-    <div className="flex min-h-[calc(100vh-4rem)] flex-col">
-      {/* This div will contain your main page content and grow to fill available space */}
-      <div className="flex-grow">
-        <SubHeader submenuText="Satellite Imagery for New Zealand" />
-        <RadarAndSatelliteImages images={satelliteData} chartType="Satellite" />
+    <ImageProgressProvider
+      expected={expectedLoadedImages(satelliteData.length)}
+    >
+      {/* This outer div manages the layout for content and the sticky footer.
+          It takes at least the height of the viewport minus the navbar (h-16). */}
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col">
+        {/* This div contains the main page content and grows to fill space */}
+        <div className="flex-grow">
+          <SubHeader submenuText="Satellite Imagery for New Zealand" />
+          <RadarAndSatelliteImages
+            images={satelliteData}
+            chartType="Satellite"
+          />
+        </div>
+        <FooterControl charts={satelliteData} />
       </div>
-      <FooterControl charts={satelliteData} />
-    </div>
+    </ImageProgressProvider>
   )
 }
