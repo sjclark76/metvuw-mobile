@@ -1,7 +1,6 @@
 'use client'
-import { format } from 'date-fns'
-
 import Card from '@/components/Card'
+import { useFormatDate } from '@/components/Hooks/useFormatDate'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
 
@@ -15,11 +14,12 @@ interface Props {
 }
 
 export function WeatherChart(props: Props) {
-  const altTag = `${props.region.name} forecast chart for ${format(
-    new Date(props.chart.forecastDate),
+  const formatDate = useFormatDate()
+  const forecastDate = new Date(props.chart.forecastDate)
+  const altTag = `${props.region.name} forecast chart for ${formatDate(
+    forecastDate,
     'PPPPp',
   )}`
-  const forecastDate = new Date(props.chart.forecastDate)
 
   return (
     <Card
@@ -34,7 +34,7 @@ export function WeatherChart(props: Props) {
       }
       date={
         <span className="text-left text-sm font-semibold text-gray-700 sm:text-base dark:text-stone-100">
-          {format(forecastDate, 'dd/MM/yyyy')}
+          {formatDate(forecastDate, 'dd/MM/yyyy')}
         </span>
         // <div className="flex items-center justify-center gap-x-1 text-sm font-semibold text-gray-700 sm:text-base dark:text-stone-100">
         //
@@ -44,10 +44,10 @@ export function WeatherChart(props: Props) {
       time={
         <div className="flex items-center justify-center gap-x-1 text-center text-xs font-semibold text-white">
           <span className="w-20 transform rounded-sm bg-sky-600 px-1 py-1">
-            {format(forecastDate, 'EEEE')}
+            {formatDate(forecastDate, 'EEEE')}
           </span>
           <span className="w-20 transform rounded-sm bg-gray-900 px-1 py-1 font-mono uppercase dark:bg-stone-200 dark:text-stone-700">
-            {format(forecastDate, 'hh:mm a')}
+            {formatDate(forecastDate, 'hh:mm a')}
           </span>
         </div>
       }
