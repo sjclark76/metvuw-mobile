@@ -1,6 +1,6 @@
 import SubHeader from '@/components/SubHeader'
 import { SkinnyChartData } from '@/shared/types/chartData'
-import { radarRegions } from '@/shared/types/radarRegions'
+import { RadarCode, radarRegions } from '@/shared/types/radarRegions'
 
 import RadarAndSatelliteImages from '../RadarAndSatelliteImages/RadarAndSatelliteImages'
 
@@ -9,7 +9,7 @@ export function RadarPage({
   radarCode,
 }: {
   radarData: SkinnyChartData[]
-  radarCode: string
+  radarCode: RadarCode
 }) {
   return (
     <>

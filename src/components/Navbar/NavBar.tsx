@@ -35,16 +35,20 @@ const pacificLinks = mapRegionToMenuLink(pacificRegions)
 const europeLinks = mapRegionToMenuLink(europeRegions)
 const worldLinks = mapRegionToMenuLink(worldRegions)
 const oceanLinks = mapRegionToMenuLink(oceans)
-const radarLinks: MenuLink[] = Object.keys(radarRegions).map((key) => ({
-  href: `/radar/${key}`,
-  key,
-  value: radarRegions[key],
-}))
-const balloonLinks: MenuLink[] = Object.keys(balloonLocations).map((key) => ({
-  href: `/upperair/${key}`,
-  key,
-  value: balloonLocations[key],
-}))
+const radarLinks: MenuLink[] = Object.entries(radarRegions).map(
+  ([key, value]) => ({
+    href: `/radar/${key}`,
+    key,
+    value,
+  }),
+)
+const balloonLinks: MenuLink[] = Object.entries(balloonLocations).map(
+  ([key, value]) => ({
+    href: `/upperair/${key}`,
+    key,
+    value,
+  }),
+)
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useAtom(isMenuOpenAtom)

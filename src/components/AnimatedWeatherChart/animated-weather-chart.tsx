@@ -25,7 +25,7 @@ const AnimatedWeatherChart = ({
   usePreloadedImages(charts)
 
   useEffect(() => {
-    let interval: any
+    let interval: ReturnType<typeof setInterval> | undefined
     if (playAnimation) {
       interval = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % charts.length)
