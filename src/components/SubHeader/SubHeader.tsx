@@ -2,20 +2,14 @@
 import clsx from 'clsx'
 import { useAtomValue } from 'jotai'
 
-import { loadedImageStateAtom } from '@/app/regions/[name]/state'
 import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
+import { useImageProgress } from '@/components/ImageProgress/ImageProgress'
 
 import { RefreshButton } from '../RefreshButton/RefreshButton'
 
 export function SubHeader({ submenuText }: { submenuText: string }) {
   const menuOpen = useAtomValue(isMenuOpenAtom)
-  const loadedImageState = useAtomValue(loadedImageStateAtom)
-
-  const loadedCount = Array.from(loadedImageState.values()).filter(
-    Boolean,
-  ).length
-  const totalCount = loadedImageState.size
-  const progress = totalCount > 0 ? (loadedCount / totalCount) * 100 : 0
+  const progress = useImageProgress()
 
   const styling = clsx(
     // For screen: apply sticky positioning with a z-index.

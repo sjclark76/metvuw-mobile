@@ -1,4 +1,6 @@
+import { ImageProgressProvider } from '@/components/ImageProgress/ImageProgress'
 import SubHeader from '@/components/SubHeader'
+import { expectedLoadedImages } from '@/shared/helpers/imageLoading'
 import {
   BalloonLocationCode,
   balloonLocations,
@@ -15,11 +17,11 @@ export function UpperAirPage({
   balloonCode: BalloonLocationCode
 }) {
   return (
-    <>
+    <ImageProgressProvider expected={expectedLoadedImages(chartData.length)}>
       <SubHeader
         submenuText={`Upper Air Chart for ${balloonLocations[balloonCode]}`}
       />
       <RadarAndSatelliteImages images={chartData} chartType="Upper Air" />
-    </>
+    </ImageProgressProvider>
   )
 }
