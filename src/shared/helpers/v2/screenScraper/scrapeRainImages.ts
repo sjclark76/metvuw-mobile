@@ -1,3 +1,4 @@
+import { collectScrapedImages } from '@/shared/helpers/v2/screenScraper/collectScrapedImages'
 import { imagePipeline } from '@/shared/helpers/v2/screenScraper/imagePipeline'
 import { loadImages } from '@/shared/helpers/v2/screenScraper/loadImages'
 import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
@@ -12,19 +13,23 @@ export const scrapeRainImages = async (
     'img[src*=rain]',
   )
 
-  return images.map((image) => {
-    return imagePipeline(
-      (relativeUrl) => relativeUrl.replace('.', 'forecast'),
-      (originalFileName, newFileName) => {
-        const regionCode =
-          originalFileName.match(
+  return collectScrapedImages(
+    images.map((image) =>
+      imagePipeline(
+        (relativeUrl) => relativeUrl.replace('.', 'forecast'),
+        (originalFileName, newFileName) => {
+          const regionCode = originalFileName.match(
             /rain-(?<region>\w+)-thumb-(?<filename>\d+-\d+\.gif)/,
-          )?.groups?.region ?? ''
+          )?.groups?.region
+          if (!regionCode) return undefined
 
-        return {
-          fullStoragePath: `images/rain/${regionCode}/${newFileName}`,
-        }
-      },
-    )(image)
-  })
+          return {
+            fullStoragePath: `images/rain/${regionCode}/${newFileName}`,
+          }
+        },
+      )(image),
+    ),
+    images,
+    'rain',
+  )
 }

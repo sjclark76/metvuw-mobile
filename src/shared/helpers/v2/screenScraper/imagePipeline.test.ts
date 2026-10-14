@@ -14,10 +14,19 @@ describe('imagePipeline', () => {
 
     const result = pipeline({ relativeUrl: './2026101318/rain-nz-006.gif' })
 
-    expect(result.originalImageURL).toBe(
+    expect(result?.originalImageURL).toBe(
       'https://metvuw.com/forecast/2026101318/rain-nz-006.gif',
     )
-    expect(result.imageFileName).toBe('rain-nz-006.webp')
+    expect(result?.imageFileName).toBe('rain-nz-006.webp')
+  })
+
+  test('returns undefined when the storage path generator does not recognise the file', () => {
+    const pipeline = imagePipeline(
+      (relativeUrl) => relativeUrl,
+      () => undefined,
+    )
+
+    expect(pipeline({ relativeUrl: './unknown.gif' })).toBeUndefined()
   })
 
   // A compromised or changed metvuw page must not be able to point the
