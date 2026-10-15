@@ -1,5 +1,9 @@
 import { NextRequest } from 'next/server'
 
+import {
+  IMAGE_CACHE_CONTROL,
+  UPSTREAM_ERROR_CACHE_CONTROL,
+} from '@/shared/helpers/v2/dataSource/imageCache'
 import { getCompressorForChart } from '@/shared/helpers/v2/imageCompression/getCompressorForChart'
 import { downloadImageToBuffer } from '@/shared/helpers/v2/imageDownload/downloadImageToBuffer'
 
@@ -53,7 +57,7 @@ describe('GET /api/fallback-image', () => {
     expect(response.status).toBe(200)
     expect(primary).toHaveBeenCalledWith(sourceBuffer)
     expect(response.headers.get('Content-Type')).toBe('image/webp')
-    expect(response.headers.get('Cache-Control')).toContain('s-maxage=')
+    expect(response.headers.get('Cache-Control')).toBe(IMAGE_CACHE_CONTROL)
 
     const responseBuffer = Buffer.from(await response.arrayBuffer())
     expect(responseBuffer.equals(transformedBuffer)).toBeTruthy()
@@ -143,7 +147,7 @@ describe('GET /api/fallback-image', () => {
     expect(primary).not.toHaveBeenCalled()
     // Long enough to protect the origin during an outage, short enough to recover quickly.
     expect(response.headers.get('Cache-Control')).toBe(
-      'public, max-age=0, s-maxage=30',
+      UPSTREAM_ERROR_CACHE_CONTROL,
     )
   })
 

@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { isAllowedSourceUrl } from '@/shared/helpers/v2/dataSource/allowedSourceUrl'
+import {
+  IMAGE_CACHE_CONTROL,
+  UPSTREAM_ERROR_CACHE_CONTROL,
+} from '@/shared/helpers/v2/dataSource/imageCache'
 import { getCompressorForChart } from '@/shared/helpers/v2/imageCompression/getCompressorForChart'
 import { downloadImageToBuffer } from '@/shared/helpers/v2/imageDownload/downloadImageToBuffer'
 import { ChartType } from '@/shared/types/ChartType'
@@ -76,8 +80,7 @@ export async function GET(request: NextRequest) {
       status: 200,
       headers: {
         'Content-Type': 'image/webp',
-        'Cache-Control':
-          'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+        'Cache-Control': IMAGE_CACHE_CONTROL,
       },
     })
   } catch {
@@ -88,7 +91,7 @@ export async function GET(request: NextRequest) {
       { ok: false, message: 'unable to fetch source image' },
       {
         status: 502,
-        headers: { 'Cache-Control': 'public, max-age=0, s-maxage=30' },
+        headers: { 'Cache-Control': UPSTREAM_ERROR_CACHE_CONTROL },
       },
     )
   }
