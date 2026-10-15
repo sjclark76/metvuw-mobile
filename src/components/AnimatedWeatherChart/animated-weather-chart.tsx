@@ -1,11 +1,5 @@
 'use client'
-import { useAtom, useAtomValue } from 'jotai'
-import { useEffect } from 'react'
-
-import {
-  animatedChartIndexAtom,
-  playAnimationAtom,
-} from '@/components/Atoms/GlobalState'
+import { useAnimation } from '@/components/Animation/Animation'
 import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
 import { WeatherChart } from '@/components/WeatherCharts/WeatherChart'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
@@ -19,27 +13,11 @@ const AnimatedWeatherChart = ({
   region,
   charts,
 }: AnimatedWeatherChartProps) => {
-  const [currentIndex, setCurrentIndex] = useAtom(animatedChartIndexAtom)
-  const playAnimation = useAtomValue(playAnimationAtom)
+  // The animation provider owns the timer and keeps the index within the charts.
+  const { index } = useAnimation()
   // The viewer swaps one image's src, so warm the cache for the whole loop.
   usePreloadedImages(charts)
 
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval> | undefined
-    if (playAnimation) {
-      interval = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % charts.length)
-      }, 500)
-    }
-    return () => clearInterval(interval)
-  }, [playAnimation, charts.length, setCurrentIndex])
-
-  return (
-    <WeatherChart
-      region={region}
-      chart={charts[currentIndex]}
-      index={currentIndex}
-    />
-  )
+  return <WeatherChart region={region} chart={charts[index]} index={index} />
 }
 export { AnimatedWeatherChart }

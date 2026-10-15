@@ -1,10 +1,4 @@
-import { useAtom, useAtomValue } from 'jotai'
-import { useEffect } from 'react'
-
-import {
-  animatedChartIndexAtom,
-  playAnimationAtom,
-} from '@/components/Atoms/GlobalState'
+import { useAnimation } from '@/components/Animation/Animation'
 import { usePreloadedImages } from '@/components/Hooks/usePreloadedImages'
 import { RadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/RadarAndSatelliteImageCard'
 import { SkinnyChartData } from '@/shared/types/chartData'
@@ -16,25 +10,15 @@ type Props = {
 }
 
 function AnimatedRadarAndSatelliteImageCard({ images, chartType }: Props) {
-  const [currentIndex, setCurrentIndex] = useAtom(animatedChartIndexAtom)
-  const playAnimation = useAtomValue(playAnimationAtom)
+  // The animation provider owns the timer and keeps the index within the images.
+  const { index } = useAnimation()
   // The viewer swaps one image's src, so warm the cache for the whole loop.
   usePreloadedImages(images)
-
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval> | undefined
-    if (playAnimation) {
-      interval = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
-      }, 1000)
-    }
-    return () => clearInterval(interval)
-  }, [playAnimation, images.length, setCurrentIndex])
 
   return (
     <div>
       <RadarAndSatelliteImageCard
-        image={images[currentIndex]}
+        image={images[index]}
         chartType={chartType}
         isHighPriority={true}
       />

@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 
+import { AnimationProvider } from '@/components/Animation/Animation'
 import { FooterControl } from '@/components/FooterControl'
 import { ImageProgressProvider } from '@/components/ImageProgress/ImageProgress'
 import SubHeader from '@/components/SubHeader'
@@ -18,19 +19,21 @@ export function SatellitePage({
     <ImageProgressProvider
       expected={expectedLoadedImages(satelliteData.length)}
     >
-      {/* This outer div manages the layout for content and the sticky footer.
+      <AnimationProvider count={satelliteData.length} intervalMs={1000}>
+        {/* This outer div manages the layout for content and the sticky footer.
           It takes at least the height of the viewport minus the navbar (h-16). */}
-      <div className="flex min-h-[calc(100vh-4rem)] flex-col">
-        {/* This div contains the main page content and grows to fill space */}
-        <div className="flex-grow">
-          <SubHeader submenuText="Satellite Imagery for New Zealand" />
-          <RadarAndSatelliteImages
-            images={satelliteData}
-            chartType="Satellite"
-          />
+        <div className="flex min-h-[calc(100vh-4rem)] flex-col">
+          {/* This div contains the main page content and grows to fill space */}
+          <div className="flex-grow">
+            <SubHeader submenuText="Satellite Imagery for New Zealand" />
+            <RadarAndSatelliteImages
+              images={satelliteData}
+              chartType="Satellite"
+            />
+          </div>
+          <FooterControl />
         </div>
-        <FooterControl charts={satelliteData} />
-      </div>
+      </AnimationProvider>
     </ImageProgressProvider>
   )
 }
