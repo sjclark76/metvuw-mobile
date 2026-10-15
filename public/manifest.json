@@ -9,8 +9,8 @@
   "short_name": "MetvuwMobile",
   "screenshots" : [
     {
-      "src": "Screen Shot.png",
-      "sizes": "2168X2046",
+      "src": "/screenshot.png",
+      "sizes": "1084x1023",
       "type": "image/png"
     }
   ],
