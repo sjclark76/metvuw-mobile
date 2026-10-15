@@ -1,80 +1,138 @@
-import { useEffect, useRef, useState } from 'react'
+'use client'
+import { useSetAtom } from 'jotai'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import {
+  FocusEvent,
+  KeyboardEvent,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react'
 
+import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
 import { MenuLink } from '@/components/Navbar/types'
 
 interface DropDownProps {
   heading: string
   links: MenuLink[]
 }
+
+/**
+ * A navigation disclosure: a button that shows or hides a list of links. The
+ * links are ordinary links in the tab order, so Tab, Enter and Space behave as
+ * they do everywhere else. Arrow keys, Home and End are a convenience on top, and
+ * Escape closes the list and returns focus to the button.
+ */
 const DropDown = (props: DropDownProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [currentItem, setCurrentItem] = useState<number | undefined>(undefined)
-  const menuRef = useRef<HTMLUListElement>(null)
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (isOpen) {
-      e.preventDefault()
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const pendingFocus = useRef<number | null>(null)
+  const listId = useId()
+  const pathname = usePathname()
+  const setMobileMenuOpen = useSetAtom(isMenuOpenAtom)
 
-      switch (e.keyCode) {
-        // KeyDown
-        case 40:
-          if (currentItem === props.links.length - 1) {
-            setCurrentItem(0)
-          } else {
-            const newValue = currentItem === undefined ? 0 : currentItem + 1
-            setCurrentItem(newValue)
-          }
-          break
-        // KeyUp
-        case 38:
-          if (currentItem === 0) {
-            setCurrentItem(props.links.length - 1)
-          } else {
-            setCurrentItem(
-              currentItem ? currentItem - 1 : props.links.length - 1,
-            )
-          }
-          break
-        // Escape
-        case 27:
-          setCurrentItem(1)
-          setIsOpen(false)
-          break
-        default:
-          break
-      }
-    }
-  }
+  const links = () =>
+    Array.from(wrapperRef.current?.querySelectorAll('a') ?? [])
 
+  // A press anywhere outside the whole control (button and list) closes it. The
+  // list alone was checked before, so pressing the button counted as "outside":
+  // it closed the menu and then the click reopened it.
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown)
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  })
+    if (!isOpen) return
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+    const closeOnOutsidePress = (event: MouseEvent) => {
+      if (!wrapperRef.current?.contains(event.target as Node)) {
         setIsOpen(false)
       }
     }
+    document.addEventListener('mousedown', closeOnOutsidePress)
+    return () => document.removeEventListener('mousedown', closeOnOutsidePress)
+  }, [isOpen])
 
-    document.addEventListener('mousedown', handleClickOutside)
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
+  // Links can only take focus once the list is shown.
+  useEffect(() => {
+    if (isOpen && pendingFocus.current !== null) {
+      links()[pendingFocus.current]?.focus()
+      pendingFocus.current = null
     }
-  }, [menuRef])
+  }, [isOpen])
+
+  const focusLink = (index: number) => links()[index]?.focus()
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const items = links()
+    const current = items.indexOf(document.activeElement as HTMLAnchorElement)
+    const last = items.length - 1
+
+    switch (event.key) {
+      case 'Escape':
+        if (!isOpen) return
+        event.preventDefault()
+        setIsOpen(false)
+        buttonRef.current?.focus()
+        break
+      case 'ArrowDown':
+        event.preventDefault()
+        if (!isOpen) {
+          pendingFocus.current = 0
+          setIsOpen(true)
+        } else {
+          focusLink(current < 0 || current === last ? 0 : current + 1)
+        }
+        break
+      case 'ArrowUp':
+        if (!isOpen) return
+        event.preventDefault()
+        focusLink(current <= 0 ? last : current - 1)
+        break
+      case 'Home':
+        if (!isOpen || current < 0) return
+        event.preventDefault()
+        focusLink(0)
+        break
+      case 'End':
+        if (!isOpen || current < 0) return
+        event.preventDefault()
+        focusLink(last)
+        break
+    }
+  }
+
+  // Tabbing to something outside closes the list. A blur with no new target is
+  // ignored: Safari does not focus a button on click, so pressing the toggle
+  // produces one, and closing then would let the click reopen the list.
+  const handleBlur = (event: FocusEvent<HTMLDivElement>) => {
+    const next = event.relatedTarget as Node | null
+    if (next && !wrapperRef.current?.contains(next)) setIsOpen(false)
+  }
+
+  const closeAll = () => {
+    setIsOpen(false)
+    // Links navigate client-side, so nothing reloads the page to close the
+    // mobile navigation behind this one.
+    setMobileMenuOpen(false)
+  }
 
   const headerText =
     'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-slate-500 focus:bg-slate-600'
 
   return (
-    <div className="relative inline-flex" id="dropdown">
+    <div
+      ref={wrapperRef}
+      className="relative inline-flex"
+      onKeyDown={handleKeyDown}
+      onBlur={handleBlur}
+    >
       <button
+        ref={buttonRef}
+        type="button"
         className={headerText}
         onClick={() => setIsOpen((prevState) => !prevState)}
         aria-expanded={isOpen}
+        aria-controls={listId}
       >
         <span>{props.heading}</span>
         <span className="relative only:-mx-5">
@@ -85,10 +143,9 @@ const DropDown = (props: DropDownProps) => {
             viewBox="0 0 24 24"
             stroke="currentColor"
             strokeWidth="1.5"
-            aria-labelledby="t-01 d-01"
-            role="graphics-symbol"
+            aria-hidden="true"
+            focusable="false"
           >
-            <title id="t-01">Button icon</title>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -98,32 +155,24 @@ const DropDown = (props: DropDownProps) => {
         </span>
       </button>
       <ul
-        ref={menuRef}
-        className={`${
-          isOpen ? 'flex' : 'hidden'
-        } absolute top-full z-30 mt-3 flex w-72 list-none flex-col rounded bg-white py-2 shadow-md shadow-slate-500/10`}
+        id={listId}
+        // The attribute (not just a class) hides it from the tab order and from
+        // assistive technology while closed.
+        hidden={!isOpen}
+        className="absolute top-full z-30 mt-3 flex w-72 list-none flex-col rounded bg-white py-2 shadow-md shadow-slate-500/10"
       >
-        {props.links.map((item, index) => {
-          return (
-            <li
-              key={index}
-              className={` ${
-                index === currentItem
-                  ? 'bg-emerald-50 text-blue-500'
-                  : 'bg-none text-slate-500'
-              } flex items-start justify-between gap-2 p-2 px-5 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus:bg-blue-50 focus:text-blue-600 focus:outline-hidden focus-visible:outline-hidden`}
+        {props.links.map((item) => (
+          <li key={item.key}>
+            <Link
+              href={item.href}
+              onClick={closeAll}
+              aria-current={pathname === item.href ? 'page' : undefined}
+              className="block truncate p-2 px-5 leading-5 text-slate-500 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus-visible:bg-blue-50 focus-visible:text-blue-600 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sky-600 aria-[current=page]:bg-emerald-50 aria-[current=page]:text-blue-500"
             >
-              <a
-                href={item.href}
-                aria-current={index + 1 === currentItem ? 'page' : 'false'}
-              >
-                <span className="flex flex-col gap-1 overflow-hidden whitespace-nowrap">
-                  <span className="truncate leading-5">{item.value}</span>
-                </span>
-              </a>
-            </li>
-          )
-        })}
+              {item.value}
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   )
