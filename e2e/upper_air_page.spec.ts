@@ -19,9 +19,5 @@ test.describe('upper air page', () => {
         name: /upper air chart for/i,
       }),
     ).toBeVisible()
-
-    // const accessibilityScanResults = await new AxeBuilder({ page }).analyze()
-    //
-    // expect(accessibilityScanResults.violations).toEqual([])
   })
 })

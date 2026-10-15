@@ -8,7 +8,7 @@ interface RainfallLegendBand {
   hexCode: string
 }
 
-export const rainfallLegendBands: ReadonlyArray<RainfallLegendBand> = [
+const rainfallLegendBands: ReadonlyArray<RainfallLegendBand> = [
   { amount: '0.1 - 0.5 mm', hexCode: '#E6E6FA' },
   { amount: '0.5 - 1.0 mm', hexCode: '#D8BFD8' },
   { amount: '1.0 - 2.0 mm', hexCode: '#DA70D6' },

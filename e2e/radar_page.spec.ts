@@ -19,9 +19,5 @@ test.describe('radar page', () => {
         name: /radar chart for/i,
       }),
     ).toBeVisible()
-
-    // const accessibilityScanResults = await new AxeBuilder({ page }).analyze()
-    //
-    // expect(accessibilityScanResults.violations).toEqual([])
   })
 })

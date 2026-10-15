@@ -2,7 +2,7 @@ import { ChartType } from '@/shared/types/ChartType'
 
 export type FallbackImageVariant = 'primary' | 'small'
 
-export const fallbackImageProxyPath = '/api/fallback-image'
+const fallbackImageProxyPath = '/api/fallback-image'
 
 export function buildFallbackImageProxyUrl({
   sourceUrl,

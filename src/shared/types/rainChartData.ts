@@ -1,6 +1,6 @@
 import { ChartData } from './chartData'
 
-export interface RainChartData extends ChartData {
+interface RainChartData extends ChartData {
   forecastDate: string
   offset: number
 }

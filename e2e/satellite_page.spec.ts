@@ -20,9 +20,5 @@ test.describe('satellite page', () => {
         name: /satellite chart for/i,
       }),
     ).toBeVisible()
-
-    // const accessibilityScanResults = await new AxeBuilder({ page }).analyze()
-    //
-    // expect(accessibilityScanResults.violations).toEqual([])
   })
 })
