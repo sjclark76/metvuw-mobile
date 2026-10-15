@@ -20,9 +20,5 @@ test.describe('homepage', () => {
         name: /new zealand forecast chart for .*/i,
       }),
     ).toBeVisible()
-
-    // const accessibilityScanResults = await new AxeBuilder({ page }).analyze()
-    //
-    // expect(accessibilityScanResults.violations).toEqual([])
   })
 })

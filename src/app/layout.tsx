@@ -3,7 +3,6 @@ import './globals.css'
 
 import { Provider } from 'jotai'
 import React from 'react'
-import { Toaster } from 'react-hot-toast'
 
 import FavoritePageRedirect from '@/components/FavoritePageRedirect/FavoritePageRedirect'
 import { favoritePageRedirectScript } from '@/components/FavoritePageRedirect/favoritePageRedirectScript'
@@ -33,7 +32,6 @@ export default function RootLayout({
       <body className="font-sans text-gray-800">
         <GoogleTag />
         <GoogleAdSense />
-        <Toaster />
         <div className="font-sans text-gray-800">
           <Provider>
             <header className="sticky top-0 z-30 bg-white shadow-md print:hidden">

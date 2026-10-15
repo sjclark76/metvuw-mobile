@@ -13,7 +13,7 @@ import {
 } from '@/shared/helpers/v2/imageCompression/imageDimensions'
 import { ChartType } from '@/shared/types/ChartType'
 
-export interface WeatherImageProps {
+interface WeatherImageProps {
   chartType: ChartType
   imageAlt: string
   imageSrc: string | undefined

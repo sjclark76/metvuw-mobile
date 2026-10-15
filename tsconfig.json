@@ -31,15 +31,7 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@legacy-components/*": [
-        "./components/*"
-      ],
-      "@shared/*": [
-        "./shared/*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
   "include": [
