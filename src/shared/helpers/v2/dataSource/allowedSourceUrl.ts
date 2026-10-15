@@ -2,12 +2,8 @@ import { config } from '@/config'
 
 // hostname -> origin, built only from our own config.
 function allowedOrigins() {
-  return new Map(
-    [config.metvuwBaseUrl, config.cloudFrontUrl].map((base) => {
-      const { hostname, origin } = new URL(base)
-      return [hostname, origin] as const
-    }),
-  )
+  const { hostname, origin } = new URL(config.metvuwBaseUrl)
+  return new Map([[hostname, origin]])
 }
 
 /**

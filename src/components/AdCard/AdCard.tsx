@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 
+import { config } from '@/config'
+
 declare global {
   interface Window {
     adsbygoogle: Record<string, unknown>[]
@@ -46,11 +48,9 @@ export function AdCard() {
     }
   }, [])
 
-  if (adFilled === false) return null
-
-  const clientId =
-    process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ?? 'ca-pub-9572839501955022'
   const slotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID
+  // An ad unit with no slot id can never fill, so don't take up space for one.
+  if (adFilled === false || !slotId) return null
 
   return (
     <div
@@ -62,7 +62,7 @@ export function AdCard() {
           ref={adRef}
           className="adsbygoogle"
           style={{ display: 'block', width: '100%' }}
-          data-ad-client={clientId}
+          data-ad-client={config.adsenseClientId}
           data-ad-slot={slotId}
           data-ad-format="auto"
           data-full-width-responsive="true"

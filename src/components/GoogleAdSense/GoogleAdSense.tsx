@@ -3,6 +3,8 @@
 import Script from 'next/script'
 import { useEffect, useState } from 'react'
 
+import { config } from '@/config'
+
 /**
  * Loads the AdSense script only for visitors who are shown ads (the 'show-ads'
  * cookie set by the middleware), so domestic visitors don't make the request.
@@ -21,7 +23,7 @@ export function GoogleAdSense() {
 
   return (
     <Script
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9572839501955022"
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${config.adsenseClientId}`}
       crossOrigin="anonymous"
       strategy="afterInteractive"
     />
