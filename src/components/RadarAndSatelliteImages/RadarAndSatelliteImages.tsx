@@ -4,8 +4,8 @@ import { AnimatePresence, motion } from 'motion/react'
 import React from 'react'
 
 import { AdCard } from '@/components/AdCard'
+import { useAnimation } from '@/components/Animation/Animation'
 import { showAdsAtom, useInitShowAds } from '@/components/Atoms/AdState'
-import { displayAnimatedChartAtom } from '@/components/Atoms/GlobalState'
 import { AnimatedRadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/AnimatedRadarAndSatelliteImageCard'
 import { RadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/RadarAndSatelliteImageCard'
 import { fadeInProps } from '@/shared/helpers/fadeIn'
@@ -28,7 +28,7 @@ const viewSwitchVariants = {
 const AD_POSITION = 2
 
 export default function Foo({ images, chartType }: Props) {
-  const displayAnimatedChart = useAtomValue(displayAnimatedChartAtom)
+  const { displayAnimated: displayAnimatedChart } = useAnimation()
   const showAds = useAtomValue(showAdsAtom)
   useInitShowAds()
 

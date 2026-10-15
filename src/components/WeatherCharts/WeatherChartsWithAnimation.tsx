@@ -5,8 +5,8 @@ import React from 'react'
 
 import { AdCard } from '@/components/AdCard'
 import { AnimatedWeatherChart } from '@/components/AnimatedWeatherChart/animated-weather-chart'
+import { useAnimation } from '@/components/Animation/Animation'
 import { showAdsAtom } from '@/components/Atoms/AdState'
-import { displayAnimatedChartAtom } from '@/components/Atoms/GlobalState'
 import { fadeInProps } from '@/shared/helpers/fadeIn'
 import { imageLoadingFor } from '@/shared/helpers/imageLoading'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
@@ -29,7 +29,7 @@ const viewSwitchVariants = {
 const AD_POSITION = 2
 
 const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
-  const displayAnimatedChart = useAtomValue(displayAnimatedChartAtom)
+  const { displayAnimated: displayAnimatedChart } = useAnimation()
   const showAds = useAtomValue(showAdsAtom)
   return (
     <>

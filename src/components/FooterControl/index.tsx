@@ -1,21 +1,15 @@
 'use client'
 import clsx from 'clsx'
-import { useAtom } from 'jotai'
 import { AnimatePresence, motion } from 'motion/react'
-import { ChangeEvent, useCallback, useMemo } from 'react'
+import { ChangeEvent } from 'react'
 
-import {
-  animatedChartIndexAtom,
-  displayAnimatedChartAtom,
-  playAnimationAtom,
-} from '@/components/Atoms/GlobalState'
+import { useAnimation } from '@/components/Animation/Animation'
 import { useIsStandalone } from '@/components/Hooks/useIsStandalone'
 import { BackwardIcon } from '@/components/icons/BackwardIcon'
 import { CrossIcon } from '@/components/icons/CrossIcon'
 import { ForwardIcon } from '@/components/icons/ForwardIcon'
 import { PauseIcon } from '@/components/icons/PauseIcon'
 import { PlayIcon } from '@/components/icons/PlayIcon'
-import { SkinnyChartData } from '@/shared/types/chartData'
 
 const motionProps = {
   initial: { opacity: 0, x: -20 },
@@ -33,47 +27,22 @@ const motionProps = {
   },
 }
 
-function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
-  const [playAnimation, setPlayAnimation] = useAtom(playAnimationAtom)
-  const [displayAnimatedChart, setDisplayAnimatedChart] = useAtom(
-    displayAnimatedChartAtom,
-  )
-  const [animatedChartIndex, setAnimatedChartIndex] = useAtom(
-    animatedChartIndexAtom,
-  )
+function FooterControl() {
+  const {
+    displayAnimated: displayAnimatedChart,
+    playing: playAnimation,
+    index: animatedChartIndex,
+    max,
+    toggleDisplay,
+    togglePlaying,
+    stepBackward,
+    stepForward,
+    seek,
+  } = useAnimation()
   const isStandalone = useIsStandalone()
 
-  const handleMasterPlay = useCallback(() => {
-    if (displayAnimatedChart) {
-      setPlayAnimation(false)
-      setAnimatedChartIndex(0)
-    } else {
-      setPlayAnimation(false)
-    }
-    setDisplayAnimatedChart((prev) => !prev)
-  }, [
-    displayAnimatedChart,
-    setPlayAnimation,
-    setDisplayAnimatedChart,
-    setAnimatedChartIndex,
-  ])
-
   const handleProgressChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAnimatedChartIndex(Number(e.target.value))
-  }
-
-  const max = useMemo(
-    () => (charts && charts.length > 0 ? charts.length - 1 : 0),
-    [charts],
-  )
-  const handleBackward = () => {
-    setPlayAnimation(false)
-    setAnimatedChartIndex((prev) => Math.max(prev - 1, 0))
-  }
-
-  const handleForward = () => {
-    setPlayAnimation(false)
-    setAnimatedChartIndex((prev) => Math.min(prev + 1, max))
+    seek(Number(e.target.value))
   }
 
   const footerClasses = clsx(
@@ -98,7 +67,7 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
             layout // This enables smooth animation when layout changes
             // For more control over the animation, you can add a transition prop:
             transition={{ type: 'tween', ease: 'easeInOut', duration: 0.5 }}
-            onClick={handleMasterPlay}
+            onClick={toggleDisplay}
             className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
             aria-label={
               displayAnimatedChart
@@ -113,7 +82,7 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
             <>
               <motion.button
                 {...motionProps}
-                onClick={() => setPlayAnimation((prev) => !prev)}
+                onClick={togglePlaying}
                 className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
                 aria-label={
                   playAnimation ? 'Pause animation' : 'Play animation'
@@ -133,7 +102,7 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
               />
               <motion.button
                 {...motionProps}
-                onClick={handleBackward}
+                onClick={stepBackward}
                 className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
                 aria-label="Step backward"
               >
@@ -141,7 +110,7 @@ function FooterControl({ charts }: { charts: SkinnyChartData[] }) {
               </motion.button>
               <motion.button
                 {...motionProps}
-                onClick={handleForward}
+                onClick={stepForward}
                 className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
                 aria-label="Step forward"
               >

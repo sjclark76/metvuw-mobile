@@ -2,6 +2,7 @@
 
 import React from 'react'
 
+import { AnimationProvider } from '@/components/Animation/Animation'
 import { useInitShowAds } from '@/components/Atoms/AdState'
 import { FooterControl } from '@/components/FooterControl'
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
@@ -36,17 +37,22 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
     <ImageProgressProvider
       expected={expectedLoadedImages(rainChartData.length)}
     >
-      {/* This outer div manages the layout for content and the sticky footer.
+      <AnimationProvider count={rainChartData.length} intervalMs={500}>
+        {/* This outer div manages the layout for content and the sticky footer.
           It takes at least the height of the viewport minus the navbar (h-16). */}
-      <div className="flex min-h-[calc(100vh-4rem)] flex-col">
-        {/* This div contains the main page content and grows to fill space */}
-        <div className="flex flex-grow flex-col">
-          <SubHeader submenuText={submenuText} />
-          <WeatherChartsWithAnimation region={region} charts={rainChartData} />
+        <div className="flex min-h-[calc(100vh-4rem)] flex-col">
+          {/* This div contains the main page content and grows to fill space */}
+          <div className="flex flex-grow flex-col">
+            <SubHeader submenuText={submenuText} />
+            <WeatherChartsWithAnimation
+              region={region}
+              charts={rainChartData}
+            />
+          </div>
+          <RainfallLegendSection />
+          <FooterControl />
         </div>
-        <RainfallLegendSection />
-        <FooterControl charts={rainChartData} />
-      </div>
+      </AnimationProvider>
     </ImageProgressProvider>
   )
 }
