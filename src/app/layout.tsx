@@ -1,14 +1,12 @@
-'use client'
 import './globals.css'
 
-import { Provider } from 'jotai'
-import { MotionConfig } from 'motion/react'
 import React from 'react'
 
 import FavoritePageRedirect from '@/components/FavoritePageRedirect/FavoritePageRedirect'
 import { favoritePageRedirectScript } from '@/components/FavoritePageRedirect/favoritePageRedirectScript'
 import { GoogleAdSense } from '@/components/GoogleAdSense'
 import GoogleTag from '@/components/GoogleTag'
+import { Providers } from '@/components/Providers/Providers'
 import { config } from '@/config'
 
 import Navbar from '../components/Navbar'
@@ -35,19 +33,15 @@ export default function RootLayout({
         <GoogleTag />
         <GoogleAdSense />
         <div className="font-sans text-gray-800">
-          {/* Honour prefers-reduced-motion: motion skips transform and layout
-              animations for visitors who ask for less movement. */}
-          <MotionConfig reducedMotion="user">
-            <Provider>
-              <header className="sticky top-0 z-30 bg-white shadow-md print:hidden">
-                <Navbar />
-              </header>
-              <FavoritePageRedirect />
-              <main className="mx-auto dark:bg-stone-600 dark:text-stone-100">
-                {children}
-              </main>
-            </Provider>
-          </MotionConfig>
+          <Providers>
+            <header className="sticky top-0 z-30 bg-white shadow-md print:hidden">
+              <Navbar />
+            </header>
+            <FavoritePageRedirect />
+            <main className="mx-auto dark:bg-stone-600 dark:text-stone-100">
+              {children}
+            </main>
+          </Providers>
         </div>
       </body>
     </html>
