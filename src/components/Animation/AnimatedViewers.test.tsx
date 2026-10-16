@@ -46,7 +46,7 @@ describe('animated viewer and footer together', () => {
   test('opening a shorter page after the end of a longer one does not crash', () => {
     const { rerender } = render(page('region', 40))
     fireEvent.click(screen.getByLabelText('Show animated weather chart'))
-    fireEvent.change(screen.getByLabelText('progress bar'), {
+    fireEvent.change(screen.getByLabelText('Chart position'), {
       target: { value: '39' },
     })
     expect(currentImage()).toContain('40-39.webp')
@@ -54,7 +54,7 @@ describe('animated viewer and footer together', () => {
     expect(() => rerender(page('satellite', 3))).not.toThrow()
 
     // The new page starts on its static list, not the old viewer.
-    expect(screen.queryByLabelText('progress bar')).toBeNull()
+    expect(screen.queryByLabelText('Chart position')).toBeNull()
     expect(screen.getAllByRole('img')).toHaveLength(3)
   })
 
@@ -67,7 +67,7 @@ describe('animated viewer and footer together', () => {
     )
     const { rerender } = render(ui(40))
     fireEvent.click(screen.getByLabelText('Show animated weather chart'))
-    fireEvent.change(screen.getByLabelText('progress bar'), {
+    fireEvent.change(screen.getByLabelText('Chart position'), {
       target: { value: '39' },
     })
 

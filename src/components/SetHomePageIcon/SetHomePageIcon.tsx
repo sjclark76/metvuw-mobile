@@ -25,7 +25,13 @@ const SetHomePageIcon = () => {
   const tooltipText = isFavorite ? 'Unset as home page' : 'Set as home page'
 
   return (
-    <button onClick={handleClick} className="p-2" title={tooltipText}>
+    <button
+      onClick={handleClick}
+      className="p-2.5"
+      title={tooltipText}
+      aria-label="Use this page as my home page"
+      aria-pressed={isFavorite}
+    >
       {isFavorite ? (
         <HomeIcon className="h-6 w-6 text-sky-400" />
       ) : (

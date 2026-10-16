@@ -19,7 +19,7 @@ const renderFooter = () =>
 
 const open = () =>
   fireEvent.click(screen.getByLabelText('Show animated weather chart'))
-const slider = () => screen.getByLabelText('progress bar') as HTMLInputElement
+const slider = () => screen.getByLabelText('Chart position') as HTMLInputElement
 
 describe('<FooterControl />', () => {
   test('opens the viewer paused, and closes it again', () => {
@@ -32,7 +32,7 @@ describe('<FooterControl />', () => {
     expect(
       screen.getByLabelText('Show animated weather chart'),
     ).toBeInTheDocument()
-    expect(screen.queryByLabelText('progress bar')).toBeNull()
+    expect(screen.queryByLabelText('Chart position')).toBeNull()
   })
 
   // Dragging the slider used to leave the interval running, so playback fought
@@ -47,6 +47,17 @@ describe('<FooterControl />', () => {
 
     expect(screen.getByLabelText('Play animation')).toBeInTheDocument()
     expect(slider().value).toBe('3')
+  })
+
+  // A bare range input is announced as a percentage; say which chart it is.
+  test('describes the position in words for assistive technology', () => {
+    renderFooter()
+    open()
+    expect(slider()).toHaveAttribute('aria-valuetext', 'Chart 1 of 5')
+
+    fireEvent.click(screen.getByLabelText('Step forward'))
+
+    expect(slider()).toHaveAttribute('aria-valuetext', 'Chart 2 of 5')
   })
 
   test('the slider spans exactly the charts', () => {
