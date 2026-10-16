@@ -21,7 +21,6 @@
     "checkly:deploy": "npx checkly deploy"
   },
   "dependencies": {
-    "@baselime/node-opentelemetry": "0.5.8",
     "@date-fns/tz": "1.5.0",
     "@serwist/next": "^9.2.1",
     "cheerio": "1.2.0",
@@ -63,8 +62,5 @@
     "typescript-eslint": "^8.0.0",
     "vite": "^8.0.0",
     "vitest": "^5.0.0"
-  },
-  "overrides": {
-    "@opentelemetry/api": "^1.9.0"
   }
 }
