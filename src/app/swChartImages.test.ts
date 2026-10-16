@@ -1,4 +1,4 @@
-import { buildFallbackImageProxyUrl } from '@/shared/helpers/v2/dataSource/fallbackImageProxyUrl'
+import { buildFallbackImageProxyUrl } from '@/shared/helpers/dataSource/fallbackImageProxyUrl'
 
 import { chartImageCache } from './swChartImages'
 

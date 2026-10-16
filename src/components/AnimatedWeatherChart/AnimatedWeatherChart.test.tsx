@@ -4,7 +4,7 @@ import { preloadImage } from '@/shared/helpers/images'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { findRegionByCode } from '@/shared/types/region'
 
-import { AnimatedWeatherChart } from './animated-weather-chart'
+import { AnimatedWeatherChart } from './AnimatedWeatherChart'
 
 vi.mock('@/shared/helpers/images', () => ({ preloadImage: vi.fn() }))
 

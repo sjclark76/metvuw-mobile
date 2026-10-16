@@ -1,5 +1,5 @@
 /* eslint-disable no-console -- asserts on the spied console */
-import { constructChartDataFromScrapedImages } from '@/shared/helpers/v2/chartData/constructChartDataFromScrapedImages'
+import { constructChartDataFromScrapedImages } from '@/shared/helpers/chartData/constructChartDataFromScrapedImages'
 
 describe('constructChartDataFromScrapedImages', () => {
   test('maps scraped image URLs and extracts utc date from filename', () => {

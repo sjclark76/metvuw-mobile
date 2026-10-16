@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { AnimationProvider } from '@/components/Animation/Animation'
 import { SkinnyChartData } from '@/shared/types/chartData'
 
-import { FooterControl } from './index'
+import { FooterControl } from './FooterControl'
 
 const charts: SkinnyChartData[] = [0, 1, 2, 3, 4].map((hour) => ({
   imageDateUTC: Date.UTC(2026, 9, 1, hour),

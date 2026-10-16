@@ -4,13 +4,13 @@ import { useMarkImageLoaded } from '@/components/ImageProgress/ImageProgress'
 import {
   isFallbackImageProxyUrl,
   withFallbackImageProxyVariant,
-} from '@/shared/helpers/v2/dataSource/fallbackImageProxyUrl'
+} from '@/shared/helpers/dataSource/fallbackImageProxyUrl'
 import {
   radarImageDimensions,
   rainImageDimensions,
   satelliteImageDimensions,
   upperAirImageDimensions,
-} from '@/shared/helpers/v2/imageCompression/imageDimensions'
+} from '@/shared/helpers/imageCompression/imageDimensions'
 import { ChartType } from '@/shared/types/ChartType'
 
 interface WeatherImageProps {

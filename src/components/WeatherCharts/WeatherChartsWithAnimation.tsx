@@ -5,7 +5,7 @@ import * as m from 'motion/react-m'
 import React from 'react'
 
 import { AdCard } from '@/components/AdCard'
-import { AnimatedWeatherChart } from '@/components/AnimatedWeatherChart/animated-weather-chart'
+import { AnimatedWeatherChart } from '@/components/AnimatedWeatherChart/AnimatedWeatherChart'
 import { useAnimation } from '@/components/Animation/Animation'
 import { showAdsAtom } from '@/components/Atoms/AdState'
 import { fadeInProps } from '@/shared/helpers/fadeIn'

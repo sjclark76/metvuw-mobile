@@ -2,7 +2,7 @@ import {
   buildFallbackImageProxyUrl,
   isFallbackImageProxyUrl,
   withFallbackImageProxyVariant,
-} from '@/shared/helpers/v2/dataSource/fallbackImageProxyUrl'
+} from '@/shared/helpers/dataSource/fallbackImageProxyUrl'
 
 describe('fallbackImageProxyUrl helpers', () => {
   test('builds proxy url with encoded source and defaults to primary variant', () => {

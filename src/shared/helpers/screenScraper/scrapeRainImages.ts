@@ -1,7 +1,7 @@
-import { collectScrapedImages } from '@/shared/helpers/v2/screenScraper/collectScrapedImages'
-import { imagePipeline } from '@/shared/helpers/v2/screenScraper/imagePipeline'
-import { loadImages } from '@/shared/helpers/v2/screenScraper/loadImages'
-import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
+import { collectScrapedImages } from '@/shared/helpers/screenScraper/collectScrapedImages'
+import { imagePipeline } from '@/shared/helpers/screenScraper/imagePipeline'
+import { loadImages } from '@/shared/helpers/screenScraper/loadImages'
+import { ScrapedImage } from '@/shared/helpers/screenScraper/scrapedImage'
 import { Region } from '@/shared/types/region'
 
 export const scrapeRainImages = async (

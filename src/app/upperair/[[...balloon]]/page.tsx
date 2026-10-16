@@ -3,8 +3,8 @@ import { notFound } from 'next/navigation'
 
 import NoForecast from '@/components/NoForecast'
 import { UpperAirPage } from '@/components/UpperAirPage'
+import { getUpperAirChartDataForCode } from '@/shared/helpers/dataSource/getWeatherChartData'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { getUpperAirChartDataForCode } from '@/shared/helpers/v2/dataSource/getWeatherChartData'
 import { getsBalloonLocationCodeOrDefault } from '@/shared/types/balloonLocations'
 
 export const revalidate = 3600

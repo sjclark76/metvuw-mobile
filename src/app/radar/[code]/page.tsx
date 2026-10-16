@@ -3,8 +3,8 @@ import { notFound } from 'next/navigation'
 
 import NoForecast from '@/components/NoForecast'
 import { RadarPage } from '@/components/RadarPage'
+import { getRadarChartDataForCode } from '@/shared/helpers/dataSource/getWeatherChartData'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { getRadarChartDataForCode } from '@/shared/helpers/v2/dataSource/getWeatherChartData'
 import { isRadarCode } from '@/shared/types/radarRegions'
 
 type Props = {

@@ -1,6 +1,6 @@
-import { parseUtcDate } from '@/shared/helpers/v2/chartData/parseUtcDate'
-import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
-import { ScrapeError } from '@/shared/helpers/v2/screenScraper/scrapeError'
+import { parseUtcDate } from '@/shared/helpers/chartData/parseUtcDate'
+import { ScrapedImage } from '@/shared/helpers/screenScraper/scrapedImage'
+import { ScrapeError } from '@/shared/helpers/screenScraper/scrapeError'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 
 const fileNamePattern =

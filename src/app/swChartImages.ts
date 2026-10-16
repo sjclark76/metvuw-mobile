@@ -1,4 +1,4 @@
-import { isFallbackImageProxyUrl } from '@/shared/helpers/v2/dataSource/fallbackImageProxyUrl'
+import { isFallbackImageProxyUrl } from '@/shared/helpers/dataSource/fallbackImageProxyUrl'
 
 // Kept apart from sw.ts so it can be unit tested without a worker scope.
 export const chartImageCache = {

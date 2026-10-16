@@ -1,0 +1,1 @@
+export { FooterControl } from './FooterControl'

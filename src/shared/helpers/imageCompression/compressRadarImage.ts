@@ -1,7 +1,7 @@
 import sharp from 'sharp'
 
-import { radarImageDimensions } from '@/shared/helpers/v2/imageCompression/imageDimensions'
-import { sharpInputOptions } from '@/shared/helpers/v2/imageCompression/sharpInput'
+import { radarImageDimensions } from '@/shared/helpers/imageCompression/imageDimensions'
+import { sharpInputOptions } from '@/shared/helpers/imageCompression/sharpInput'
 
 export function compressRadarImage(image: Buffer): Promise<Buffer> {
   return sharp(image, sharpInputOptions)

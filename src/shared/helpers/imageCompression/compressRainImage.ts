@@ -1,7 +1,7 @@
 import sharp from 'sharp'
 
-import { rainImageDimensions } from '@/shared/helpers/v2/imageCompression/imageDimensions'
-import { sharpInputOptions } from '@/shared/helpers/v2/imageCompression/sharpInput'
+import { rainImageDimensions } from '@/shared/helpers/imageCompression/imageDimensions'
+import { sharpInputOptions } from '@/shared/helpers/imageCompression/sharpInput'
 
 export default function compressRainImage(image: Buffer): Promise<Buffer> {
   return sharp(image, sharpInputOptions)
