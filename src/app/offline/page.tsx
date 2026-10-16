@@ -2,11 +2,14 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import React from 'react'
 
+import { ReloadWhenOnline } from '@/components/ReloadWhenOnline'
+
 export const metadata: Metadata = { title: 'metvuw mobile | Offline' }
 
 export default function OfflinePage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4 py-2 text-center sm:px-6 lg:px-8 dark:bg-gray-900">
+      <ReloadWhenOnline />
       <div className="mx-auto max-w-md">
         {/* Modern "No Internet" Icon */}
         <svg

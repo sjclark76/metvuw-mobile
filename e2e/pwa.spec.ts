@@ -51,6 +51,22 @@ test.describe('service worker', () => {
     await expect(page.getByText("You're Offline")).toBeVisible()
   })
 
+  test('the offline page reloads the page you wanted once you are back online', async ({
+    page,
+    context,
+  }) => {
+    await openControlled(page)
+    await context.setOffline(true)
+    await page.goto('/regions/nz').catch(() => {})
+    await expect(page.getByText("You're Offline")).toBeVisible()
+
+    await context.setOffline(false)
+
+    await expect(page.getByText("You're Offline")).toBeHidden()
+    await expect(page).toHaveURL(/\/regions\/nz$/)
+    await page.waitForSelector('main img')
+  })
+
   test('charts already viewed still show offline', async ({
     page,
     context,
