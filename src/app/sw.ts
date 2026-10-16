@@ -1,6 +1,13 @@
 import { defaultCache } from '@serwist/next/worker'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
-import { Serwist } from 'serwist'
+import {
+  CacheableResponsePlugin,
+  CacheFirst,
+  ExpirationPlugin,
+  Serwist,
+} from 'serwist'
+
+import { chartImageCache } from './swChartImages'
 
 // This declares the value of `self.__SW_MANIFEST`.
 // See https://serwist.pages.dev/docs/next/configuring
@@ -12,26 +19,41 @@ declare global {
 
 declare const self: ServiceWorkerGlobalScope
 
-// eslint-disable-next-line no-console
-console.log('Service worker script loaded.')
-
 const serwist = new Serwist({
-  precacheEntries: [
-    ...(self.__SW_MANIFEST || []),
-    { url: '/offline', revision: null },
-    // { url: '/', revision: null },
-    // { url: '/regions/nz', revision: null },
-  ],
-  skipWaiting: true,
+  // `/offline` is added with a per-build revision in next.config.ts, so it is
+  // re-fetched after every deploy.
+  precacheEntries: self.__SW_MANIFEST,
+  // No skipWaiting: a new worker waits until the visitor accepts the update
+  // (see UpdateNotification), so open tabs keep the JS chunks they loaded.
+  // Claiming only matters for a first visit, which has no worker to replace.
   clientsClaim: true,
-  navigationPreload: false,
-  runtimeCaching: defaultCache,
+  navigationPreload: true,
+  runtimeCaching: [
+    // A chart's URL names the image it shows, so its bytes never change and it
+    // can be served from the cache, which is also what makes it viewable offline.
+    {
+      matcher: chartImageCache.matcher,
+      handler: new CacheFirst({
+        cacheName: chartImageCache.name,
+        plugins: [
+          new CacheableResponsePlugin({ statuses: [200] }),
+          new ExpirationPlugin({
+            maxEntries: chartImageCache.maxEntries,
+            maxAgeSeconds: chartImageCache.maxAgeSeconds,
+            maxAgeFrom: 'last-used',
+          }),
+        ],
+      }),
+    },
+    ...defaultCache,
+  ],
 })
 
 serwist.setCatchHandler(async ({ request }) => {
   // Fallback for document requests to the offline page.
   if (request.destination === 'document') {
-    const offlinePage = await caches.match('/offline')
+    // Precache keys carry the revision, so a plain caches.match would miss it.
+    const offlinePage = await serwist.matchPrecache('/offline')
     if (offlinePage) {
       return offlinePage
     }
