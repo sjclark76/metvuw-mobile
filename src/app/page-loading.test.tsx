@@ -1,17 +1,17 @@
 import NoForecast from '@/components/NoForecast'
-import RegionPage from '@/components/RegionPage/region-page'
+import RegionPage from '@/components/RegionPage/RegionPage'
 import { SatellitePage } from '@/components/SatellitePage'
 import {
   getRadarChartDataForCode,
   getRainChartDataForRegion,
   getSatelliteChartData,
-} from '@/shared/helpers/v2/dataSource/getWeatherChartData'
+} from '@/shared/helpers/dataSource/getWeatherChartData'
 
 import HomePage from './page'
 import RadarRoute from './radar/[code]/page'
 import SatelliteRoute from './satellite/page'
 
-vi.mock('@/shared/helpers/v2/dataSource/getWeatherChartData', () => ({
+vi.mock('@/shared/helpers/dataSource/getWeatherChartData', () => ({
   getRainChartDataForRegion: vi.fn(),
   getRadarChartDataForCode: vi.fn(),
   getSatelliteChartData: vi.fn(),

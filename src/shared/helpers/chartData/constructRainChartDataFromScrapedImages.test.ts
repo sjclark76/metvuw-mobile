@@ -1,5 +1,5 @@
 /* eslint-disable no-console -- asserts on the spied console */
-import { constructRainChartDataFromScrapedImages } from '@/shared/helpers/v2/chartData/constructRainChartDataFromScrapedImages'
+import { constructRainChartDataFromScrapedImages } from '@/shared/helpers/chartData/constructRainChartDataFromScrapedImages'
 
 describe('constructRainChartDataFromScrapedImages', () => {
   test('maps direct source urls and calculates forecast date from offset', () => {

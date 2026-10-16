@@ -1,8 +1,8 @@
 import path from 'node:path'
 
 import { config } from '@/config'
-import { isAllowedSourceUrl } from '@/shared/helpers/v2/dataSource/allowedSourceUrl'
-import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
+import { isAllowedSourceUrl } from '@/shared/helpers/dataSource/allowedSourceUrl'
+import { ScrapedImage } from '@/shared/helpers/screenScraper/scrapedImage'
 
 /**
  * Function to transform and generate paths for scraped images.

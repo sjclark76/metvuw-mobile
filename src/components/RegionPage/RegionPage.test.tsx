@@ -3,7 +3,7 @@ import { fireEvent, render } from '@testing-library/react'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { findRegionByCode } from '@/shared/types/region'
 
-import RegionPage from './region-page'
+import RegionPage from './RegionPage'
 
 const region = findRegionByCode('nz')!
 const charts: SkinnyRainChartData[] = [0, 1, 2, 3].map((day) => ({

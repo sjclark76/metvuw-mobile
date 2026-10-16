@@ -1,12 +1,12 @@
-import { constructChartDataFromScrapedImages } from '@/shared/helpers/v2/chartData/constructChartDataFromScrapedImages'
-import { constructRainChartDataFromScrapedImages } from '@/shared/helpers/v2/chartData/constructRainChartDataFromScrapedImages'
-import { buildFallbackImageProxyUrl } from '@/shared/helpers/v2/dataSource/fallbackImageProxyUrl'
+import { constructChartDataFromScrapedImages } from '@/shared/helpers/chartData/constructChartDataFromScrapedImages'
+import { constructRainChartDataFromScrapedImages } from '@/shared/helpers/chartData/constructRainChartDataFromScrapedImages'
+import { buildFallbackImageProxyUrl } from '@/shared/helpers/dataSource/fallbackImageProxyUrl'
 import {
   scrapeRadarImages,
   scrapeRainImages,
   scrapeSatelliteImages,
   scrapeUpperAirImages,
-} from '@/shared/helpers/v2/screenScraper'
+} from '@/shared/helpers/screenScraper'
 import { SkinnyChartData } from '@/shared/types/chartData'
 import { ChartType } from '@/shared/types/ChartType'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'

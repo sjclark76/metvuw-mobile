@@ -3,17 +3,17 @@ import { NextRequest } from 'next/server'
 import {
   IMAGE_CACHE_CONTROL,
   UPSTREAM_ERROR_CACHE_CONTROL,
-} from '@/shared/helpers/v2/dataSource/imageCache'
-import { getCompressorForChart } from '@/shared/helpers/v2/imageCompression/getCompressorForChart'
-import { downloadImageToBuffer } from '@/shared/helpers/v2/imageDownload/downloadImageToBuffer'
+} from '@/shared/helpers/dataSource/imageCache'
+import { getCompressorForChart } from '@/shared/helpers/imageCompression/getCompressorForChart'
+import { downloadImageToBuffer } from '@/shared/helpers/imageDownload/downloadImageToBuffer'
 
 import { GET } from './route'
 
-vi.mock('@/shared/helpers/v2/imageDownload/downloadImageToBuffer', () => ({
+vi.mock('@/shared/helpers/imageDownload/downloadImageToBuffer', () => ({
   downloadImageToBuffer: vi.fn(),
 }))
 
-vi.mock('@/shared/helpers/v2/imageCompression/getCompressorForChart', () => ({
+vi.mock('@/shared/helpers/imageCompression/getCompressorForChart', () => ({
   getCompressorForChart: vi.fn(),
 }))
 

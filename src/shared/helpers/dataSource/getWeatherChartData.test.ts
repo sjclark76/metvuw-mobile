@@ -3,16 +3,16 @@ import {
   getRainChartDataForRegion,
   getSatelliteChartData,
   getUpperAirChartDataForCode,
-} from '@/shared/helpers/v2/dataSource/getWeatherChartData'
+} from '@/shared/helpers/dataSource/getWeatherChartData'
 import {
   scrapeRadarImages,
   scrapeRainImages,
   scrapeSatelliteImages,
   scrapeUpperAirImages,
-} from '@/shared/helpers/v2/screenScraper'
+} from '@/shared/helpers/screenScraper'
 import { findRegionByCode } from '@/shared/types/region'
 
-vi.mock('@/shared/helpers/v2/screenScraper', () => ({
+vi.mock('@/shared/helpers/screenScraper', () => ({
   scrapeRadarImages: vi.fn(),
   scrapeRainImages: vi.fn(),
   scrapeSatelliteImages: vi.fn(),

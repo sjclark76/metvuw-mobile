@@ -3,8 +3,8 @@ import { Metadata } from 'next'
 import NoForecast from '@/components/NoForecast'
 import { SatellitePage } from '@/components/SatellitePage'
 import { config } from '@/config'
+import { getSatelliteChartData } from '@/shared/helpers/dataSource/getWeatherChartData'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { getSatelliteChartData } from '@/shared/helpers/v2/dataSource/getWeatherChartData'
 
 export const revalidate = 3600
 

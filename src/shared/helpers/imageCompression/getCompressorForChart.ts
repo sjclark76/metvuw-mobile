@@ -1,13 +1,13 @@
-import { compressRadarImage } from '@/shared/helpers/v2/imageCompression/compressRadarImage'
-import compressRainImage from '@/shared/helpers/v2/imageCompression/compressRainImage'
+import { compressRadarImage } from '@/shared/helpers/imageCompression/compressRadarImage'
+import compressRainImage from '@/shared/helpers/imageCompression/compressRainImage'
 import {
   compressSatelliteImage,
   compressSmallSatelliteImage,
-} from '@/shared/helpers/v2/imageCompression/compressSatelliteImage'
+} from '@/shared/helpers/imageCompression/compressSatelliteImage'
 import {
   compressSmallUpperAirImage,
   compressUpperAirImage,
-} from '@/shared/helpers/v2/imageCompression/compressUpperAirImage'
+} from '@/shared/helpers/imageCompression/compressUpperAirImage'
 import { ChartType } from '@/shared/types/ChartType'
 
 export const getCompressorForChart = (chartType: ChartType) => {

@@ -1,5 +1,5 @@
-import { ScrapedImage } from '@/shared/helpers/v2/screenScraper/scrapedImage'
-import { ScrapeError } from '@/shared/helpers/v2/screenScraper/scrapeError'
+import { ScrapedImage } from '@/shared/helpers/screenScraper/scrapedImage'
+import { ScrapeError } from '@/shared/helpers/screenScraper/scrapeError'
 
 /**
  * Keeps the images whose filenames were recognised, reporting the ones that

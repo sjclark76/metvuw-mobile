@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { isAllowedSourceUrl } from '@/shared/helpers/v2/dataSource/allowedSourceUrl'
+import { isAllowedSourceUrl } from '@/shared/helpers/dataSource/allowedSourceUrl'
 import {
   IMAGE_CACHE_CONTROL,
   UPSTREAM_ERROR_CACHE_CONTROL,
-} from '@/shared/helpers/v2/dataSource/imageCache'
-import { getCompressorForChart } from '@/shared/helpers/v2/imageCompression/getCompressorForChart'
-import { downloadImageToBuffer } from '@/shared/helpers/v2/imageDownload/downloadImageToBuffer'
+} from '@/shared/helpers/dataSource/imageCache'
+import { getCompressorForChart } from '@/shared/helpers/imageCompression/getCompressorForChart'
+import { downloadImageToBuffer } from '@/shared/helpers/imageDownload/downloadImageToBuffer'
 import { ChartType } from '@/shared/types/ChartType'
 
 type FallbackImageVariant = 'primary' | 'small'

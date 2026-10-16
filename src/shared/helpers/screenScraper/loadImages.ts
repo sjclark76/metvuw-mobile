@@ -1,7 +1,7 @@
 import * as cheerio from 'cheerio'
 
 import { config } from '@/config'
-import { ScrapeError } from '@/shared/helpers/v2/screenScraper/scrapeError'
+import { ScrapeError } from '@/shared/helpers/screenScraper/scrapeError'
 
 const TIMEOUT_MS = 10_000
 

@@ -2,10 +2,10 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import NoForecast from '@/components/NoForecast'
-import RegionPage from '@/components/RegionPage/region-page'
+import RegionPage from '@/components/RegionPage/RegionPage'
 import { config } from '@/config'
+import { getRainChartDataForRegion } from '@/shared/helpers/dataSource/getWeatherChartData'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { getRainChartDataForRegion } from '@/shared/helpers/v2/dataSource/getWeatherChartData'
 import { findRegionByCode } from '@/shared/types/region'
 
 export const revalidate = 3600

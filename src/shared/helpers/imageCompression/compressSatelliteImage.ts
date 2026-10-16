@@ -3,8 +3,8 @@ import sharp from 'sharp'
 import {
   satelliteImageDimensions,
   smallSatelliteImageDimensions,
-} from '@/shared/helpers/v2/imageCompression/imageDimensions'
-import { sharpInputOptions } from '@/shared/helpers/v2/imageCompression/sharpInput'
+} from '@/shared/helpers/imageCompression/imageDimensions'
+import { sharpInputOptions } from '@/shared/helpers/imageCompression/sharpInput'
 
 export function compressSatelliteImage(image: Buffer) {
   return sharp(image, sharpInputOptions)
