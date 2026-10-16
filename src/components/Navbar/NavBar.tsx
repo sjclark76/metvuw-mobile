@@ -82,12 +82,12 @@ const Navbar = () => {
   }, [menuOpen, setMenuOpen]) // Re-run effect if menuOpen or setMenuOpen changes
 
   const headerText =
-    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-slate-600 focus:bg-slate-700'
+    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-slate-700 focus:bg-slate-800'
 
   return (
     <nav
       ref={navRef} // Attach the ref to the nav element
-      className="flex flex-wrap items-center bg-linear-to-b from-slate-400 to-slate-500 p-2"
+      className="flex flex-wrap items-center bg-linear-to-b from-slate-500 to-slate-600 p-2"
     >
       <Link href="/" className="mr-4 inline-flex items-center p-2">
         <MetvuwMobileImage />
@@ -98,14 +98,17 @@ const Navbar = () => {
       <div className="ml-auto flex items-center">
         <SetHomePageIcon />
         <button
-          aria-label="Open Menu"
-          className="inline-flex rounded-xs px-1 py-3 text-white outline-hidden hover:bg-slate-500 hover:text-white 2xl:hidden"
+          aria-label="Menu"
+          aria-expanded={menuOpen}
+          aria-controls="site-menu"
+          className="inline-flex rounded-xs p-3 text-white outline-hidden hover:bg-slate-700 hover:text-white focus-visible:outline-2 focus-visible:outline-white 2xl:hidden"
           onClick={handleClick}
         >
           <HamburgerSvg />
         </button>
       </div>
       <div
+        id="site-menu"
         className={`${
           menuOpen ? '' : 'hidden'
         } w-full 2xl:inline-flex 2xl:w-auto 2xl:grow`}

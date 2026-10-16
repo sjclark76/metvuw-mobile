@@ -117,7 +117,7 @@ const DropDown = (props: DropDownProps) => {
   }
 
   const headerText =
-    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-slate-500 focus:bg-slate-600'
+    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-slate-700 focus:bg-slate-800'
 
   return (
     <div
@@ -167,7 +167,7 @@ const DropDown = (props: DropDownProps) => {
               href={item.href}
               onClick={closeAll}
               aria-current={pathname === item.href ? 'page' : undefined}
-              className="block truncate p-2 px-5 leading-5 text-slate-500 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-500 focus-visible:bg-blue-50 focus-visible:text-blue-600 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sky-600 aria-[current=page]:bg-emerald-50 aria-[current=page]:text-blue-500"
+              className="block truncate p-2 px-5 leading-5 text-slate-500 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-700 focus-visible:bg-blue-50 focus-visible:text-blue-800 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sky-600 aria-[current=page]:bg-emerald-50 aria-[current=page]:text-blue-700"
             >
               {item.value}
             </Link>

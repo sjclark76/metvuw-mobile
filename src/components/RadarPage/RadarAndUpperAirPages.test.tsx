@@ -36,7 +36,7 @@ describe.each(pages)('%s page animation', (_name, page) => {
 
     fireEvent.click(screen.getByLabelText('Show animated weather chart'))
     expect(screen.getAllByRole('img')).toHaveLength(1)
-    expect(screen.getByLabelText('progress bar')).toHaveAttribute('max', '4')
+    expect(screen.getByLabelText('Chart position')).toHaveAttribute('max', '4')
 
     fireEvent.click(screen.getByLabelText('Show static weather chart list'))
     // The list returns once the viewer's exit animation has finished.

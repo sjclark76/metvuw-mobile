@@ -97,7 +97,8 @@ function FooterControl() {
                 max={max}
                 value={animatedChartIndex}
                 onChange={handleProgressChange}
-                aria-label="progress bar"
+                aria-label="Chart position"
+                aria-valuetext={`Chart ${animatedChartIndex + 1} of ${max + 1}`}
                 className="w-full text-sky-400"
               />
               <motion.button

@@ -69,7 +69,7 @@ export function AdCard() {
         />
       </div>
       <div className="flex items-center justify-around rounded-lg pt-3">
-        <span className="text-xs text-gray-400 dark:text-stone-300">
+        <span className="text-xs text-gray-500 dark:text-stone-300">
           Sponsored
         </span>
       </div>
