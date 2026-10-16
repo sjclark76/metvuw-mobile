@@ -1,6 +1,7 @@
 'use client'
 
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
+import * as m from 'motion/react-m'
 import { useState } from 'react'
 
 interface RainfallLegendBand {
@@ -56,7 +57,7 @@ export function RainfallLegendSection() {
       <div className="flex items-end gap-2">
         <AnimatePresence initial={false}>
           {isOpen && (
-            <motion.div
+            <m.div
               key="rainfall-legend-panel"
               initial={{ opacity: 0, x: 8, scale: 0.98 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -65,7 +66,7 @@ export function RainfallLegendSection() {
               className="w-[min(80vw,20rem)]"
             >
               <RainfallLegend />
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
         <button

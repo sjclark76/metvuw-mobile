@@ -1,6 +1,7 @@
 'use client'
 import { useAtomValue } from 'jotai'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
+import * as m from 'motion/react-m'
 import React from 'react'
 
 import { AdCard } from '@/components/AdCard'
@@ -37,7 +38,7 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
         {/* AnimatePresence handles the transition between the two views */}
         <AnimatePresence mode="wait">
           {displayAnimatedChart ? (
-            <motion.div
+            <m.div
               key="animated-view" // Unique key is crucial for AnimatePresence
               variants={viewSwitchVariants}
               initial="initial"
@@ -49,7 +50,7 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
                 region={props.region}
                 charts={props.charts}
               />
-            </motion.div>
+            </m.div>
           ) : (
             <ul
               key="static-list"

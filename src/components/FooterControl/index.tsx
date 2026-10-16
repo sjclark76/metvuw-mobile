@@ -1,6 +1,7 @@
 'use client'
 import clsx from 'clsx'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
+import * as m from 'motion/react-m'
 import { ChangeEvent } from 'react'
 
 import { useAnimation } from '@/components/Animation/Animation'
@@ -57,18 +58,21 @@ function FooterControl() {
     <footer className={footerClasses}>
       <AnimatePresence>
         <div
-          className={`container mx-auto flex flex-row items-center ${
-            displayAnimatedChart
-              ? 'justify-start space-x-4 lg:gap-5'
-              : 'justify-center'
-          }`}
+          className={clsx(
+            'container mx-auto flex flex-row items-center justify-start',
+            displayAnimatedChart && 'space-x-4 lg:gap-5',
+          )}
         >
-          <motion.button
-            layout // This enables smooth animation when layout changes
-            // For more control over the animation, you can add a transition prop:
-            transition={{ type: 'tween', ease: 'easeInOut', duration: 0.5 }}
+          {/* Slides from the centre to the left edge when the controls open: a
+              CSS offset moves it, as justify-content cannot be transitioned. */}
+          <button
             onClick={toggleDisplay}
-            className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
+            className={clsx(
+              'relative rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-[left,translate] duration-500 ease-in-out hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none motion-reduce:transition-none lg:p-4',
+              displayAnimatedChart
+                ? 'left-0 translate-x-0'
+                : 'left-1/2 -translate-x-1/2',
+            )}
             aria-label={
               displayAnimatedChart
                 ? 'Show static weather chart list'
@@ -76,11 +80,11 @@ function FooterControl() {
             }
           >
             {displayAnimatedChart ? <CrossIcon /> : <PlayIcon />}
-          </motion.button>
+          </button>
 
           {displayAnimatedChart && (
             <>
-              <motion.button
+              <m.button
                 {...motionProps}
                 onClick={togglePlaying}
                 className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
@@ -89,8 +93,8 @@ function FooterControl() {
                 }
               >
                 {playAnimation ? <PauseIcon /> : <PlayIcon />}
-              </motion.button>
-              <motion.input
+              </m.button>
+              <m.input
                 {...motionProps}
                 type="range"
                 min="0"
@@ -101,22 +105,22 @@ function FooterControl() {
                 aria-valuetext={`Chart ${animatedChartIndex + 1} of ${max + 1}`}
                 className="w-full text-sky-400"
               />
-              <motion.button
+              <m.button
                 {...motionProps}
                 onClick={stepBackward}
                 className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
                 aria-label="Step backward"
               >
                 <BackwardIcon />
-              </motion.button>
-              <motion.button
+              </m.button>
+              <m.button
                 {...motionProps}
                 onClick={stepForward}
                 className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
                 aria-label="Step forward"
               >
                 <ForwardIcon />
-              </motion.button>
+              </m.button>
             </>
           )}
         </div>
