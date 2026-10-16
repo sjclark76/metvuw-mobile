@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto'
+
 import withSerwistInit from '@serwist/next'
 import type { NextConfig } from 'next'
 
@@ -6,7 +8,20 @@ import { securityHeaders } from './src/securityHeaders'
 const withSerwist = withSerwistInit({
   swSrc: 'src/app/sw.ts',
   swDest: 'public/sw.js',
-  reloadOnOnline: true,
+  // UpdateNotification registers the worker, so it can offer a reload when a new
+  // version is waiting.
+  register: false,
+  // The default reloads the page whenever connectivity returns, which loses
+  // whatever the visitor was doing, such as the animation they were watching.
+  reloadOnOnline: false,
+  // The offline page is not part of the build manifest. A fresh revision per
+  // deploy re-caches it, so it never goes stale.
+  additionalPrecacheEntries: [
+    {
+      url: '/offline',
+      revision: process.env.VERCEL_GIT_COMMIT_SHA ?? randomUUID(),
+    },
+  ],
   disable: process.env.NODE_ENV !== 'production',
 })
 

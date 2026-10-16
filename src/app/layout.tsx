@@ -7,6 +7,7 @@ import { favoritePageRedirectScript } from '@/components/FavoritePageRedirect/fa
 import { GoogleAdSense } from '@/components/GoogleAdSense'
 import GoogleTag from '@/components/GoogleTag'
 import { Providers } from '@/components/Providers/Providers'
+import { UpdateNotification } from '@/components/UpdateNotification'
 import { config } from '@/config'
 
 import Navbar from '../components/Navbar'
@@ -38,6 +39,7 @@ export default function RootLayout({
               <Navbar />
             </header>
             <FavoritePageRedirect />
+            <UpdateNotification />
             <main className="mx-auto dark:bg-stone-600 dark:text-stone-100">
               {children}
             </main>

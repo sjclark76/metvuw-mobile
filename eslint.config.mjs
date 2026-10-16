@@ -6,7 +6,8 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import globals from 'globals'
 
 export default defineConfig([
-  globalIgnores(['src/shared/db/database.types.ts']),
+  // public/sw.js is generated from src/app/sw.ts by the build and gitignored.
+  globalIgnores(['src/shared/db/database.types.ts', 'public/sw.js']),
   js.configs.recommended,
   ...nextCoreWebVitals,
   prettierRecommended,

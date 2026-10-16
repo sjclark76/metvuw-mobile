@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev -p 3002",
     "prod": "rm -rf ./.next && npm run build && npm run start",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start -p 3002",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
