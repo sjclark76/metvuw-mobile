@@ -16,3 +16,12 @@
     }
   }
 }
+
+/* List items below the first screen skip layout and paint until they near the
+   viewport. The height is only a placeholder until the item has been seen (`auto`
+   then remembers the real one): a card is as wide as the screen up to 42rem, and
+   its height follows its width, so the page's scroll height barely drifts. */
+@utility defer-offscreen {
+  content-visibility: auto;
+  contain-intrinsic-size: auto calc(min(100vw, 42rem) * 0.65 + 5.5rem);
+}
