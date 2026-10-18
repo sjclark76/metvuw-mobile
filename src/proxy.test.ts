@@ -5,8 +5,9 @@ import { config, proxy } from './proxy'
 const request = (
   country: string | null,
   cookies: Record<string, string> = {},
+  path = '/satellite',
 ) =>
-  new NextRequest('https://metvuw.test/satellite', {
+  new NextRequest(`https://metvuw.test${path}`, {
     headers: {
       ...(country ? { 'x-vercel-ip-country': country } : {}),
       cookie: Object.entries(cookies)
@@ -69,6 +70,63 @@ describe('proxy cookies', () => {
     expect(cookie).toMatch(/SameSite=lax/i)
     expect(cookie).toMatch(/Secure/)
     expect(cookie).not.toMatch(/HttpOnly/i)
+  })
+})
+
+describe('proxy favourite page', () => {
+  const home = (favourite?: string) =>
+    proxy(
+      request(
+        'NZ',
+        favourite === undefined
+          ? {}
+          : { 'favorite-page': encodeURIComponent(favourite) },
+        '/',
+      ),
+    )
+
+  test('sends the home page to the favourite page, before it renders', () => {
+    const response = home('/regions/nzsi')
+
+    expect(response.status).toBe(307)
+    expect(response.headers.get('location')).toBe(
+      'https://metvuw.test/regions/nzsi',
+    )
+  })
+
+  test('never lets a shared cache keep the redirect', () => {
+    expect(home('/regions/nzsi').headers.get('cache-control')).toBe(
+      'private, no-store',
+    )
+  })
+
+  test('leaves the home page alone without a favourite', () => {
+    const response = home()
+
+    expect(response.status).toBe(200)
+    expect(response.headers.get('location')).toBeNull()
+  })
+
+  test('leaves the home page alone when it is the favourite', () => {
+    expect(home('/').headers.get('location')).toBeNull()
+  })
+
+  test('only redirects the home page', () => {
+    const response = proxy(
+      request('NZ', { 'favorite-page': '%2Fregions%2Fnzsi' }, '/satellite'),
+    )
+
+    expect(response.headers.get('location')).toBeNull()
+  })
+
+  test.each([
+    '//evil.example/phish',
+    '/\\evil.example',
+    'https://evil.example',
+    'javascript:alert(1)',
+    'regions/nzsi',
+  ])('ignores the unsafe favourite %j', (favourite) => {
+    expect(home(favourite).headers.get('location')).toBeNull()
   })
 })
 

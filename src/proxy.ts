@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+import {
+  FAVORITE_PAGE_COOKIE,
+  isSameOriginPath,
+} from '@/shared/helpers/favoritePage'
+
 const DOMESTIC_COUNTRIES = new Set(['NZ'])
 
 const cookieOptions = {
@@ -11,6 +16,21 @@ const cookieOptions = {
 } as const
 
 export function proxy(request: NextRequest) {
+  // A visitor with a favourite page never needs the home page: redirect before it
+  // is rendered or downloaded. The redirect depends on the cookie, so no shared
+  // cache may keep it.
+  const favoritePage = request.cookies.get(FAVORITE_PAGE_COOKIE)?.value
+  if (
+    request.nextUrl.pathname === '/' &&
+    favoritePage &&
+    favoritePage !== '/' &&
+    isSameOriginPath(favoritePage)
+  ) {
+    const redirect = NextResponse.redirect(new URL(favoritePage, request.url))
+    redirect.headers.set('Cache-Control', 'private, no-store')
+    return redirect
+  }
+
   const country = request.headers.get('x-vercel-ip-country')
   const response = NextResponse.next()
 
