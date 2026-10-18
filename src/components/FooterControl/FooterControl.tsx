@@ -5,7 +5,6 @@ import * as m from 'motion/react-m'
 import { ChangeEvent } from 'react'
 
 import { useAnimation } from '@/components/Animation/Animation'
-import { useIsStandalone } from '@/components/Hooks/useIsStandalone'
 import { BackwardIcon } from '@/components/icons/BackwardIcon'
 import { CrossIcon } from '@/components/icons/CrossIcon'
 import { ForwardIcon } from '@/components/icons/ForwardIcon'
@@ -40,19 +39,16 @@ function FooterControl() {
     stepForward,
     seek,
   } = useAnimation()
-  const isStandalone = useIsStandalone()
 
   const handleProgressChange = (e: ChangeEvent<HTMLInputElement>) => {
     seek(Number(e.target.value))
   }
 
-  const footerClasses = clsx(
-    'sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 shadow-lg lg:p-3 dark:border-slate-700 dark:bg-slate-800 print:hidden',
-    {
-      'm:p-2 px-5 pt-3 pb-6': isStandalone,
-      'p-2': !isStandalone,
-    },
-  )
+  // The installed app pads the footer for the phone's home indicator. `standalone:`
+  // is a CSS media query, so it applies from the first paint; a hook that read
+  // matchMedia after mount made the footer jump on every load.
+  const footerClasses =
+    'sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 p-2 shadow-lg standalone:px-5 standalone:pt-3 standalone:pb-6 lg:p-3 lg:standalone:p-3 dark:border-slate-700 dark:bg-slate-800 print:hidden'
 
   return (
     <footer className={footerClasses}>
