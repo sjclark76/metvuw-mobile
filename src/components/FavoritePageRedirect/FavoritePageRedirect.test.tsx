@@ -27,9 +27,53 @@ function renderAt(pathname: string, favoritePage: string | null) {
   )
 }
 
+const cookieHeader = () => document.cookie
+
 describe('<FavoritePageRedirect />', () => {
   beforeEach(() => {
     replace.mockClear()
+    localStorage.clear()
+    document.cookie = 'favorite-page=; Path=/; Max-Age=0'
+  })
+
+  // The proxy reads this cookie to redirect the home page before it renders.
+  describe('favorite-page cookie', () => {
+    test('is set for the favourite page', () => {
+      renderAt('/satellite', '/regions/nzsi')
+
+      expect(cookieHeader()).toContain('favorite-page=%2Fregions%2Fnzsi')
+    })
+
+    test('is set on any page, so existing favourites reach it on their next visit', () => {
+      // A favourite saved before the cookie existed is only in localStorage.
+      localStorage.setItem('favoritePage', JSON.stringify('/radar/nl'))
+      vi.mocked(usePathname).mockReturnValue('/regions/nz')
+      vi.mocked(useRouter).mockReturnValue({
+        replace,
+      } as unknown as ReturnType<typeof useRouter>)
+
+      render(
+        <Provider store={createStore()}>
+          <FavoritePageRedirect />
+        </Provider>,
+      )
+
+      expect(cookieHeader()).toContain('favorite-page=%2Fradar%2Fnl')
+    })
+
+    test('is cleared when the favourite is unset', () => {
+      document.cookie = 'favorite-page=%2Fregions%2Fnzsi; Path=/'
+
+      renderAt('/satellite', null)
+
+      expect(cookieHeader()).not.toContain('favorite-page')
+    })
+
+    test('never holds an unsafe page', () => {
+      renderAt('/satellite', '//evil.example')
+
+      expect(cookieHeader()).not.toContain('evil')
+    })
   })
 
   test('sends the home page to the favourite page', () => {
@@ -55,6 +99,7 @@ describe('<FavoritePageRedirect />', () => {
   // rule as the inline script instead of trusting the stored value.
   test.each([
     '//evil.example/phish',
+    '/\\evil.example',
     'https://evil.example',
     'javascript:alert(1)',
     'regions/nzsi',

@@ -32,6 +32,7 @@ describe('redirectToFavoritePage', () => {
 
   test.each([
     ['protocol-relative url', '//evil.example.com'],
+    ['backslash url, which browsers read as //', '/\\evil.example.com'],
     ['absolute url', 'https://evil.example.com'],
     ['empty string', ''],
   ])('ignores a %s', (_name, stored) => {

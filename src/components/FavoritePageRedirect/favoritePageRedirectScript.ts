@@ -14,12 +14,14 @@ export function redirectToFavoritePage(
   try {
     if (location.pathname !== '/') return
     const favoritePage = JSON.parse(storage.getItem('favoritePage') || 'null')
-    // Same-origin paths only; '//host' would be a protocol-relative URL.
+    // Same-origin paths only; '//host' would be a protocol-relative URL, and
+    // browsers read '/\host' the same way.
     if (
       typeof favoritePage === 'string' &&
       favoritePage.length > 1 &&
       favoritePage.charAt(0) === '/' &&
-      favoritePage.charAt(1) !== '/'
+      favoritePage.charAt(1) !== '/' &&
+      favoritePage.charAt(1) !== '\\'
     ) {
       location.replace(favoritePage)
     }
