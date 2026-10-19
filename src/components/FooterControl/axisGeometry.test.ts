@@ -1,6 +1,11 @@
 import { formatInTimeZone } from '@/shared/helpers/timeZone'
 
-import { dayBoundaries, nowPosition, visibleTicks } from './axisGeometry'
+import {
+  dayBoundaries,
+  namedDays,
+  nowPosition,
+  visibleTicks,
+} from './axisGeometry'
 
 const HOUR = 36e5
 const zone = 'Pacific/Auckland'
@@ -163,5 +168,29 @@ describe('visibleTicks', () => {
     expect(visibleTicks(0, 300, 10)).toEqual([])
     expect(visibleTicks(1, 300, 10)).toEqual([0])
     expect(visibleTicks(5, 0, 10)).toEqual([0])
+  })
+})
+
+describe('namedDays', () => {
+  const days = [1, 2, 3, 4, 5, 6].map((position) => ({
+    position,
+    label: `D${position}`,
+  }))
+
+  test('names every day when they all fit', () => {
+    expect([...namedDays(days, 60, 48)]).toEqual([1, 2, 3, 4, 5, 6])
+  })
+
+  test('skips names that would touch the last one written', () => {
+    // 30px a day with 48px needed: every second day.
+    expect([...namedDays(days, 30, 48)]).toEqual([1, 3, 5])
+  })
+
+  test('always names the first day, however crowded', () => {
+    expect([...namedDays(days, 1, 48)]).toEqual([1])
+  })
+
+  test('copes with no days', () => {
+    expect(namedDays([], 30, 48).size).toBe(0)
   })
 })

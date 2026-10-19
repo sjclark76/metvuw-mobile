@@ -74,6 +74,29 @@ export function visibleTicks(
 }
 
 /**
+ * Which days get their name written. Nine days across a phone leave the names
+ * touching ("THUFRI SAT SUNMON"), so a name is skipped when the last one written
+ * is closer than `minSpacing` pixels. Every day keeps its line; only the names
+ * are thinned. Returns the positions of the days to name.
+ */
+export function namedDays(
+  days: readonly DayBoundary[],
+  pixelsPerChart: number,
+  minSpacing: number,
+): Set<number> {
+  const named = new Set<number>()
+  let lastAt = Number.NEGATIVE_INFINITY
+  for (const day of days) {
+    const at = day.position * pixelsPerChart
+    if (at - lastAt >= minSpacing) {
+      named.add(day.position)
+      lastAt = at
+    }
+  }
+  return named
+}
+
+/**
  * Where the current moment falls along the axis, or undefined when it is
  * outside the charts' range (or there are fewer than two charts to place it
  * between).

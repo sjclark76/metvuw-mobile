@@ -3,7 +3,12 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
 
-import { dayBoundaries, nowPosition, visibleTicks } from './axisGeometry'
+import {
+  dayBoundaries,
+  namedDays,
+  nowPosition,
+  visibleTicks,
+} from './axisGeometry'
 import { useElementWidth } from './useElementWidth'
 
 /**
@@ -17,6 +22,8 @@ import { useElementWidth } from './useElementWidth'
  */
 // Closer than this and neighbouring ticks stop reading as separate marks.
 const MIN_TICK_SPACING_PX = 20
+// Closer than this and two day names run together.
+const MIN_DAY_NAME_SPACING_PX = 48
 // Roughly a phone, used until the axis has been measured.
 const ASSUMED_WIDTH_PX = 280
 // Half the (touch) handle, in rem and px, kept clear at each end of the track.
@@ -71,6 +78,7 @@ export function TimeAxis({
   )
   // A minor tick on a day line only looks like a heavier day line.
   const pixelsPerChart = max > 0 ? (width - 2 * INSET_PX) / max : 0
+  const named = namedDays(days, pixelsPerChart, MIN_DAY_NAME_SPACING_PX)
   const underDayLine = (position: number) =>
     days.some((day) => Math.abs(day.position - position) * pixelsPerChart < 3)
   const nowAt = now === undefined ? undefined : nowPosition(times, now)
@@ -197,9 +205,11 @@ export function TimeAxis({
             className="bg-ink absolute bottom-[1.05rem] h-4 w-px"
             style={{ left: percent(day.position) }}
           >
-            <em className="font-display text-ink-soft absolute top-[calc(100%+0.35rem)] left-1 text-xs font-semibold tracking-widest whitespace-nowrap uppercase not-italic">
-              {day.label}
-            </em>
+            {named.has(day.position) && (
+              <em className="font-display text-ink-soft absolute top-[calc(100%+0.35rem)] left-1 text-xs font-semibold tracking-widest whitespace-nowrap uppercase not-italic">
+                {day.label}
+              </em>
+            )}
           </i>
         ))}
 

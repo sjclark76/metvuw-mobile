@@ -216,3 +216,23 @@ test.describe('the handle and its label @mobile', () => {
     expect(gap).toBeGreaterThanOrEqual(3)
   })
 })
+
+// A long forecast puts many days across a phone; their names must not run into
+// each other. Days that do not fit keep their line but lose their name.
+test.describe('day names on the axis @mobile', () => {
+  test('never overlap', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 800 })
+    await openList(page)
+
+    const boxes = await page.evaluate(() =>
+      [...document.querySelectorAll('[data-axis-drawing] em')]
+        .map((el) => el.getBoundingClientRect())
+        .map((box) => ({ left: box.left, right: box.right }))
+        .sort((a, b) => a.left - b.left),
+    )
+
+    for (let i = 1; i < boxes.length; i++) {
+      expect(boxes[i].left).toBeGreaterThanOrEqual(boxes[i - 1].right + 2)
+    }
+  })
+})
