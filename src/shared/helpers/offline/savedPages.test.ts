@@ -3,6 +3,7 @@ import {
   downloadPage,
   expiredPages,
   refreshPage,
+  sanitizeSavedPages,
   SAVED_CHARTS_CACHE,
   SAVED_LIFETIME_MS,
   SAVED_PAGES_CACHE,
@@ -351,5 +352,48 @@ describe('expiredPages', () => {
 
   test('is seven days exactly', () => {
     expect(SAVED_LIFETIME_MS).toBe(7 * 24 * 60 * 60 * 1000)
+  })
+})
+
+describe('sanitizeSavedPages', () => {
+  test('keeps well-formed pages, in order', () => {
+    const a = page({ path: '/a' })
+    const b = page({ path: '/b', issued: undefined })
+
+    expect(sanitizeSavedPages([a, b])).toEqual([a, b])
+  })
+
+  test.each([undefined, null, 'x', 7, {}, { 0: page() }])(
+    'is empty when what was stored is %j, not a list',
+    (stored) => {
+      expect(sanitizeSavedPages(stored)).toEqual([])
+    },
+  )
+
+  test('drops entries that are not saved pages, and keeps the rest', () => {
+    const good = page({ path: '/good' })
+
+    expect(
+      sanitizeSavedPages([
+        null,
+        'x',
+        { ...good, path: 'no-slash' },
+        { ...good, path: '//evil.example' },
+        { ...good, title: 3 },
+        { ...good, refreshedAt: 'yesterday' },
+        { ...good, refreshedAt: Infinity },
+        { ...good, bytes: '1MB' },
+        { ...good, urls: 'x' },
+        { ...good, urls: ['https://evil.example/x.png'] },
+        good,
+      ]),
+    ).toEqual([good])
+  })
+
+  test('keeps one entry for a page saved twice', () => {
+    const first = page({ refreshedAt: 1 })
+    const second = page({ refreshedAt: 2 })
+
+    expect(sanitizeSavedPages([first, second])).toEqual([first])
   })
 })

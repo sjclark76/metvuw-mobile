@@ -8,6 +8,7 @@ import {
 } from 'serwist'
 
 import { chartImageCache } from './swChartImages'
+import { savedChart, savedPage } from './swSavedPages'
 
 // This declares the value of `self.__SW_MANIFEST`.
 // See https://serwist.pages.dev/docs/next/configuring
@@ -18,6 +19,18 @@ declare global {
 }
 
 declare const self: ServiceWorkerGlobalScope
+
+const viewedChart = new CacheFirst({
+  cacheName: chartImageCache.name,
+  plugins: [
+    new CacheableResponsePlugin({ statuses: [200] }),
+    new ExpirationPlugin({
+      maxEntries: chartImageCache.maxEntries,
+      maxAgeSeconds: chartImageCache.maxAgeSeconds,
+      maxAgeFrom: 'last-used',
+    }),
+  ],
+})
 
 const serwist = new Serwist({
   // `/offline` is added with a per-build revision in next.config.ts, so it is
@@ -31,19 +44,15 @@ const serwist = new Serwist({
   runtimeCaching: [
     // A chart's URL names the image it shows, so its bytes never change and it
     // can be served from the cache, which is also what makes it viewable offline.
+    // Charts the visitor saved come first: they are kept for a week, where the
+    // ones simply seen are kept for a day and may be evicted.
     {
       matcher: chartImageCache.matcher,
-      handler: new CacheFirst({
-        cacheName: chartImageCache.name,
-        plugins: [
-          new CacheableResponsePlugin({ statuses: [200] }),
-          new ExpirationPlugin({
-            maxEntries: chartImageCache.maxEntries,
-            maxAgeSeconds: chartImageCache.maxAgeSeconds,
-            maxAgeFrom: 'last-used',
-          }),
-        ],
-      }),
+      handler: {
+        handle: async (options) =>
+          (await savedChart(options.request, caches)) ??
+          viewedChart.handle(options),
+      },
     },
     ...defaultCache,
   ],
@@ -52,6 +61,11 @@ const serwist = new Serwist({
 serwist.setCatchHandler(async ({ request }) => {
   // Fallback for document requests to the offline page.
   if (request.destination === 'document') {
+    // A page the visitor saved for offline use opens as it was saved.
+    const saved = await savedPage(request, caches)
+    if (saved) {
+      return saved
+    }
     // Precache keys carry the revision, so a plain caches.match would miss it.
     const offlinePage = await serwist.matchPrecache('/offline')
     if (offlinePage) {
