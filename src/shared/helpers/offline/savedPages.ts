@@ -41,6 +41,9 @@ const MAX_ASSETS = 80
 
 const PROXY_PREFIX = '/api/fallback-image?'
 
+/** The list of saved pages. It has to open offline too, so it is kept with them. */
+export const SAVED_LIST_PATH = '/saved'
+
 const listUrl = (path: string) =>
   `/api/chart-list?path=${encodeURIComponent(path)}`
 
@@ -135,6 +138,8 @@ async function keepList(
   })
 
   await keepPage(list.path, deps)
+  // The way back to what was saved. Not worth failing a save over.
+  await keepPage(SAVED_LIST_PATH, deps).catch(() => {})
 
   return {
     path: list.path,
@@ -195,7 +200,10 @@ export async function collectGarbage(
   deps: Dependencies,
 ): Promise<void> {
   const wantedCharts = new Set(saved.flatMap((page) => page.urls))
-  const wantedPages = new Set(saved.map((page) => page.path))
+  const wantedPages = new Set([
+    SAVED_LIST_PATH,
+    ...saved.map((page) => page.path),
+  ])
 
   const charts = await deps.caches.open(SAVED_CHARTS_CACHE)
   for (const request of await charts.keys()) {
