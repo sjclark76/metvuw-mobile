@@ -13,7 +13,7 @@ const charts: SkinnyRainChartData[] = [0, 1, 2, 3].map((day) => ({
 }))
 
 const barWidth = (container: HTMLElement) =>
-  (container.querySelector('.bg-sky-400') as HTMLElement).style.width
+  (container.querySelector('.bg-rule > div') as HTMLElement).style.width
 
 const finishLoading = (container: HTMLElement, count: number) =>
   [...container.querySelectorAll('img')]

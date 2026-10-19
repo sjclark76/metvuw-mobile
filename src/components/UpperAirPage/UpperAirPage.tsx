@@ -27,7 +27,8 @@ export function UpperAirPage({
           {/* This div contains the main page content and grows to fill space */}
           <div className="flex-grow">
             <SubHeader
-              submenuText={`Upper Air Chart for ${balloonLocations[balloonCode]}`}
+              eyebrow="Upper air"
+              title={balloonLocations[balloonCode]}
             />
             <RadarAndSatelliteImages images={chartData} chartType="Upper Air" />
           </div>

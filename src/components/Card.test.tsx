@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 
 import Card from './Card'
 
@@ -7,19 +7,25 @@ describe('<Card />', () => {
     render(
       <Card
         weatherImage={<img alt="chart" />}
-        date={<span>Mon</span>}
-        time={<span>6pm</span>}
+        caption={<p>Mon 13:00</p>}
         isLoading={isLoading}
       />,
     ).container.firstElementChild as HTMLElement
 
-  // drop-shadow is a CSS filter that is re-rasterised for each of the ~40
-  // image cards; box-shadow is far cheaper and looks the same on a card.
-  test('uses a box shadow, not the drop-shadow filter', () => {
-    const card = renderCard()
+  test('shows the chart with its caption underneath', () => {
+    renderCard()
 
-    expect(card.className).toContain('shadow-lg')
-    expect(card.className).not.toContain('drop-shadow')
+    expect(screen.getByRole('img', { name: 'chart' })).toBeInTheDocument()
+    expect(screen.getByText('Mon 13:00')).toBeInTheDocument()
+  })
+
+  // The page is the chart's own paper colour, so a chart needs no card around
+  // it. A white card with a shadow would put the frame back.
+  test('has no card background or shadow around the chart', () => {
+    const classes = renderCard().className
+
+    expect(classes).not.toMatch(/\bbg-/)
+    expect(classes).not.toMatch(/shadow/)
   })
 
   test('pulses while loading', () => {

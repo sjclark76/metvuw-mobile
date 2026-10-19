@@ -7,9 +7,7 @@ test.describe('upper air page', () => {
     await expect(page).toHaveTitle('metvuw mobile | Upper Air Data')
 
     await expect(
-      page.getByRole('heading', {
-        name: /upper air chart for whenuapai/i,
-      }),
+      page.getByRole('heading', { name: 'Whenuapai', level: 1 }),
     ).toBeVisible()
 
     const charts = page.getByRole('img', { name: /upper air chart for/i })
@@ -27,7 +25,7 @@ test.describe('upper air page', () => {
     await page.goto('/upperair')
 
     await expect(
-      page.getByRole('heading', { name: /upper air chart for whenuapai/i }),
+      page.getByRole('heading', { name: 'Whenuapai', level: 1 }),
     ).toBeVisible()
   })
 
@@ -35,7 +33,7 @@ test.describe('upper air page', () => {
     await page.goto('/upperair/93844')
 
     await expect(
-      page.getByRole('heading', { name: /upper air chart for invercargill/i }),
+      page.getByRole('heading', { name: 'Invercargill', level: 1 }),
     ).toBeVisible()
   })
 })

@@ -1,29 +1,28 @@
 import clsx from 'clsx'
 import { ReactNode } from 'react'
 
+/**
+ * A chart on the page. There is no card: the page is the chart's own paper
+ * colour, so the chart sits straight on it with a faint outline, and its
+ * caption underneath. In dark mode charts cannot be recoloured, so they sit on
+ * a framed plate instead.
+ */
 export default function Card({
   weatherImage,
-  date,
-  time,
+  caption,
   isLoading = false,
 }: {
   weatherImage: ReactNode
-  date: ReactNode
-  time: ReactNode
+  caption: ReactNode
   isLoading?: boolean
 }) {
-  const styling = clsx(
-    'mb-5 rounded-xl bg-white pb-3 dark:bg-stone-700 shadow-lg w-full ',
-    // 'sm:w-4/5 xl:w-5/12 2xl:w-1/2 ',
-    isLoading && 'animate-pulse',
-  )
+  const styling = clsx('mb-7 w-full', isLoading && 'animate-pulse')
   return (
-    <div className={styling}>
-      {weatherImage}
-      <div className="flex items-center justify-around rounded-lg pt-3">
-        {date}
-        {time}
+    <article className={styling}>
+      <div className="dark:bg-plate [&_img]:outline-rule dark:mx-3 dark:rounded-lg dark:p-1.5 md:dark:mx-0 [&_img]:outline-1 [&_img]:-outline-offset-1 dark:[&_img]:rounded-sm dark:[&_img]:brightness-90">
+        {weatherImage}
       </div>
-    </div>
+      {caption}
+    </article>
   )
 }

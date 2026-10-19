@@ -24,5 +24,24 @@ export function formatInTimeZone(
   formatString: string,
   timeZone: string,
 ): string {
-  return format(date, formatString, { in: tz(timeZone) })
+  // date-fns names New Zealand time "GMT+13"; use the abbreviation people know
+  // (NZDT) for the `zzz` token, passed to date-fns as a quoted literal.
+  const withZoneName = formatString.includes('zzz')
+    ? formatString.replace('zzz', `'${zoneAbbreviation(date, timeZone)}'`)
+    : formatString
+  return format(date, withZoneName, { in: tz(timeZone) })
+}
+
+/** A short name for the zone at that instant, e.g. NZDT or UTC. */
+function zoneAbbreviation(
+  date: Date | number | string,
+  timeZone: string,
+): string {
+  const part = new Intl.DateTimeFormat('en-NZ', {
+    timeZone,
+    timeZoneName: 'short',
+  })
+    .formatToParts(new Date(date))
+    .find((p) => p.type === 'timeZoneName')
+  return part?.value ?? timeZone
 }

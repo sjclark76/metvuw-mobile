@@ -5,7 +5,50 @@
 /* The installed app (PWA), as opposed to a browser tab. */
 @custom-variant standalone (@media (display-mode: standalone));
 
+/* Chart paper: the page is the colour of the charts themselves, so they read as
+   one plotted sheet. See the visual identity notes in the PR. */
+:root {
+  --paper: #e6e6fa;
+  --plate: #f7f7fd;
+  --ink: #1b1740;
+  --ink-soft: #4a4670;
+  --rule: rgb(27 23 64 / 0.14);
+  --warm: #c4361f;
+  --cold: #2457a6;
+  --bar: #1b1740;
+  --bar-ink: #e6e6fa;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0e1226;
+    --plate: #171c38;
+    --ink: #e8eaf7;
+    --ink-soft: #a9aed0;
+    --rule: rgb(232 234 247 / 0.16);
+    --warm: #ff7a5c;
+    --cold: #8db4ff;
+    --bar: #0a0d1d;
+    --bar-ink: #e8eaf7;
+  }
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-plate: var(--plate);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-rule: var(--rule);
+  --color-warm: var(--warm);
+  --color-cold: var(--cold);
+  --color-bar: var(--bar);
+  --color-bar-ink: var(--bar-ink);
+}
+
 @theme {
+  --font-sans:
+    'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Barlow Condensed', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
   --animate-fade-in-up: fade-in-up 0.4s ease-out backwards;
 
   @keyframes fade-in-up {

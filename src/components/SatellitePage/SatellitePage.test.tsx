@@ -15,8 +15,9 @@ describe('<SatellitePage />', () => {
     render(<SatellitePage satelliteData={charts(4)} />)
 
     expect(
-      screen.getByText('Satellite Imagery for New Zealand'),
+      screen.getByRole('heading', { name: 'New Zealand' }),
     ).toBeInTheDocument()
+    expect(screen.getByText('Satellite imagery')).toBeInTheDocument()
     expect(screen.getAllByRole('img')).toHaveLength(4)
   })
 

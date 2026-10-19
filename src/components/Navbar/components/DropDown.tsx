@@ -117,7 +117,7 @@ const DropDown = (props: DropDownProps) => {
   }
 
   const headerText =
-    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-slate-700 focus:bg-slate-800'
+    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-bar-ink transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-white/10 focus:bg-white/15'
 
   return (
     <div
@@ -159,7 +159,7 @@ const DropDown = (props: DropDownProps) => {
         // The attribute (not just a class) hides it from the tab order and from
         // assistive technology while closed.
         hidden={!isOpen}
-        className="absolute top-full z-30 mt-3 flex w-72 list-none flex-col rounded bg-white py-2 shadow-md shadow-slate-500/10"
+        className="bg-plate ring-ink/10 absolute top-full z-30 mt-3 flex w-72 list-none flex-col rounded py-2 shadow-lg ring-1"
       >
         {props.links.map((item) => (
           <li key={item.key}>
@@ -167,7 +167,7 @@ const DropDown = (props: DropDownProps) => {
               href={item.href}
               onClick={closeAll}
               aria-current={pathname === item.href ? 'page' : undefined}
-              className="block truncate p-2 px-5 leading-5 text-slate-500 transition-colors duration-300 hover:bg-blue-50 hover:text-blue-700 focus-visible:bg-blue-50 focus-visible:text-blue-800 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sky-600 aria-[current=page]:bg-emerald-50 aria-[current=page]:text-blue-700"
+              className="text-ink-soft hover:bg-paper hover:text-ink focus-visible:bg-paper focus-visible:text-ink focus-visible:outline-cold aria-[current=page]:bg-paper aria-[current=page]:text-ink block truncate p-2 px-5 leading-5 transition-colors duration-300 focus-visible:outline-2 focus-visible:-outline-offset-2 aria-[current=page]:font-bold"
             >
               {item.value}
             </Link>

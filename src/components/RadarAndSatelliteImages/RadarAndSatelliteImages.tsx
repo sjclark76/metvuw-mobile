@@ -55,7 +55,7 @@ export default function Foo({ images, chartType }: Props) {
           ) : (
             <ul
               key="static-list"
-              className="mx-auto flex w-full max-w-2xl flex-col items-center px-2"
+              className="mx-auto flex w-full max-w-176 flex-col items-center"
             >
               {images.map((image, index) => (
                 <React.Fragment key={image.url}>

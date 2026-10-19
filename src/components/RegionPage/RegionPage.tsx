@@ -22,13 +22,10 @@ interface RegionPageProps {
 export default function RegionPage({ region, rainChartData }: RegionPageProps) {
   const formatDate = useFormatDate()
 
-  const submenuText =
+  const issued =
     rainChartData.length > 0
-      ? `Forecast issued at ${formatDate(
-          rainChartData[0].imageDateUTC,
-          'PPPPp',
-        )} for ${region.name}`
-      : ''
+      ? `Issued ${formatDate(rainChartData[0].imageDateUTC, 'EEEE d MMMM, h:mmaaa')}`
+      : undefined
 
   useInitShowAds()
 
@@ -43,7 +40,11 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
         <div className="flex min-h-[calc(100vh-4rem)] flex-col">
           {/* This div contains the main page content and grows to fill space */}
           <div className="flex flex-grow flex-col">
-            <SubHeader submenuText={submenuText} />
+            <SubHeader
+              eyebrow="Rain and wind forecast"
+              title={region.name}
+              detail={issued}
+            />
             <WeatherChartsWithAnimation
               region={region}
               charts={rainChartData}

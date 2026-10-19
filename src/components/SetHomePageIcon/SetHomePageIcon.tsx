@@ -33,9 +33,9 @@ const SetHomePageIcon = () => {
       aria-pressed={isFavorite}
     >
       {isFavorite ? (
-        <HomeIcon className="h-6 w-6 text-sky-400" />
+        <HomeIcon className="text-bar-ink h-6 w-6" />
       ) : (
-        <HomeIconOutlined className="h-6 w-6 text-white" />
+        <HomeIconOutlined className="text-bar-ink h-6 w-6" />
       )}
     </button>
   )

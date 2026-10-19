@@ -23,9 +23,7 @@ export function RadarPage({
         <div className="flex min-h-[calc(100vh-4rem)] flex-col">
           {/* This div contains the main page content and grows to fill space */}
           <div className="flex-grow">
-            <SubHeader
-              submenuText={`Radar Chart for ${radarRegions[radarCode]}`}
-            />
+            <SubHeader eyebrow="Radar" title={radarRegions[radarCode]} />
             <RadarAndSatelliteImages images={radarData} chartType="Radar" />
           </div>
           <FooterControl />
