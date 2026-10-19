@@ -22,8 +22,17 @@ describe('<ChartCaption />', () => {
     expect(container.querySelectorAll('span')).toHaveLength(2)
   })
 
-  // The time block is two lines tall; aligning on the first baseline made the
-  // big day name look low, so the columns are centred on one line.
+  // The time is the big one, with the day above the date beside it.
+  test('sets the time in display type and the day over the date', () => {
+    render(<ChartCaption day="Mon" time="13:00" date="19 OCT NZDT" />)
+
+    expect(screen.getByText('13:00')).toHaveClass('font-display')
+    expect(screen.getByText('Mon')).not.toHaveClass('font-display')
+    expect(screen.getByText('Mon').textContent).toContain('19 OCT NZDT')
+  })
+
+  // The day block is two lines tall; aligning on the first baseline made the
+  // big time look low, so the columns are centred on one line.
   test('centres its columns on one line', () => {
     const { container } = render(
       <ChartCaption day="Mon" time="13:00" date="19 OCT NZDT" />,
