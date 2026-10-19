@@ -1,0 +1,153 @@
+import { fireEvent, render, screen } from '@testing-library/react'
+
+import { SavedPage } from '@/shared/helpers/offline/savedPages'
+
+import { SaveForOfflineButton } from './SaveForOfflineButton'
+import { SaveStatus } from './useSavedPages'
+
+const state = vi.hoisted(() => ({
+  path: '/regions/nz' as string | null,
+  online: true,
+  supported: true,
+  saved: undefined as SavedPage | undefined,
+  status: 'idle' as SaveStatus,
+  save: vi.fn(),
+  remove: vi.fn(),
+}))
+
+vi.mock('next/navigation', () => ({ usePathname: () => state.path }))
+vi.mock('@/components/Hooks/useOnline', () => ({
+  useOnline: () => state.online,
+}))
+vi.mock('./browserDependencies', () => ({
+  supportsSavingPages: () => state.supported,
+}))
+vi.mock('./useSavedPages', () => ({
+  useSavedPage: () => ({
+    saved: state.saved,
+    status: state.status,
+    save: state.save,
+    remove: state.remove,
+  }),
+}))
+
+const saved: SavedPage = {
+  path: '/regions/nz',
+  title: 'New Zealand',
+  issued: Date.UTC(2026, 9, 16, 18),
+  refreshedAt: 1,
+  urls: [],
+  bytes: 2.1 * 1024 * 1024,
+}
+
+const button = () => screen.getByRole('button', { name: 'Save for offline' })
+
+describe('<SaveForOfflineButton />', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    Object.assign(state, {
+      path: '/regions/nz',
+      online: true,
+      supported: true,
+      saved: undefined,
+      status: 'idle',
+    })
+  })
+
+  test('offers to save a page that is not saved', () => {
+    render(<SaveForOfflineButton />)
+
+    expect(button()).toHaveAttribute('aria-pressed', 'false')
+    expect(button()).toBeEnabled()
+  })
+
+  test('saves it when pressed', () => {
+    render(<SaveForOfflineButton />)
+
+    fireEvent.click(button())
+
+    expect(state.save).toHaveBeenCalledTimes(1)
+    expect(state.remove).not.toHaveBeenCalled()
+  })
+
+  test('shows a saved page as pressed, with its size', () => {
+    state.saved = saved
+
+    render(<SaveForOfflineButton />)
+
+    expect(button()).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Saved for offline, 2.1 MB',
+    )
+  })
+
+  test('forgets a saved page when pressed again', () => {
+    state.saved = saved
+
+    render(<SaveForOfflineButton />)
+    fireEvent.click(button())
+
+    expect(state.remove).toHaveBeenCalledTimes(1)
+    expect(state.save).not.toHaveBeenCalled()
+  })
+
+  test('says it is saving, and cannot be pressed meanwhile', () => {
+    state.status = 'saving'
+
+    render(<SaveForOfflineButton />)
+
+    expect(screen.getByRole('status')).toHaveTextContent('Saving')
+    expect(button()).toBeDisabled()
+  })
+
+  test('says what went wrong, and offers another try', () => {
+    state.status = 'failed'
+
+    render(<SaveForOfflineButton />)
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Could not save. Check your connection and try again.',
+    )
+    expect(button()).toBeEnabled()
+    fireEvent.click(button())
+    expect(state.save).toHaveBeenCalledTimes(1)
+  })
+
+  test('cannot save while offline, and says why', () => {
+    state.online = false
+
+    render(<SaveForOfflineButton />)
+
+    expect(button()).toBeDisabled()
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Connect to save this page',
+    )
+  })
+
+  test('a page that is saved can still be forgotten while offline', () => {
+    state.online = false
+    state.saved = saved
+
+    render(<SaveForOfflineButton />)
+
+    expect(button()).toBeEnabled()
+    fireEvent.click(button())
+    expect(state.remove).toHaveBeenCalledTimes(1)
+  })
+
+  test('is not offered where pages cannot be saved', () => {
+    state.supported = false
+
+    const { container } = render(<SaveForOfflineButton />)
+
+    expect(container).toBeEmptyDOMElement()
+  })
+
+  test('is not offered when the page is not known', () => {
+    state.path = null
+
+    const { container } = render(<SaveForOfflineButton />)
+
+    expect(container).toBeEmptyDOMElement()
+  })
+})

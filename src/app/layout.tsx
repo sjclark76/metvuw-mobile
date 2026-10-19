@@ -8,6 +8,8 @@ import { favoritePageRedirectScript } from '@/components/FavoritePageRedirect/fa
 import { GoogleAdSense } from '@/components/GoogleAdSense'
 import GoogleTag from '@/components/GoogleTag'
 import { Providers } from '@/components/Providers/Providers'
+import { OfflineNotice } from '@/components/SavedPages/OfflineNotice'
+import { SavedPagesSync } from '@/components/SavedPages/SavedPagesSync'
 import { themeScript } from '@/components/ThemeToggle/themeScript'
 import { UpdateNotification } from '@/components/UpdateNotification'
 import { config } from '@/config'
@@ -46,6 +48,8 @@ export default function RootLayout({
             </header>
             <FavoritePageRedirect />
             <UpdateNotification />
+            <SavedPagesSync />
+            <OfflineNotice />
             <main className="mx-auto">{children}</main>
           </Providers>
         </div>

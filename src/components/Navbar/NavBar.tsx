@@ -143,6 +143,16 @@ const Navbar = () => {
           <DropDown heading="Radar" links={radarLinks} />
           <DropDown heading="Upper Air" links={balloonLinks} />
           <div className={headerText}>
+            <Link
+              href="/saved"
+              className="mr-1"
+              prefetch={false}
+              onClick={() => setMenuOpen(false)}
+            >
+              Saved
+            </Link>
+          </div>
+          <div className={headerText}>
             <a className="mr-1" href="mailto:metvuwmobile@gmail.com">
               Contact
             </a>
