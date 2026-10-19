@@ -1,11 +1,10 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('satellite page', () => {
-  test('should render page correctly', async ({ page }) => {
+  test('should render page correctly @mobile', async ({ page }) => {
     await page.goto('/satellite')
 
-    // Expect a title "to contain" a substring.
-    await expect(page).toHaveTitle(/metvuw mobile | satellite/)
+    await expect(page).toHaveTitle('metvuw mobile | Satellite')
 
     await expect(
       page.getByRole('heading', {
@@ -13,12 +12,12 @@ test.describe('satellite page', () => {
       }),
     ).toBeVisible()
 
-    const firstCard = page.getByRole('listitem').first()
-
-    await expect(
-      firstCard.getByRole('img', {
-        name: /satellite chart for/i,
-      }),
-    ).toBeVisible()
+    const charts = page.getByRole('img', { name: /satellite chart for/i })
+    await expect(charts).toHaveCount(4)
+    await expect
+      .poll(() =>
+        charts.first().evaluate((img: HTMLImageElement) => img.naturalWidth),
+      )
+      .toBeGreaterThan(0)
   })
 })

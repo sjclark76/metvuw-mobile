@@ -1,0 +1,143 @@
+// A stand-in for metvuw.com for the e2e tests, so they do not depend on the live
+// site being up, or on its markup staying the same. It serves the four listing
+// pages the scrapers read, in the same shape, and the chart images they point
+// at (real, correctly sized images, because the app crops and compresses them).
+//
+// Test conventions:
+//   - region "estonia" always answers 502, to exercise the error state
+//   - every other known region lists the same ten forecast charts
+import http from 'node:http'
+
+import sharp from 'sharp'
+
+export const STUB_PORT = 4010
+
+const RUN = '2026101518'
+const FORECAST_HOURS = [
+  '006',
+  '012',
+  '018',
+  '024',
+  '030',
+  '036',
+  '042',
+  '048',
+  '054',
+  '060',
+]
+const RADAR_CODES = ['nl', 'ak', 'bp', 'mh', 'np', 'wn', 'ch', 'wl', 'nv']
+const RADAR_TIMES = ['202610131500Z', '202610131510Z', '202610131520Z']
+const SATELLITE_DATES = ['2026101512', '2026101515', '2026101518', '2026101521']
+const BALLOONS = ['93112', '93417', '93844']
+const BALLOON_TIMES = ['202610111100', '202610112300', '202610121100']
+const FAILING_REGION = 'estonia'
+
+const page = (images) =>
+  `<!doctype html><html><body>${images
+    .map((src) => `<img src="${src}">`)
+    .join('\n')}</body></html>`
+
+const pages = {
+  '/forecast/forecast.php': (query) => {
+    const region = query.get('region') ?? ''
+    if (region === FAILING_REGION) return { status: 502, body: 'Bad Gateway' }
+    return {
+      body: page(
+        FORECAST_HOURS.map(
+          (h) => `./${RUN}/rain-${region}-thumb-${RUN}-${h}.gif`,
+        ),
+      ),
+    }
+  },
+  '/radar/radar.php': () => ({
+    body: page(
+      RADAR_CODES.flatMap((code) =>
+        RADAR_TIMES.map((time) => `./images/${time}_${code}.gif`),
+      ),
+    ),
+  }),
+  '/satellite': () => ({
+    body: page(SATELLITE_DATES.map((d) => `./small/${d}.jpg`)),
+  }),
+  '/upperair': () => ({
+    body: page(
+      BALLOONS.flatMap((b) =>
+        BALLOON_TIMES.map((t) => `./${t}.${b}.thumb.png`),
+      ),
+    ),
+  }),
+}
+
+// Sized for the crops in src/shared/helpers/imageCompression: rain is cropped
+// from (73, 116) to 565 x 396, radar is scaled to 565 wide then cropped to 540
+// high, satellite is cropped to 840 x 607.
+const images = {
+  gif: (path) =>
+    path.startsWith('/radar/')
+      ? { width: 565, height: 560, format: 'gif' }
+      : { width: 700, height: 560, format: 'gif' },
+  jpg: () => ({ width: 900, height: 650, format: 'jpeg' }),
+  png: () => ({ width: 760, height: 690, format: 'png' }),
+}
+
+const imageCache = new Map()
+async function image(path) {
+  const extension = path.split('.').pop()
+  const make = images[extension]
+  if (!make) return undefined
+  const { width, height, format } = make(path)
+  const key = `${format}-${width}x${height}`
+  if (!imageCache.has(key)) {
+    const buffer = await sharp({
+      create: {
+        width,
+        height,
+        channels: 3,
+        background: { r: 70, g: 130, b: 180 },
+      },
+    })
+      [format]()
+      .toBuffer()
+    imageCache.set(key, {
+      buffer,
+      type: `image/${format === 'jpeg' ? 'jpeg' : format}`,
+    })
+  }
+  return imageCache.get(key)
+}
+
+export function createStubServer() {
+  return http.createServer(async (request, response) => {
+    const url = new URL(request.url ?? '/', 'http://stub')
+
+    if (url.pathname === '/health') {
+      response.writeHead(200).end('ok')
+      return
+    }
+
+    const handler = pages[url.pathname]
+    if (handler) {
+      const { status = 200, body } = handler(url.searchParams)
+      response
+        .writeHead(status, { 'content-type': 'text/html; charset=utf-8' })
+        .end(body)
+      return
+    }
+
+    const found = await image(url.pathname)
+    if (found) {
+      response.writeHead(200, { 'content-type': found.type }).end(found.buffer)
+      return
+    }
+
+    response.writeHead(404, { 'content-type': 'text/plain' }).end('Not found')
+  })
+}
+
+// Run directly (`node e2e/stub/metvuw-stub.mjs`) to start it.
+if (import.meta.url === `file://${process.argv[1]}`) {
+  createStubServer().listen(STUB_PORT, '127.0.0.1', () => {
+    // eslint-disable-next-line no-console
+    console.log(`metvuw stub listening on http://127.0.0.1:${STUB_PORT}`)
+  })
+}

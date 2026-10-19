@@ -1,4 +1,18 @@
+import path from 'node:path'
+
 import { defineConfig, devices } from '@playwright/test'
+
+// The app's pages scrape metvuw.com on the host, so tests run against a local
+// stand-in (e2e/stub) instead of the live site. The app reaches it through a
+// preloaded fetch shim; see e2e/stub/redirect-metvuw.mjs.
+const STUB_ORIGIN = 'http://127.0.0.1:4010'
+const stubbedEnv = {
+  METVUW_STUB_ORIGIN: STUB_ORIGIN,
+  NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --import=${path.resolve(
+    __dirname,
+    'e2e/stub/redirect-metvuw.mjs',
+  )}`.trim(),
+}
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -41,15 +55,13 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
 
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
+    /* The product is mobile-first: run the page and flow tests (tagged @mobile)
+       on a phone-sized touch viewport too. */
+    {
+      name: 'Mobile Chrome',
+      use: { ...devices['Pixel 7'] },
+      grep: /@mobile/,
+    },
 
     /* Test against branded browsers. */
     // {
@@ -62,13 +74,24 @@ export default defineConfig({
     // },
   ],
 
-  /* Serve the production build (run `npm run build` first) unless a deployed URL is supplied. */
+  /* Serve the production build (run `npm run build` first, through the stub:
+     `node e2e/stub/with-stub.mjs npm run build`) unless a deployed URL is
+     supplied. A deployed site scrapes the real metvuw.com, so no stub then. */
   webServer: process.env.PLAYWRIGHT_TEST_BASE_URL
     ? undefined
-    : {
-        command: 'npm run start',
-        url: 'http://localhost:3002',
-        reuseExistingServer: !process.env.CI,
-        timeout: 120_000,
-      },
+    : [
+        {
+          command: 'node e2e/stub/metvuw-stub.mjs',
+          url: 'http://127.0.0.1:4010/health',
+          reuseExistingServer: !process.env.CI,
+          timeout: 30_000,
+        },
+        {
+          command: 'npm run start',
+          url: 'http://localhost:3002',
+          reuseExistingServer: !process.env.CI,
+          timeout: 120_000,
+          env: stubbedEnv,
+        },
+      ],
 })

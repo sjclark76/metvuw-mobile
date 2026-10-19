@@ -18,11 +18,14 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+    # The build prerenders pages that scrape metvuw.com, so it runs against the
+    # local stand-in (e2e/stub) like the tests do: CI no longer depends on the
+    # live site being up or keeping its markup.
     - name: Build app
-      run: npm run build
-    # playwright.config.ts starts the app with `npm run start` (webServer), so the
-    # tests run against this build rather than a Vercel preview (which Attack Mode
-    # challenges, blocking the runner).
+      run: npm run e2e:build
+    # playwright.config.ts starts the stub and the app with `npm run start`
+    # (webServer), so the tests run against this build rather than a Vercel
+    # preview (which Attack Mode challenges, blocking the runner).
     - name: Run Playwright tests
       run: npx playwright test
     - uses: actions/upload-artifact@v7

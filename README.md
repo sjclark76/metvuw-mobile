@@ -4,6 +4,19 @@
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 This is a [Next.js](https://nextjs.org/) weather forecast web site. View it [here](https://www.metvuwmobile.com)
 
+## End-to-end tests
+
+The pages scrape metvuw.com on the host, so the tests run against a local
+stand-in for it (`e2e/stub`) instead of the live site: a metvuw outage or markup
+change cannot fail CI. The app reaches the stub through a preloaded fetch shim
+(`e2e/stub/redirect-metvuw.mjs`) that only exists in the test process.
+
+    npm run e2e:build   # build with the stub running (the build prerenders pages)
+    npm run e2e         # starts the stub and the app, then runs the tests
+
+The region `estonia` always answers 502 from the stub, to test the error state.
+Tests tagged `@mobile` also run on a phone-sized touch viewport.
+
 npx playwright test
 Runs the end-to-end tests.
 
