@@ -7,6 +7,7 @@ import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
 import { useImageProgress } from '@/components/ImageProgress/ImageProgress'
 
 import { RefreshButton } from '../RefreshButton/RefreshButton'
+import { SaveForOfflineButton } from '../SavedPages/SaveForOfflineButton'
 
 /**
  * The top of a chart page: what it shows (`title`, the page's one heading), a
@@ -49,6 +50,7 @@ export function SubHeader({
             {detail}
           </p>
         )}
+        <SaveForOfflineButton />
         <div className="absolute top-4 right-4 md:right-0">
           <RefreshButton />
         </div>
