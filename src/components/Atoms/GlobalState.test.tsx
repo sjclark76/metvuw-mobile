@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import { createStore, Provider, useAtom } from 'jotai'
 import { ReactNode } from 'react'
 
-import { favoritePageAtom, isMenuOpenAtom } from './GlobalState'
+import { favoritePageAtom, isMenuOpenAtom, themeAtom } from './GlobalState'
 
 const wrapperFor = (store = createStore()) =>
   function Wrapper({ children }: { children: ReactNode }) {
@@ -66,5 +66,62 @@ describe('isMenuOpenAtom', () => {
     expect(result.current[0]).toBe(false)
     act(() => result.current[1](true))
     expect(localStorage.length).toBe(0)
+  })
+})
+
+// The theme is saved the same way as the favourite page: jotai's storage atom,
+// as JSON, under its own key.
+describe('themeAtom', () => {
+  beforeEach(() => localStorage.clear())
+
+  test('follows the system until a choice is made', () => {
+    const { result } = renderHook(() => useAtom(themeAtom), {
+      wrapper: wrapperFor(),
+    })
+
+    expect(result.current[0]).toBe('system')
+  })
+
+  test.each(['light', 'dark', 'system'] as const)(
+    'saves a %s choice as JSON, so it survives a reload',
+    (choice) => {
+      const { result } = renderHook(() => useAtom(themeAtom), {
+        wrapper: wrapperFor(),
+      })
+
+      act(() => result.current[1](choice))
+
+      expect(JSON.parse(localStorage.getItem('theme')!)).toBe(choice)
+    },
+  )
+
+  // Read when the atom is created, which in the browser is before the first
+  // render, not after mount: the page applies the theme from this value, and
+  // starting from "system" would flash the wrong theme.
+  test('is read back from storage on the very first render', async () => {
+    localStorage.setItem('theme', JSON.stringify('dark'))
+    vi.resetModules()
+    const { themeAtom: freshAtom } = await import('./GlobalState')
+    const firstRender: string[] = []
+
+    renderHook(
+      () => {
+        const [theme] = useAtom(freshAtom)
+        if (firstRender.length === 0) firstRender.push(theme)
+      },
+      { wrapper: wrapperFor() },
+    )
+
+    expect(firstRender).toEqual(['dark'])
+  })
+
+  test('is kept apart from the favourite page', () => {
+    const { result } = renderHook(() => useAtom(themeAtom), {
+      wrapper: wrapperFor(),
+    })
+
+    act(() => result.current[1]('dark'))
+
+    expect(localStorage.getItem('favoritePage')).toBeNull()
   })
 })

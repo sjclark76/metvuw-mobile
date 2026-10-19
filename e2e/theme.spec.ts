@@ -2,7 +2,12 @@ import { expect, Page, test } from '@playwright/test'
 
 // Light and dark follow the system until the visitor chooses; a choice is
 // remembered and applied before the page first paints.
-const toggle = (page: Page) => page.getByRole('button', { name: 'Dark mode' })
+const menu = (page: Page) => page.getByRole('button', { name: /^Theme:/ })
+type Choice = 'System' | 'Light' | 'Dark'
+const choose = async (page: Page, choice: Choice) => {
+  await menu(page).click()
+  await page.getByRole('button', { name: choice, exact: true }).click()
+}
 const pageColour = (page: Page) =>
   page.evaluate(() => getComputedStyle(document.body).backgroundColor)
 
@@ -13,22 +18,22 @@ test.describe('following the system', () => {
   test.describe('a light system', () => {
     test.use({ colorScheme: 'light' })
 
-    test('shows the light page, with the switch off', async ({ page }) => {
+    test('shows the light page, on the system choice', async ({ page }) => {
       await page.goto('/offline')
 
       expect(await pageColour(page)).toBe(LIGHT)
-      await expect(toggle(page)).toHaveAttribute('aria-pressed', 'false')
+      await expect(menu(page)).toHaveAccessibleName('Theme: System')
     })
   })
 
   test.describe('a dark system', () => {
     test.use({ colorScheme: 'dark' })
 
-    test('shows the dark page, with the switch on', async ({ page }) => {
+    test('shows the dark page, on the system choice', async ({ page }) => {
       await page.goto('/offline')
 
       expect(await pageColour(page)).toBe(DARK)
-      await expect(toggle(page)).toHaveAttribute('aria-pressed', 'true')
+      await expect(menu(page)).toHaveAccessibleName('Theme: System')
     })
   })
 })
@@ -36,16 +41,34 @@ test.describe('following the system', () => {
 test.describe('choosing', () => {
   test.use({ colorScheme: 'light' })
 
-  test('the switch turns a light page dark, and back', async ({ page }) => {
+  test('dark and light override a light system, and system hands it back', async ({
+    page,
+  }) => {
     await page.goto('/offline')
 
-    await toggle(page).click()
+    await choose(page, 'Dark')
     expect(await pageColour(page)).toBe(DARK)
-    await expect(toggle(page)).toHaveAttribute('aria-pressed', 'true')
+    await expect(menu(page)).toHaveAccessibleName('Theme: Dark')
 
-    await toggle(page).click()
+    await choose(page, 'Light')
     expect(await pageColour(page)).toBe(LIGHT)
-    await expect(toggle(page)).toHaveAttribute('aria-pressed', 'false')
+
+    await choose(page, 'System')
+    expect(await pageColour(page)).toBe(LIGHT)
+    await expect(menu(page)).toHaveAccessibleName('Theme: System')
+  })
+
+  test('system follows the device again after a forced choice', async ({
+    page,
+  }) => {
+    await page.goto('/offline')
+    await choose(page, 'Light')
+
+    await page.emulateMedia({ colorScheme: 'dark' })
+    expect(await pageColour(page)).toBe(LIGHT)
+
+    await choose(page, 'System')
+    expect(await pageColour(page)).toBe(DARK)
   })
 
   test('overrides the system: a dark system can be switched to light', async ({
@@ -55,26 +78,32 @@ test.describe('choosing', () => {
     await page.goto('/offline')
     expect(await pageColour(page)).toBe(DARK)
 
-    await toggle(page).click()
+    await choose(page, 'Light')
 
     expect(await pageColour(page)).toBe(LIGHT)
   })
 
+  // Saved as JSON in localStorage, the way the favourite page is.
   test('is remembered on the next visit', async ({ page }) => {
     await page.goto('/offline')
-    await toggle(page).click()
+    await choose(page, 'Dark')
+    expect(await page.evaluate(() => localStorage.getItem('theme'))).toBe(
+      '"dark"',
+    )
 
     await page.goto('/regions/nz')
 
     expect(await pageColour(page)).toBe(DARK)
-    await expect(toggle(page)).toHaveAttribute('aria-pressed', 'true')
+    await expect(menu(page)).toHaveAccessibleName('Theme: Dark')
   })
 
   // The inline script applies the choice before anything is painted. Checked
   // from the document itself, ahead of the app's scripts, so a late application
   // (a flash of the wrong theme) would fail.
   test('is applied before the page first paints', async ({ page }) => {
-    await page.addInitScript(() => localStorage.setItem('theme', 'dark'))
+    await page.addInitScript(() =>
+      localStorage.setItem('theme', JSON.stringify('dark')),
+    )
     const seenFirst: (string | null)[] = []
     await page.exposeFunction('record', (value: string | null) =>
       seenFirst.push(value),
@@ -95,7 +124,9 @@ test.describe('choosing', () => {
   test('an unknown saved value is ignored and the system decides', async ({
     page,
   }) => {
-    await page.addInitScript(() => localStorage.setItem('theme', 'purple'))
+    await page.addInitScript(() =>
+      localStorage.setItem('theme', JSON.stringify('purple')),
+    )
 
     await page.goto('/offline')
 
@@ -108,7 +139,7 @@ test.describe('choosing', () => {
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
 
-    await toggle(page).click()
+    await choose(page, 'Dark')
 
     expect(await pageColour(page)).toBe(DARK)
     // The charts cannot be recoloured, so in dark they sit on a plate.
@@ -173,7 +204,7 @@ test.describe('switching theme does not shift the layout', () => {
         const light = await layout(page)
         expect(light.length).toBeGreaterThan(4)
 
-        await toggle(page).click()
+        await choose(page, 'Dark')
         await page.waitForTimeout(400)
 
         expect(await layout(page)).toEqual(light)
