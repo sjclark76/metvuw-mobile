@@ -19,7 +19,7 @@ import {
 } from '@/shared/types/region'
 
 import SetHomePageIcon from '../SetHomePageIcon/SetHomePageIcon'
-import { ThemeToggle } from '../ThemeToggle'
+import { ThemeMenu } from '../ThemeToggle'
 import DropDown from './components/DropDown'
 import { MenuLink } from './types'
 
@@ -100,7 +100,7 @@ const Navbar = () => {
         </span>
       </Link>
       <div className="ml-auto flex items-center">
-        <ThemeToggle />
+        <ThemeMenu />
         <SetHomePageIcon />
         <button
           aria-label="Menu"
