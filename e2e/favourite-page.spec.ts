@@ -38,7 +38,7 @@ test.describe('favourite page', () => {
       page.getByLabel('Use this page as my home page'),
     ).toHaveAttribute('aria-pressed', 'true')
 
-    const redirects: number[] = []
+    const homeStatuses: number[] = []
     page.on('response', (response) => {
       // Only the page navigation: the logo links home, so the app may also
       // prefetch '/' once it has loaded.
@@ -46,13 +46,15 @@ test.describe('favourite page', () => {
         response.request().isNavigationRequest() &&
         new URL(response.url()).pathname === '/'
       ) {
-        redirects.push(response.status())
+        homeStatuses.push(response.status())
       }
     })
     await page.goto('/')
 
     await expect(page).toHaveURL(/\/regions\/nzsi$/)
-    expect(redirects).toEqual([307])
+    // The home page document was never served. (Not asserted as exactly [307]:
+    // Firefox does not report the redirect hop through the response event.)
+    expect(homeStatuses).not.toContain(200)
   })
 
   // The installed app launches at '/', through its service worker.
