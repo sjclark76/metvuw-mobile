@@ -4,6 +4,11 @@
     {
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
+    },
+    {
+      "description": "TypeScript 7 is the native rewrite and has no compiler API: typescript-eslint throws on it (peer typescript <6.1.0; tracked in typescript-eslint#10940), as do Next's type check and Serwist. Stay on 6.x until typescript-eslint supports 7.",
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<7"
     }
   ]
 }
