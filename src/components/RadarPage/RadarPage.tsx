@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { AnimationProvider } from '@/components/Animation/Animation'
 import { FooterControl } from '@/components/FooterControl'
 import { ImageProgressProvider } from '@/components/ImageProgress/ImageProgress'
@@ -15,9 +17,19 @@ export function RadarPage({
   radarData: SkinnyChartData[]
   radarCode: RadarCode
 }) {
+  // When each chart is for, so the footer can draw a time axis.
+  const times = useMemo(
+    () => radarData.map((chart) => chart.imageDateUTC),
+    [radarData],
+  )
+
   return (
     <ImageProgressProvider expected={expectedLoadedImages(radarData.length)}>
-      <AnimationProvider count={radarData.length} intervalMs={1000}>
+      <AnimationProvider
+        count={radarData.length}
+        times={times}
+        intervalMs={1000}
+      >
         {/* This outer div manages the layout for content and the sticky footer.
             It takes at least the height of the viewport minus the navbar (h-16). */}
         <div className="flex min-h-[calc(100vh-4rem)] flex-col">

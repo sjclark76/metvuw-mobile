@@ -65,9 +65,11 @@
 
 /* List items below the first screen skip layout and paint until they near the
    viewport. The height is only a placeholder until the item has been seen (`auto`
-   then remembers the real one): a card is as wide as the screen up to 42rem, and
-   its height follows its width, so the page's scroll height barely drifts. */
+   then remembers the real one). A chart is as wide as the screen up to 44rem, and
+   its height is that width times the chart's 0.701 aspect ratio plus its caption
+   (measured, 4.55rem), so the page's scroll height does not drift, and scrolling
+   to a chart further down lands where it should. */
 @utility defer-offscreen {
   content-visibility: auto;
-  contain-intrinsic-size: auto calc(min(100vw, 42rem) * 0.65 + 5.5rem);
+  contain-intrinsic-size: auto calc(min(100vw, 44rem) * 0.701 + 4.55rem);
 }

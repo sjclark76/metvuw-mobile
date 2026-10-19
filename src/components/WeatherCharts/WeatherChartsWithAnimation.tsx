@@ -63,7 +63,10 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
                       <AdCard />
                     </li>
                   )}
-                  <li {...fadeInProps(index, 'w-full')}>
+                  <li
+                    {...fadeInProps(index, 'w-full scroll-mt-20')}
+                    data-chart-index={index}
+                  >
                     <WeatherChart
                       chart={chart}
                       region={props.region}

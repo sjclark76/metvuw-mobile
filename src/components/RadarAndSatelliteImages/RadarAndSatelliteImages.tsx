@@ -64,7 +64,10 @@ export default function Foo({ images, chartType }: Props) {
                       <AdCard />
                     </li>
                   )}
-                  <li {...fadeInProps(index, 'w-full')}>
+                  <li
+                    {...fadeInProps(index, 'w-full scroll-mt-20')}
+                    data-chart-index={index}
+                  >
                     <RadarAndSatelliteImageCard
                       image={image}
                       chartType={chartType}

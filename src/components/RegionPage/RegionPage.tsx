@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { AnimationProvider } from '@/components/Animation/Animation'
 import { useInitShowAds } from '@/components/Atoms/AdState'
@@ -29,12 +29,22 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
 
   useInitShowAds()
 
+  // When each chart is for, so the footer can draw a time axis.
+  const times = useMemo(
+    () => rainChartData.map((chart) => new Date(chart.forecastDate).getTime()),
+    [rainChartData],
+  )
+
   return (
     // Only the eagerly loaded charts count towards the progress bar.
     <ImageProgressProvider
       expected={expectedLoadedImages(rainChartData.length)}
     >
-      <AnimationProvider count={rainChartData.length} intervalMs={500}>
+      <AnimationProvider
+        count={rainChartData.length}
+        times={times}
+        intervalMs={500}
+      >
         {/* This outer div manages the layout for content and the sticky footer.
           It takes at least the height of the viewport minus the navbar (h-16). */}
         <div className="flex min-h-[calc(100vh-4rem)] flex-col">

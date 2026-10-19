@@ -19,6 +19,7 @@ function Probe() {
         playing: current.playing,
         index: current.index,
         max: current.max,
+        times: current.times,
       })}
     </output>
   )
@@ -26,8 +27,18 @@ function Probe() {
 
 const state = () => JSON.parse(screen.getByTestId('state').textContent!)
 
-const page = (count: number, key = 'page', intervalMs?: number) => (
-  <AnimationProvider key={key} count={count} intervalMs={intervalMs}>
+const page = (
+  count: number,
+  key = 'page',
+  intervalMs?: number,
+  times?: number[],
+) => (
+  <AnimationProvider
+    key={key}
+    count={count}
+    intervalMs={intervalMs}
+    times={times}
+  >
     <Probe />
   </AnimationProvider>
 )
@@ -49,20 +60,37 @@ describe('Animation', () => {
       playing: false,
       index: 0,
       max: 4,
+      times: [],
     })
   })
 
-  test('opening the viewer shows it paused; closing it resets the position', () => {
+  // The time axis is on the page in both views, so the chart you were looking at
+  // is where you stay when you switch between the list and the viewer.
+  test('opening the viewer shows it paused; closing it keeps your place', () => {
     render(page(5))
 
-    act(() => controls.toggleDisplay())
-    expect(state()).toMatchObject({ display: true, playing: false, index: 0 })
-
     act(() => controls.seek(3))
+    act(() => controls.toggleDisplay())
+    expect(state()).toMatchObject({ display: true, playing: false, index: 3 })
+
+    act(() => controls.seek(2))
     act(() => controls.togglePlaying())
     act(() => controls.toggleDisplay())
 
-    expect(state()).toMatchObject({ display: false, playing: false, index: 0 })
+    expect(state()).toMatchObject({ display: false, playing: false, index: 2 })
+  })
+
+  test('knows when each chart is for, so the footer can draw a time axis', () => {
+    const times = [1000, 2000, 3000]
+    render(page(3, 'page', undefined, times))
+
+    expect(state().times).toEqual(times)
+  })
+
+  test('has no times for a page that does not give any', () => {
+    render(page(3))
+
+    expect(state().times).toEqual([])
   })
 
   test('playing advances at the interval and loops back to the start', () => {
@@ -164,6 +192,7 @@ describe('Animation', () => {
       playing: false,
       index: 0,
       max: 8,
+      times: [],
     })
   })
 
@@ -206,6 +235,7 @@ describe('Animation', () => {
       playing: false,
       index: 0,
       max: 0,
+      times: [],
     })
     expect(() => {
       act(() => {
