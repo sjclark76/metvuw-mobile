@@ -7,9 +7,7 @@ test.describe('satellite page', () => {
     await expect(page).toHaveTitle('metvuw mobile | Satellite')
 
     await expect(
-      page.getByRole('heading', {
-        name: /satellite imagery for new zealand/i,
-      }),
+      page.getByRole('heading', { name: 'New Zealand', level: 1 }),
     ).toBeVisible()
 
     const charts = page.getByRole('img', { name: /satellite chart for/i })

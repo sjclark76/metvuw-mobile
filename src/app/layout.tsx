@@ -1,3 +1,9 @@
+import '@fontsource/atkinson-hyperlegible-next/400.css'
+import '@fontsource/atkinson-hyperlegible-next/700.css'
+import '@fontsource/barlow-condensed/600.css'
+import '@fontsource/barlow-condensed/700.css'
+import '@fontsource/ibm-plex-mono/400.css'
+import '@fontsource/ibm-plex-mono/500.css'
 import './globals.css'
 
 import React from 'react'
@@ -18,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="bg-gray-100">
+    <html lang="en" className="bg-paper">
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="google-adsense-account" content={config.adsenseClientId} />
@@ -30,19 +36,17 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: favoritePageRedirectScript }}
         />
       </head>
-      <body className="font-sans text-gray-800">
+      <body className="bg-paper text-ink font-sans">
         <GoogleTag />
         <GoogleAdSense />
-        <div className="font-sans text-gray-800">
+        <div className="text-ink font-sans">
           <Providers>
-            <header className="sticky top-0 z-30 bg-white shadow-md print:hidden">
+            <header className="bg-bar sticky top-0 z-30 print:hidden">
               <Navbar />
             </header>
             <FavoritePageRedirect />
             <UpdateNotification />
-            <main className="mx-auto dark:bg-stone-600 dark:text-stone-100">
-              {children}
-            </main>
+            <main className="mx-auto">{children}</main>
           </Providers>
         </div>
       </body>

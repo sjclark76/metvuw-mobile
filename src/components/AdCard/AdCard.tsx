@@ -54,7 +54,7 @@ export function AdCard() {
 
   return (
     <div
-      className="mb-5 w-full rounded-xl bg-white pb-3 shadow-lg dark:bg-stone-700"
+      className="bg-plate ring-ink/10 mb-5 w-full rounded-xl pb-3 shadow-lg ring-1"
       style={{ display: adFilled === null ? 'none' : undefined }}
     >
       <div className="flex min-h-50 items-center justify-center rounded-t-xl p-4">
@@ -69,9 +69,7 @@ export function AdCard() {
         />
       </div>
       <div className="flex items-center justify-around rounded-lg pt-3">
-        <span className="text-xs text-gray-500 dark:text-stone-300">
-          Sponsored
-        </span>
+        <span className="text-ink-soft text-xs">Sponsored</span>
       </div>
     </div>
   )

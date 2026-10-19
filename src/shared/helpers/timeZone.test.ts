@@ -68,3 +68,43 @@ describe('formatInTimeZone', () => {
     expect(DEFAULT_TIME_ZONE).toBe('Pacific/Auckland')
   })
 })
+
+describe('formatInTimeZone zone abbreviation (zzz)', () => {
+  // date-fns' own `zzz` gives "GMT+13"; people in New Zealand expect NZDT.
+  test('names New Zealand time as NZDT in summer and NZST in winter', () => {
+    expect(
+      formatInTimeZone(
+        Date.UTC(2026, 9, 15, 0),
+        'HH:mm zzz',
+        'Pacific/Auckland',
+      ),
+    ).toBe('13:00 NZDT')
+    expect(
+      formatInTimeZone(
+        Date.UTC(2026, 5, 15, 0),
+        'HH:mm zzz',
+        'Pacific/Auckland',
+      ),
+    ).toBe('12:00 NZST')
+  })
+
+  test('names UTC as UTC', () => {
+    expect(formatInTimeZone(instant, 'HH:mm zzz', 'UTC')).toBe('07:00 UTC')
+  })
+
+  test('gives other zones some readable name rather than failing', () => {
+    expect(formatInTimeZone(instant, 'zzz', 'America/New_York')).toMatch(
+      /^[A-Za-z0-9+:-]+$/,
+    )
+  })
+
+  test('does not disturb the rest of the format', () => {
+    expect(
+      formatInTimeZone(instant, "EEE d MMM 'at' HH:mm zzz", 'Pacific/Auckland'),
+    ).toBe('Thu 15 Oct at 20:00 NZDT')
+  })
+
+  test('leaves a format without it exactly as before', () => {
+    expect(formatInTimeZone(instant, 'HH:mm', 'Pacific/Auckland')).toBe('20:00')
+  })
+})

@@ -26,22 +26,20 @@ function RainfallLegend() {
   return (
     <div
       id="rainfall-legend"
-      className="max-h-[40vh] overflow-y-auto rounded-lg border border-gray-300 bg-white/90 p-2 shadow-lg backdrop-blur-[1px] dark:border-slate-600 dark:bg-stone-700/90"
+      className="border-rule bg-plate/90 max-h-[40vh] overflow-y-auto rounded-lg border p-2 shadow-lg backdrop-blur-[1px]"
     >
       <ul className="grid grid-cols-2 gap-1">
         {rainfallLegendBands.map((band) => (
           <li
             key={band.amount}
-            className="flex items-center gap-1 rounded-sm bg-gray-50/90 px-2 py-1 dark:bg-stone-600/90"
+            className="bg-paper/90 flex items-center gap-1 rounded-sm px-2 py-1"
           >
             <span
-              className="h-3 w-3 shrink-0 rounded-xs border border-gray-400"
+              className="border-ink-soft/40 h-3 w-3 shrink-0 rounded-xs border"
               style={{ backgroundColor: band.hexCode }}
               aria-hidden="true"
             />
-            <p className="text-[11px] font-semibold text-gray-700 dark:text-stone-100">
-              {band.amount}
-            </p>
+            <p className="text-ink text-[11px] font-semibold">{band.amount}</p>
           </li>
         ))}
       </ul>
@@ -75,7 +73,7 @@ export function RainfallLegendSection() {
           aria-label={isOpen ? 'Hide rainfall legend' : 'Show rainfall legend'}
           aria-expanded={isOpen}
           aria-controls="rainfall-legend"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-700 shadow dark:border-slate-600 dark:bg-stone-700 dark:text-stone-100"
+          className="border-rule bg-plate text-ink flex h-10 w-10 items-center justify-center rounded-full border shadow"
         >
           <svg
             data-testid="rainfall-legend-toggle-icon"

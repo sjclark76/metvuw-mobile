@@ -53,7 +53,7 @@ test.describe('navigation menu on a desktop', () => {
 
     await expect(page).toHaveURL(/\/regions\/swaussie$/)
     await expect(
-      page.getByRole('heading', { name: /forecast issued at .* for perth/i }),
+      page.getByRole('heading', { name: 'Perth', level: 1 }),
     ).toBeVisible()
   })
 

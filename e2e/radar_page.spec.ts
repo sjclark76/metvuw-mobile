@@ -7,9 +7,7 @@ test.describe('radar page', () => {
     await expect(page).toHaveTitle('metvuw mobile | Radar')
 
     await expect(
-      page.getByRole('heading', {
-        name: /radar chart for northland/i,
-      }),
+      page.getByRole('heading', { name: 'Northland', level: 1 }),
     ).toBeVisible()
 
     const charts = page.getByRole('img', { name: /radar chart for/i })
@@ -25,7 +23,7 @@ test.describe('radar page', () => {
     await page.goto('/radar/ak')
 
     await expect(
-      page.getByRole('heading', { name: /radar chart for auckland/i }),
+      page.getByRole('heading', { name: 'Auckland', level: 1 }),
     ).toBeVisible()
     await expect(
       page.getByRole('img', { name: /radar chart for/i }),

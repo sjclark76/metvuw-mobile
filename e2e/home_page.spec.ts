@@ -7,9 +7,7 @@ test.describe('homepage', () => {
     await expect(page).toHaveTitle('metvuw mobile | nz')
 
     await expect(
-      page.getByRole('heading', {
-        name: /forecast issued at .* for new zealand/i,
-      }),
+      page.getByRole('heading', { name: 'New Zealand', level: 1 }),
     ).toBeVisible()
 
     const firstCard = page.getByRole('listitem').first()

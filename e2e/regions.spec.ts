@@ -10,9 +10,7 @@ test.describe('region pages', () => {
 
     await expect(page).toHaveTitle('metvuw mobile | nzsi')
     await expect(
-      page.getByRole('heading', {
-        name: /forecast issued at .* for south island/i,
-      }),
+      page.getByRole('heading', { name: 'South Island', level: 1 }),
     ).toBeVisible()
     await expect(
       page.getByRole('img', { name: /south island forecast chart for .*/i }),

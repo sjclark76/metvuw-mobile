@@ -25,7 +25,7 @@ export function SatellitePage({
         <div className="flex min-h-[calc(100vh-4rem)] flex-col">
           {/* This div contains the main page content and grows to fill space */}
           <div className="flex-grow">
-            <SubHeader submenuText="Satellite Imagery for New Zealand" />
+            <SubHeader eyebrow="Satellite imagery" title="New Zealand" />
             <RadarAndSatelliteImages
               images={satelliteData}
               chartType="Satellite"

@@ -1,5 +1,6 @@
 'use client'
 import Card from '@/components/Card'
+import ChartCaption from '@/components/ChartCaption'
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
@@ -16,6 +17,12 @@ interface Props {
 export function WeatherChart(props: Props) {
   const formatDate = useFormatDate()
   const forecastDate = new Date(props.chart.forecastDate)
+  // How far ahead of the model run this chart is, as forecasters write it.
+  const hoursAhead = Math.round(
+    (forecastDate.getTime() - props.chart.imageDateUTC) / 36e5,
+  )
+  const leadTime =
+    hoursAhead >= 0 ? `T+${String(hoursAhead).padStart(2, '0')}` : undefined
   const altTag = `${props.region.name} forecast chart for ${formatDate(
     forecastDate,
     'PPPPp',
@@ -32,20 +39,13 @@ export function WeatherChart(props: Props) {
           loading={props.loading}
         />
       }
-      date={
-        <span className="text-left text-sm font-semibold text-gray-700 sm:text-base dark:text-stone-100">
-          {formatDate(forecastDate, 'dd/MM/yyyy')}
-        </span>
-      }
-      time={
-        <div className="flex items-center justify-center gap-x-1 text-center text-xs font-semibold text-white">
-          <span className="w-20 transform rounded-sm bg-sky-700 px-1 py-1">
-            {formatDate(forecastDate, 'EEEE')}
-          </span>
-          <span className="w-20 transform rounded-sm bg-gray-900 px-1 py-1 font-mono uppercase dark:bg-stone-200 dark:text-stone-700">
-            {formatDate(forecastDate, 'hh:mm a')}
-          </span>
-        </div>
+      caption={
+        <ChartCaption
+          day={formatDate(forecastDate, 'EEE')}
+          time={formatDate(forecastDate, 'HH:mm')}
+          date={`${formatDate(forecastDate, 'dd MMM zzz')}`.toUpperCase()}
+          lead={leadTime}
+        />
       }
     />
   )

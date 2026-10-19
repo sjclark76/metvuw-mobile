@@ -1,5 +1,5 @@
 import SubHeader from '@/components/SubHeader'
 
 export default function Loading() {
-  return <SubHeader submenuText="Loading forecast data" />
+  return <SubHeader title="Loading forecast data" />
 }

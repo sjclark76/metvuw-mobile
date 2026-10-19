@@ -82,17 +82,20 @@ const Navbar = () => {
   }, [menuOpen, setMenuOpen]) // Re-run effect if menuOpen or setMenuOpen changes
 
   const headerText =
-    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-white transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-slate-700 focus:bg-slate-800'
+    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-bar-ink transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-white/10 focus:bg-white/15'
 
   return (
     <nav
       ref={navRef} // Attach the ref to the nav element
-      className="flex flex-wrap items-center bg-linear-to-b from-slate-500 to-slate-600 p-2"
+      className="text-bar-ink mx-auto flex max-w-176 flex-wrap items-center p-2 pl-4 2xl:max-w-none"
     >
-      <Link href="/" className="mr-4 inline-flex items-center p-2">
+      <Link href="/" className="mr-4 inline-flex min-h-11 items-center gap-2">
         <MetvuwMobileImage />
-        <span className="pl-2 text-base font-bold tracking-wide text-white uppercase sm:text-lg md:text-xl">
-          Metvuw Mobile
+        <span className="font-display text-[1.55rem] leading-none font-bold tracking-[0.06em] uppercase">
+          metvuw{' '}
+          <span className="ml-1 text-[1.05rem] font-semibold tracking-[0.14em] opacity-70">
+            mobile
+          </span>
         </span>
       </Link>
       <div className="ml-auto flex items-center">
@@ -101,7 +104,7 @@ const Navbar = () => {
           aria-label="Menu"
           aria-expanded={menuOpen}
           aria-controls="site-menu"
-          className="inline-flex rounded-xs p-3 text-white outline-hidden hover:bg-slate-700 hover:text-white focus-visible:outline-2 focus-visible:outline-white 2xl:hidden"
+          className="text-bar-ink focus-visible:outline-bar-ink inline-flex rounded-xs p-3 outline-hidden hover:bg-white/10 focus-visible:outline-2 2xl:hidden"
           onClick={handleClick}
         >
           <HamburgerSvg />

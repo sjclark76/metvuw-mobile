@@ -48,7 +48,7 @@ function FooterControl() {
   // is a CSS media query, so it applies from the first paint; a hook that read
   // matchMedia after mount made the footer jump on every load.
   const footerClasses =
-    'sticky bottom-0 z-20 border-t border-gray-300 bg-gray-100 p-2 shadow-lg standalone:px-5 standalone:pt-3 standalone:pb-6 lg:p-3 lg:standalone:p-3 dark:border-slate-700 dark:bg-slate-800 print:hidden'
+    'sticky bottom-0 z-20 border-t border-rule bg-plate p-2 standalone:px-5 standalone:pt-3 standalone:pb-6 lg:p-3 lg:standalone:p-3 print:hidden'
 
   return (
     <footer className={footerClasses}>
@@ -64,7 +64,7 @@ function FooterControl() {
           <button
             onClick={toggleDisplay}
             className={clsx(
-              'relative rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-[left,translate] duration-500 ease-in-out hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none motion-reduce:transition-none lg:p-4',
+              'bg-ink text-paper hover:bg-ink-soft focus:ring-cold relative rounded-full p-3 shadow-lg transition-[left,translate] duration-500 ease-in-out hover:scale-110 focus:ring-2 focus:ring-offset-2 focus:outline-none motion-reduce:transition-none lg:p-4',
               displayAnimatedChart
                 ? 'left-0 translate-x-0'
                 : 'left-1/2 -translate-x-1/2',
@@ -83,7 +83,7 @@ function FooterControl() {
               <m.button
                 {...motionProps}
                 onClick={togglePlaying}
-                className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
+                className="bg-ink text-paper hover:bg-ink-soft focus:ring-cold transform rounded-full p-3 shadow-lg transition-all hover:scale-110 focus:ring-2 focus:ring-offset-2 focus:outline-none lg:p-4"
                 aria-label={
                   playAnimation ? 'Pause animation' : 'Play animation'
                 }
@@ -99,12 +99,12 @@ function FooterControl() {
                 onChange={handleProgressChange}
                 aria-label="Chart position"
                 aria-valuetext={`Chart ${animatedChartIndex + 1} of ${max + 1}`}
-                className="w-full text-sky-400"
+                className="text-ink accent-ink w-full"
               />
               <m.button
                 {...motionProps}
                 onClick={stepBackward}
-                className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
+                className="bg-ink text-paper hover:bg-ink-soft focus:ring-cold transform rounded-full p-3 shadow-lg transition-all hover:scale-110 focus:ring-2 focus:ring-offset-2 focus:outline-none lg:p-4"
                 aria-label="Step backward"
               >
                 <BackwardIcon />
@@ -112,7 +112,7 @@ function FooterControl() {
               <m.button
                 {...motionProps}
                 onClick={stepForward}
-                className="transform rounded-full bg-slate-700 p-3 text-sky-400 shadow-lg transition-all hover:scale-110 hover:bg-slate-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none lg:p-4"
+                className="bg-ink text-paper hover:bg-ink-soft focus:ring-cold transform rounded-full p-3 shadow-lg transition-all hover:scale-110 focus:ring-2 focus:ring-offset-2 focus:outline-none lg:p-4"
                 aria-label="Step forward"
               >
                 <ForwardIcon />

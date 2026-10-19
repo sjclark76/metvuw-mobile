@@ -49,7 +49,9 @@ describe('<RadarAndSatelliteImageCard /> time zones', () => {
     const html = renderToString(ui)
 
     expect(html).toContain('Friday, October 16th, 2026')
-    expect(html).toContain('03:00 AM')
+    expect(html).toContain('03:00')
+    expect(html).toContain('>Fri<')
+    expect(html).toContain('16 OCT')
     expect(html).toContain(
       'radar chart for Friday, October 16th, 2026 at 3:00 AM',
     )
@@ -66,8 +68,9 @@ describe('<RadarAndSatelliteImageCard /> time zones', () => {
     vi.mocked(getBrowserTimeZone).mockReturnValue('America/New_York')
     const onRecoverableError = await hydrate(container)
 
-    await waitFor(() => expect(container).toHaveTextContent('10:00 AM'))
-    expect(container).toHaveTextContent('Thursday, October 15th, 2026')
+    await waitFor(() => expect(container).toHaveTextContent('10:00'))
+    expect(container).toHaveTextContent('Thu')
+    expect(container).toHaveTextContent('15 OCT')
     expect(container.querySelector('img')).toHaveAttribute(
       'alt',
       'radar chart for Thursday, October 15th, 2026 at 10:00 AM',

@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 import Card from '@/components/Card'
+import ChartCaption from '@/components/ChartCaption'
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
 import WeatherImage from '@/components/WeatherImage'
 import { SkinnyChartData } from '@/shared/types/chartData'
@@ -56,15 +57,16 @@ function RadarAndSatelliteImageCard({
           loading={loading}
         />
       }
-      date={
-        <span className="text-base font-semibold text-gray-700 dark:text-stone-100">
-          {safeFormat(formatDate, image.imageDateUTC, 'PPPP')}
-        </span>
-      }
-      time={
-        <span className="w-20 transform rounded-xs bg-gray-900 px-2 py-1 text-center text-xs font-semibold text-white uppercase dark:bg-stone-200 dark:text-stone-700">
-          {safeFormat(formatDate, image.imageDateUTC, 'hh:mm a')}
-        </span>
+      caption={
+        <ChartCaption
+          day={safeFormat(formatDate, image.imageDateUTC, 'EEE')}
+          time={safeFormat(formatDate, image.imageDateUTC, 'HH:mm')}
+          date={safeFormat(
+            formatDate,
+            image.imageDateUTC,
+            'dd MMM zzz',
+          )?.toUpperCase()}
+        />
       }
     />
   )

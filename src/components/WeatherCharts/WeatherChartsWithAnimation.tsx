@@ -44,7 +44,7 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="mx-auto flex w-full max-w-2xl flex-grow flex-col items-center justify-center"
+              className="mx-auto flex w-full max-w-176 flex-grow flex-col items-center justify-center"
             >
               <AnimatedWeatherChart
                 region={props.region}
@@ -54,7 +54,7 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
           ) : (
             <ul
               key="static-list"
-              className="mx-auto flex w-full max-w-2xl flex-col items-center px-2 pt-2"
+              className="mx-auto flex w-full max-w-176 flex-col items-center pt-2"
             >
               {props.charts.map((chart, index) => (
                 <React.Fragment key={chart.forecastDate}>

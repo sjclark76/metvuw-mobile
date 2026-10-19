@@ -43,8 +43,9 @@ for (const colorScheme of ['light', 'dark'] as const) {
   })
 }
 
-// axe cannot evaluate text over a gradient (it reports it as "needs review"),
-// so measure the contrast of the navbar's text over what is actually rendered.
+// axe cannot always evaluate the navbar's text against what is behind it (it
+// reports it as "needs review"), so measure each item's own text colour against
+// the background that is actually rendered under it.
 const luminance = ([r, g, b]: number[]) => {
   const channel = (c: number) =>
     (c /= 255) <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
@@ -59,7 +60,7 @@ for (const [label, width] of [
   ['desktop', 1600],
   ['mobile', 390],
 ] as const) {
-  test(`navbar text has 4.5:1 contrast over its gradient (${label})`, async ({
+  test(`navbar text has 4.5:1 contrast over its background (${label})`, async ({
     page,
   }) => {
     await page.setViewportSize({ width, height: 900 })
@@ -82,11 +83,13 @@ for (const [label, width] of [
             y: Math.round(box.y),
             width: Math.round(box.width),
             height: Math.round(box.height),
-            // The text colour as the browser resolved it (white on this navbar).
-            white: getComputedStyle(el).color === 'rgb(255, 255, 255)',
+            // The text colour as the browser resolved it, as [r, g, b].
+            color: (getComputedStyle(el).color.match(/\d+/g) ?? [])
+              .slice(0, 3)
+              .map(Number),
           }
         })
-        .filter((item) => item.white),
+        .filter((item) => item.color.length === 3),
     )
     expect(items.length).toBeGreaterThan(5)
 
@@ -115,7 +118,7 @@ for (const [label, width] of [
           item.x + item.width - 4,
         ].map((x) => pixel(x, y))
         const worst = Math.min(
-          ...samples.map((s) => contrast([255, 255, 255], s)),
+          ...samples.map((sample) => contrast(item.color, sample)),
         )
         return { name: item.name, ratio: Number(worst.toFixed(2)) }
       })
