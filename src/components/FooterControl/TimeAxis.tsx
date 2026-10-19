@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
 
@@ -28,12 +28,18 @@ export function TimeAxis({
   index,
   max,
   onSeek,
+  glideMs,
 }: {
   /** When each chart is for (epoch ms), in chart order. May be empty. */
   times: readonly number[]
   index: number
   max: number
   onSeek: (index: number) => void
+  /**
+   * While playing, how long each chart is shown. The handle then glides toward
+   * the next chart over exactly this long, instead of hopping once per chart.
+   */
+  glideMs?: number
 }) {
   const formatDate = useFormatDate()
   const [axisRef, width] = useElementWidth<HTMLDivElement>(ASSUMED_WIDTH_PX)
@@ -75,6 +81,68 @@ export function TimeAxis({
   // or last chart stays clear of the controls beside the axis.
   const percent = (position: number) =>
     `calc(${INSET} + (100% - 2 * ${INSET}) * ${ratio(position)})`
+
+  const labelPlace = (position: number) =>
+    `clamp(2.9rem, ${percent(position)}, calc(100% - 2.9rem))`
+
+  // Gliding is driven frame by frame on the elements themselves, not through
+  // React: re-rendering sixty times a second for a moving marker would be waste.
+  const handleRef = useRef<HTMLDivElement>(null)
+  const labelRef = useRef<HTMLSpanElement>(null)
+  const changedAt = useRef(0)
+  const latest = useRef({ index })
+  useLayoutEffect(() => {
+    latest.current = { index }
+  })
+  useEffect(() => {
+    changedAt.current = performance.now()
+  }, [index])
+
+  const place = (position: number) => {
+    if (handleRef.current) {
+      handleRef.current.style.left = percent(position)
+      handleRef.current.dataset.at = String(ratio(position))
+    }
+    if (labelRef.current) {
+      labelRef.current.style.left = labelPlace(position)
+      labelRef.current.dataset.at = String(ratio(position))
+    }
+  }
+  const gliding =
+    glideMs !== undefined &&
+    glideMs > 0 &&
+    max > 0 &&
+    !(
+      typeof matchMedia === 'function' &&
+      matchMedia('(prefers-reduced-motion: reduce)').matches
+    )
+
+  useEffect(() => {
+    if (!gliding) return
+    let frame = 0
+    const step = (now: number) => {
+      const fraction = Math.min(
+        Math.max((now - changedAt.current) / glideMs!, 0),
+        1,
+      )
+      // Toward the next chart, arriving as it appears; the last chart has none.
+      place(Math.min(index + fraction, max))
+      frame = requestAnimationFrame(step)
+    }
+    frame = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(frame)
+    // `place` closes over this render's values, which are what this loop needs.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gliding, glideMs, index, max])
+
+  // When playback stops, put the marker back on the chart it is on: React will
+  // not, because as far as it knows nothing moved.
+  useEffect(() => {
+    if (!gliding) return
+    return () => {
+      place(latest.current.index)
+    }
+  }, [gliding])
 
   const current = times[index]
   const handleLabel =
@@ -139,22 +207,28 @@ export function TimeAxis({
         )}
 
         <div
+          ref={handleRef}
           data-handle
           data-at={ratio(index)}
           // Bigger where there is a finger instead of a mouse.
           className="bg-ink ring-plate absolute bottom-[0.3rem] h-7 w-4 -translate-x-1/2 rounded-full ring-[3px] transition-[left] duration-200 ease-out motion-reduce:transition-none pointer-coarse:bottom-[0.1rem] pointer-coarse:h-10 pointer-coarse:w-6"
-          style={{ left: percent(index) }}
+          // No easing while gliding: the glide is the animation.
+          style={{
+            left: percent(index),
+            transition: gliding ? 'none' : undefined,
+          }}
         >
           <span className="bg-paper absolute inset-y-1.5 left-1/2 w-0.5 -translate-x-1/2 rounded-full" />
         </div>
 
         {handleLabel && (
           <span
+            ref={labelRef}
+            data-handle-label
+            data-at={ratio(index)}
             // Kept inside the axis, clear of the controls beside it.
             className="bg-ink text-paper absolute top-0 -translate-x-1/2 rounded-sm px-1.5 py-1 font-mono text-xs leading-none font-medium whitespace-nowrap"
-            style={{
-              left: `clamp(2.9rem, ${percent(index)}, calc(100% - 2.9rem))`,
-            }}
+            style={{ left: labelPlace(index) }}
           >
             {handleLabel}
           </span>

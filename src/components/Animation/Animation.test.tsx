@@ -20,6 +20,7 @@ function Probe() {
         index: current.index,
         max: current.max,
         times: current.times,
+        intervalMs: current.intervalMs,
       })}
     </output>
   )
@@ -61,6 +62,7 @@ describe('Animation', () => {
       index: 0,
       max: 4,
       times: [],
+      intervalMs: 500,
     })
   })
 
@@ -193,6 +195,7 @@ describe('Animation', () => {
       index: 0,
       max: 8,
       times: [],
+      intervalMs: 500,
     })
   })
 
@@ -236,6 +239,7 @@ describe('Animation', () => {
       index: 0,
       max: 0,
       times: [],
+      intervalMs: 500,
     })
     expect(() => {
       act(() => {
@@ -246,5 +250,19 @@ describe('Animation', () => {
       })
     }).not.toThrow()
     expect(state().display).toBe(false)
+  })
+
+  // The footer glides its handle over exactly this long while playing, so it
+  // arrives at the next chart as the next chart appears.
+  test('tells the footer how long each chart is shown', () => {
+    render(page(3, 'page', 750))
+
+    expect(state().intervalMs).toBe(750)
+  })
+
+  test('defaults to the standard interval when the page gives none', () => {
+    render(page(3))
+
+    expect(state().intervalMs).toBe(500)
   })
 })

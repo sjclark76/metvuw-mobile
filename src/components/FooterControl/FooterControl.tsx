@@ -50,6 +50,7 @@ function FooterControl() {
     index,
     max,
     times,
+    intervalMs,
     toggleDisplay,
     togglePlaying,
     stepBackward,
@@ -150,7 +151,13 @@ function FooterControl() {
           )}
         </div>
 
-        <TimeAxis times={times} index={index} max={max} onSeek={onSeek} />
+        <TimeAxis
+          times={times}
+          index={index}
+          max={max}
+          onSeek={onSeek}
+          glideMs={displayAnimated && playing ? intervalMs : undefined}
+        />
       </div>
     </footer>
   )
