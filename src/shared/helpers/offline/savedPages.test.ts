@@ -81,7 +81,7 @@ function setup(partial: Partial<World> = {}) {
       },
     },
     failing: new Set(),
-    html: { '/regions/nz': '<html></html>' },
+    html: { '/regions/nz': '<html></html>', '/saved': '<html>saved</html>' },
     ...partial,
   }
   const requested: string[] = []
@@ -144,6 +144,21 @@ describe('downloadPage', () => {
       bytes: 2 * CHART_BYTES,
     })
     expect(caches.urls(SAVED_CHARTS_CACHE)).toEqual([chart(1), chart(2)])
+    expect(caches.urls(SAVED_PAGES_CACHE)).toContain('/regions/nz')
+  })
+
+  test('also keeps the list of saved pages, so there is a way back to them offline', async () => {
+    const { deps, caches } = setup()
+
+    await downloadPage('/regions/nz', deps)
+
+    expect(caches.urls(SAVED_PAGES_CACHE)).toEqual(['/regions/nz', '/saved'])
+  })
+
+  test('saving still works when the list of saved pages cannot be kept', async () => {
+    const { deps, caches } = setup({ failing: new Set(['/saved']) })
+
+    await expect(downloadPage('/regions/nz', deps)).resolves.toBeDefined()
     expect(caches.urls(SAVED_PAGES_CACHE)).toEqual(['/regions/nz'])
   })
 
@@ -299,7 +314,8 @@ describe('collectGarbage', () => {
     await collectGarbage([], deps)
 
     expect(caches.urls(SAVED_CHARTS_CACHE)).toEqual([])
-    expect(caches.urls(SAVED_PAGES_CACHE)).toEqual([])
+    // Only the list of saved pages stays: it is not any one page's.
+    expect(caches.urls(SAVED_PAGES_CACHE)).toEqual(['/saved'])
   })
 
   test('keeps what is still used, including a chart two pages share', async () => {
@@ -322,6 +338,7 @@ describe('collectGarbage', () => {
     expect(caches.urls(SAVED_PAGES_CACHE)).toEqual([
       '/regions/nz',
       '/satellite',
+      '/saved',
     ])
   })
 
