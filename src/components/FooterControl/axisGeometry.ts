@@ -45,6 +45,35 @@ export function dayBoundaries(
 }
 
 /**
+ * Which charts get a tick. Forty charts across a phone leave the ticks a few
+ * pixels apart, which blurs into a barcode, so only every few are drawn, evenly,
+ * as many as leave `minSpacing` pixels between them. The last chart keeps its
+ * tick only when there is room for it. Every chart is still reachable: ticks are
+ * decoration, the slider underneath has a step for each chart.
+ */
+export function visibleTicks(
+  count: number,
+  width: number,
+  minSpacing: number,
+): number[] {
+  if (count <= 0) return []
+  if (count === 1 || width <= 0) return [0]
+
+  const last = count - 1
+  const pixelsPerChart = width / last
+  const stride = Math.max(1, Math.ceil(minSpacing / pixelsPerChart))
+
+  const ticks: number[] = []
+  for (let i = 0; i <= last; i += stride) ticks.push(i)
+
+  const lastTick = ticks[ticks.length - 1]
+  if (lastTick !== last && (last - lastTick) * pixelsPerChart >= minSpacing) {
+    ticks.push(last)
+  }
+  return ticks
+}
+
+/**
  * Where the current moment falls along the axis, or undefined when it is
  * outside the charts' range (or there are fewer than two charts to place it
  * between).

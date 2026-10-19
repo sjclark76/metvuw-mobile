@@ -3,7 +3,8 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
 
-import { dayBoundaries, nowPosition } from './axisGeometry'
+import { dayBoundaries, nowPosition, visibleTicks } from './axisGeometry'
+import { useElementWidth } from './useElementWidth'
 
 /**
  * A forecast timeline: one tick for each chart, a longer one at each local
@@ -14,6 +15,14 @@ import { dayBoundaries, nowPosition } from './axisGeometry'
  * drawing, so keyboard, touch, screen readers and focus all behave as they do
  * for any slider. The drawing is for the eye only.
  */
+// Closer than this and neighbouring ticks stop reading as separate marks.
+const MIN_TICK_SPACING_PX = 20
+// Roughly a phone, used until the axis has been measured.
+const ASSUMED_WIDTH_PX = 280
+// Half the (touch) handle, in rem and px, kept clear at each end of the track.
+const INSET = '0.75rem'
+const INSET_PX = 12
+
 export function TimeAxis({
   times,
   index,
@@ -27,6 +36,7 @@ export function TimeAxis({
   onSeek: (index: number) => void
 }) {
   const formatDate = useFormatDate()
+  const [axisRef, width] = useElementWidth<HTMLDivElement>(ASSUMED_WIDTH_PX)
 
   // The clock is only read in the browser, after mount: the page is rendered
   // ahead of time on the host's clock, and a "now" that differs from the
@@ -45,17 +55,33 @@ export function TimeAxis({
       }),
     [times, formatDate],
   )
+  const ticks = useMemo(
+    () =>
+      new Set(
+        visibleTicks(times.length, width - 2 * INSET_PX, MIN_TICK_SPACING_PX),
+      ),
+    [times.length, width],
+  )
+  // A minor tick on a day line only looks like a heavier day line.
+  const pixelsPerChart = max > 0 ? (width - 2 * INSET_PX) / max : 0
+  const underDayLine = (position: number) =>
+    days.some((day) => Math.abs(day.position - position) * pixelsPerChart < 3)
   const nowAt = now === undefined ? undefined : nowPosition(times, now)
 
+  // 0 at the first chart, 1 at the last.
+  const ratio = (position: number) =>
+    max > 0 ? Math.min(Math.max(position / max, 0), 1) : 0
+  // The track stops half a handle short of each edge, so the handle at the first
+  // or last chart stays clear of the controls beside the axis.
   const percent = (position: number) =>
-    `${max > 0 ? Math.min(Math.max(position / max, 0), 1) * 100 : 0}%`
+    `calc(${INSET} + (100% - 2 * ${INSET}) * ${ratio(position)})`
 
   const current = times[index]
   const handleLabel =
     current === undefined ? '' : formatDate(current, 'EEE HH:mm')
 
   return (
-    <div className="relative h-14 min-w-0 grow basis-auto">
+    <div ref={axisRef} className="relative h-14 min-w-0 grow basis-auto">
       <input
         type="range"
         min={0}
@@ -67,7 +93,7 @@ export function TimeAxis({
         aria-valuetext={`Chart ${index + 1} of ${max + 1}`}
         // Invisible, but it takes every touch and key press. No thumb width, so
         // a press maps to the chart under the finger all the way to the ends.
-        className="peer absolute inset-0 z-10 m-0 h-full w-full cursor-ew-resize touch-none appearance-none bg-transparent opacity-0 [&::-moz-range-thumb]:size-0 [&::-webkit-slider-thumb]:size-0"
+        className="peer absolute inset-y-0 left-3 z-10 m-0 h-full w-[calc(100%-1.5rem)] cursor-ew-resize touch-none appearance-none bg-transparent opacity-0 [&::-moz-range-thumb]:size-0 [&::-webkit-slider-thumb]:size-0"
       />
 
       <div
@@ -77,14 +103,16 @@ export function TimeAxis({
       >
         <div className="bg-rule absolute right-0 bottom-[1.05rem] left-0 h-0.5" />
 
-        {times.map((time, position) => (
-          <i
-            key={time}
-            data-tick
-            className="bg-ink-soft absolute bottom-[1.05rem] h-2 w-px"
-            style={{ left: percent(position) }}
-          />
-        ))}
+        {times.map((time, position) =>
+          ticks.has(position) && !underDayLine(position) ? (
+            <i
+              key={time}
+              data-tick
+              className="bg-ink-soft/70 absolute bottom-[1.05rem] h-1.5 w-px"
+              style={{ left: percent(position) }}
+            />
+          ) : null,
+        )}
 
         {days.map((day) => (
           <i
@@ -112,7 +140,9 @@ export function TimeAxis({
 
         <div
           data-handle
-          className="bg-ink ring-plate absolute bottom-[0.45rem] h-6 w-3.5 -translate-x-1/2 rounded-full ring-[3px] transition-[left] duration-200 ease-out motion-reduce:transition-none"
+          data-at={ratio(index)}
+          // Bigger where there is a finger instead of a mouse.
+          className="bg-ink ring-plate absolute bottom-[0.3rem] h-7 w-4 -translate-x-1/2 rounded-full ring-[3px] transition-[left] duration-200 ease-out motion-reduce:transition-none pointer-coarse:bottom-[0.1rem] pointer-coarse:h-10 pointer-coarse:w-6"
           style={{ left: percent(index) }}
         >
           <span className="bg-paper absolute inset-y-1.5 left-1/2 w-0.5 -translate-x-1/2 rounded-full" />

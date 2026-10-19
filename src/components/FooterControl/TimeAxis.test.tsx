@@ -107,7 +107,7 @@ describe('<TimeAxis />', () => {
 
     test('moves the handle to the chosen chart', () => {
       const { container, rerender } = renderAxis({ index: 0 })
-      expect(handle(container).style.left).toBe('0%')
+      expect(handle(container).dataset.at).toBe('0')
 
       rerender(
         <TimeAxis
@@ -118,7 +118,7 @@ describe('<TimeAxis />', () => {
         />,
       )
 
-      expect(handle(container).style.left).toBe('100%')
+      expect(handle(container).dataset.at).toBe('1')
     })
 
     test('marks now when it falls within the charts', () => {
@@ -170,7 +170,108 @@ describe('<TimeAxis />', () => {
     test('copes with a single chart', () => {
       const { container } = renderAxis({ times: [first], max: 0, index: 0 })
 
-      expect(handle(container).style.left).toBe('0%')
+      expect(handle(container).dataset.at).toBe('0')
+    })
+  })
+
+  describe('on a narrow screen', () => {
+    // Forty charts is what a region page really has.
+    const many = Array.from({ length: 40 }, (_, i) => first + i * 6 * HOUR)
+
+    afterEach(() => {
+      vi.unstubAllGlobals()
+    })
+
+    function stubWidth(width: number) {
+      vi.stubGlobal(
+        'ResizeObserver',
+        class {
+          constructor(private callback: () => void) {}
+          observe(element: Element) {
+            Object.defineProperty(element, 'clientWidth', {
+              configurable: true,
+              value: width,
+            })
+            this.callback()
+          }
+          disconnect() {}
+        },
+      )
+    }
+
+    test('draws fewer ticks than charts, so they do not blur into a barcode', () => {
+      stubWidth(250)
+      const { container } = renderAxis({ times: many, max: 39 })
+
+      const ticks = container.querySelectorAll('[data-tick]').length
+      expect(ticks).toBeGreaterThan(5)
+      expect(ticks).toBeLessThan(30)
+    })
+
+    test('draws every tick on a wide screen', () => {
+      stubWidth(900)
+      const { container } = renderAxis({ times: many, max: 39 })
+
+      expect(container.querySelectorAll('[data-tick]')).toHaveLength(40)
+    })
+
+    test('still names the days, and still reaches every chart', () => {
+      stubWidth(250)
+      renderAxis({ times: many, max: 39 })
+
+      expect(
+        screen.getAllByText(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)$/).length,
+      ).toBeGreaterThan(3)
+      expect(slider()).toHaveAttribute('max', '39')
+    })
+
+    // The handle is wider than a tick, so the track stops short of both edges by
+    // half a handle. Otherwise it sticks out over the view switch beside it.
+    test('keeps the handle clear of the edges at the first and last chart', () => {
+      const { container, rerender } = renderAxis({ index: 0 })
+      expect(handle(container).style.left).toContain('0.75rem')
+
+      rerender(
+        <TimeAxis
+          times={times}
+          index={times.length - 1}
+          max={times.length - 1}
+          onSeek={vi.fn()}
+        />,
+      )
+
+      expect(handle(container).style.left).toContain('0.75rem')
+      expect(handle(container).style.left).toContain('100% - 1.5rem')
+    })
+
+    // Two lines at the same spot only look like one heavier line, and add noise.
+    test('does not draw a minor tick on top of a day line', () => {
+      stubWidth(900)
+      // NZDT is +13, so 11:00Z is local midnight: the day line falls on a chart.
+      const midnight = Date.UTC(2026, 9, 19, 11)
+      const onMidnight = [-6, 0, 6, 12].map((hours) => midnight + hours * HOUR)
+
+      const { container } = renderAxis({ times: onMidnight, max: 3 })
+
+      expect(container.querySelectorAll('[data-tick]')).toHaveLength(3)
+    })
+
+    test('keeps the minor ticks on a phone to a handful, not a barcode', () => {
+      stubWidth(320)
+      const { container } = renderAxis({ times: many, max: 39 })
+
+      // 40 charts over 296px of track is 7.6px a chart: a tick every 3rd or so.
+      const ticks = container.querySelectorAll('[data-tick]').length
+      expect(ticks).toBeGreaterThan(3)
+      expect(ticks).toBeLessThanOrEqual(14)
+    })
+
+    test('has a handle big enough for a finger on a touch screen', () => {
+      const { container } = renderAxis()
+
+      const handle = container.querySelector('[data-handle]')!
+      expect(handle.className).toMatch(/pointer-coarse:h-/)
+      expect(handle.className).toMatch(/pointer-coarse:w-/)
     })
   })
 })
