@@ -25,6 +25,11 @@ const chartTop = (page: Page, index: number) =>
     index,
   )
 
+// The axis names days in the visitor's zone, and a minor tick is dropped where a
+// day line falls on a chart, so what is drawn depends on the zone. Fixed here to
+// the one the site is written for, so the results do not depend on the machine.
+test.use({ timezoneId: 'Pacific/Auckland' })
+
 test.describe('time axis in the list', () => {
   test('has a tick for each chart and starts on the first', async ({
     page,
@@ -145,5 +150,24 @@ test.describe('on a phone', () => {
         () => document.documentElement.scrollWidth <= window.innerWidth,
       ),
     ).toBe(true)
+  })
+})
+
+// The stub's charts are six-hourly from 00Z. In UTC local midnight lands exactly
+// on charts, where the day line stands in for the minor tick.
+test.describe('in UTC, where midnight falls on the charts', () => {
+  test.use({ timezoneId: 'UTC' })
+
+  test('draws a day line, not a second tick, where a day begins', async ({
+    page,
+  }) => {
+    await openList(page)
+
+    // Ten charts, two of them at midnight.
+    await expect(page.locator('[data-tick]')).toHaveCount(8)
+    await expect(slider(page)).toHaveAttribute('max', '9')
+    expect(
+      await page.locator('[data-axis-drawing] em').count(),
+    ).toBeGreaterThan(0)
   })
 })
