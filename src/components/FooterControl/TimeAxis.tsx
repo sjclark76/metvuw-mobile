@@ -20,6 +20,7 @@ const MIN_TICK_SPACING_PX = 20
 // Roughly a phone, used until the axis has been measured.
 const ASSUMED_WIDTH_PX = 280
 // Half the (touch) handle, in rem and px, kept clear at each end of the track.
+// The input's thumb is twice this wide (w-6) so its centre runs from inset to inset.
 const INSET = '0.75rem'
 const INSET_PX = 12
 
@@ -161,9 +162,12 @@ export function TimeAxis({
         onChange={(event) => onSeek(Number(event.target.value))}
         aria-label="Chart position"
         aria-valuetext={`Chart ${index + 1} of ${max + 1}`}
-        // Invisible, but it takes every touch and key press. No thumb width, so
-        // a press maps to the chart under the finger all the way to the ends.
-        className="peer absolute inset-y-0 left-3 z-10 m-0 h-full w-[calc(100%-1.5rem)] cursor-ew-resize touch-none appearance-none bg-transparent opacity-0 [&::-moz-range-thumb]:size-0 [&::-webkit-slider-thumb]:size-0"
+        // Invisible, but it takes every touch and key press. Its thumb is as wide
+        // as the two insets and as tall as the axis: iOS only starts dragging a
+        // slider that is pressed on its thumb, so a thumb of no size could not be
+        // dragged at all. The thumb's centre then runs exactly where the drawn
+        // handle does, from one inset to the other.
+        className="peer absolute inset-0 z-10 m-0 h-full w-full cursor-ew-resize touch-none appearance-none bg-transparent opacity-0 [&::-moz-range-thumb]:h-14 [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0 [&::-moz-range-track]:bg-transparent [&::-webkit-slider-runnable-track]:h-full [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:h-14 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none"
       />
 
       <div
