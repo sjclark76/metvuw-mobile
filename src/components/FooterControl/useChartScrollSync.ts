@@ -4,6 +4,9 @@ import { useCallback, useEffect, useRef } from 'react'
 // The page scrolls itself to a chart it was sent to, passing every chart on the
 // way. For this long after sending it, the page's own position is not news.
 const SCROLL_SETTLE_MS = 900
+// A drag asks for a new chart many times a second. Asks closer together than
+// this are a drag: the page jumps instead of gliding to each one in turn.
+const DRAG_GAP_MS = 400
 const POLL_MS = 16
 // The list is not on the page for a moment after the viewer closes.
 const GIVE_UP_AFTER_MS = 1500
@@ -34,6 +37,7 @@ export function useChartScrollSync({
   onIndex: (index: number) => void
 }) {
   const ignoreUntil = useRef(0)
+  const lastScrollAt = useRef(0)
   const latest = useRef({ index, onIndex })
   useEffect(() => {
     latest.current = { index, onIndex }
@@ -43,10 +47,14 @@ export function useChartScrollSync({
     (target: number, behavior?: 'auto' | 'smooth') => {
       const element = chartElement(target)
       if (!element) return
-      ignoreUntil.current = Date.now() + SCROLL_SETTLE_MS
+      const now = Date.now()
+      const dragging = now - lastScrollAt.current < DRAG_GAP_MS
+      lastScrollAt.current = now
+      ignoreUntil.current = now + SCROLL_SETTLE_MS
       element.scrollIntoView({
         block: 'start',
-        behavior: behavior ?? (prefersReducedMotion() ? 'auto' : 'smooth'),
+        behavior:
+          behavior ?? (prefersReducedMotion() || dragging ? 'auto' : 'smooth'),
       })
     },
     [],

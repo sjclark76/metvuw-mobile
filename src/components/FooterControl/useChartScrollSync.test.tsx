@@ -174,6 +174,40 @@ describe('useChartScrollSync', () => {
       )
     })
 
+    // A drag asks for a new chart many times a second. Gliding to each in turn
+    // is sluggish and never catches up, so a quick succession jumps.
+    test('jumps, rather than glides, while the visitor is dragging', () => {
+      chartsInPage()
+      const { result } = renderHook(() =>
+        useChartScrollSync({ enabled: true, index: 0, onIndex: vi.fn() }),
+      )
+
+      act(() => result.current.scrollToChart(1))
+      act(() => vi.advanceTimersByTime(60))
+      act(() => result.current.scrollToChart(2))
+      act(() => vi.advanceTimersByTime(60))
+      act(() => result.current.scrollToChart(3))
+
+      expect(
+        scrollIntoView.mock.calls.map(([options]) => options.behavior),
+      ).toEqual(['smooth', 'auto', 'auto'])
+    })
+
+    test('glides again for a single move after the drag has stopped', () => {
+      chartsInPage()
+      const { result } = renderHook(() =>
+        useChartScrollSync({ enabled: true, index: 0, onIndex: vi.fn() }),
+      )
+
+      act(() => result.current.scrollToChart(1))
+      act(() => vi.advanceTimersByTime(1000))
+      act(() => result.current.scrollToChart(4))
+
+      expect(
+        scrollIntoView.mock.calls.map(([options]) => options.behavior),
+      ).toEqual(['smooth', 'smooth'])
+    })
+
     test('jumps instead of gliding for visitors who prefer less motion', () => {
       vi.stubGlobal('matchMedia', () => ({ matches: true }))
       chartsInPage()

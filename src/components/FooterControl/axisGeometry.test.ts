@@ -1,6 +1,6 @@
 import { formatInTimeZone } from '@/shared/helpers/timeZone'
 
-import { dayBoundaries, nowPosition } from './axisGeometry'
+import { dayBoundaries, nowPosition, visibleTicks } from './axisGeometry'
 
 const HOUR = 36e5
 const zone = 'Pacific/Auckland'
@@ -117,5 +117,51 @@ describe('nowPosition', () => {
 
   test('does not divide by zero for charts at the same instant', () => {
     expect(nowPosition([run, run, run + HOUR], run)).not.toBeNaN()
+  })
+})
+
+describe('visibleTicks', () => {
+  const spacing = (ticks: number[], count: number, width: number) =>
+    (width / (count - 1)) *
+    Math.min(...ticks.slice(1).map((t, i) => t - ticks[i]))
+
+  test('draws every tick when they all fit', () => {
+    expect(visibleTicks(10, 300, 10)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+  })
+
+  // 40 charts on a phone-width axis put ticks 6px apart: a barcode.
+  test('draws only as many as fit, however many charts there are', () => {
+    const ticks = visibleTicks(40, 250, 10)
+
+    expect(ticks.length).toBeLessThan(40)
+    expect(spacing(ticks, 40, 250)).toBeGreaterThanOrEqual(10)
+  })
+
+  test('thins out evenly, keeping the first chart', () => {
+    const ticks = visibleTicks(40, 250, 10)
+    const gaps = ticks.slice(1).map((t, i) => t - ticks[i])
+
+    expect(ticks[0]).toBe(0)
+    expect(new Set(gaps).size).toBe(1)
+  })
+
+  test('draws more as the axis gets wider', () => {
+    expect(visibleTicks(40, 700, 10).length).toBeGreaterThan(
+      visibleTicks(40, 250, 10).length,
+    )
+  })
+
+  test('keeps the last chart when there is room, and drops it when it would crowd', () => {
+    // 11 charts over 100px: every tick is 10px apart, so all fit and the last stays.
+    expect(visibleTicks(11, 100, 10).at(-1)).toBe(10)
+
+    // 40 charts over 250px: stride 2 hits 38, and 39 would sit 6px from it.
+    expect(visibleTicks(40, 250, 10).at(-1)).not.toBe(39)
+  })
+
+  test('copes with nothing, one chart, and a zero width', () => {
+    expect(visibleTicks(0, 300, 10)).toEqual([])
+    expect(visibleTicks(1, 300, 10)).toEqual([0])
+    expect(visibleTicks(5, 0, 10)).toEqual([0])
   })
 })
