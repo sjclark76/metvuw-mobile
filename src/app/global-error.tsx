@@ -4,6 +4,7 @@ import './fonts'
 import './globals.css'
 
 import GeneralError from '@/components/GeneralError'
+import { themeScript } from '@/components/ThemeToggle/themeScript'
 
 // Replaces the root layout when it fails, so it supplies its own document.
 export default function GlobalError({
@@ -14,7 +15,13 @@ export default function GlobalError({
   retry: () => void
 }) {
   return (
-    <html lang="en" className="bg-paper">
+    <html lang="en" className="bg-paper" suppressHydrationWarning>
+      <head>
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: themeScript }}
+        />
+      </head>
       <body className="bg-paper text-ink font-sans">
         <GeneralError error={error} retry={retry} />
       </body>

@@ -8,6 +8,7 @@
 /* Chart paper: the page is the colour of the charts themselves, so they read as
    one plotted sheet. See the visual identity notes in the PR. */
 :root {
+  color-scheme: light dark;
   --paper: #e6e6fa;
   --plate: #f7f7fd;
   --ink: #1b1740;
@@ -18,8 +19,11 @@
   --bar: #1b1740;
   --bar-ink: #e6e6fa;
 }
+/* Dark follows the system until the visitor chooses (data-theme on <html>, set
+   before paint by the theme script). The dark values appear twice because CSS
+   cannot share a declaration block between a media query and a selector. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --paper: #0e1226;
     --plate: #171c38;
     --ink: #e8eaf7;
@@ -29,6 +33,33 @@
     --cold: #8db4ff;
     --bar: #0a0d1d;
     --bar-ink: #e8eaf7;
+  }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #0e1226;
+  --plate: #171c38;
+  --ink: #e8eaf7;
+  --ink-soft: #a9aed0;
+  --rule: rgb(232 234 247 / 0.16);
+  --warm: #ff7a5c;
+  --cold: #8db4ff;
+  --bar: #0a0d1d;
+  --bar-ink: #e8eaf7;
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+/* Tailwind's `dark:` follows the same rule as the tokens above. */
+@custom-variant dark {
+  &:where([data-theme='dark'], [data-theme='dark'] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:not([data-theme='light'], [data-theme='light'] *)) {
+      @slot;
+    }
   }
 }
 
