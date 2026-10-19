@@ -1,38 +1,55 @@
 'use client'
 import clsx from 'clsx'
-import { AnimatePresence } from 'motion/react'
-import * as m from 'motion/react-m'
-import { ChangeEvent } from 'react'
+import { ReactNode, useEffect, useRef } from 'react'
 
 import { useAnimation } from '@/components/Animation/Animation'
-import { BackwardIcon } from '@/components/icons/BackwardIcon'
-import { CrossIcon } from '@/components/icons/CrossIcon'
-import { ForwardIcon } from '@/components/icons/ForwardIcon'
-import { PauseIcon } from '@/components/icons/PauseIcon'
-import { PlayIcon } from '@/components/icons/PlayIcon'
 
-const motionProps = {
-  initial: { opacity: 0, x: -20 },
-  animate: { opacity: 1, x: 0 },
-  // Define a specific, quick transition for when the controls exit
-  exit: {
-    opacity: 0,
-    x: -20,
-    transition: { duration: 0.2 }, // Adjust duration as needed for exit
-  },
-  // This transition applies to the "enter" animation (initial to animate)
-  transition: {
-    delay: 0.5, // Wait for the master button's 0.5s animation
-    duration: 0.3, // Duration for these controls to fade/slide in
-  },
+import {
+  CloseIcon,
+  OpenViewerIcon,
+  PauseIcon,
+  PlayIcon,
+  StepBackIcon,
+  StepForwardIcon,
+} from './icons'
+import { TimeAxis } from './TimeAxis'
+import { useChartScrollSync } from './useChartScrollSync'
+
+const control =
+  'grid shrink-0 place-items-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cold'
+const solid = `${control} size-12 rounded-full bg-ink text-paper hover:bg-ink-soft`
+const quiet = `${control} size-11 rounded text-ink hover:bg-rule`
+
+function Control({
+  label,
+  onClick,
+  className,
+  children,
+}: {
+  label: string
+  onClick: () => void
+  className: string
+  children: ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      className={className}
+    >
+      {children}
+    </button>
+  )
 }
 
 function FooterControl() {
   const {
-    displayAnimated: displayAnimatedChart,
-    playing: playAnimation,
-    index: animatedChartIndex,
+    displayAnimated,
+    playing,
+    index,
     max,
+    times,
     toggleDisplay,
     togglePlaying,
     stepBackward,
@@ -40,87 +57,101 @@ function FooterControl() {
     seek,
   } = useAnimation()
 
-  const handleProgressChange = (e: ChangeEvent<HTMLInputElement>) => {
-    seek(Number(e.target.value))
+  // In the list, the axis follows the chart in view and moves the list when it
+  // is dragged. In the viewer the axis simply changes the chart shown.
+  const { scrollToChart } = useChartScrollSync({
+    enabled: !displayAnimated,
+    index,
+    onIndex: seek,
+  })
+  const onSeek = (target: number) => {
+    seek(target)
+    if (!displayAnimated) scrollToChart(target)
   }
+
+  // Things that stick above the footer (the rainfall legend) need to know how
+  // tall it is, and it is taller in the viewer, where the axis has its own row.
+  const footerRef = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const footer = footerRef.current
+    if (!footer || typeof ResizeObserver === 'undefined') return
+    const publish = () =>
+      document.documentElement.style.setProperty(
+        '--footer-height',
+        `${footer.offsetHeight}px`,
+      )
+    publish()
+    const observer = new ResizeObserver(publish)
+    observer.observe(footer)
+    return () => {
+      observer.disconnect()
+      document.documentElement.style.removeProperty('--footer-height')
+    }
+  }, [])
 
   // The installed app pads the footer for the phone's home indicator. `standalone:`
   // is a CSS media query, so it applies from the first paint; a hook that read
   // matchMedia after mount made the footer jump on every load.
   const footerClasses =
-    'sticky bottom-0 z-20 border-t border-rule bg-plate p-2 standalone:px-5 standalone:pt-3 standalone:pb-6 lg:p-3 lg:standalone:p-3 print:hidden'
+    'sticky bottom-0 z-20 border-t border-rule bg-plate px-4 pt-2.5 pb-2.5 standalone:pb-6 print:hidden'
 
   return (
-    <footer className={footerClasses}>
-      <AnimatePresence>
+    <footer ref={footerRef} className={footerClasses}>
+      <div
+        className={clsx(
+          'mx-auto flex max-w-176 items-center gap-3',
+          // The viewer has four controls, so the axis gets a full-width row of
+          // its own above them instead of being squeezed beside them.
+          displayAnimated && 'flex-col-reverse items-stretch gap-1',
+        )}
+      >
         <div
           className={clsx(
-            'container mx-auto flex flex-row items-center justify-start',
-            displayAnimatedChart && 'space-x-4 lg:gap-5',
+            'flex items-center gap-1',
+            displayAnimated && 'justify-center gap-3',
           )}
         >
-          {/* Slides from the centre to the left edge when the controls open: a
-              CSS offset moves it, as justify-content cannot be transitioned. */}
-          <button
-            onClick={toggleDisplay}
-            className={clsx(
-              'bg-ink text-paper hover:bg-ink-soft focus:ring-cold relative rounded-full p-3 shadow-lg transition-[left,translate] duration-500 ease-in-out hover:scale-110 focus:ring-2 focus:ring-offset-2 focus:outline-none motion-reduce:transition-none lg:p-4',
-              displayAnimatedChart
-                ? 'left-0 translate-x-0'
-                : 'left-1/2 -translate-x-1/2',
-            )}
-            aria-label={
-              displayAnimatedChart
+          <Control
+            label={
+              displayAnimated
                 ? 'Show static weather chart list'
                 : 'Show animated weather chart'
             }
+            onClick={toggleDisplay}
+            className={solid}
           >
-            {displayAnimatedChart ? <CrossIcon /> : <PlayIcon />}
-          </button>
+            {displayAnimated ? <CloseIcon /> : <OpenViewerIcon />}
+          </Control>
 
-          {displayAnimatedChart && (
+          {displayAnimated && (
             <>
-              <m.button
-                {...motionProps}
+              <Control
+                label={playing ? 'Pause animation' : 'Play animation'}
                 onClick={togglePlaying}
-                className="bg-ink text-paper hover:bg-ink-soft focus:ring-cold transform rounded-full p-3 shadow-lg transition-all hover:scale-110 focus:ring-2 focus:ring-offset-2 focus:outline-none lg:p-4"
-                aria-label={
-                  playAnimation ? 'Pause animation' : 'Play animation'
-                }
+                className={quiet}
               >
-                {playAnimation ? <PauseIcon /> : <PlayIcon />}
-              </m.button>
-              <m.input
-                {...motionProps}
-                type="range"
-                min="0"
-                max={max}
-                value={animatedChartIndex}
-                onChange={handleProgressChange}
-                aria-label="Chart position"
-                aria-valuetext={`Chart ${animatedChartIndex + 1} of ${max + 1}`}
-                className="text-ink accent-ink w-full"
-              />
-              <m.button
-                {...motionProps}
+                {playing ? <PauseIcon /> : <PlayIcon />}
+              </Control>
+              <Control
+                label="Step backward"
                 onClick={stepBackward}
-                className="bg-ink text-paper hover:bg-ink-soft focus:ring-cold transform rounded-full p-3 shadow-lg transition-all hover:scale-110 focus:ring-2 focus:ring-offset-2 focus:outline-none lg:p-4"
-                aria-label="Step backward"
+                className={quiet}
               >
-                <BackwardIcon />
-              </m.button>
-              <m.button
-                {...motionProps}
+                <StepBackIcon />
+              </Control>
+              <Control
+                label="Step forward"
                 onClick={stepForward}
-                className="bg-ink text-paper hover:bg-ink-soft focus:ring-cold transform rounded-full p-3 shadow-lg transition-all hover:scale-110 focus:ring-2 focus:ring-offset-2 focus:outline-none lg:p-4"
-                aria-label="Step forward"
+                className={quiet}
               >
-                <ForwardIcon />
-              </m.button>
+                <StepForwardIcon />
+              </Control>
             </>
           )}
         </div>
-      </AnimatePresence>
+
+        <TimeAxis times={times} index={index} max={max} onSeek={onSeek} />
+      </div>
     </footer>
   )
 }

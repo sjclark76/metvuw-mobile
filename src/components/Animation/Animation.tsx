@@ -38,10 +38,12 @@ const clamp = (index: number, max: number) => Math.min(Math.max(index, 0), max)
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'toggleDisplay':
-      // Closing the viewer returns to the start; opening it starts paused.
-      return state.displayAnimated
-        ? initialState
-        : { ...state, displayAnimated: true, playing: false }
+      // Either way the viewer ends up paused, on the chart you were on.
+      return {
+        ...state,
+        displayAnimated: !state.displayAnimated,
+        playing: false,
+      }
     case 'togglePlaying':
       return { ...state, playing: !state.playing }
     // Moving by hand always pauses, or the timer would fight the user for the
@@ -68,19 +70,25 @@ function reducer(state: State, action: Action): State {
 
 const DEFAULT_INTERVAL_MS = 500
 
+const NO_TIMES: readonly number[] = []
+
 const AnimationContext = createContext<{
   state: State
   count: number
+  times: readonly number[]
   dispatch: (action: Action) => void
 } | null>(null)
 
 export function AnimationProvider({
   count,
+  times = NO_TIMES,
   intervalMs = DEFAULT_INTERVAL_MS,
   children,
 }: {
   /** How many charts the page has. */
   count: number
+  /** When each chart is for (epoch ms), in chart order, for the time axis. */
+  times?: readonly number[]
   /** Time each chart is shown while playing. */
   intervalMs?: number
   children: ReactNode
@@ -95,8 +103,8 @@ export function AnimationProvider({
   }, [state.playing, state.displayAnimated, count, max, intervalMs])
 
   const value = useMemo(
-    () => ({ state, count, dispatch }),
-    [state, count, dispatch],
+    () => ({ state, count, times, dispatch }),
+    [state, count, times, dispatch],
   )
 
   return <AnimationContext value={value}>{children}</AnimationContext>
@@ -120,6 +128,7 @@ export function useAnimation() {
       // Never past the last chart, even if the page now has fewer charts.
       index: clamp(context?.state.index ?? 0, max),
       max,
+      times: context?.times ?? NO_TIMES,
       toggleDisplay: dispatch
         ? () => dispatch({ type: 'toggleDisplay' })
         : noop,
@@ -136,6 +145,6 @@ export function useAnimation() {
         ? (index: number) => dispatch({ type: 'seek', index, max })
         : noop,
     }),
-    [context?.state, dispatch, max],
+    [context?.state, context?.times, dispatch, max],
   )
 }

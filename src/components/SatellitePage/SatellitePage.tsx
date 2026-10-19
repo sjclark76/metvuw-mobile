@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { AnimationProvider } from '@/components/Animation/Animation'
 import { FooterControl } from '@/components/FooterControl'
@@ -15,11 +15,21 @@ export function SatellitePage({
 }: {
   satelliteData: SkinnyChartData[]
 }) {
+  // When each chart is for, so the footer can draw a time axis.
+  const times = useMemo(
+    () => satelliteData.map((chart) => chart.imageDateUTC),
+    [satelliteData],
+  )
+
   return (
     <ImageProgressProvider
       expected={expectedLoadedImages(satelliteData.length)}
     >
-      <AnimationProvider count={satelliteData.length} intervalMs={1000}>
+      <AnimationProvider
+        count={satelliteData.length}
+        times={times}
+        intervalMs={1000}
+      >
         {/* This outer div manages the layout for content and the sticky footer.
           It takes at least the height of the viewport minus the navbar (h-16). */}
         <div className="flex min-h-[calc(100vh-4rem)] flex-col">

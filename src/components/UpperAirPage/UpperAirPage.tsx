@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { AnimationProvider } from '@/components/Animation/Animation'
 import { FooterControl } from '@/components/FooterControl'
 import { ImageProgressProvider } from '@/components/ImageProgress/ImageProgress'
@@ -18,9 +20,19 @@ export function UpperAirPage({
   chartData: SkinnyChartData[]
   balloonCode: BalloonLocationCode
 }) {
+  // When each chart is for, so the footer can draw a time axis.
+  const times = useMemo(
+    () => chartData.map((chart) => chart.imageDateUTC),
+    [chartData],
+  )
+
   return (
     <ImageProgressProvider expected={expectedLoadedImages(chartData.length)}>
-      <AnimationProvider count={chartData.length} intervalMs={1000}>
+      <AnimationProvider
+        count={chartData.length}
+        times={times}
+        intervalMs={1000}
+      >
         {/* This outer div manages the layout for content and the sticky footer.
             It takes at least the height of the viewport minus the navbar (h-16). */}
         <div className="flex min-h-[calc(100vh-4rem)] flex-col">

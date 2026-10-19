@@ -53,8 +53,11 @@ describe('animated viewer and footer together', () => {
 
     expect(() => rerender(page('satellite', 3))).not.toThrow()
 
-    // The new page starts on its static list, not the old viewer.
-    expect(screen.queryByLabelText('Chart position')).toBeNull()
+    // The new page starts on its static list, not the old viewer, with the time
+    // axis sized to the new page and back at its first chart.
+    expect(screen.queryByLabelText('Play animation')).toBeNull()
+    expect(screen.getByLabelText('Chart position')).toHaveAttribute('max', '2')
+    expect(screen.getByLabelText('Chart position')).toHaveValue('0')
     expect(screen.getAllByRole('img')).toHaveLength(3)
   })
 

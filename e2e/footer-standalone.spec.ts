@@ -52,34 +52,26 @@ async function footerPadding(page: Page, width: number, standalone: boolean) {
   })
 }
 
-const all = (px: number) => ({
-  top: `${px}px`,
-  right: `${px}px`,
-  bottom: `${px}px`,
-  left: `${px}px`,
-})
+const tab = { top: '10px', right: '16px', bottom: '10px', left: '16px' }
+// The installed app leaves room under the controls for the home indicator.
+const installed = { ...tab, bottom: '24px' }
 
 test.describe('footer padding', () => {
   test('in a browser tab, on a phone', async ({ page }) => {
-    expect(await footerPadding(page, 390, false)).toEqual(all(8))
+    expect(await footerPadding(page, 390, false)).toEqual(tab)
   })
 
   test('in a browser tab, on a desktop', async ({ page }) => {
-    expect(await footerPadding(page, 1280, false)).toEqual(all(12))
+    expect(await footerPadding(page, 1280, false)).toEqual(tab)
   })
 
   test('in the installed app, on a phone, leaves room for the home indicator', async ({
     page,
   }) => {
-    expect(await footerPadding(page, 390, true)).toEqual({
-      top: '12px',
-      right: '20px',
-      bottom: '24px',
-      left: '20px',
-    })
+    expect(await footerPadding(page, 390, true)).toEqual(installed)
   })
 
   test('in the installed app, on a desktop', async ({ page }) => {
-    expect(await footerPadding(page, 1280, true)).toEqual(all(12))
+    expect(await footerPadding(page, 1280, true)).toEqual(installed)
   })
 })

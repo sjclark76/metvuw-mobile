@@ -51,7 +51,7 @@ export function RainfallLegendSection() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <section className="sticky bottom-16 z-30 flex w-full justify-end px-2 py-1 lg:bottom-24">
+    <section className="sticky bottom-[calc(var(--footer-height,5rem)+0.25rem)] z-30 flex w-full justify-end px-2 py-1">
       <div className="flex items-end gap-2">
         <AnimatePresence initial={false}>
           {isOpen && (

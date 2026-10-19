@@ -22,7 +22,9 @@ test.describe('animated viewer', () => {
 
     await page.getByLabel('Show static weather chart list').click()
 
-    await expect(slider(page)).toBeHidden()
+    // Back to the list: the viewer's controls go, the time axis stays.
+    await expect(page.getByLabel('Play animation')).toBeHidden()
+    await expect(slider(page)).toBeAttached()
     await expect(
       page.getByRole('img', { name: /satellite chart for/i }),
     ).toHaveCount(4)
