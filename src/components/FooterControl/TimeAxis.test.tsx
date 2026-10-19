@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { ComponentProps } from 'react'
 import { renderToString } from 'react-dom/server'
 
@@ -272,6 +272,154 @@ describe('<TimeAxis />', () => {
       const handle = container.querySelector('[data-handle]')!
       expect(handle.className).toMatch(/pointer-coarse:h-/)
       expect(handle.className).toMatch(/pointer-coarse:w-/)
+    })
+  })
+
+  describe('gliding while playing', () => {
+    const frames = [
+      'requestAnimationFrame',
+      'cancelAnimationFrame',
+      'performance',
+      'Date',
+    ] as const
+    const last = times.length - 1
+    // `data-at` is how far along the axis, 0 to 1, kept current on every frame.
+    const handleAt = (container: HTMLElement) =>
+      Number(container.querySelector<HTMLElement>('[data-handle]')!.dataset.at)
+
+    beforeEach(() => {
+      vi.useFakeTimers({ toFake: [...frames] })
+    })
+
+    afterEach(() => {
+      vi.unstubAllGlobals()
+    })
+
+    const play = (props: Partial<ComponentProps<typeof TimeAxis>> = {}) =>
+      renderAxis({ index: 2, max: last, glideMs: 1000, ...props })
+
+    // It used to move once a tick and then sit still. It now moves toward the
+    // next chart the whole time, so the ruler runs instead of hopping.
+    test('moves toward the next chart as the interval passes', () => {
+      const { container } = play()
+      const start = handleAt(container)
+
+      act(() => vi.advanceTimersByTime(500))
+      const halfway = handleAt(container)
+
+      expect(halfway).toBeGreaterThan(start)
+      expect(halfway).toBeCloseTo(2.5 / last, 1)
+    })
+
+    test('keeps moving in between, not only at the ends of the interval', () => {
+      const { container } = play()
+
+      const seen = new Set<number>()
+      for (let i = 0; i < 8; i++) {
+        act(() => vi.advanceTimersByTime(100))
+        seen.add(Math.round(handleAt(container) * 1000))
+      }
+
+      expect(seen.size).toBeGreaterThan(5)
+    })
+
+    test('arrives at the next chart as the interval ends, and no further', () => {
+      const { container } = play()
+
+      act(() => vi.advanceTimersByTime(2500))
+
+      expect(handleAt(container)).toBeCloseTo(3 / last, 2)
+    })
+
+    test('starts from the new chart when the tick moves on', () => {
+      const { container, rerender } = play()
+      act(() => vi.advanceTimersByTime(900))
+
+      rerender(
+        <TimeAxis
+          times={times}
+          index={3}
+          max={last}
+          onSeek={vi.fn()}
+          glideMs={1000}
+        />,
+      )
+
+      expect(handleAt(container)).toBeCloseTo(3 / last, 1)
+    })
+
+    // Looping back to the first chart must not sweep the handle all the way
+    // back across the axis.
+    test('jumps, rather than sweeping back, when it loops to the start', () => {
+      const { container, rerender } = play({ index: last })
+      act(() => vi.advanceTimersByTime(300))
+
+      rerender(
+        <TimeAxis
+          times={times}
+          index={0}
+          max={last}
+          onSeek={vi.fn()}
+          glideMs={1000}
+        />,
+      )
+
+      expect(handleAt(container)).toBeCloseTo(0, 1)
+    })
+
+    test('stays on the last chart, with nowhere further to go', () => {
+      const { container } = play({ index: last })
+
+      act(() => vi.advanceTimersByTime(600))
+
+      expect(handleAt(container)).toBeCloseTo(1, 5)
+    })
+
+    test('carries the time label along with the handle', () => {
+      const { container } = play()
+      const label = () =>
+        container.querySelector<HTMLElement>('[data-handle-label]')!
+      const before = label().dataset.at
+
+      act(() => vi.advanceTimersByTime(500))
+
+      expect(label().dataset.at).not.toBe(before)
+      expect(Number(label().dataset.at)).toBeCloseTo(handleAt(container), 5)
+    })
+
+    test('does not move on its own when it is not playing', () => {
+      const { container } = renderAxis({ index: 2, max: last })
+      const before = handleAt(container)
+
+      act(() => vi.advanceTimersByTime(800))
+
+      expect(handleAt(container)).toBe(before)
+    })
+
+    test('returns to the chart it is on when playback stops', () => {
+      const { container, rerender } = play()
+      act(() => vi.advanceTimersByTime(500))
+
+      rerender(<TimeAxis times={times} index={2} max={last} onSeek={vi.fn()} />)
+
+      expect(handleAt(container)).toBeCloseTo(2 / last, 5)
+    })
+
+    test('hops instead of gliding for visitors who prefer less motion', () => {
+      vi.stubGlobal('matchMedia', () => ({ matches: true }))
+      const { container } = play()
+
+      act(() => vi.advanceTimersByTime(500))
+
+      expect(handleAt(container)).toBeCloseTo(2 / last, 5)
+    })
+
+    test('stops its animation loop when it unmounts', () => {
+      const { unmount } = play()
+
+      unmount()
+
+      expect(vi.getTimerCount()).toBe(0)
     })
   })
 })

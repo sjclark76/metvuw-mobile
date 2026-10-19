@@ -75,3 +75,67 @@ test.describe('animated viewer', () => {
     await expect(slider(page)).toHaveAttribute('aria-valuetext', 'Chart 1 of 4')
   })
 })
+
+// While playing, the handle runs along the axis instead of hopping once per
+// chart. Sampled from the page itself, in real time, over most of one interval.
+const handleXs = (page: Page, durationMs: number) =>
+  page.evaluate(async (duration) => {
+    const handle = document.querySelector('[data-handle]')!
+    const xs: number[] = []
+    const start = performance.now()
+    while (performance.now() - start < duration) {
+      xs.push(Math.round(handle.getBoundingClientRect().x * 10) / 10)
+      await new Promise((resolve) => setTimeout(resolve, 40))
+    }
+    return xs
+  }, durationMs)
+
+test.describe('the handle while playing', () => {
+  test('glides smoothly instead of hopping @mobile', async ({ page }) => {
+    await openViewer(page)
+
+    await page.getByLabel('Play animation').click()
+    await expect(page.getByLabel('Pause animation')).toBeVisible()
+    const xs = await handleXs(page, 800)
+
+    // Many positions within one second, rising steadily.
+    expect(new Set(xs).size).toBeGreaterThan(8)
+    const rising = xs.filter((x, i) => i > 0 && x >= xs[i - 1] - 0.5).length
+    expect(rising).toBeGreaterThan(xs.length - 4)
+  })
+
+  // Pausing mid-glide eases the handle back onto the chart that is on screen, so
+  // the handle never points between two charts while the picture shows one.
+  test('settles on the chart that is showing when paused @mobile', async ({
+    page,
+  }) => {
+    await openViewer(page)
+    await page.getByLabel('Play animation').click()
+    await page.waitForTimeout(1300)
+
+    await page.getByLabel('Pause animation').click()
+    await page.waitForTimeout(450)
+    const xs = await handleXs(page, 500)
+
+    expect(Math.max(...xs) - Math.min(...xs)).toBeLessThan(1)
+    const index = Number(await slider(page).inputValue())
+    const at = Number(
+      await page.locator('[data-handle]').getAttribute('data-at'),
+    )
+    expect(at).toBeCloseTo(index / 3, 3)
+  })
+
+  test.describe('for a visitor who prefers less motion', () => {
+    test.use({ reducedMotion: 'reduce' })
+
+    test('hops from chart to chart, as before', async ({ page }) => {
+      await openViewer(page)
+
+      await page.getByLabel('Play animation').click()
+      const xs = await handleXs(page, 800)
+
+      // At most the starting chart and the next one.
+      expect(new Set(xs).size).toBeLessThanOrEqual(3)
+    })
+  })
+})

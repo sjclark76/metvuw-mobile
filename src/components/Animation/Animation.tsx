@@ -76,6 +76,7 @@ const AnimationContext = createContext<{
   state: State
   count: number
   times: readonly number[]
+  intervalMs: number
   dispatch: (action: Action) => void
 } | null>(null)
 
@@ -103,8 +104,8 @@ export function AnimationProvider({
   }, [state.playing, state.displayAnimated, count, max, intervalMs])
 
   const value = useMemo(
-    () => ({ state, count, times, dispatch }),
-    [state, count, times, dispatch],
+    () => ({ state, count, times, intervalMs, dispatch }),
+    [state, count, times, intervalMs, dispatch],
   )
 
   return <AnimationContext value={value}>{children}</AnimationContext>
@@ -129,6 +130,8 @@ export function useAnimation() {
       index: clamp(context?.state.index ?? 0, max),
       max,
       times: context?.times ?? NO_TIMES,
+      // How long each chart is shown while playing.
+      intervalMs: context?.intervalMs ?? DEFAULT_INTERVAL_MS,
       toggleDisplay: dispatch
         ? () => dispatch({ type: 'toggleDisplay' })
         : noop,
@@ -145,6 +148,6 @@ export function useAnimation() {
         ? (index: number) => dispatch({ type: 'seek', index, max })
         : noop,
     }),
-    [context?.state, context?.times, dispatch, max],
+    [context?.state, context?.times, context?.intervalMs, dispatch, max],
   )
 }
