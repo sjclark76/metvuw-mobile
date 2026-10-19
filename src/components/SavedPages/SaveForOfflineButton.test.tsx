@@ -76,9 +76,7 @@ describe('<SaveForOfflineButton />', () => {
     render(<SaveForOfflineButton />)
 
     expect(button()).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('status')).toHaveTextContent(
-      'Saved for offline, 2.1 MB',
-    )
+    expect(screen.getByRole('status')).toHaveTextContent('Saved, 2.1 MB')
   })
 
   test('forgets a saved page when pressed again', () => {
@@ -138,16 +136,44 @@ describe('<SaveForOfflineButton />', () => {
   test('is not offered where pages cannot be saved', () => {
     state.supported = false
 
-    const { container } = render(<SaveForOfflineButton />)
+    render(<SaveForOfflineButton />)
 
-    expect(container).toBeEmptyDOMElement()
+    expect(screen.queryByRole('button')).toBeNull()
   })
 
   test('is not offered when the page is not known', () => {
     state.path = null
 
+    render(<SaveForOfflineButton />)
+
+    expect(screen.queryByRole('button')).toBeNull()
+  })
+
+  // The button only appears once the page is running in the browser; its space
+  // is held from the first paint so nothing below it jumps.
+  test('holds its space even where nothing is offered', () => {
+    state.supported = false
+
     const { container } = render(<SaveForOfflineButton />)
 
-    expect(container).toBeEmptyDOMElement()
+    expect(container.firstElementChild).toHaveClass('min-h-9')
+  })
+
+  test('keeps a saved message on one line, so it cannot change the height', () => {
+    state.saved = saved
+
+    const { container } = render(<SaveForOfflineButton />)
+
+    expect(container.firstElementChild).toHaveClass('flex-nowrap')
+    expect(screen.getByRole('status')).toHaveClass('truncate')
+  })
+
+  test('lets a failure message wrap: it follows a press, not a page load', () => {
+    state.status = 'failed'
+
+    const { container } = render(<SaveForOfflineButton />)
+
+    expect(container.firstElementChild).toHaveClass('flex-wrap')
+    expect(screen.getByRole('status')).not.toHaveClass('truncate')
   })
 })

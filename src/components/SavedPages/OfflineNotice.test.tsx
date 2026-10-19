@@ -86,17 +86,12 @@ describe('<OfflineNotice />', () => {
     expect(screen.getByRole('status')).not.toHaveTextContent('issued')
   })
 
-  test('on a page that is not saved, says only what has been seen can be shown', () => {
+  test('says nothing on a page that is not saved: that is the offline page, or what was merely viewed', () => {
     state.pages = [saved({ path: '/satellite' })]
 
-    render(<OfflineNotice />)
+    const { container } = render(<OfflineNotice />)
 
-    const notice = screen.getByRole('status')
-    expect(notice).toHaveTextContent("You're offline.")
-    expect(notice).toHaveTextContent(
-      'Charts you have already viewed on this device can still be shown.',
-    )
-    expect(notice).not.toHaveTextContent('Charts saved')
+    expect(container).toBeEmptyDOMElement()
   })
 
   test('says nothing when the page is not known', () => {

@@ -43,40 +43,61 @@ export function SaveForOfflineButton() {
   const online = useOnline()
   const { saved, status, save, remove } = useSavedPage(path ?? '')
 
-  if (!isMounted || !path || !supportsSavingPages()) return null
+  const ready = isMounted && !!path && supportsSavingPages()
 
   const saving = status === 'saving'
+  const failed = status === 'failed'
   const cannotSave = !saved && !online
   const message = saving
     ? 'Saving…'
-    : status === 'failed'
+    : failed
       ? 'Could not save. Check your connection and try again.'
       : saved
-        ? `Saved for offline, ${formatBytes(saved.bytes)}`
+        ? `Saved, ${formatBytes(saved.bytes)}`
         : cannotSave
           ? 'Connect to save this page'
           : ''
 
   return (
-    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
-      <button
-        type="button"
-        aria-pressed={!!saved}
-        disabled={saving || cannotSave}
-        onClick={() => void (saved ? remove() : save())}
-        className={clsx(
-          'ring-ink/10 focus-visible:outline-cold inline-flex min-h-9 items-center gap-2 rounded-full px-3.5 text-sm font-semibold ring-1 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-60 pointer-coarse:min-h-11',
-          saved
-            ? 'bg-ink text-paper hover:bg-ink-soft'
-            : 'bg-plate text-ink hover:bg-paper',
-        )}
-      >
-        {saved ? <CheckIcon /> : <DownloadIcon />}
-        Save for offline
-      </button>
-      <p role="status" className="text-ink-soft font-mono text-xs empty:hidden">
-        {message}
-      </p>
+    // The space is reserved from the first paint, as the button only appears once
+    // the page is running in the browser: otherwise the charts would jump down.
+    // The message stays on the one line (it is short) so that a saved page's
+    // does not wrap and change the height when it arrives; only a failure, which
+    // follows a press, is allowed to.
+    <div
+      className={clsx(
+        'mt-3 flex min-h-9 items-center gap-x-3 pointer-coarse:min-h-11',
+        failed ? 'flex-wrap gap-y-1' : 'flex-nowrap',
+      )}
+    >
+      {ready && (
+        <>
+          <button
+            type="button"
+            aria-pressed={!!saved}
+            disabled={saving || cannotSave}
+            onClick={() => void (saved ? remove() : save())}
+            className={clsx(
+              'ring-ink/10 focus-visible:outline-cold inline-flex min-h-9 shrink-0 items-center gap-2 rounded-full px-3.5 text-sm font-semibold ring-1 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-60 pointer-coarse:min-h-11',
+              saved
+                ? 'bg-ink text-paper hover:bg-ink-soft'
+                : 'bg-plate text-ink hover:bg-paper',
+            )}
+          >
+            {saved ? <CheckIcon /> : <DownloadIcon />}
+            Save for offline
+          </button>
+          <p
+            role="status"
+            className={clsx(
+              'text-ink-soft min-w-0 font-mono text-xs empty:hidden',
+              !failed && 'truncate',
+            )}
+          >
+            {message}
+          </p>
+        </>
+      )}
     </div>
   )
 }
