@@ -1,4 +1,5 @@
 import {
+  balloonLocations,
   getsBalloonLocationCodeOrDefault,
   isBalloonLocationCode,
 } from './balloonLocations'
@@ -15,6 +16,19 @@ describe('isBalloonLocationCode', () => {
   it('returns false for empty string', () => {
     expect(isBalloonLocationCode('')).toBe(false)
   })
+
+  it('accepts every station the app has', () => {
+    for (const code of Object.keys(balloonLocations)) {
+      expect(isBalloonLocationCode(code)).toBe(true)
+    }
+  })
+
+  it.each(['93112x', ' 93112', 'constructor', '__proto__'])(
+    'rejects %j',
+    (value) => {
+      expect(isBalloonLocationCode(value)).toBe(false)
+    },
+  )
 })
 
 describe('getsBalloonLocationCodeOrDefault', () => {
