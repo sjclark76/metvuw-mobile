@@ -215,3 +215,35 @@ export function expiredPages(
 ): SavedPage[] {
   return saved.filter((page) => now - page.refreshedAt > SAVED_LIFETIME_MS)
 }
+
+const isSavedPage = (value: unknown): value is SavedPage => {
+  if (typeof value !== 'object' || value === null) return false
+  const page = value as Record<string, unknown>
+  return (
+    typeof page.path === 'string' &&
+    page.path.startsWith('/') &&
+    !page.path.startsWith('//') &&
+    typeof page.title === 'string' &&
+    (page.issued === undefined || typeof page.issued === 'number') &&
+    typeof page.refreshedAt === 'number' &&
+    Number.isFinite(page.refreshedAt) &&
+    typeof page.bytes === 'number' &&
+    Array.isArray(page.urls) &&
+    page.urls.every(isChartUrl)
+  )
+}
+
+/**
+ * The saved pages in whatever was stored, dropping anything that is not one
+ * (and a second entry for the same page), so the rest of the app can rely on
+ * the shape.
+ */
+export function sanitizeSavedPages(stored: unknown): SavedPage[] {
+  if (!Array.isArray(stored)) return []
+  const seen = new Set<string>()
+  return stored.filter((page): page is SavedPage => {
+    if (!isSavedPage(page) || seen.has(page.path)) return false
+    seen.add(page.path)
+    return true
+  })
+}

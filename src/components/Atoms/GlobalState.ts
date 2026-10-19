@@ -1,38 +1,11 @@
 import { atom } from 'jotai'
 import { atomWithStorage, createJSONStorage } from 'jotai/utils'
 
+import { tolerantStorage } from '@/shared/helpers/tolerantStorage'
+
 const isMenuOpenAtom = atom(false)
 
 const favoritePageAtom = atomWithStorage<string | null>('favoritePage', null)
-
-/**
- * localStorage, minus its exceptions. A browser that blocks it (private modes,
- * a full quota) throws on every call, and a choice that cannot be saved should
- * still take effect for the visit, not break the button that made it.
- */
-const tolerantStorage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'> = {
-  getItem: (key) => {
-    try {
-      return localStorage.getItem(key)
-    } catch {
-      return null
-    }
-  },
-  setItem: (key, value) => {
-    try {
-      localStorage.setItem(key, value)
-    } catch {
-      // Not saved; it still applies until the page is closed.
-    }
-  },
-  removeItem: (key) => {
-    try {
-      localStorage.removeItem(key)
-    } catch {
-      // Nothing to remove.
-    }
-  },
-}
 
 /** The visitor's choice of theme. "System" follows the device's own setting. */
 type ThemeChoice = 'system' | 'light' | 'dark'
@@ -50,5 +23,19 @@ const themeAtom = atomWithStorage<ThemeChoice>(
   { getOnInit: true },
 )
 
-export { favoritePageAtom, isMenuOpenAtom, themeAtom }
+/**
+ * The pages saved for offline use. Their charts are in the browser's cache; this
+ * is only what to remember about them. What is read back is not trusted (it is
+ * the visitor's to edit, and an older version may have written it): see
+ * `sanitizeSavedPages`. Read on the first render, because the sync that keeps
+ * the pages current starts as soon as the app does.
+ */
+const savedPagesAtom = atomWithStorage<unknown>(
+  'savedPages',
+  [],
+  createJSONStorage(() => tolerantStorage),
+  { getOnInit: true },
+)
+
+export { favoritePageAtom, isMenuOpenAtom, savedPagesAtom, themeAtom }
 export type { ThemeChoice }

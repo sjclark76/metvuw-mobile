@@ -2,7 +2,12 @@ import { act, renderHook } from '@testing-library/react'
 import { createStore, Provider, useAtom } from 'jotai'
 import { ReactNode } from 'react'
 
-import { favoritePageAtom, isMenuOpenAtom, themeAtom } from './GlobalState'
+import {
+  favoritePageAtom,
+  isMenuOpenAtom,
+  savedPagesAtom,
+  themeAtom,
+} from './GlobalState'
 
 const wrapperFor = (store = createStore()) =>
   function Wrapper({ children }: { children: ReactNode }) {
@@ -123,5 +128,59 @@ describe('themeAtom', () => {
     act(() => result.current[1]('dark'))
 
     expect(localStorage.getItem('favoritePage')).toBeNull()
+  })
+})
+
+describe('savedPagesAtom', () => {
+  beforeEach(() => localStorage.clear())
+
+  test('starts with nothing saved', () => {
+    const { result } = renderHook(() => useAtom(savedPagesAtom), {
+      wrapper: wrapperFor(),
+    })
+
+    expect(result.current[0]).toEqual([])
+  })
+
+  test('is saved as JSON under its own key', () => {
+    const { result } = renderHook(() => useAtom(savedPagesAtom), {
+      wrapper: wrapperFor(),
+    })
+
+    act(() => result.current[1]([{ path: '/regions/nz' }]))
+
+    expect(JSON.parse(localStorage.getItem('savedPages')!)).toEqual([
+      { path: '/regions/nz' },
+    ])
+    expect(localStorage.getItem('favoritePage')).toBeNull()
+  })
+
+  test('is read when the atom is created, before the first render', async () => {
+    localStorage.setItem('savedPages', JSON.stringify([{ path: '/radar/nl' }]))
+    vi.resetModules()
+    const { savedPagesAtom: fresh } = await import('./GlobalState')
+    const firstRender: unknown[] = []
+
+    renderHook(
+      () => {
+        const [pages] = useAtom(fresh)
+        if (firstRender.length === 0) firstRender.push(pages)
+      },
+      { wrapper: wrapperFor() },
+    )
+
+    expect(firstRender).toEqual([[{ path: '/radar/nl' }]])
+  })
+
+  test('does not throw when storage is blocked', () => {
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('storage is blocked')
+    })
+    const { result } = renderHook(() => useAtom(savedPagesAtom), {
+      wrapper: wrapperFor(),
+    })
+
+    expect(() => act(() => result.current[1]([]))).not.toThrow()
+    vi.restoreAllMocks()
   })
 })
