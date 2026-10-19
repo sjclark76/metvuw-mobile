@@ -122,3 +122,62 @@ test.describe('choosing', () => {
     expect(plate).toBe('rgb(23, 28, 56)') // #171C38
   })
 })
+
+// Switching theme changes colour, never position: nothing on the page may move or
+// resize. Measured by laying the page out in light, switching, and comparing.
+test.describe('switching theme does not shift the layout', () => {
+  test.use({ colorScheme: 'light' })
+
+  const measured = [
+    'header',
+    'h1',
+    '[data-chart-index]',
+    '[data-chart-index] img',
+    'article > div + div',
+    'footer',
+    '[data-axis-drawing]',
+    '[data-handle]',
+    'nav button',
+  ]
+
+  const layout = (page: Page) =>
+    page.evaluate((selectors) => {
+      const round = (n: number) => Math.round(n * 2) / 2
+      return selectors.flatMap((selector) =>
+        [...document.querySelectorAll(selector)].slice(0, 12).map((element) => {
+          const box = element.getBoundingClientRect()
+          return [
+            selector,
+            round(box.x),
+            round(box.y),
+            round(box.width),
+            round(box.height),
+          ]
+        }),
+      )
+    }, measured)
+
+  for (const [name, width, height] of [
+    ['a phone', 390, 800],
+    ['a desktop', 1280, 800],
+  ] as const) {
+    for (const path of ['/regions/nz', '/satellite', '/radar/nl', '/offline']) {
+      test(`${path} on ${name}`, async ({ page }) => {
+        await page.setViewportSize({ width, height })
+        await page.goto(path)
+        if (path !== '/offline') await page.waitForSelector('main img')
+        // Let entrance animations finish, and every chart settle at its real size.
+        await page.evaluate(() =>
+          Promise.all(document.getAnimations().map((a) => a.finished)),
+        )
+        const light = await layout(page)
+        expect(light.length).toBeGreaterThan(4)
+
+        await toggle(page).click()
+        await page.waitForTimeout(400)
+
+        expect(await layout(page)).toEqual(light)
+      })
+    }
+  }
+})
