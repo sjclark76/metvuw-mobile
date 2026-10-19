@@ -8,6 +8,7 @@ import { favoritePageRedirectScript } from '@/components/FavoritePageRedirect/fa
 import { GoogleAdSense } from '@/components/GoogleAdSense'
 import GoogleTag from '@/components/GoogleTag'
 import { Providers } from '@/components/Providers/Providers'
+import { themeScript } from '@/components/ThemeToggle/themeScript'
 import { UpdateNotification } from '@/components/UpdateNotification'
 import { config } from '@/config'
 
@@ -19,13 +20,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="bg-paper">
+    <html lang="en" className="bg-paper" suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="google-adsense-account" content={config.adsenseClientId} />
         {/* A plain inline script blocks parsing, so it runs before the page
             paints. next/script's beforeInteractive only queues the script for
             Next's runtime, which runs after the page can already be visible. */}
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: themeScript }}
+        />
         <script
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: favoritePageRedirectScript }}
