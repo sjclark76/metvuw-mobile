@@ -90,10 +90,6 @@ export function TimeAxis({
   const handleRef = useRef<HTMLDivElement>(null)
   const labelRef = useRef<HTMLSpanElement>(null)
   const changedAt = useRef(0)
-  const latest = useRef({ index })
-  useLayoutEffect(() => {
-    latest.current = { index }
-  })
   useEffect(() => {
     changedAt.current = performance.now()
   }, [index])
@@ -108,6 +104,12 @@ export function TimeAxis({
       labelRef.current.dataset.at = String(ratio(position))
     }
   }
+  // What the cleanup below needs, from the latest render rather than the one the
+  // glide started in.
+  const latest = useRef({ index, place })
+  useLayoutEffect(() => {
+    latest.current = { index, place }
+  })
   const gliding =
     glideMs !== undefined &&
     glideMs > 0 &&
@@ -140,7 +142,7 @@ export function TimeAxis({
   useEffect(() => {
     if (!gliding) return
     return () => {
-      place(latest.current.index)
+      latest.current.place(latest.current.index)
     }
   }, [gliding])
 
