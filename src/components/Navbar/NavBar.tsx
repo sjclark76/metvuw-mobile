@@ -90,16 +90,22 @@ const Navbar = () => {
       ref={navRef} // Attach the ref to the nav element
       className="text-bar-ink mx-auto flex max-w-176 flex-wrap items-center p-2 pl-4 2xl:max-w-none"
     >
-      <Link href="/" className="mr-4 inline-flex min-h-11 items-center gap-2">
+      <Link
+        href="/"
+        aria-label="MetVuw Mobile home"
+        className="@container mr-4 inline-flex min-h-11 min-w-0 flex-1 basis-0 items-center gap-2"
+      >
         <MetvuwMobileImage />
-        <span className="font-display text-[1.55rem] leading-none font-bold tracking-[0.06em] uppercase">
+        {/* Sized in rem, like the space it is given, so at larger text sizes it
+            shows only as much of the name as fits whole, never half a word. */}
+        <span className="font-display hidden text-[1.55rem] leading-none font-bold tracking-[0.06em] whitespace-nowrap uppercase @min-[8rem]:inline">
           metvuw{' '}
-          <span className="ml-1 text-[1.05rem] font-semibold tracking-[0.14em] opacity-70">
+          <span className="ml-1 hidden text-[1.05rem] font-semibold tracking-[0.14em] opacity-70 @min-[12rem]:inline">
             mobile
           </span>
         </span>
       </Link>
-      <div className="ml-auto flex items-center">
+      <div className="ml-auto flex shrink-0 items-center">
         <ThemeMenu />
         <SetHomePageIcon />
         <button
