@@ -16,6 +16,7 @@
     "test:watch": "vitest --ui",
     "test:ci": "vitest run --reporter=junit --outputFile.junit=reports/junit.xml",
     "e2e": "npx playwright test",
+    "e2e:build": "node e2e/stub/with-stub.mjs npm run build",
     "e2e:interactive": "npx playwright test --ui",
     "checkly:test": "npx checkly test",
     "checkly:deploy": "npx checkly deploy"
