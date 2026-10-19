@@ -171,3 +171,28 @@ test.describe('in UTC, where midnight falls on the charts', () => {
     ).toBeGreaterThan(0)
   })
 })
+
+// iOS only starts dragging a slider that is pressed on its thumb, so the
+// invisible slider's thumb must be a real, grabbable size and line up with the
+// drawn handle (its centre runs from one inset, 0.75rem, to the other).
+test.describe('the slider can be grabbed by touch', () => {
+  test('has a thumb big enough to grab', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'reads the WebKit-style thumb')
+    await openList(page)
+
+    const thumb = await page.evaluate(() => {
+      const input = document.querySelector<HTMLInputElement>(
+        'input[aria-label="Chart position"]',
+      )!
+      const style = getComputedStyle(input, '::-webkit-slider-thumb')
+      return {
+        width: parseFloat(style.width),
+        height: parseFloat(style.height),
+        rem: parseFloat(getComputedStyle(document.documentElement).fontSize),
+      }
+    })
+
+    expect(thumb.width).toBeGreaterThanOrEqual(thumb.rem * 1.5)
+    expect(thumb.height).toBeGreaterThanOrEqual(40)
+  })
+})
