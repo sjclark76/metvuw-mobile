@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 
+import { actionClasses } from '@/components/StatusMessage'
+
 // The slice of `window.serwist` (a @serwist/window Serwist, created by
 // @serwist/next) that this component uses. It does not exist in development,
 // where the service worker is disabled.
@@ -64,21 +66,21 @@ export function UpdateNotification({
   return (
     <div
       role="status"
-      className="fixed inset-x-2 bottom-24 z-40 mx-auto flex max-w-md flex-wrap items-center justify-between gap-3 rounded-lg border border-gray-300 bg-white p-3 text-gray-800 shadow-lg dark:border-slate-600 dark:bg-stone-700 dark:text-stone-100 print:hidden"
+      className="border-rule bg-plate text-ink fixed inset-x-2 bottom-[calc(var(--footer-height,5rem)+0.75rem)] z-40 mx-auto flex max-w-md flex-wrap items-center justify-between gap-3 rounded-lg border p-3 shadow-lg print:hidden"
     >
       <p className="font-medium">A new version is available.</p>
       <div className="flex gap-2">
         <button
           type="button"
           onClick={() => setUpdateReady(false)}
-          className="inline-flex min-h-11 items-center justify-center rounded border border-gray-400 px-4 font-semibold hover:bg-gray-100 dark:hover:bg-stone-600"
+          className={actionClasses.secondary}
         >
           Later
         </button>
         <button
           type="button"
           onClick={applyUpdate}
-          className="inline-flex min-h-11 items-center justify-center rounded bg-sky-700 px-4 font-semibold text-white hover:bg-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+          className={actionClasses.primary}
         >
           Reload
         </button>
