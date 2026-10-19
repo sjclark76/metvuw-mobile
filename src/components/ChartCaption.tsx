@@ -1,9 +1,9 @@
 import { ReactNode } from 'react'
 
 /**
- * The line under a chart: the day in display type, the time over the date, and
- * how far ahead it is. Centred on one line because the time block is two lines
- * tall, so aligning on the first baseline made the day look low.
+ * The line under a chart: the time in display type, the day over the date, and
+ * how far ahead it is. Centred on one line because the day block is two lines
+ * tall, so aligning on the first baseline made the time look low.
  */
 export default function ChartCaption({
   day,
@@ -19,10 +19,10 @@ export default function ChartCaption({
   return (
     <div className="grid grid-cols-[auto_1fr_auto] items-center gap-x-3.5 px-4 pt-2.5 md:px-0">
       <span className="font-display text-ink text-[2.1rem] leading-[0.9] font-bold tracking-[0.04em] uppercase">
-        {day}
+        {time}
       </span>
       <span className="text-ink font-mono text-[0.95rem] leading-tight font-medium">
-        {time}
+        {day}
         <small className="text-ink-soft block font-mono text-xs font-normal">
           {date}
         </small>
