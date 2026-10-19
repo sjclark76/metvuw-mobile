@@ -152,7 +152,10 @@ export function TimeAxis({
     current === undefined ? '' : formatDate(current, 'EEE HH:mm')
 
   return (
-    <div ref={axisRef} className="relative h-14 min-w-0 grow basis-auto">
+    <div
+      ref={axisRef} // Taller where there is a finger, so the bigger handle clears the label above it.
+      className="relative h-14 min-w-0 grow basis-auto pointer-coarse:h-[4.25rem]"
+    >
       <input
         type="range"
         min={0}
@@ -167,7 +170,7 @@ export function TimeAxis({
         // slider that is pressed on its thumb, so a thumb of no size could not be
         // dragged at all. The thumb's centre then runs exactly where the drawn
         // handle does, from one inset to the other.
-        className="peer absolute inset-0 z-10 m-0 h-full w-full cursor-ew-resize touch-none appearance-none bg-transparent opacity-0 [&::-moz-range-thumb]:h-14 [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0 [&::-moz-range-track]:bg-transparent [&::-webkit-slider-runnable-track]:h-full [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:h-14 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none"
+        className="peer absolute inset-0 z-10 m-0 h-full w-full cursor-ew-resize touch-none appearance-none bg-transparent opacity-0 [&::-moz-range-thumb]:h-14 [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0 pointer-coarse:[&::-moz-range-thumb]:h-[4.25rem] [&::-moz-range-track]:bg-transparent [&::-webkit-slider-runnable-track]:h-full [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:h-14 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none pointer-coarse:[&::-webkit-slider-thumb]:h-[4.25rem]"
       />
 
       <div

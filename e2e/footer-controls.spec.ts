@@ -196,3 +196,23 @@ test.describe('the slider can be grabbed by touch', () => {
     expect(thumb.height).toBeGreaterThanOrEqual(40)
   })
 })
+
+// The label naming the chart in view sits above the handle. The touch handle is
+// the taller one, and it once overlapped the label.
+test.describe('the handle and its label @mobile', () => {
+  test('are clear of each other', async ({ page }) => {
+    await openList(page)
+
+    const gap = await page.evaluate(() => {
+      const label = document
+        .querySelector('[data-handle-label]')!
+        .getBoundingClientRect()
+      const handle = document
+        .querySelector('[data-handle]')!
+        .getBoundingClientRect()
+      return handle.top - label.bottom
+    })
+
+    expect(gap).toBeGreaterThanOrEqual(3)
+  })
+})
