@@ -15,10 +15,10 @@ import { useSavedPageList } from './useSavedPages'
 const OUT_OF_DATE_AFTER_MS = 24 * 60 * 60 * 1000
 
 /**
- * Shown while there is no connection. On a page that was saved it says how old
- * what is on screen is, and warns when the forecast is out of date: a saved chart
- * looks exactly like a current one, and someone in the backcountry may be
- * deciding what to do by it.
+ * Shown on a saved page while there is no connection. It says how old what is on
+ * screen is, and warns when the forecast is out of date: a saved chart looks
+ * exactly like a current one, and someone in the backcountry may be deciding what
+ * to do by it.
  */
 export function OfflineNotice() {
   const path = usePathname()
@@ -30,9 +30,12 @@ export function OfflineNotice() {
 
   if (!isMounted || online || !path) return null
 
+  // Only for a page that was saved: that is the one whose age matters. Anything
+  // else shown offline is the offline page itself, or what was merely viewed.
   const saved = pages.find((page) => page.path === path)
+  if (!saved) return null
   const outOfDate =
-    saved?.issued !== undefined && now - saved.issued > OUT_OF_DATE_AFTER_MS
+    saved.issued !== undefined && now - saved.issued > OUT_OF_DATE_AFTER_MS
 
   return (
     <div
@@ -43,23 +46,17 @@ export function OfflineNotice() {
       )}
     >
       <p className="font-semibold">You&apos;re offline.</p>
-      {saved ? (
-        <>
-          <p>Charts saved {formatAge(now - saved.refreshedAt)}.</p>
-          {saved.issued !== undefined && (
-            <p className="text-ink-soft font-mono text-xs">
-              Forecast issued {formatDate(saved.issued, 'EEE d MMM, h:mmaaa')} (
-              {formatAge(now - saved.issued)}).
-            </p>
-          )}
-          {outOfDate && (
-            <p className="mt-1 font-semibold">
-              Out of date. Conditions may have changed.
-            </p>
-          )}
-        </>
-      ) : (
-        <p>Charts you have already viewed on this device can still be shown.</p>
+      <p>Charts saved {formatAge(now - saved.refreshedAt)}.</p>
+      {saved.issued !== undefined && (
+        <p className="text-ink-soft font-mono text-xs">
+          Forecast issued {formatDate(saved.issued, 'EEE d MMM, h:mmaaa')} (
+          {formatAge(now - saved.issued)}).
+        </p>
+      )}
+      {outOfDate && (
+        <p className="mt-1 font-semibold">
+          Out of date. Conditions may have changed.
+        </p>
       )}
     </div>
   )
