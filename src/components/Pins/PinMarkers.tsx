@@ -13,13 +13,19 @@ import { usePins } from './usePins'
 const FLIP_AFTER = 0.55
 
 /**
- * The visitor's pins, marked on a region's chart: a small hollow ring where the
- * place is (so the chart shows through) with its name, or its label, beside it.
- * Drawn over the chart image, which it sits exactly on, so nothing moves; a pin
- * the chart does not show draws nothing.
+ * The visitor's pins, marked on a region's chart: a solid orange dot where the
+ * place is, with its name, or its label, beside it. Drawn over the chart image,
+ * which it sits exactly on, so nothing moves; a pin the chart does not show draws
+ * nothing.
+ *
+ * The dot is solid and orange because the chart is covered in small hollow black
+ * circles (its wind-barb grid), and a hollow ring was lost among them. Orange is
+ * a colour the chart does not use (it is lavender, with red isobars, black barbs
+ * and the rain colours); the white edge keeps it clear of red isobars and the
+ * dark edge of pale rain.
  *
  * The chart image is light in both themes (charts cannot be recoloured), so the
- * marker uses fixed dark colours with a light edge, not the theme's. What is
+ * marker uses fixed colours, not the theme's. What is
  * pinned is only known in the browser, so nothing is drawn before the page is
  * running there. The Pins page lists the same pins in words, so these are not read
  * out.
@@ -52,7 +58,10 @@ export function PinMarkers({ region }: { region: RegionCode }) {
             top: `${position.y * 100}%`,
           }}
         >
-          <span className="block size-3.5 rounded-full border-2 border-[#1b1740] shadow-[0_0_0_1.5px_rgba(255,255,255,0.9)]" />
+          <span
+            data-pin-dot
+            className="block size-[18px] rounded-full border-[3px] border-white bg-[#ff6a00] shadow-[0_0_0_1.5px_#1b1740,0_1px_5px_rgba(0,0,0,0.55)]"
+          />
           <span
             data-pin-label
             className={clsx(

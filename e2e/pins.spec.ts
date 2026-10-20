@@ -63,7 +63,7 @@ test.describe('pinning a place', () => {
     await expect(marker).toContainText('Wanaka')
   })
 
-  test('draws the ring over the chart image, not beside it @mobile', async ({
+  test('draws the dot over the chart image, not beside it @mobile', async ({
     page,
   }) => {
     await pinWanaka(page)
@@ -73,8 +73,7 @@ test.describe('pinning a place', () => {
     const image = (await page.locator('main img').first().boundingBox())!
     const ring = (await markers(page)
       .first()
-      .locator('span')
-      .first()
+      .locator('[data-pin-dot]')
       .boundingBox())!
 
     expect(ring.x + ring.width / 2).toBeGreaterThan(
