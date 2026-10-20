@@ -109,8 +109,32 @@ describe('chartListForPath', () => {
     expect((await chartListForPath('/satellite'))?.issued).toBe(10)
   })
 
+  test('the home page is the New Zealand forecast, kept under its own address', async () => {
+    vi.mocked(getRainChartDataForRegion).mockResolvedValue([
+      { ...chart(proxy('a', 'Rain'), 1000), forecastDate: '' },
+    ])
+
+    const list = await chartListForPath('/')
+
+    expect(getRainChartDataForRegion).toHaveBeenCalledWith(
+      expect.objectContaining({ code: 'nz' }),
+    )
+    expect(list).toMatchObject({
+      title: 'New Zealand',
+      path: '/',
+      urls: [proxy('a', 'Rain')],
+    })
+  })
+
+  test('the home page with a query string is still the home page', async () => {
+    vi.mocked(getRainChartDataForRegion).mockResolvedValue([])
+
+    expect(await chartListForPath('/?utm_source=x')).toMatchObject({
+      path: '/',
+    })
+  })
+
   test.each([
-    '/',
     '/offline',
     '/regions/atlantis',
     '/radar/zz',

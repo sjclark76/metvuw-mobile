@@ -72,6 +72,25 @@ test.describe('saving a page', () => {
     expect(await cacheSize(page, 'saved-charts')).toBeGreaterThan(1)
   })
 
+  test('works from the home page, which is the New Zealand forecast', async ({
+    page,
+    context,
+  }) => {
+    await openControlled(page, '/')
+
+    await save(page)
+    await context.setOffline(true)
+    await page.reload()
+
+    const [saved] = await savedPages(page)
+    expect(saved.path).toBe('/')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'New Zealand',
+    )
+    await expect(notice(page)).toContainText('Charts saved')
+    await expect.poll(() => firstChartLoaded(page)).toBeGreaterThan(0)
+  })
+
   test('pressing it again forgets the page and its charts', async ({
     page,
   }) => {
