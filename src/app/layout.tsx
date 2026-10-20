@@ -7,6 +7,7 @@ import FavoritePageRedirect from '@/components/FavoritePageRedirect/FavoritePage
 import { favoritePageRedirectScript } from '@/components/FavoritePageRedirect/favoritePageRedirectScript'
 import { GoogleAdSense } from '@/components/GoogleAdSense'
 import GoogleTag from '@/components/GoogleTag'
+import { PinnedHeader } from '@/components/PinnedHeader'
 import { Providers } from '@/components/Providers/Providers'
 import { OfflineNotice } from '@/components/SavedPages/OfflineNotice'
 import { SavedPagesSync } from '@/components/SavedPages/SavedPagesSync'
@@ -43,9 +44,9 @@ export default function RootLayout({
         <GoogleAdSense />
         <div className="text-ink font-sans">
           <Providers>
-            <header className="bg-bar sticky top-0 z-30 print:hidden">
+            <PinnedHeader>
               <Navbar />
-            </header>
+            </PinnedHeader>
             <FavoritePageRedirect />
             <UpdateNotification />
             <SavedPagesSync />
