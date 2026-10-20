@@ -18,6 +18,7 @@ import {
   worldRegions,
 } from '@/shared/types/region'
 
+import { usePinCount } from '../Pins/usePins'
 import { SavedMark } from '../SavedPages/SavedMark'
 import { useSavedPageCount, useSavedPaths } from '../SavedPages/useSavedPaths'
 import SetHomePageIcon from '../SetHomePageIcon/SetHomePageIcon'
@@ -58,6 +59,7 @@ const Navbar = () => {
   const navRef = useRef<HTMLElement>(null) // Create a ref for the nav element
   const savedPaths = useSavedPaths()
   const savedCount = useSavedPageCount()
+  const pinCount = usePinCount()
 
   const handleClick = () => {
     setMenuOpen((prev) => !prev)
@@ -159,6 +161,21 @@ const Navbar = () => {
                   known: what is saved is only known in the browser. */}
               <span className="inline-block min-w-[3ch]">
                 {savedCount > 0 && `(${savedCount})`}
+              </span>
+            </Link>
+          </div>
+          <div className={headerText}>
+            <Link
+              href="/pins"
+              className="mr-1"
+              prefetch={false}
+              onClick={() => setMenuOpen(false)}
+            >
+              Pins{' '}
+              {/* Room for the count is held, as for Saved: what is pinned is only
+                  known in the browser. */}
+              <span className="inline-block min-w-[3ch]">
+                {pinCount > 0 && `(${pinCount})`}
               </span>
             </Link>
           </div>

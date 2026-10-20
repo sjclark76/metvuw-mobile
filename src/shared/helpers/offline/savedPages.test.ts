@@ -88,7 +88,11 @@ function setup(partial: Partial<World> = {}) {
     failing: new Set(),
     redirecting: new Set(),
     unreachable: new Set(),
-    html: { '/regions/nz': '<html></html>', '/saved': '<html>saved</html>' },
+    html: {
+      '/regions/nz': '<html></html>',
+      '/saved': '<html>saved</html>',
+      '/pins': '<html>pins</html>',
+    },
     ...partial,
   }
   const requested: string[] = []
@@ -180,19 +184,30 @@ describe('downloadPage', () => {
     expect(caches.urls(SAVED_PAGES_CACHE)).toContain('/regions/nz')
   })
 
-  test('also keeps the list of saved pages, so there is a way back to them offline', async () => {
+  test('also keeps the list of saved pages and the Pins page, so both open offline', async () => {
     const { deps, caches } = setup()
 
     await downloadPage('/regions/nz', deps)
 
-    expect(caches.urls(SAVED_PAGES_CACHE)).toEqual(['/regions/nz', '/saved'])
+    expect(caches.urls(SAVED_PAGES_CACHE)).toEqual([
+      '/pins',
+      '/regions/nz',
+      '/saved',
+    ])
   })
 
   test('saving still works when the list of saved pages cannot be kept', async () => {
     const { deps, caches } = setup({ failing: new Set(['/saved']) })
 
     await expect(downloadPage('/regions/nz', deps)).resolves.toBeDefined()
-    expect(caches.urls(SAVED_PAGES_CACHE)).toEqual(['/regions/nz'])
+    expect(caches.urls(SAVED_PAGES_CACHE)).toEqual(['/pins', '/regions/nz'])
+  })
+
+  test('saving still works when the Pins page cannot be kept', async () => {
+    const { deps, caches } = setup({ failing: new Set(['/pins']) })
+
+    await expect(downloadPage('/regions/nz', deps)).resolves.toBeDefined()
+    expect(caches.urls(SAVED_PAGES_CACHE)).toEqual(['/regions/nz', '/saved'])
   })
 
   test('fails, and says so, when one chart cannot be downloaded', async () => {
@@ -361,8 +376,8 @@ describe('collectGarbage', () => {
     await collectGarbage([], deps)
 
     expect(caches.urls(SAVED_CHARTS_CACHE)).toEqual([])
-    // Only the list of saved pages stays: it is not any one page's.
-    expect(caches.urls(SAVED_PAGES_CACHE)).toEqual(['/saved'])
+    // Only the list of saved pages and the Pins page stay: they are not any one page's.
+    expect(caches.urls(SAVED_PAGES_CACHE)).toEqual(['/pins', '/saved'])
   })
 
   test('keeps what is still used, including a chart two pages share', async () => {
@@ -383,6 +398,7 @@ describe('collectGarbage', () => {
 
     expect(caches.urls(SAVED_CHARTS_CACHE)).toEqual([chart(1), chart(2)])
     expect(caches.urls(SAVED_PAGES_CACHE)).toEqual([
+      '/pins',
       '/regions/nz',
       '/satellite',
       '/saved',

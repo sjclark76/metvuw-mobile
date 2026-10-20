@@ -46,6 +46,16 @@ const PROXY_PREFIX = '/api/fallback-image?'
 /** The list of saved pages. It has to open offline too, so it is kept with them. */
 export const SAVED_LIST_PATH = '/saved'
 
+/** The Pins page: the places someone watches, and the way to add one. */
+export const PINS_PATH = '/pins'
+
+/**
+ * Pages kept whenever a page is saved, so they open with no connection: the list
+ * of what is saved, and the pins. Neither is any one saved page's, so they stay
+ * until nothing is saved (see `collectGarbage`, which never removes them).
+ */
+export const KEPT_WITH_SAVED_PAGES = [SAVED_LIST_PATH, PINS_PATH]
+
 const listUrl = (path: string) =>
   `/api/chart-list?path=${encodeURIComponent(path)}`
 
@@ -162,7 +172,9 @@ async function keepList(
       // Opens online as usual; offline it is not available at this address.
     }
   }
-  await keepPage(SAVED_LIST_PATH, deps).catch(() => {})
+  for (const path of KEPT_WITH_SAVED_PAGES) {
+    await keepPage(path, deps).catch(() => {})
+  }
 
   return {
     path: list.path,
@@ -289,7 +301,7 @@ export async function collectGarbage(
 ): Promise<void> {
   const wantedCharts = new Set(saved.flatMap((page) => page.urls))
   const wantedPages = new Set([
-    SAVED_LIST_PATH,
+    ...KEPT_WITH_SAVED_PAGES,
     ...saved.flatMap((page) => [page.path, ...(page.aliases ?? [])]),
   ])
 
