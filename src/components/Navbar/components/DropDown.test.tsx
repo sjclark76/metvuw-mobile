@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { createStore, Provider } from 'jotai'
 import { usePathname } from 'next/navigation'
 
-import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
+import { isMenuOpenAtom, savedPagesAtom } from '@/components/Atoms/GlobalState'
 import { MenuLink } from '@/components/Navbar/types'
 
 import DropDown from './DropDown'
@@ -279,5 +279,56 @@ describe('<DropDown />', () => {
       add.mock.calls.filter(([type]) => String(type) === 'keydown'),
     ).toHaveLength(0)
     add.mockRestore()
+  })
+
+  describe('pages saved for offline use', () => {
+    const saved = (path: string) => ({
+      path,
+      title: path,
+      issued: 1,
+      refreshedAt: 1,
+      urls: ['/api/fallback-image?url=a'],
+      bytes: 1,
+    })
+    const renderWithSaved = (...paths: string[]) => {
+      const store = createStore()
+      store.set(savedPagesAtom, paths.map(saved))
+      renderMenu(store)
+      open()
+    }
+
+    test('marks the links to saved pages, for screen readers too', () => {
+      renderWithSaved('/regions/nzsi')
+
+      expect(
+        screen.getByRole('link', { name: 'South Island Saved for offline' }),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('link', { name: 'North Island' }),
+      ).toBeInTheDocument()
+      expect(screen.getAllByText('Saved for offline')).toHaveLength(1)
+    })
+
+    test('marks nothing when nothing is saved', () => {
+      renderWithSaved()
+
+      expect(screen.queryByText('Saved for offline')).toBeNull()
+    })
+
+    test('marks every saved page in the list', () => {
+      renderWithSaved('/regions/nz', '/regions/nzni', '/radar/nl')
+
+      expect(screen.getAllByText('Saved for offline')).toHaveLength(2)
+    })
+
+    test('a long name still truncates, leaving room for the mark', () => {
+      renderWithSaved('/regions/nz')
+
+      expect(
+        menuLink('New Zealand Saved for offline').querySelector(
+          'span.truncate',
+        ),
+      ).toHaveTextContent('New Zealand')
+    })
   })
 })

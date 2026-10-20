@@ -91,6 +91,24 @@ test.describe('saving a page', () => {
     await expect.poll(() => firstChartLoaded(page)).toBeGreaterThan(0)
   })
 
+  test('marks the saved page in the menu, and counts it @mobile', async ({
+    page,
+  }) => {
+    await openControlled(page)
+    await save(page)
+
+    await page.getByRole('button', { name: 'Menu' }).click()
+    await page.getByRole('button', { name: 'New Zealand' }).click()
+
+    await expect(
+      page.getByRole('link', { name: 'New Zealand Saved for offline' }),
+    ).toBeVisible()
+    await expect(
+      page.getByRole('link', { name: 'North Island', exact: true }),
+    ).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Saved (1)' })).toBeVisible()
+  })
+
   test('pressing it again forgets the page and its charts', async ({
     page,
   }) => {

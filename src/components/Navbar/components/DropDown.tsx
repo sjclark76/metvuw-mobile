@@ -13,6 +13,8 @@ import {
 
 import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
 import { MenuLink } from '@/components/Navbar/types'
+import { SavedMark } from '@/components/SavedPages/SavedMark'
+import { useSavedPaths } from '@/components/SavedPages/useSavedPaths'
 
 interface DropDownProps {
   heading: string
@@ -33,6 +35,7 @@ const DropDown = (props: DropDownProps) => {
   const listId = useId()
   const pathname = usePathname()
   const setMobileMenuOpen = useSetAtom(isMenuOpenAtom)
+  const savedPaths = useSavedPaths()
 
   const links = () =>
     Array.from(wrapperRef.current?.querySelectorAll('a') ?? [])
@@ -167,9 +170,10 @@ const DropDown = (props: DropDownProps) => {
               href={item.href}
               onClick={closeAll}
               aria-current={pathname === item.href ? 'page' : undefined}
-              className="text-ink-soft hover:bg-paper hover:text-ink focus-visible:bg-paper focus-visible:text-ink focus-visible:outline-cold aria-[current=page]:bg-paper aria-[current=page]:text-ink block truncate p-2 px-5 leading-5 transition-colors duration-300 focus-visible:outline-2 focus-visible:-outline-offset-2 aria-[current=page]:font-bold"
+              className="text-ink-soft hover:bg-paper hover:text-ink focus-visible:bg-paper focus-visible:text-ink focus-visible:outline-cold aria-[current=page]:bg-paper aria-[current=page]:text-ink flex items-center justify-between gap-2 p-2 px-5 leading-5 transition-colors duration-300 focus-visible:outline-2 focus-visible:-outline-offset-2 aria-[current=page]:font-bold"
             >
-              {item.value}
+              <span className="truncate">{item.value}</span>
+              <SavedMark saved={savedPaths.has(item.href)} />
             </Link>
           </li>
         ))}
