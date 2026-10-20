@@ -1,5 +1,6 @@
+import { formatAge } from './format'
+
 const HOUR = 60 * 60 * 1000
-const DAY = 24 * HOUR
 
 /**
  * How often metvuw issues a new forecast: twice a day. A forecast older than this
@@ -9,8 +10,8 @@ export const ISSUE_INTERVAL_MS = 12 * HOUR
 
 export type Freshness =
   | { state: 'current' }
-  /** `behindMs` is how long a newer forecast should have been out. */
-  | { state: 'outOfDate'; behindMs: number }
+  /** `ageMs` is how long ago it was issued. */
+  | { state: 'outOfDate'; ageMs: number }
 
 /**
  * Whether a forecast issued at `issued` is still the newest, as far as can be told
@@ -22,30 +23,22 @@ export function freshness(
   now: number,
 ): Freshness | undefined {
   if (issued === undefined || now <= 0) return undefined
-  const behindMs = now - issued - ISSUE_INTERVAL_MS
-  return behindMs > 0 ? { state: 'outOfDate', behindMs } : { state: 'current' }
-}
-
-const plural = (count: number, unit: string) =>
-  `${count} ${unit}${count === 1 ? '' : 's'}`
-
-/** A length of time for people: under an hour, then hours, then days. */
-export function formatBehind(ms: number): string {
-  if (ms < HOUR) return 'under an hour'
-  if (ms < DAY) return plural(Math.floor(ms / HOUR), 'hour')
-  return plural(Math.floor(ms / DAY), 'day')
+  const ageMs = now - issued
+  return ageMs > ISSUE_INTERVAL_MS
+    ? { state: 'outOfDate', ageMs }
+    : { state: 'current' }
 }
 
 /**
- * In words: "up to date", or how far out of date. Without a connection a newer
- * forecast cannot be looked for, so it says only that it is probably out of date.
+ * In words: "up to date", or how long ago the forecast was issued once a newer one
+ * is due. That is a fact whether or not there is a connection to look for the newer
+ * one, so it says the same either way.
  */
 export function describeFreshness(
   value: Freshness | undefined,
-  online: boolean,
 ): string | undefined {
   if (!value) return undefined
-  if (value.state === 'current') return 'up to date'
-  const behind = formatBehind(value.behindMs)
-  return online ? `${behind} out of date` : `probably ${behind} out of date`
+  return value.state === 'current'
+    ? 'up to date'
+    : `issued ${formatAge(value.ageMs)}`
 }

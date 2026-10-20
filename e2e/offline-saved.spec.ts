@@ -70,10 +70,10 @@ test.describe('saving a page', () => {
     await save(page)
 
     await expect(saveButton(page)).toHaveAttribute('aria-pressed', 'true')
-    await expect(status(page)).toContainText(/^Saved · .+ out of date/)
+    await expect(status(page)).toContainText(/^Saved · issued .+ ago/)
     await page.goto('/saved')
     await expect(page.locator('[data-freshness]').first()).toContainText(
-      /out of date/,
+      /issued .+ ago/i,
     )
     const [saved] = await savedPages(page)
     expect(saved.path).toBe('/regions/nz')

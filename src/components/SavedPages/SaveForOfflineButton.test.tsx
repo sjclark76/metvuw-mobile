@@ -83,24 +83,24 @@ describe('<SaveForOfflineButton />', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Saved · up to date')
   })
 
-  test('says how far out of date a saved forecast is', () => {
+  test('says how long ago the forecast was issued once a newer one is due', () => {
     state.saved = { ...saved, issued: NOW - 17 * HOUR }
 
     render(<SaveForOfflineButton />)
 
     expect(screen.getByRole('status')).toHaveTextContent(
-      'Saved · 5 hours out of date',
+      'Saved · issued 17 hours ago',
     )
   })
 
-  test('says only probably out of date with no connection to check', () => {
+  test('says the same with no connection: it is a fact either way', () => {
     state.online = false
     state.saved = { ...saved, issued: NOW - 17 * HOUR }
 
     render(<SaveForOfflineButton />)
 
     expect(screen.getByRole('status')).toHaveTextContent(
-      'Saved · probably 5 hours out of date',
+      'Saved · issued 17 hours ago',
     )
   })
 

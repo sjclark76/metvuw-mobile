@@ -38,12 +38,8 @@ const CheckIcon = () => (
 
 // Whether what is kept is the newest forecast, as far as can be told: the size of
 // it is on the Saved page, where it matters.
-function savedMessage(
-  issued: number | undefined,
-  now: number,
-  online: boolean,
-) {
-  const status = describeFreshness(freshness(issued, now), online)
+function savedMessage(issued: number | undefined, now: number) {
+  const status = describeFreshness(freshness(issued, now))
   return status ? `Saved · ${status}` : 'Saved'
 }
 
@@ -69,7 +65,7 @@ export function SaveForOfflineButton() {
     : failed
       ? 'Could not save. Check your connection and try again.'
       : saved
-        ? savedMessage(saved.issued, now, online)
+        ? savedMessage(saved.issued, now)
         : cannotSave
           ? 'Connect to save this page'
           : ''
