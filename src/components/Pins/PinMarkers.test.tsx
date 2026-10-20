@@ -154,6 +154,15 @@ describe('<PinMarkers />', () => {
     expect(dot.className).toMatch(/rounded-full/)
   })
 
+  test('is smaller on a very small screen', () => {
+    const { container } = renderMarkers('nz', [wanaka])
+    const dot = container.querySelector('[data-pin-dot]')!
+    const label = container.querySelector('[data-pin-label]')!
+
+    expect(dot.className).toMatch(/max-\[400px\]:size-3\.5/)
+    expect(label.className).toMatch(/max-\[400px\]:text-\[10px\]/)
+  })
+
   test('draws one dot for each pin', () => {
     const { container } = renderMarkers('world', [london, wanaka])
 
