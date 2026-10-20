@@ -187,6 +187,65 @@ export async function downloadPage(
   return keepList(await fetchList(path, deps), deps)
 }
 
+type Verdict = 'itself' | 'elsewhere' | 'unknown'
+
+/**
+ * Whether an address shows the page it is meant to, or sends the visitor on to
+ * another (the home page does, once they have chosen their own). Asked not to
+ * follow the redirect, and the body is dropped unread: this is only a question.
+ */
+async function servesItself(
+  address: string,
+  deps: Dependencies,
+): Promise<Verdict> {
+  try {
+    const response = await deps.fetch(address, {
+      redirect: 'manual',
+      // Not from the browser's own cache: it still held the page from an earlier
+      // visit and answered with that, so a changed home page was never noticed.
+      cache: 'no-store',
+    })
+    void response.body?.cancel()
+    if (response.type === 'opaqueredirect') return 'elsewhere'
+    return response.ok ? 'itself' : 'unknown'
+  } catch {
+    return 'unknown'
+  }
+}
+
+/**
+ * A page's other addresses are only true while they show the same page, and a
+ * visitor can change that after saving (by choosing another home page). So they
+ * are checked again on every refresh: one that now sends the visitor elsewhere is
+ * dropped, one that now shows the page is added and kept. When it cannot be
+ * checked (no connection part way, say) the addresses stay as they were.
+ */
+async function reconcileAliases(
+  saved: SavedPage,
+  list: ChartList,
+  deps: Dependencies,
+): Promise<string[]> {
+  const recorded = saved.aliases ?? []
+  const addresses = [...new Set([...recorded, ...(list.aliases ?? [])])]
+  const aliases: string[] = []
+
+  for (const address of addresses) {
+    const verdict = await servesItself(address, deps)
+    if (verdict === 'elsewhere') continue
+    if (recorded.includes(address)) {
+      aliases.push(address)
+    } else if (verdict === 'itself') {
+      try {
+        await keepPage(address, deps)
+        aliases.push(address)
+      } catch {
+        // Not kept, so not recorded.
+      }
+    }
+  }
+  return aliases
+}
+
 /**
  * Brings a saved page up to date. When it still has the newest charts, that is
  * all that is checked (one small request, no download) and the page is simply
@@ -204,7 +263,12 @@ export async function refreshPage(
     list.urls.length === saved.urls.length &&
     list.urls.every((url, i) => url === saved.urls[i])
   if (unchanged) {
-    return { ...saved, title: list.title, refreshedAt: deps.now() }
+    return {
+      ...saved,
+      title: list.title,
+      aliases: await reconcileAliases(saved, list, deps),
+      refreshedAt: deps.now(),
+    }
   }
   return keepList(list, deps)
 }
