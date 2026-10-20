@@ -19,7 +19,9 @@
     "e2e:build": "node e2e/stub/with-stub.mjs npm run build",
     "e2e:interactive": "npx playwright test --ui",
     "checkly:test": "npx checkly test",
-    "checkly:deploy": "npx checkly deploy"
+    "checkly:deploy": "npx checkly deploy",
+    "chart-geometry:measure": "node scripts/chart-geometry/measure.mjs",
+    "chart-geometry:verify": "node scripts/chart-geometry/verify.mjs"
   },
   "dependencies": {
     "@date-fns/tz": "1.5.0",

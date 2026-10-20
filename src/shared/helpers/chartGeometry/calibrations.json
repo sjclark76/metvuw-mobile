@@ -1,0 +1,164 @@
+{
+  "nz": {
+    "x0": -1994.3983,
+    "perDegree": 13.82,
+    "y0": -301.6684,
+    "perMercator": -789.1511
+  },
+  "nzni": {
+    "x0": -4631.8211,
+    "perDegree": 28.6598,
+    "y0": -841.7718,
+    "perMercator": -1633.5591
+  },
+  "nzsi": {
+    "x0": -4469.2248,
+    "perDegree": 28.3778,
+    "y0": -1063.9753,
+    "perMercator": -1618.7487
+  },
+  "victoria": {
+    "x0": -4244.0071,
+    "perDegree": 31.5001,
+    "y0": -1006.5679,
+    "perMercator": -1796.3762
+  },
+  "nsw": {
+    "x0": -4065.7,
+    "perDegree": 29.87,
+    "y0": -722.0571,
+    "perMercator": -1702.2688
+  },
+  "waussie": {
+    "x0": -1265,
+    "perDegree": 13.5,
+    "y0": -40.5977,
+    "perMercator": -768.384
+  },
+  "swaussie": {
+    "x0": -2871.7303,
+    "perDegree": 26.9997,
+    "y0": -542.8881,
+    "perMercator": -1539.7735
+  },
+  "queensland": {
+    "x0": -2223.4943,
+    "perDegree": 18,
+    "y0": -44.7047,
+    "perMercator": -1024.3166
+  },
+  "saussie": {
+    "x0": -3031.1064,
+    "perDegree": 25.0821,
+    "y0": -531.2475,
+    "perMercator": -1431.9141
+  },
+  "seaussie": {
+    "x0": -1535,
+    "perDegree": 13.5,
+    "y0": -150.281,
+    "perMercator": -770.5071
+  },
+  "newcaledonia": {
+    "x0": -8334,
+    "perDegree": 52.5,
+    "y0": -786.2844,
+    "perMercator": -2993.1363
+  },
+  "swp": {
+    "x0": -552.7018,
+    "perDegree": 5.6717,
+    "y0": 102.5357,
+    "perMercator": -323.5522
+  },
+  "europe": {
+    "x0": 262.5729,
+    "perDegree": 6.1618,
+    "y0": 722.4756,
+    "perMercator": -352.3318
+  },
+  "uk": {
+    "x0": 421.8,
+    "perDegree": 16.685,
+    "y0": 1454.4445,
+    "perMercator": -953.7839
+  },
+  "estonia": {
+    "x0": -110.6764,
+    "perDegree": 20.2485,
+    "y0": 1780.6043,
+    "perMercator": -1158.7062
+  },
+  "turkey": {
+    "x0": -343.3182,
+    "perDegree": 21.8172,
+    "y0": 1212.9416,
+    "perMercator": -1245.1637
+  },
+  "world": {
+    "x0": 331.2925,
+    "perDegree": 1.5749,
+    "y0": 346.2,
+    "perMercator": -89.7707
+  },
+  "usa": {
+    "x0": 1124.2397,
+    "perDegree": 8.0987,
+    "y0": 693.9367,
+    "perMercator": -462.9043
+  },
+  "japan": {
+    "x0": -1769.9,
+    "perDegree": 15.74,
+    "y0": 964.1545,
+    "perMercator": -903.7051
+  },
+  "safrica": {
+    "x0": 89.1785,
+    "perDegree": 8.8607,
+    "y0": 132.018,
+    "perMercator": -504.5545
+  },
+  "ocean": {
+    "x0": -2128.1777,
+    "perDegree": 14.1895,
+    "y0": -88.4629,
+    "perMercator": -809.2972
+  },
+  "pacific": {
+    "x0": -2197.4,
+    "perDegree": 14.18,
+    "y0": 101.5722,
+    "perMercator": -806.1573
+  },
+  "fiji": {
+    "x0": -4748.8636,
+    "perDegree": 28.3545,
+    "y0": -152.3932,
+    "perMercator": -1612.8368
+  },
+  "spacific": {
+    "x0": -647.75,
+    "perDegree": 4.36,
+    "y0": 200.8808,
+    "perMercator": -249.0846
+  },
+  "pitcairn": {
+    "x0": 4077.3333,
+    "perDegree": 28.6333,
+    "y0": -417.5855,
+    "perMercator": -1632.1651
+  },
+  "natlantic": {
+    "x0": 604.4545,
+    "perDegree": 5.6712,
+    "y0": 517.2228,
+    "perMercator": -322.7435
+  },
+  "satlantic": {
+    "x0": 491.0303,
+    "perDegree": 5.6712,
+    "y0": 124.7772,
+    "perMercator": -322.7435
+  }
+}
