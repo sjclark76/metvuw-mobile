@@ -49,5 +49,24 @@ const pinsAtom = atomWithStorage<unknown>(
   { getOnInit: true },
 )
 
-export { favoritePageAtom, isMenuOpenAtom, pinsAtom, savedPagesAtom, themeAtom }
+/**
+ * Which pin the rain strip shows: a pin's id, or 'all'. Remembered, so the strip is
+ * as it was left. A pin that has since gone is not an error: the strip falls back
+ * to the first pin.
+ */
+const rainStripPinAtom = atomWithStorage<string>(
+  'rainStripPin',
+  'first',
+  createJSONStorage(() => tolerantStorage),
+  { getOnInit: true },
+)
+
+export {
+  favoritePageAtom,
+  isMenuOpenAtom,
+  pinsAtom,
+  rainStripPinAtom,
+  savedPagesAtom,
+  themeAtom,
+}
 export type { ThemeChoice }

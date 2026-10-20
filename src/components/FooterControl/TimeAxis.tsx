@@ -1,5 +1,12 @@
 'use client'
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import {
+  ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
 
@@ -37,6 +44,7 @@ export function TimeAxis({
   max,
   onSeek,
   glideMs,
+  above,
 }: {
   /** When each chart is for (epoch ms), in chart order. May be empty. */
   times: readonly number[]
@@ -48,6 +56,15 @@ export function TimeAxis({
    * the next chart over exactly this long, instead of hopping once per chart.
    */
   glideMs?: number
+  /**
+   * Something drawn just above the axis that has to line up with it, given where
+   * each chart is: `percent(position)` is the CSS left of chart `position`, and
+   * `pixelsPerChart` the width between neighbouring charts.
+   */
+  above?: (axis: {
+    percent: (position: number) => string
+    pixelsPerChart: number
+  }) => ReactNode
 }) {
   const formatDate = useFormatDate()
   const [axisRef, width] = useElementWidth<HTMLDivElement>(ASSUMED_WIDTH_PX)
@@ -160,98 +177,101 @@ export function TimeAxis({
     current === undefined ? '' : formatDate(current, 'EEE HH:mm')
 
   return (
-    <div
-      ref={axisRef} // Taller where there is a finger, so the bigger handle clears the label above it.
-      className="relative h-14 min-w-0 grow basis-auto pointer-coarse:h-[4.25rem]"
-    >
-      <input
-        type="range"
-        min={0}
-        max={max}
-        step={1}
-        value={index}
-        onChange={(event) => onSeek(Number(event.target.value))}
-        aria-label="Chart position"
-        aria-valuetext={`Chart ${index + 1} of ${max + 1}`}
-        // Invisible, but it takes every touch and key press. Its thumb is as wide
-        // as the two insets and as tall as the axis: iOS only starts dragging a
-        // slider that is pressed on its thumb, so a thumb of no size could not be
-        // dragged at all. The thumb's centre then runs exactly where the drawn
-        // handle does, from one inset to the other.
-        className="peer absolute inset-0 z-10 m-0 h-full w-full cursor-ew-resize touch-none appearance-none bg-transparent opacity-0 [&::-moz-range-thumb]:h-14 [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0 pointer-coarse:[&::-moz-range-thumb]:h-[4.25rem] [&::-moz-range-track]:bg-transparent [&::-webkit-slider-runnable-track]:h-full [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:h-14 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none pointer-coarse:[&::-webkit-slider-thumb]:h-[4.25rem]"
-      />
-
+    <div className="min-w-0 grow basis-auto">
+      {above?.({ percent, pixelsPerChart })}
       <div
-        data-axis-drawing
-        aria-hidden="true"
-        className="peer-focus-visible:outline-cold pointer-events-none absolute inset-0 rounded-sm peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2"
+        ref={axisRef} // Taller where there is a finger, so the bigger handle clears the label above it.
+        className="relative h-14 pointer-coarse:h-[4.25rem]"
       >
-        <div className="bg-rule absolute right-0 bottom-[1.05rem] left-0 h-0.5" />
-
-        {times.map((time, position) =>
-          ticks.has(position) && !underDayLine(position) ? (
-            <i
-              key={time}
-              data-tick
-              className="bg-ink-soft/70 absolute bottom-[1.05rem] h-1.5 w-px"
-              style={{ left: percent(position) }}
-            />
-          ) : null,
-        )}
-
-        {days.map((day) => (
-          <i
-            key={day.position}
-            className="bg-ink absolute bottom-[1.05rem] h-4 w-px"
-            style={{ left: percent(day.position) }}
-          >
-            {named.has(day.position) && (
-              <em className="font-display text-ink-soft absolute top-[calc(100%+0.35rem)] left-1 text-xs font-semibold tracking-widest whitespace-nowrap uppercase not-italic">
-                {day.label}
-              </em>
-            )}
-          </i>
-        ))}
-
-        {nowAt !== undefined && (
-          <i
-            data-now
-            className="bg-warm absolute bottom-[0.55rem] h-6 w-0.5"
-            style={{ left: percent(nowAt) }}
-          >
-            <span className="text-warm absolute top-[calc(100%+0.2rem)] left-1/2 -translate-x-1/2 font-mono text-[0.62rem] font-medium tracking-widest uppercase">
-              Now
-            </span>
-          </i>
-        )}
+        <input
+          type="range"
+          min={0}
+          max={max}
+          step={1}
+          value={index}
+          onChange={(event) => onSeek(Number(event.target.value))}
+          aria-label="Chart position"
+          aria-valuetext={`Chart ${index + 1} of ${max + 1}`}
+          // Invisible, but it takes every touch and key press. Its thumb is as wide
+          // as the two insets and as tall as the axis: iOS only starts dragging a
+          // slider that is pressed on its thumb, so a thumb of no size could not be
+          // dragged at all. The thumb's centre then runs exactly where the drawn
+          // handle does, from one inset to the other.
+          className="peer absolute inset-0 z-10 m-0 h-full w-full cursor-ew-resize touch-none appearance-none bg-transparent opacity-0 [&::-moz-range-thumb]:h-14 [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0 pointer-coarse:[&::-moz-range-thumb]:h-[4.25rem] [&::-moz-range-track]:bg-transparent [&::-webkit-slider-runnable-track]:h-full [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:h-14 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none pointer-coarse:[&::-webkit-slider-thumb]:h-[4.25rem]"
+        />
 
         <div
-          ref={handleRef}
-          data-handle
-          data-at={ratio(index)}
-          // Bigger where there is a finger instead of a mouse.
-          className="bg-ink ring-plate absolute bottom-[0.3rem] h-7 w-4 -translate-x-1/2 rounded-full ring-[3px] transition-[left] duration-200 ease-out motion-reduce:transition-none pointer-coarse:bottom-[0.1rem] pointer-coarse:h-10 pointer-coarse:w-6"
-          // No easing while gliding: the glide is the animation.
-          style={{
-            left: percent(index),
-            transition: gliding ? 'none' : undefined,
-          }}
+          data-axis-drawing
+          aria-hidden="true"
+          className="peer-focus-visible:outline-cold pointer-events-none absolute inset-0 rounded-sm peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2"
         >
-          <span className="bg-paper absolute inset-y-1.5 left-1/2 w-0.5 -translate-x-1/2 rounded-full" />
-        </div>
+          <div className="bg-rule absolute right-0 bottom-[1.05rem] left-0 h-0.5" />
 
-        {handleLabel && (
-          <span
-            ref={labelRef}
-            data-handle-label
+          {times.map((time, position) =>
+            ticks.has(position) && !underDayLine(position) ? (
+              <i
+                key={time}
+                data-tick
+                className="bg-ink-soft/70 absolute bottom-[1.05rem] h-1.5 w-px"
+                style={{ left: percent(position) }}
+              />
+            ) : null,
+          )}
+
+          {days.map((day) => (
+            <i
+              key={day.position}
+              className="bg-ink absolute bottom-[1.05rem] h-4 w-px"
+              style={{ left: percent(day.position) }}
+            >
+              {named.has(day.position) && (
+                <em className="font-display text-ink-soft absolute top-[calc(100%+0.35rem)] left-1 text-xs font-semibold tracking-widest whitespace-nowrap uppercase not-italic">
+                  {day.label}
+                </em>
+              )}
+            </i>
+          ))}
+
+          {nowAt !== undefined && (
+            <i
+              data-now
+              className="bg-warm absolute bottom-[0.55rem] h-6 w-0.5"
+              style={{ left: percent(nowAt) }}
+            >
+              <span className="text-warm absolute top-[calc(100%+0.2rem)] left-1/2 -translate-x-1/2 font-mono text-[0.62rem] font-medium tracking-widest uppercase">
+                Now
+              </span>
+            </i>
+          )}
+
+          <div
+            ref={handleRef}
+            data-handle
             data-at={ratio(index)}
-            // Kept inside the axis, clear of the controls beside it.
-            className="bg-ink text-paper absolute top-0 -translate-x-1/2 rounded-sm px-1.5 py-1 font-mono text-xs leading-none font-medium whitespace-nowrap"
-            style={{ left: labelPlace(index) }}
+            // Bigger where there is a finger instead of a mouse.
+            className="bg-ink ring-plate absolute bottom-[0.3rem] h-7 w-4 -translate-x-1/2 rounded-full ring-[3px] transition-[left] duration-200 ease-out motion-reduce:transition-none pointer-coarse:bottom-[0.1rem] pointer-coarse:h-10 pointer-coarse:w-6"
+            // No easing while gliding: the glide is the animation.
+            style={{
+              left: percent(index),
+              transition: gliding ? 'none' : undefined,
+            }}
           >
-            {handleLabel}
-          </span>
-        )}
+            <span className="bg-paper absolute inset-y-1.5 left-1/2 w-0.5 -translate-x-1/2 rounded-full" />
+          </div>
+
+          {handleLabel && (
+            <span
+              ref={labelRef}
+              data-handle-label
+              data-at={ratio(index)}
+              // Kept inside the axis, clear of the controls beside it.
+              className="bg-ink text-paper absolute top-0 -translate-x-1/2 rounded-sm px-1.5 py-1 font-mono text-xs leading-none font-medium whitespace-nowrap"
+              style={{ left: labelPlace(index) }}
+            >
+              {handleLabel}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   )

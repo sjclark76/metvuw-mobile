@@ -3,6 +3,10 @@ import clsx from 'clsx'
 import { ReactNode, useEffect, useRef } from 'react'
 
 import { useAnimation } from '@/components/Animation/Animation'
+import { usePins } from '@/components/Pins/usePins'
+import { RainStrip } from '@/components/RainStrip/RainStrip'
+import { useRainReadings } from '@/components/RainStrip/useRainReadings'
+import type { RegionCode } from '@/shared/types/region'
 
 import {
   CloseIcon,
@@ -43,7 +47,12 @@ function Control({
   )
 }
 
-function FooterControl() {
+function FooterControl({
+  rain,
+}: {
+  /** The region's rain charts, for the strip that shows rain at the visitor's pins. */
+  rain?: { region: RegionCode; chartUrls: readonly string[] }
+}) {
   const {
     displayAnimated,
     playing,
@@ -57,6 +66,14 @@ function FooterControl() {
     stepForward,
     seek,
   } = useAnimation()
+
+  const { pins } = usePins()
+  const readings = useRainReadings({
+    region: rain?.region ?? 'nz',
+    chartUrls: rain ? rain.chartUrls : [],
+    current: index,
+    pins: rain ? pins : [],
+  })
 
   // In the list, the axis follows the chart in view and moves the list when it
   // is dragged. In the viewer the axis simply changes the chart shown.
@@ -157,6 +174,22 @@ function FooterControl() {
           max={max}
           onSeek={onSeek}
           glideMs={displayAnimated && playing ? intervalMs : undefined}
+          above={
+            rain && pins.length > 0
+              ? (axis) => (
+                  <RainStrip
+                    region={rain.region}
+                    pins={pins}
+                    chartUrls={rain.chartUrls}
+                    times={times}
+                    index={index}
+                    readings={readings}
+                    onSeek={onSeek}
+                    axis={axis}
+                  />
+                )
+              : undefined
+          }
         />
       </div>
     </footer>
