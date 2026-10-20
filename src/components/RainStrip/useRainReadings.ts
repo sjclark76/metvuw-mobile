@@ -15,7 +15,11 @@ export type RainReadings = ReadonlyMap<string, Record<string, RainReading>>
 
 const NONE: RainReadings = new Map()
 
-// Between charts, give the page the chance to do what the visitor is doing.
+// How many charts are read at once: enough to fill the strip quickly, few enough
+// not to crowd out the charts the page itself is loading.
+const AT_ONCE = 3
+
+// Before reading, give the page the chance to do what the visitor is doing.
 const afterIdle = () =>
   new Promise<void>((resolve) =>
     typeof requestIdleCallback === 'function'
@@ -35,12 +39,15 @@ export function useRainReadings({
   chartUrls,
   current,
   pins,
+  ready = true,
 }: {
   region: RegionCode
   chartUrls: readonly string[]
   /** The chart being looked at, to be read first. */
   current: number
   pins: readonly Pin[]
+  /** False until the page's own charts have loaded: nothing is read before. */
+  ready?: boolean
 }): RainReadings {
   const [readings, setReadings] = useState<RainReadings>(NONE)
   const done = useRef(new Map<string, Record<string, RainReading>>())
@@ -54,10 +61,11 @@ export function useRainReadings({
     region,
     chartUrls,
     pins.map((pin) => [pin.id, pin.latitude, pin.longitude]),
+    ready,
   ])
 
   useEffect(() => {
-    if (pins.length === 0 || chartUrls.length === 0) return
+    if (!ready || pins.length === 0 || chartUrls.length === 0) return
     const abort = new AbortController()
     const positions = Object.fromEntries(
       pins.map((pin) => [
@@ -67,30 +75,38 @@ export function useRainReadings({
     )
 
     const run = async () => {
-      const order = [...chartUrls.keys()].sort(
+      // The chart being looked at first, then outwards from it.
+      const queue = [...chartUrls.keys()].sort(
         (a, b) =>
           Math.abs(a - currentRef.current) - Math.abs(b - currentRef.current),
       )
-      for (const index of order) {
-        const url = chartUrls[index]
-        const have = done.current.get(url) ?? {}
-        const missing = Object.fromEntries(
-          Object.entries(positions).filter(([id]) => !(id in have)),
-        )
-        if (Object.keys(missing).length === 0) continue
-        await afterIdle()
-        if (abort.signal.aborted) return
-        try {
-          const chart = await decodeChart(url, abort.signal)
+      const readNext = async () => {
+        for (
+          let index = queue.shift();
+          index !== undefined;
+          index = queue.shift()
+        ) {
+          const url = chartUrls[index]
+          const have = done.current.get(url) ?? {}
+          const missing = Object.fromEntries(
+            Object.entries(positions).filter(([id]) => !(id in have)),
+          )
+          if (Object.keys(missing).length === 0) continue
+          await afterIdle()
           if (abort.signal.aborted) return
-          done.current.set(url, { ...have, ...readRain(chart, missing) })
-          setReadings(new Map(done.current))
-        } catch {
-          // Leave this chart unread; the strip shows it as not known.
+          try {
+            const chart = await decodeChart(url, abort.signal)
+            if (abort.signal.aborted) return
+            done.current.set(url, { ...have, ...readRain(chart, missing) })
+            setReadings(new Map(done.current))
+          } catch {
+            // Leave this chart unread; the strip shows it as not known.
+          }
         }
       }
+      await Promise.all(Array.from({ length: AT_ONCE }, readNext))
     }
-    // A read is not started until the page has settled.
+    // Reads do not start until the page's own charts have loaded.
     void run()
     return () => abort.abort()
     // `key` stands for region, chartUrls and pins.
