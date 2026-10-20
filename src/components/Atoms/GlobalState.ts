@@ -37,5 +37,17 @@ const savedPagesAtom = atomWithStorage<unknown>(
   { getOnInit: true },
 )
 
-export { favoritePageAtom, isMenuOpenAtom, savedPagesAtom, themeAtom }
+/**
+ * The places the visitor has pinned. Saved like the saved pages, and as little
+ * trusted when it is read back: see `sanitizePins`. Read on the first render, so
+ * the markers are there as soon as a chart is.
+ */
+const pinsAtom = atomWithStorage<unknown>(
+  'pins',
+  [],
+  createJSONStorage(() => tolerantStorage),
+  { getOnInit: true },
+)
+
+export { favoritePageAtom, isMenuOpenAtom, pinsAtom, savedPagesAtom, themeAtom }
 export type { ThemeChoice }
