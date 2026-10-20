@@ -133,6 +133,24 @@ describe('chartListForPath', () => {
     })
   })
 
+  test('a very long run of slashes is dealt with at once, not slowly', async () => {
+    vi.mocked(getRainChartDataForRegion).mockResolvedValue([])
+    const started = performance.now()
+
+    const list = await chartListForPath(`/regions/nz${'/'.repeat(200_000)}!`)
+
+    expect(list).toBeUndefined()
+    expect(performance.now() - started).toBeLessThan(200)
+  })
+
+  test('trailing slashes of any number are ignored', async () => {
+    vi.mocked(getRainChartDataForRegion).mockResolvedValue([])
+
+    expect(await chartListForPath('/regions/nz////')).toMatchObject({
+      path: '/regions/nz',
+    })
+  })
+
   test('a page with no charts has an empty list and no issue time', async () => {
     vi.mocked(getRainChartDataForRegion).mockResolvedValue([])
 

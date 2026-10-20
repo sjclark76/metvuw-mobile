@@ -75,7 +75,11 @@ function cleanPath(path: string): string | undefined {
     return undefined
   }
   const bare = path.split(/[?#]/)[0]
-  return bare.length > 1 ? bare.replace(/\/+$/, '') : bare
+  // A loop, not a regular expression: the path comes from the query string, and a
+  // pattern for trailing slashes can take quadratic time on a long run of them.
+  let end = bare.length
+  while (end > 1 && bare[end - 1] === '/') end--
+  return bare.slice(0, end)
 }
 
 /**
