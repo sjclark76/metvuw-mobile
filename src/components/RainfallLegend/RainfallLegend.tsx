@@ -12,21 +12,20 @@ function RainfallLegend() {
       id="rainfall-legend"
       className="border-rule bg-plate/90 max-h-[40vh] overflow-y-auto rounded-lg border p-2 shadow-lg backdrop-blur-[1px]"
     >
-      <p className="text-ink mb-1 px-1 text-[11px] font-semibold">
+      <p className="text-ink mb-2 text-[11px] font-semibold">
         Rain in 6 hours (mm)
       </p>
-      <ul className="grid grid-flow-col grid-rows-10 gap-1">
+      <ul className="grid grid-flow-col grid-rows-10 gap-x-4">
         {RAIN_BANDS.map((band) => (
-          <li
-            key={band.label}
-            className="bg-paper/90 flex items-center gap-1 rounded-sm px-2 py-1"
-          >
+          <li key={band.label} className="flex items-center gap-2 py-px">
             <span
-              className="border-ink-soft/40 h-3 w-3 shrink-0 rounded-xs border"
+              className="border-ink-soft/30 h-4 w-6 shrink-0 rounded-xs border"
               style={{ backgroundColor: band.hexCode }}
               aria-hidden="true"
             />
-            <p className="text-ink text-[11px] font-semibold">{band.label}</p>
+            <p className="text-ink w-6 text-[11px] font-semibold tabular-nums">
+              {band.label}
+            </p>
           </li>
         ))}
       </ul>
@@ -48,7 +47,7 @@ export function RainfallLegendSection() {
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 8, scale: 0.98 }}
               transition={{ duration: 0.18, ease: 'easeOut' }}
-              className="w-[min(80vw,20rem)]"
+              className="w-max max-w-[80vw]"
             >
               <RainfallLegend />
             </m.div>
