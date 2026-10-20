@@ -19,7 +19,11 @@ const NONE: RainReadings = new Map()
 // not to crowd out the charts the page itself is loading.
 const AT_ONCE = 3
 
-// Before reading, give the page the chance to do what the visitor is doing.
+// The chart in view and this many either side are read straight away: they are
+// the part of the strip the visitor is looking at.
+const READ_AT_ONCE_NEAR = 1
+
+// Before reading the rest, give the page the chance to do what the visitor is doing.
 const afterIdle = () =>
   new Promise<void>((resolve) =>
     typeof requestIdleCallback === 'function'
@@ -76,9 +80,9 @@ export function useRainReadings({
 
     const run = async () => {
       // The chart being looked at first, then outwards from it.
+      const start = currentRef.current
       const queue = [...chartUrls.keys()].sort(
-        (a, b) =>
-          Math.abs(a - currentRef.current) - Math.abs(b - currentRef.current),
+        (a, b) => Math.abs(a - start) - Math.abs(b - start),
       )
       const readNext = async () => {
         for (
@@ -92,7 +96,7 @@ export function useRainReadings({
             Object.entries(positions).filter(([id]) => !(id in have)),
           )
           if (Object.keys(missing).length === 0) continue
-          await afterIdle()
+          if (Math.abs(index - start) > READ_AT_ONCE_NEAR) await afterIdle()
           if (abort.signal.aborted) return
           try {
             const chart = await decodeChart(url, abort.signal)
