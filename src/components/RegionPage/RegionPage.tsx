@@ -24,7 +24,7 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
 
   const issued =
     rainChartData.length > 0
-      ? `Issued ${formatDate(rainChartData[0].imageDateUTC, 'EEEE d MMMM, h:mmaaa')}`
+      ? `Issued ${formatDate(rainChartData[0].imageDateUTC, 'EEE d MMMM, h:mmaaa')}`
       : undefined
 
   useInitShowAds()
