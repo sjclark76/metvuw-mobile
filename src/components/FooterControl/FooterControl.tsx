@@ -90,14 +90,21 @@ function FooterControl({
   // Things that stick above the footer (the rainfall legend) need to know how
   // tall it is, and it is taller in the viewer, where the axis has its own row.
   const footerRef = useRef<HTMLElement>(null)
+  const gapRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const footer = footerRef.current
-    if (!footer || typeof ResizeObserver === 'undefined') return
-    const publish = () =>
+    const gap = gapRef.current
+    if (!footer || !gap || typeof ResizeObserver === 'undefined') return
+    // The footer is fixed, so it takes no room: a gap as tall as it is keeps the
+    // end of the page clear of it. Written straight to the element, not through
+    // React state, so it is right before the frame is drawn.
+    const publish = () => {
+      gap.style.height = `${footer.offsetHeight}px`
       document.documentElement.style.setProperty(
         '--footer-height',
         `${footer.offsetHeight}px`,
       )
+    }
     publish()
     const observer = new ResizeObserver(publish)
     observer.observe(footer)
@@ -107,92 +114,105 @@ function FooterControl({
     }
   }, [])
 
+  // Fixed, not sticky, for the same reason as the bar across the top: on an
+  // iPhone a sticky bar is put in place a frame behind a large scroll, so jumping
+  // the page by dragging the time axis made it flash. A fixed bar is placed with
+  // the page's own layer.
+  //
   // The installed app pads the footer for the phone's home indicator. `standalone:`
   // is a CSS media query, so it applies from the first paint; a hook that read
   // matchMedia after mount made the footer jump on every load.
   const footerClasses =
-    'sticky bottom-0 z-20 border-t border-rule bg-plate px-4 pt-2.5 pb-2.5 standalone:pb-6 print:hidden'
+    'fixed inset-x-0 bottom-0 z-20 border-t border-rule bg-plate px-4 pt-2.5 pb-2.5 standalone:pb-6 print:hidden'
 
   return (
-    <footer ref={footerRef} className={footerClasses}>
-      <div
-        className={clsx(
-          'mx-auto flex max-w-176 items-center gap-3',
-          // The viewer has four controls, so the axis gets a full-width row of
-          // its own above them instead of being squeezed beside them.
-          displayAnimated && 'flex-col-reverse items-stretch gap-1',
-        )}
-      >
+    <>
+      <footer ref={footerRef} className={footerClasses}>
         <div
           className={clsx(
-            'flex items-center gap-1',
-            displayAnimated && 'justify-center gap-3',
+            'mx-auto flex max-w-176 items-center gap-3',
+            // The viewer has four controls, so the axis gets a full-width row of
+            // its own above them instead of being squeezed beside them.
+            displayAnimated && 'flex-col-reverse items-stretch gap-1',
           )}
         >
-          <Control
-            label={
-              displayAnimated
-                ? 'Show static weather chart list'
-                : 'Show animated weather chart'
-            }
-            onClick={toggleDisplay}
-            className={solid}
+          <div
+            className={clsx(
+              'flex items-center gap-1',
+              displayAnimated && 'justify-center gap-3',
+            )}
           >
-            {displayAnimated ? <CloseIcon /> : <OpenViewerIcon />}
-          </Control>
+            <Control
+              label={
+                displayAnimated
+                  ? 'Show static weather chart list'
+                  : 'Show animated weather chart'
+              }
+              onClick={toggleDisplay}
+              className={solid}
+            >
+              {displayAnimated ? <CloseIcon /> : <OpenViewerIcon />}
+            </Control>
 
-          {displayAnimated && (
-            <>
-              <Control
-                label={playing ? 'Pause animation' : 'Play animation'}
-                onClick={togglePlaying}
-                className={quiet}
-              >
-                {playing ? <PauseIcon /> : <PlayIcon />}
-              </Control>
-              <Control
-                label="Step backward"
-                onClick={stepBackward}
-                className={quiet}
-              >
-                <StepBackIcon />
-              </Control>
-              <Control
-                label="Step forward"
-                onClick={stepForward}
-                className={quiet}
-              >
-                <StepForwardIcon />
-              </Control>
-            </>
-          )}
+            {displayAnimated && (
+              <>
+                <Control
+                  label={playing ? 'Pause animation' : 'Play animation'}
+                  onClick={togglePlaying}
+                  className={quiet}
+                >
+                  {playing ? <PauseIcon /> : <PlayIcon />}
+                </Control>
+                <Control
+                  label="Step backward"
+                  onClick={stepBackward}
+                  className={quiet}
+                >
+                  <StepBackIcon />
+                </Control>
+                <Control
+                  label="Step forward"
+                  onClick={stepForward}
+                  className={quiet}
+                >
+                  <StepForwardIcon />
+                </Control>
+              </>
+            )}
+          </div>
+
+          <TimeAxis
+            times={times}
+            index={index}
+            max={max}
+            onSeek={onSeek}
+            glideMs={displayAnimated && playing ? intervalMs : undefined}
+            above={
+              rain && pins.length > 0
+                ? (axis) => (
+                    <RainStrip
+                      region={rain.region}
+                      pins={pins}
+                      chartUrls={rain.chartUrls}
+                      times={times}
+                      index={index}
+                      readings={readings}
+                      onSeek={onSeek}
+                      axis={axis}
+                    />
+                  )
+                : undefined
+            }
+          />
         </div>
-
-        <TimeAxis
-          times={times}
-          index={index}
-          max={max}
-          onSeek={onSeek}
-          glideMs={displayAnimated && playing ? intervalMs : undefined}
-          above={
-            rain && pins.length > 0
-              ? (axis) => (
-                  <RainStrip
-                    region={rain.region}
-                    pins={pins}
-                    chartUrls={rain.chartUrls}
-                    times={times}
-                    index={index}
-                    readings={readings}
-                    onSeek={onSeek}
-                    axis={axis}
-                  />
-                )
-              : undefined
-          }
-        />
-      </div>
-    </footer>
+      </footer>
+      {/* Until the footer is measured, the height it has without a strip. */}
+      <div
+        ref={gapRef}
+        aria-hidden="true"
+        className="standalone:h-23 h-19 print:hidden pointer-coarse:h-22"
+      />
+    </>
   )
 }
 export { FooterControl }
