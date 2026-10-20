@@ -35,6 +35,11 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
     [rainChartData],
   )
 
+  const chartUrls = useMemo(
+    () => rainChartData.map((chart) => chart.url),
+    [rainChartData],
+  )
+
   return (
     // Only the eagerly loaded charts count towards the progress bar.
     <ImageProgressProvider
@@ -61,7 +66,7 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
             />
           </div>
           <RainfallLegendSection />
-          <FooterControl />
+          <FooterControl rain={{ region: region.code, chartUrls }} />
         </div>
       </AnimationProvider>
     </ImageProgressProvider>
