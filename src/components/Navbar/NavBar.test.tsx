@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { createStore, Provider } from 'jotai'
 
-import { savedPagesAtom } from '@/components/Atoms/GlobalState'
+import { pinsAtom, savedPagesAtom } from '@/components/Atoms/GlobalState'
 
 import Navbar from './NavBar'
 
@@ -179,5 +179,60 @@ describe('<Navbar /> saved pages', () => {
     renderWithSaved('/regions/nz')
 
     expect(screen.getByRole('link', { name: 'Satellite' })).toBeInTheDocument()
+  })
+})
+
+describe('<Navbar /> pins', () => {
+  const place = (name: string, latitude: number) => ({
+    name,
+    context: 'Otago',
+    kind: 'Town',
+    latitude,
+    longitude: 169,
+  })
+  const renderWithPins = (...names: string[]) => {
+    const store = createStore()
+    store.set(
+      pinsAtom,
+      names.map((name, i) => place(name, -44 - i)),
+    )
+    return render(
+      <Provider store={store}>
+        <Navbar />
+      </Provider>,
+    )
+  }
+
+  test('has a Pins link to the Pins page', () => {
+    renderWithPins()
+
+    expect(screen.getByRole('link', { name: 'Pins' })).toHaveAttribute(
+      'href',
+      '/pins',
+    )
+  })
+
+  test('says how many places are pinned', () => {
+    renderWithPins('Wanaka', 'Hooker Hut', 'Queenstown')
+
+    expect(screen.getByRole('link', { name: 'Pins (3)' })).toBeInTheDocument()
+  })
+
+  test('shows no count when nothing is pinned', () => {
+    renderWithPins()
+
+    expect(screen.queryByRole('link', { name: /Pins \(/ })).toBeNull()
+  })
+
+  test('closes the menu after choosing it', () => {
+    renderWithPins()
+    fireEvent.click(screen.getByRole('button', { name: 'Menu' }))
+
+    fireEvent.click(screen.getByRole('link', { name: 'Pins' }))
+
+    expect(screen.getByRole('button', { name: 'Menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    )
   })
 })
