@@ -4,10 +4,32 @@ import Link from 'next/link'
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
 import { useIsMounted } from '@/components/Hooks/useIsMounted'
 import { useNow } from '@/components/Hooks/useNow'
+import { useOnline } from '@/components/Hooks/useOnline'
 import { actionClasses } from '@/components/StatusMessage'
 import { formatAge, formatBytes } from '@/shared/helpers/offline/format'
+import {
+  describeFreshness,
+  freshness,
+} from '@/shared/helpers/offline/freshness'
 
 import { useSavedPageList } from './useSavedPages'
+
+// Whether the forecast kept is the newest: quiet when it is, in the warm colour
+// when it is not.
+function FreshnessLine({ status }: { status: string | undefined }) {
+  if (!status) return null
+  return (
+    <p
+      data-freshness
+      className={
+        'font-mono text-xs font-semibold ' +
+        (status === 'up to date' ? 'text-ink-soft' : 'text-warm')
+      }
+    >
+      {status.charAt(0).toUpperCase() + status.slice(1)}
+    </p>
+  )
+}
 
 /**
  * The pages kept for offline use: what each is, how big, and how recently it was
@@ -17,6 +39,7 @@ import { useSavedPageList } from './useSavedPages'
 export function SavedPagesList() {
   const isMounted = useIsMounted()
   const now = useNow()
+  const online = useOnline()
   const formatDate = useFormatDate()
   const { pages, remove } = useSavedPageList()
 
@@ -58,6 +81,9 @@ export function SavedPagesList() {
                 {formatBytes(page.bytes)} · Checked{' '}
                 {formatAge(now - page.refreshedAt)}
               </p>
+              <FreshnessLine
+                status={describeFreshness(freshness(page.issued, now), online)}
+              />
             </div>
             <button
               type="button"

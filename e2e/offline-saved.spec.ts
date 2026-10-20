@@ -61,13 +61,20 @@ const firstChartLoaded = (page: Page) =>
   )
 
 test.describe('saving a page', () => {
-  test('keeps every chart and the page, and says how big', async ({ page }) => {
+  // The stub's forecast was issued on a fixed day in the past, so it is out of date.
+  test('keeps every chart and the page, and says whether it is the newest forecast', async ({
+    page,
+  }) => {
     await openControlled(page)
 
     await save(page)
 
     await expect(saveButton(page)).toHaveAttribute('aria-pressed', 'true')
-    await expect(status(page)).toContainText(/Saved, \d+(\.\d)? [KM]B/)
+    await expect(status(page)).toContainText(/^Saved · .+ out of date/)
+    await page.goto('/saved')
+    await expect(page.locator('[data-freshness]').first()).toContainText(
+      /out of date/,
+    )
     const [saved] = await savedPages(page)
     expect(saved.path).toBe('/regions/nz')
     expect(await cacheSize(page, 'saved-charts')).toBe(saved.urls.length)
