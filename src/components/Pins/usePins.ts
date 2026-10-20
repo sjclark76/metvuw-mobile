@@ -3,6 +3,7 @@ import { useAtomValue, useStore } from 'jotai'
 import { useCallback, useMemo } from 'react'
 
 import { pinsAtom } from '@/components/Atoms/GlobalState'
+import { useIsMounted } from '@/components/Hooks/useIsMounted'
 import {
   addPin,
   type Pin,
@@ -40,4 +41,14 @@ export function usePins() {
       [change],
     ),
   }
+}
+
+/**
+ * How many places are pinned. Zero until the page is running in the browser,
+ * since what is pinned is only known there.
+ */
+export function usePinCount(): number {
+  const isMounted = useIsMounted()
+  const { pins } = usePins()
+  return isMounted ? pins.length : 0
 }
