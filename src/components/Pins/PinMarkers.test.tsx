@@ -142,6 +142,24 @@ describe('<PinMarkers />', () => {
     expect(layer).toHaveAttribute('aria-hidden', 'true')
   })
 
+  // The chart is covered in small hollow black circles (its wind-barb grid): a hollow
+  // marker was lost among them.
+  test('is a solid orange dot with a white edge, not a hollow ring', () => {
+    const { container } = renderMarkers('nz', [wanaka])
+    const dot = container.querySelector('[data-pin-dot]')!
+
+    expect(dot.className).toMatch(/bg-\[#ff6a00\]/)
+    expect(dot.className).toMatch(/border-white/)
+    expect(dot.className).not.toMatch(/bg-transparent/)
+    expect(dot.className).toMatch(/rounded-full/)
+  })
+
+  test('draws one dot for each pin', () => {
+    const { container } = renderMarkers('world', [london, wanaka])
+
+    expect(container.querySelectorAll('[data-pin-dot]')).toHaveLength(2)
+  })
+
   test('uses colours that read on the chart, which is light in both themes', () => {
     const { container } = renderMarkers('nz', [wanaka])
     const label = container.querySelector('[data-pin-label]')!
