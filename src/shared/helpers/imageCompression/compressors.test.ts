@@ -1,5 +1,7 @@
 import sharp from 'sharp'
 
+import { RAIN_BANDS } from '@/shared/helpers/rainBands'
+
 import { getCompressorForChart } from './getCompressorForChart'
 import {
   radarImageDimensions,
@@ -78,6 +80,52 @@ describe('chart compressors', () => {
       ...rainImageDimensions,
     })
     expect(await isAllChart(output)).toBe(true)
+  })
+
+  // The rain strip for a pin reads the band of rain from the pixels of the chart,
+  // so every colour must come through as drawn: a lossy encoding smears them.
+  test('rain charts keep every colour exactly', async () => {
+    const { primary } = getCompressorForChart('Rain')
+    const { left, top, width, height } = {
+      left: 73,
+      top: 116,
+      ...rainImageDimensions,
+    }
+    const bands = RAIN_BANDS.map(({ hexCode }) => hexCode.slice(1))
+    const stripe = Math.floor(width / bands.length)
+    // Neighbouring colours side by side, with fine lines, as on a chart.
+    const parts = await Promise.all(
+      bands.map(async (hex, i) => ({
+        input: await sharp({
+          create: {
+            width: stripe,
+            height,
+            channels: 3,
+            background: `#${hex}`,
+          },
+        })
+          .png()
+          .toBuffer(),
+        left: left + i * stripe,
+        top,
+      })),
+    )
+    const source = await sharp({
+      create: { width: 711, height: 600, channels: 3, background: MARGIN },
+    })
+      .composite(parts)
+      .gif({ dither: 0 })
+      .toBuffer()
+
+    const output = await primary(source)
+
+    const expected = await sharp(source)
+      .extract({ left, top, width, height })
+      .removeAlpha()
+      .raw()
+      .toBuffer()
+    const actual = await sharp(output).removeAlpha().raw().toBuffer()
+    expect(actual.equals(expected)).toBe(true)
   })
 
   // Radar images are scaled to the chart width first, then cropped.
