@@ -12,6 +12,8 @@ export default defineConfig({
       'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
       // Unit tests for the e2e tooling; the Playwright specs are not vitest tests.
       'e2e/stub/**/*.test.mjs',
+      // Unit tests for the scripts that generate data files.
+      'scripts/**/*.test.mjs',
     ],
     exclude: ['node_modules', 'e2e/**/*.spec.ts'],
   },
