@@ -11,7 +11,7 @@ test.describe('upper air page', () => {
     ).toBeVisible()
 
     const charts = page.getByRole('img', { name: /upper air chart for/i })
-    await expect(charts).toHaveCount(3)
+    await expect(charts).toHaveCount(8)
     await expect
       .poll(() =>
         charts.first().evaluate((img: HTMLImageElement) => img.naturalWidth),

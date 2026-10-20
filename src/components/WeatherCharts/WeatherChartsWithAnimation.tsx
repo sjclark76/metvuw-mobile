@@ -9,6 +9,7 @@ import { AnimatedWeatherChart } from '@/components/AnimatedWeatherChart/Animated
 import { useAnimation } from '@/components/Animation/Animation'
 import { showAdsAtom } from '@/components/Atoms/AdState'
 import { fadeInProps } from '@/shared/helpers/fadeIn'
+import { chartAspectRatio } from '@/shared/helpers/imageCompression/imageDimensions'
 import { imageLoadingFor } from '@/shared/helpers/imageLoading'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
@@ -64,7 +65,11 @@ const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
                     </li>
                   )}
                   <li
-                    {...fadeInProps(index, 'w-full scroll-mt-20')}
+                    {...fadeInProps(
+                      index,
+                      'w-full scroll-mt-20',
+                      chartAspectRatio('Rain'),
+                    )}
                     data-chart-index={index}
                   >
                     <WeatherChart

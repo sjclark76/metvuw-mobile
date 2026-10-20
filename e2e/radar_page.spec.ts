@@ -11,7 +11,7 @@ test.describe('radar page', () => {
     ).toBeVisible()
 
     const charts = page.getByRole('img', { name: /radar chart for/i })
-    await expect(charts).toHaveCount(3)
+    await expect(charts).toHaveCount(8)
     await expect
       .poll(() =>
         charts.first().evaluate((img: HTMLImageElement) => img.naturalWidth),
@@ -27,6 +27,6 @@ test.describe('radar page', () => {
     ).toBeVisible()
     await expect(
       page.getByRole('img', { name: /radar chart for/i }),
-    ).toHaveCount(3)
+    ).toHaveCount(8)
   })
 })

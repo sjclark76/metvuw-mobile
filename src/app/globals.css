@@ -96,11 +96,16 @@
 
 /* List items below the first screen skip layout and paint until they near the
    viewport. The height is only a placeholder until the item has been seen (`auto`
-   then remembers the real one). A chart is as wide as the screen up to 44rem, and
-   its height is that width times the chart's 0.701 aspect ratio plus its caption
-   (measured, 4.76rem, which includes the chart's own padding), so the page's scroll height does not drift, and scrolling
-   to a chart further down lands where it should. */
+   then remembers the real one), so it must be the height the item really has: where
+   it is short, drawing items above the screen pushes the page down, and going back
+   up the page jumps (WebKit does not hold the position as Chrome does). The card is
+   as wide as the screen up to 44rem; its chart is 0.75rem narrower (the card's
+   padding), and as tall as that times the chart's aspect ratio (--chart-aspect, set
+   by the list for its kind of chart: rain is 0.701, radar 0.956); the caption and
+   the rest of the padding add 5.32rem. Measured against all four kinds of chart,
+   at phone and desktop widths, to within a pixel (e2e/chart-placeholder.spec.ts). */
 @utility defer-offscreen {
   content-visibility: auto;
-  contain-intrinsic-size: auto calc(min(100vw, 44rem) * 0.701 + 4.76rem);
+  contain-intrinsic-size: auto
+    calc((min(100vw, 44rem) - 0.75rem) * var(--chart-aspect, 0.701) + 5.32rem);
 }

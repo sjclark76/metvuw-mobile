@@ -10,6 +10,7 @@ import { showAdsAtom, useInitShowAds } from '@/components/Atoms/AdState'
 import { AnimatedRadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/AnimatedRadarAndSatelliteImageCard'
 import { RadarAndSatelliteImageCard } from '@/components/RadarAndSatelliteImages/RadarAndSatelliteImageCard'
 import { fadeInProps } from '@/shared/helpers/fadeIn'
+import { chartAspectRatio } from '@/shared/helpers/imageCompression/imageDimensions'
 import { imageLoadingFor } from '@/shared/helpers/imageLoading'
 import { SkinnyChartData } from '@/shared/types/chartData'
 import { ChartType } from '@/shared/types/ChartType'
@@ -65,7 +66,11 @@ export default function Foo({ images, chartType }: Props) {
                     </li>
                   )}
                   <li
-                    {...fadeInProps(index, 'w-full scroll-mt-20')}
+                    {...fadeInProps(
+                      index,
+                      'w-full scroll-mt-20',
+                      chartAspectRatio(chartType),
+                    )}
                     data-chart-index={index}
                   >
                     <RadarAndSatelliteImageCard
