@@ -4,23 +4,7 @@ import { AnimatePresence } from 'motion/react'
 import * as m from 'motion/react-m'
 import { useState } from 'react'
 
-interface RainfallLegendBand {
-  amount: string
-  hexCode: string
-}
-
-const rainfallLegendBands: ReadonlyArray<RainfallLegendBand> = [
-  { amount: '0.1 - 0.5 mm', hexCode: '#E6E6FA' },
-  { amount: '0.5 - 1.0 mm', hexCode: '#D8BFD8' },
-  { amount: '1.0 - 2.0 mm', hexCode: '#DA70D6' },
-  { amount: '2.0 - 5.0 mm', hexCode: '#FF00FF' },
-  { amount: '5.0 - 10.0 mm', hexCode: '#9400D3' },
-  { amount: '10.0 - 20.0 mm', hexCode: '#0000FF' },
-  { amount: '20.0 - 50.0 mm', hexCode: '#00FFFF' },
-  { amount: '50.0 - 100.0 mm', hexCode: '#00FF00' },
-  { amount: '100.0 - 200.0 mm', hexCode: '#FFFF00' },
-  { amount: '> 200.0 mm', hexCode: '#FF0000' },
-]
+import { RAIN_BANDS } from '@/shared/helpers/rainBands'
 
 function RainfallLegend() {
   return (
@@ -28,10 +12,13 @@ function RainfallLegend() {
       id="rainfall-legend"
       className="border-rule bg-plate/90 max-h-[40vh] overflow-y-auto rounded-lg border p-2 shadow-lg backdrop-blur-[1px]"
     >
-      <ul className="grid grid-cols-2 gap-1">
-        {rainfallLegendBands.map((band) => (
+      <p className="text-ink mb-1 px-1 text-[11px] font-semibold">
+        Rain in 6 hours (mm)
+      </p>
+      <ul className="grid grid-flow-col grid-rows-10 gap-1">
+        {RAIN_BANDS.map((band) => (
           <li
-            key={band.amount}
+            key={band.label}
             className="bg-paper/90 flex items-center gap-1 rounded-sm px-2 py-1"
           >
             <span
@@ -39,7 +26,7 @@ function RainfallLegend() {
               style={{ backgroundColor: band.hexCode }}
               aria-hidden="true"
             />
-            <p className="text-ink text-[11px] font-semibold">{band.amount}</p>
+            <p className="text-ink text-[11px] font-semibold">{band.label}</p>
           </li>
         ))}
       </ul>
