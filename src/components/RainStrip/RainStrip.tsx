@@ -16,6 +16,10 @@ import type { RainReadings } from './useRainReadings'
 // The chart's own background, which is what a clear cell is: nothing to show.
 const CLEAR = '#e6e6ff'
 
+// A chart not read yet, or that could not be: striped, so it is not taken for dry.
+const UNREAD =
+  'repeating-linear-gradient(135deg, transparent 0 3px, rgb(128 128 150 / 0.35) 3px 4px)'
+
 function cellColour(reading: RainReading | undefined) {
   if (!reading) return undefined
   if (reading.kind === 'rain') return RAIN_BANDS[reading.band].hexCode
@@ -82,25 +86,41 @@ export function RainStrip({
       <label htmlFor={selectId} className="sr-only">
         Pin for the rain strip
       </label>
-      <select
-        id={selectId}
-        value={selected}
-        onChange={(event) => setChoice(event.target.value)}
-        className="border-rule bg-plate text-ink focus-visible:outline-cold min-h-8 max-w-[55%] min-w-0 truncate rounded border px-2 font-mono text-xs focus-visible:outline-2 focus-visible:outline-offset-2"
-      >
-        {pins.map((pin) => (
-          <option key={pin.id} value={pin.id}>
-            {chartLabel(pin)}
-          </option>
-        ))}
-        <option value={ALL_PINS}>All pins</option>
-      </select>
+      <span className="relative inline-flex max-w-[55%] min-w-0">
+        <select
+          id={selectId}
+          value={selected}
+          onChange={(event) => setChoice(event.target.value)}
+          className="border-rule bg-plate text-ink hover:bg-paper focus-visible:outline-cold min-h-8 w-full min-w-0 cursor-pointer appearance-none truncate rounded-full border py-1 pr-7 pl-3 font-mono text-xs font-semibold tracking-wide focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          {pins.map((pin) => (
+            <option key={pin.id} value={pin.id}>
+              {chartLabel(pin)}
+            </option>
+          ))}
+          <option value={ALL_PINS}>All pins</option>
+        </select>
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 12 12"
+          className="text-ink-soft pointer-events-none absolute top-1/2 right-2.5 size-3 -translate-y-1/2"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M2.5 4.5 6 8l3.5-3.5" />
+        </svg>
+      </span>
     </>
   )
   const readout = (pin: Pin) => (
-    <span data-rain-reading className="shrink-0">
-      {when && `${when} · `}
-      {describeRain(readingAt(pin))}
+    <span data-rain-reading className="shrink-0 text-right">
+      {when && <span className="text-ink-soft">{when} · </span>}
+      <strong className="text-ink font-semibold">
+        {describeRain(readingAt(pin))}
+      </strong>
     </span>
   )
 
@@ -140,16 +160,18 @@ export function RainStrip({
                       data-reading={reading?.kind ?? 'unknown'}
                       onClick={() => onSeek(position)}
                       className={
-                        'absolute top-0 h-full -translate-x-1/2 border-y ' +
-                        (colour
-                          ? 'border-ink-soft/30'
-                          : 'border-rule border-dashed') +
-                        (position === index ? ' ring-ink z-10 ring-2' : '')
+                        'absolute top-0 h-full -translate-x-1/2 first:rounded-l-sm last:rounded-r-sm ' +
+                        (colour ? '' : 'bg-rule/40 ') +
+                        (position === index
+                          ? 'shadow-[inset_0_-3px_0_0_var(--color-ink)]'
+                          : '')
                       }
                       style={{
                         left: axis.percent(position),
-                        width: Math.max(axis.pixelsPerChart, 4),
+                        // A little over, so neighbours meet without a hairline.
+                        width: Math.max(axis.pixelsPerChart, 4) + 0.5,
                         backgroundColor: colour,
+                        backgroundImage: colour ? undefined : UNREAD,
                       }}
                     />
                   )
