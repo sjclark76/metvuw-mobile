@@ -18,6 +18,8 @@ import {
   worldRegions,
 } from '@/shared/types/region'
 
+import { SavedMark } from '../SavedPages/SavedMark'
+import { useSavedPaths } from '../SavedPages/useSavedPaths'
 import SetHomePageIcon from '../SetHomePageIcon/SetHomePageIcon'
 import { ThemeMenu } from '../ThemeToggle'
 import DropDown from './components/DropDown'
@@ -54,6 +56,7 @@ const balloonLinks: MenuLink[] = Object.entries(balloonLocations).map(
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useAtom(isMenuOpenAtom)
   const navRef = useRef<HTMLElement>(null) // Create a ref for the nav element
+  const savedPaths = useSavedPaths()
 
   const handleClick = () => {
     setMenuOpen((prev) => !prev)
@@ -134,10 +137,11 @@ const Navbar = () => {
           <div className={headerText}>
             <Link
               href="/satellite"
-              className="mr-1"
+              className="mr-1 inline-flex items-center gap-2"
               onClick={() => setMenuOpen(false)}
             >
               Satellite
+              <SavedMark saved={savedPaths.has('/satellite')} />
             </Link>
           </div>
           <DropDown heading="Radar" links={radarLinks} />
@@ -149,7 +153,12 @@ const Navbar = () => {
               prefetch={false}
               onClick={() => setMenuOpen(false)}
             >
-              Saved
+              Saved{' '}
+              {/* The count's room is held, so the menu does not shift once it is
+                  known: what is saved is only known in the browser. */}
+              <span className="inline-block min-w-[3ch]">
+                {savedPaths.size > 0 && `(${savedPaths.size})`}
+              </span>
             </Link>
           </div>
           <div className={headerText}>

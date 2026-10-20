@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { createStore, Provider } from 'jotai'
 
+import { savedPagesAtom } from '@/components/Atoms/GlobalState'
+
 import Navbar from './NavBar'
 
 vi.mock('next/navigation', () => ({ usePathname: vi.fn(() => '/') }))
@@ -113,5 +115,54 @@ describe('<Navbar /> closing the menu', () => {
     expect(
       screen.getByRole('link', { name: /metvuw mobile/i }),
     ).toHaveAttribute('href', '/')
+  })
+})
+
+describe('<Navbar /> saved pages', () => {
+  const saved = (path: string) => ({
+    path,
+    title: path,
+    issued: 1,
+    refreshedAt: 1,
+    urls: ['/api/fallback-image?url=a'],
+    bytes: 1,
+  })
+  const renderWithSaved = (...paths: string[]) => {
+    const store = createStore()
+    store.set(savedPagesAtom, paths.map(saved))
+    return render(
+      <Provider store={store}>
+        <Navbar />
+      </Provider>,
+    )
+  }
+
+  test('says how many pages are saved on the Saved link', () => {
+    renderWithSaved('/regions/nz', '/satellite', '/radar/nl')
+
+    expect(screen.getByRole('link', { name: 'Saved (3)' })).toHaveAttribute(
+      'href',
+      '/saved',
+    )
+  })
+
+  test('shows no count when nothing is saved', () => {
+    renderWithSaved()
+
+    expect(screen.getByRole('link', { name: 'Saved' })).toBeInTheDocument()
+  })
+
+  test('marks the Satellite link when it is saved', () => {
+    renderWithSaved('/satellite')
+
+    expect(
+      screen.getByRole('link', { name: 'Satellite Saved for offline' }),
+    ).toBeInTheDocument()
+  })
+
+  test('does not mark the Satellite link when it is not', () => {
+    renderWithSaved('/regions/nz')
+
+    expect(screen.getByRole('link', { name: 'Satellite' })).toBeInTheDocument()
   })
 })
