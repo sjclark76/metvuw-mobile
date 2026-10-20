@@ -1,5 +1,6 @@
 import {
   collectGarbage,
+  coversPath,
   downloadPage,
   expiredPages,
   refreshPage,
@@ -121,6 +122,7 @@ function setup(partial: Partial<World> = {}) {
 
 const page = (overrides: Partial<SavedPage> = {}): SavedPage => ({
   path: '/regions/nz',
+  aliases: [],
   title: 'New Zealand',
   issued: 100,
   refreshedAt: NOW,
@@ -137,6 +139,7 @@ describe('downloadPage', () => {
 
     expect(saved).toEqual({
       path: '/regions/nz',
+      aliases: [],
       title: 'New Zealand',
       issued: 100,
       refreshedAt: NOW,
@@ -370,6 +373,80 @@ describe('collectGarbage', () => {
     await collectGarbage([saved], deps)
 
     expect(caches.urls(SAVED_CHARTS_CACHE)).toEqual([chart(1), chart(2)])
+  })
+})
+
+describe('a page with more than one address', () => {
+  const twoAddresses = () =>
+    setup({
+      lists: {
+        '/': {
+          title: 'New Zealand',
+          issued: 100,
+          urls: [chart(1)],
+          // What the endpoint answers for the home page.
+          ...{ path: '/regions/nz', aliases: ['/'] },
+        },
+      },
+      html: { '/': '<html>home</html>', '/regions/nz': '<html>nz</html>' },
+    })
+
+  test('keeps the page under every address, and records them', async () => {
+    const { deps, caches } = twoAddresses()
+
+    const saved = await downloadPage('/', deps)
+
+    expect(saved.path).toBe('/regions/nz')
+    expect(saved.aliases).toEqual(['/'])
+    expect(caches.urls(SAVED_PAGES_CACHE)).toEqual(
+      expect.arrayContaining(['/', '/regions/nz']),
+    )
+  })
+
+  test('is still saved when another address cannot be kept', async () => {
+    const { deps, world, caches } = twoAddresses()
+    world.failing.add('/')
+
+    const saved = await downloadPage('/', deps)
+
+    expect(saved.path).toBe('/regions/nz')
+    expect(caches.urls(SAVED_PAGES_CACHE)).toContain('/regions/nz')
+    expect(caches.urls(SAVED_PAGES_CACHE)).not.toContain('/')
+  })
+
+  test('collectGarbage keeps every address of a saved page', async () => {
+    const { deps, caches } = twoAddresses()
+    const saved = await downloadPage('/', deps)
+
+    await collectGarbage([saved], deps)
+
+    expect(caches.urls(SAVED_PAGES_CACHE)).toEqual(
+      expect.arrayContaining(['/', '/regions/nz']),
+    )
+  })
+
+  test('coversPath is true for the page and for each of its addresses', () => {
+    const nz = page({ path: '/regions/nz', aliases: ['/'] })
+
+    expect(coversPath(nz, '/regions/nz')).toBe(true)
+    expect(coversPath(nz, '/')).toBe(true)
+    expect(coversPath(nz, '/satellite')).toBe(false)
+    expect(coversPath(page({ path: '/satellite' }), '/')).toBe(false)
+  })
+
+  test('sanitising keeps good addresses and drops the rest', () => {
+    const kept = sanitizeSavedPages([
+      page({ path: '/a', aliases: ['/', '//evil.example', 'x', 7 as never] }),
+    ])
+
+    expect(kept[0].aliases).toEqual(['/'])
+  })
+
+  test('a saved page with no addresses recorded has none', () => {
+    const { aliases: _unused, ...old } = page({ path: '/a' })
+    void _unused
+
+    expect(sanitizeSavedPages([old])[0].aliases).toEqual([])
   })
 })
 

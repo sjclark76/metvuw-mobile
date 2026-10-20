@@ -21,6 +21,11 @@ export interface ChartList {
   title: string
   /** The page's own path, without a query string or trailing slash. */
   path: string
+  /**
+   * Other addresses that show the same page: the home page is the New Zealand
+   * forecast. Saved as one page, so it counts as saved at either.
+   */
+  aliases: string[]
   /** When the charts were issued (epoch ms): the earliest chart's time. */
   issued: number | undefined
   /** Every image the page can ask for, in page order. */
@@ -54,16 +59,21 @@ function build(
   path: string,
   charts: Chart[],
   small: boolean,
+  aliases: string[] = [],
 ): ChartList {
   return {
     title,
     path,
+    aliases,
     issued: charts.length
       ? Math.min(...charts.map((chart) => chart.imageDateUTC))
       : undefined,
     urls: withSmallVariant(charts, small),
   }
 }
+
+const HOME_PATH = '/'
+const NEW_ZEALAND_PATH = '/regions/nz'
 
 /** The path alone: no origin, query string, fragment or trailing slash. */
 function cleanPath(path: string): string | undefined {
@@ -92,13 +102,9 @@ export async function chartListForPath(
 ): Promise<ChartList | undefined> {
   const path = cleanPath(rawPath)
   if (!path) return undefined
-  // The home page is the New Zealand forecast, under its own address.
-  if (path === '/') {
-    const nz = findRegionByCode('nz')
-    return nz
-      ? build(nz.name, path, await getRainChartDataForRegion(nz), false)
-      : undefined
-  }
+  // The home page is the New Zealand forecast: one page, two addresses. It is
+  // kept as the region page, which covers the home page too.
+  if (path === '/') return chartListForPath(NEW_ZEALAND_PATH)
   const [, section, code, ...rest] = path.split('/')
   if (rest.length > 0) return undefined
 
@@ -111,6 +117,7 @@ export async function chartListForPath(
         path,
         await getRainChartDataForRegion(region),
         false,
+        path === NEW_ZEALAND_PATH ? [HOME_PATH] : [],
       )
     }
     case 'satellite':

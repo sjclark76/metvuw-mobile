@@ -5,6 +5,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { savedPagesAtom } from '@/components/Atoms/GlobalState'
 import {
   collectGarbage,
+  coversPath,
   downloadPage,
   sanitizeSavedPages,
   SavedPage,
@@ -48,7 +49,9 @@ export function useSavedPage(path: string) {
   const { pages, remove } = useSavedPageList()
   const [status, setStatus] = useState<SaveStatus>('idle')
 
-  const saved: SavedPage | undefined = pages.find((page) => page.path === path)
+  const saved: SavedPage | undefined = pages.find((page) =>
+    coversPath(page, path),
+  )
 
   const save = useCallback(async () => {
     setStatus('saving')
@@ -72,5 +75,7 @@ export function useSavedPage(path: string) {
     }
   }, [path, store])
 
-  return { saved, status, save, remove: () => remove(path) }
+  // Removed by the page's own path, which may differ from the address it was
+  // reached at (the home page is the New Zealand region page).
+  return { saved, status, save, remove: () => remove(saved?.path ?? path) }
 }

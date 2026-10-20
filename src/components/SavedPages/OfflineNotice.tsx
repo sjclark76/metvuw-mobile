@@ -7,6 +7,7 @@ import { useIsMounted } from '@/components/Hooks/useIsMounted'
 import { useNow } from '@/components/Hooks/useNow'
 import { useOnline } from '@/components/Hooks/useOnline'
 import { formatAge } from '@/shared/helpers/offline/format'
+import { coversPath } from '@/shared/helpers/offline/savedPages'
 
 import { useSavedPageList } from './useSavedPages'
 
@@ -32,7 +33,7 @@ export function OfflineNotice() {
 
   // Only for a page that was saved: that is the one whose age matters. Anything
   // else shown offline is the offline page itself, or what was merely viewed.
-  const saved = pages.find((page) => page.path === path)
+  const saved = pages.find((page) => coversPath(page, path))
   if (!saved) return null
   const outOfDate =
     saved.issued !== undefined && now - saved.issued > OUT_OF_DATE_AFTER_MS

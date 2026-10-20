@@ -11,6 +11,7 @@ vi.mock('@/shared/helpers/offline/chartList', () => ({
 const list: ChartList = {
   title: 'New Zealand',
   path: '/regions/nz',
+  aliases: [],
   issued: 1000,
   urls: ['/api/fallback-image?a=1'],
 }
