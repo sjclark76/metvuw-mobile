@@ -81,7 +81,7 @@ describe('<SavedPagesList />', () => {
 
   describe('whether the forecast is the newest', () => {
     const freshness = () =>
-      screen.getByText(/date$/i, { selector: '[data-freshness]' })
+      document.querySelector('[data-freshness]') as HTMLElement
 
     test('says up to date for a forecast that is the newest', () => {
       state.pages = [saved('/regions/nz', { issued: NOW - 3 * HOUR })]
@@ -90,19 +90,11 @@ describe('<SavedPagesList />', () => {
       expect(freshness()).toHaveTextContent('Up to date')
     })
 
-    test('says how far out of date an older one is', () => {
+    test('says how long ago an older one was issued, in days once past one', () => {
       state.pages = [saved('/regions/nz', { issued: NOW - 30 * HOUR })]
       render(<SavedPagesList />)
 
-      expect(freshness()).toHaveTextContent('18 hours out of date')
-    })
-
-    test('says only probably without a connection', () => {
-      state.online = false
-      state.pages = [saved('/regions/nz', { issued: NOW - 30 * HOUR })]
-      render(<SavedPagesList />)
-
-      expect(freshness()).toHaveTextContent('Probably 18 hours out of date')
+      expect(freshness()).toHaveTextContent('Issued 1 day ago')
     })
 
     test('says nothing for a page whose issue time is not known', () => {

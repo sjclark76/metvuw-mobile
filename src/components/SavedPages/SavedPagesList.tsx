@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
 import { useIsMounted } from '@/components/Hooks/useIsMounted'
 import { useNow } from '@/components/Hooks/useNow'
-import { useOnline } from '@/components/Hooks/useOnline'
 import { actionClasses } from '@/components/StatusMessage'
 import { formatAge, formatBytes } from '@/shared/helpers/offline/format'
 import {
@@ -39,7 +38,6 @@ function FreshnessLine({ status }: { status: string | undefined }) {
 export function SavedPagesList() {
   const isMounted = useIsMounted()
   const now = useNow()
-  const online = useOnline()
   const formatDate = useFormatDate()
   const { pages, remove } = useSavedPageList()
 
@@ -82,7 +80,7 @@ export function SavedPagesList() {
                 {formatAge(now - page.refreshedAt)}
               </p>
               <FreshnessLine
-                status={describeFreshness(freshness(page.issued, now), online)}
+                status={describeFreshness(freshness(page.issued, now))}
               />
             </div>
             <button
