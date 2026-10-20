@@ -79,6 +79,38 @@ describe('useRainReadings', () => {
     ])
   })
 
+  test('reads nothing until the page is ready', async () => {
+    const { result, rerender } = renderHook((p) => useRainReadings(p), {
+      initialProps: props({ ready: false }),
+    })
+
+    await act(() => new Promise((r) => setTimeout(r, 120)))
+    expect(decodeChart).not.toHaveBeenCalled()
+
+    rerender(props({ ready: true }))
+    await waitFor(() => expect(result.current.size).toBe(3))
+  })
+
+  test('reads three charts at a time, and no more', async () => {
+    let running = 0
+    let most = 0
+    vi.mocked(decodeChart).mockImplementation(async () => {
+      most = Math.max(most, ++running)
+      await new Promise((r) => setTimeout(r, 30))
+      running--
+      return clearChart()
+    })
+    const { result } = renderHook(() =>
+      useRainReadings(
+        props({ chartUrls: ['/a', '/b', '/c', '/d', '/e', '/f', '/g'] }),
+      ),
+    )
+
+    await waitFor(() => expect(result.current.size).toBe(7))
+
+    expect(most).toBe(3)
+  })
+
   test('says off the chart for a pin the region’s chart does not show', async () => {
     const paris = pinFromPlace({
       name: 'Paris',

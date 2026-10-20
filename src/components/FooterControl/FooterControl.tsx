@@ -5,6 +5,7 @@ import { ReactNode, useEffect, useRef } from 'react'
 import { useAnimation } from '@/components/Animation/Animation'
 import { usePins } from '@/components/Pins/usePins'
 import { RainStrip } from '@/components/RainStrip/RainStrip'
+import { useChartsSettled } from '@/components/RainStrip/useChartsSettled'
 import { useRainReadings } from '@/components/RainStrip/useRainReadings'
 import type { RegionCode } from '@/shared/types/region'
 
@@ -68,11 +69,13 @@ function FooterControl({
   } = useAnimation()
 
   const { pins } = usePins()
+  const chartsSettled = useChartsSettled()
   const readings = useRainReadings({
     region: rain?.region ?? 'nz',
     chartUrls: rain ? rain.chartUrls : [],
     current: index,
     pins: rain ? pins : [],
+    ready: chartsSettled,
   })
 
   // In the list, the axis follows the chart in view and moves the list when it
