@@ -197,7 +197,7 @@ test.describe('with no connection', () => {
     await page.reload()
     await page.waitForSelector('main img')
     await page.getByRole('button', { name: 'Save for offline' }).click()
-    await expect(page.getByText(/^Saved, /)).toBeVisible({ timeout: 30_000 })
+    await expect(page.getByText(/^Saved · /)).toBeVisible({ timeout: 30_000 })
 
     await context.setOffline(true)
     await page.goto('/regions/nz')

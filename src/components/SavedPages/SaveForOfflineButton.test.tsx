@@ -5,6 +5,9 @@ import { SavedPage } from '@/shared/helpers/offline/savedPages'
 import { SaveForOfflineButton } from './SaveForOfflineButton'
 import { SaveStatus } from './useSavedPages'
 
+const HOUR = 60 * 60 * 1000
+const NOW = Date.UTC(2026, 9, 21, 12)
+
 const state = vi.hoisted(() => ({
   path: '/regions/nz' as string | null,
   online: true,
@@ -16,6 +19,7 @@ const state = vi.hoisted(() => ({
 }))
 
 vi.mock('next/navigation', () => ({ usePathname: () => state.path }))
+vi.mock('@/components/Hooks/useNow', () => ({ useNow: () => NOW }))
 vi.mock('@/components/Hooks/useOnline', () => ({
   useOnline: () => state.online,
 }))
@@ -34,7 +38,7 @@ vi.mock('./useSavedPages', () => ({
 const saved: SavedPage = {
   path: '/regions/nz',
   title: 'New Zealand',
-  issued: Date.UTC(2026, 9, 16, 18),
+  issued: NOW - 3 * HOUR,
   refreshedAt: 1,
   urls: [],
   bytes: 2.1 * 1024 * 1024,
@@ -70,13 +74,50 @@ describe('<SaveForOfflineButton />', () => {
     expect(state.remove).not.toHaveBeenCalled()
   })
 
-  test('shows a saved page as pressed, with its size', () => {
+  test('shows a saved page as pressed, and up to date while its forecast is the newest', () => {
     state.saved = saved
 
     render(<SaveForOfflineButton />)
 
     expect(button()).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('status')).toHaveTextContent('Saved, 2.1 MB')
+    expect(screen.getByRole('status')).toHaveTextContent('Saved · up to date')
+  })
+
+  test('says how far out of date a saved forecast is', () => {
+    state.saved = { ...saved, issued: NOW - 17 * HOUR }
+
+    render(<SaveForOfflineButton />)
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Saved · 5 hours out of date',
+    )
+  })
+
+  test('says only probably out of date with no connection to check', () => {
+    state.online = false
+    state.saved = { ...saved, issued: NOW - 17 * HOUR }
+
+    render(<SaveForOfflineButton />)
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Saved · probably 5 hours out of date',
+    )
+  })
+
+  test('just says Saved when it is not known when the forecast was issued', () => {
+    state.saved = { ...saved, issued: undefined }
+
+    render(<SaveForOfflineButton />)
+
+    expect(screen.getByRole('status')).toHaveTextContent(/^Saved$/)
+  })
+
+  test('does not show the size: that is on the Saved page', () => {
+    state.saved = saved
+
+    render(<SaveForOfflineButton />)
+
+    expect(screen.getByRole('status')).not.toHaveTextContent(/MB|KB/)
   })
 
   test('forgets a saved page when pressed again', () => {

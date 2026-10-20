@@ -3,8 +3,12 @@ import clsx from 'clsx'
 import { usePathname } from 'next/navigation'
 
 import { useIsMounted } from '@/components/Hooks/useIsMounted'
+import { useNow } from '@/components/Hooks/useNow'
 import { useOnline } from '@/components/Hooks/useOnline'
-import { formatBytes } from '@/shared/helpers/offline/format'
+import {
+  describeFreshness,
+  freshness,
+} from '@/shared/helpers/offline/freshness'
 
 import { supportsSavingPages } from './browserDependencies'
 import { useSavedPage } from './useSavedPages'
@@ -32,6 +36,17 @@ const CheckIcon = () => (
   </svg>
 )
 
+// Whether what is kept is the newest forecast, as far as can be told: the size of
+// it is on the Saved page, where it matters.
+function savedMessage(
+  issued: number | undefined,
+  now: number,
+  online: boolean,
+) {
+  const status = describeFreshness(freshness(issued, now), online)
+  return status ? `Saved · ${status}` : 'Saved'
+}
+
 /**
  * Keeps the page's charts on the device so they can be looked at with no
  * connection. A toggle: pressed means saved. What is saved is only known once
@@ -41,6 +56,7 @@ export function SaveForOfflineButton() {
   const path = usePathname()
   const isMounted = useIsMounted()
   const online = useOnline()
+  const now = useNow()
   const { saved, status, save, remove } = useSavedPage(path ?? '')
 
   const ready = isMounted && !!path && supportsSavingPages()
@@ -53,7 +69,7 @@ export function SaveForOfflineButton() {
     : failed
       ? 'Could not save. Check your connection and try again.'
       : saved
-        ? `Saved, ${formatBytes(saved.bytes)}`
+        ? savedMessage(saved.issued, now, online)
         : cannotSave
           ? 'Connect to save this page'
           : ''

@@ -10,6 +10,7 @@ const NOW = Date.UTC(2026, 9, 20, 12)
 const state = vi.hoisted(() => ({
   pages: [] as SavedPage[],
   mounted: true,
+  online: true,
   remove: vi.fn(),
 }))
 
@@ -17,6 +18,9 @@ vi.mock('@/components/Hooks/useIsMounted', () => ({
   useIsMounted: () => state.mounted,
 }))
 vi.mock('@/components/Hooks/useNow', () => ({ useNow: () => NOW }))
+vi.mock('@/components/Hooks/useOnline', () => ({
+  useOnline: () => state.online,
+}))
 vi.mock('./useSavedPages', () => ({
   useSavedPageList: () => ({ pages: state.pages, remove: state.remove }),
 }))
@@ -37,7 +41,7 @@ const saved = (
 describe('<SavedPagesList />', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    Object.assign(state, { pages: [], mounted: true })
+    Object.assign(state, { pages: [], mounted: true, online: true })
   })
 
   test('says how to save a page when nothing is saved', () => {
@@ -73,6 +77,40 @@ describe('<SavedPagesList />', () => {
     expect(item).toHaveTextContent('2.1 MB')
     expect(item).toHaveTextContent('Checked 2 hours ago')
     expect(item).toHaveTextContent('Issued')
+  })
+
+  describe('whether the forecast is the newest', () => {
+    const freshness = () =>
+      screen.getByText(/date$/i, { selector: '[data-freshness]' })
+
+    test('says up to date for a forecast that is the newest', () => {
+      state.pages = [saved('/regions/nz', { issued: NOW - 3 * HOUR })]
+      render(<SavedPagesList />)
+
+      expect(freshness()).toHaveTextContent('Up to date')
+    })
+
+    test('says how far out of date an older one is', () => {
+      state.pages = [saved('/regions/nz', { issued: NOW - 30 * HOUR })]
+      render(<SavedPagesList />)
+
+      expect(freshness()).toHaveTextContent('18 hours out of date')
+    })
+
+    test('says only probably without a connection', () => {
+      state.online = false
+      state.pages = [saved('/regions/nz', { issued: NOW - 30 * HOUR })]
+      render(<SavedPagesList />)
+
+      expect(freshness()).toHaveTextContent('Probably 18 hours out of date')
+    })
+
+    test('says nothing for a page whose issue time is not known', () => {
+      state.pages = [saved('/regions/nz', { issued: undefined })]
+      render(<SavedPagesList />)
+
+      expect(document.querySelector('[data-freshness]')).toBeNull()
+    })
   })
 
   test('shows the total kept', () => {

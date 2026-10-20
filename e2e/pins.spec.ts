@@ -222,7 +222,7 @@ test.describe('with no connection', () => {
   }) => {
     await controlled(page)
     await page.getByRole('button', { name: 'Save for offline' }).click()
-    await expect(page.getByText(/^Saved, /)).toBeVisible({ timeout: 30_000 })
+    await expect(page.getByText(/^Saved · /)).toBeVisible({ timeout: 30_000 })
     await page.evaluate(() =>
       localStorage.setItem(
         'pins',
@@ -253,7 +253,7 @@ test.describe('with no connection', () => {
   }) => {
     await controlled(page)
     await page.getByRole('button', { name: 'Save for offline' }).click()
-    await expect(page.getByText(/^Saved, /)).toBeVisible({ timeout: 30_000 })
+    await expect(page.getByText(/^Saved · /)).toBeVisible({ timeout: 30_000 })
     await page.goto('/pins')
     // Opening the page loads the list of places, which the worker keeps.
     await expect
