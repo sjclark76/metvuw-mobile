@@ -43,7 +43,9 @@ async function save(page: Page) {
 const savedPages = (page: Page) =>
   page.evaluate(() =>
     JSON.parse(localStorage.getItem('savedPages') ?? '[]'),
-  ) as Promise<{ path: string; refreshedAt: number; urls: string[] }[]>
+  ) as Promise<
+    { path: string; aliases: string[]; refreshedAt: number; urls: string[] }[]
+  >
 
 const cacheSize = (page: Page, name: string) =>
   page.evaluate(
@@ -287,6 +289,71 @@ test.describe('opening a saved page with no connection', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(
       'New Zealand',
     )
+  })
+})
+
+test.describe('a visitor who chooses their own home page', () => {
+  const homeButton = (page: Page) =>
+    page.getByLabel('Use this page as my home page')
+
+  test('with none, saving New Zealand covers the home page as well', async ({
+    page,
+  }) => {
+    await openControlled(page, '/regions/nz')
+    await save(page)
+
+    expect((await savedPages(page))[0].aliases).toEqual(['/'])
+  })
+
+  test('with another, the home page is not New Zealand, so it is not covered', async ({
+    page,
+  }) => {
+    await page.goto('/regions/nzsi')
+    await homeButton(page).click()
+    await expect(homeButton(page)).toHaveAttribute('aria-pressed', 'true')
+
+    await openControlled(page, '/regions/nz')
+    await save(page)
+
+    const [saved] = await savedPages(page)
+    expect(saved.path).toBe('/regions/nz')
+    expect(saved.aliases).toEqual([])
+  })
+
+  test('choosing another home page after saving stops it covering the home page', async ({
+    page,
+  }) => {
+    await openControlled(page, '/')
+    await save(page)
+    expect((await savedPages(page))[0].aliases).toEqual(['/'])
+
+    await page.goto('/regions/nzsi')
+    await homeButton(page).click()
+    await expect(homeButton(page)).toHaveAttribute('aria-pressed', 'true')
+    // The next time the app opens, what is saved is checked again.
+    await page.goto('/regions/nz')
+
+    await expect
+      .poll(async () => (await savedPages(page))[0].aliases)
+      .toEqual([])
+  })
+
+  test('clearing it again brings the home page back', async ({ page }) => {
+    await page.goto('/regions/nzsi')
+    await homeButton(page).click()
+    await expect(homeButton(page)).toHaveAttribute('aria-pressed', 'true')
+    await openControlled(page, '/regions/nz')
+    await save(page)
+    expect((await savedPages(page))[0].aliases).toEqual([])
+
+    await page.goto('/regions/nzsi')
+    await homeButton(page).click()
+    await expect(homeButton(page)).toHaveAttribute('aria-pressed', 'false')
+    await page.goto('/regions/nz')
+
+    await expect
+      .poll(async () => (await savedPages(page))[0].aliases)
+      .toEqual(['/'])
   })
 })
 

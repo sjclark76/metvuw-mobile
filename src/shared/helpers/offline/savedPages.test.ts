@@ -69,6 +69,10 @@ interface World {
   lists: Record<string, { title?: string; issued?: number; urls: string[] }>
   /** Paths or URLs that fail. */
   failing: Set<string>
+  /** Pages that redirect elsewhere, as the home page does with a favourite set. */
+  redirecting: Set<string>
+  /** Pages that cannot be reached at all. */
+  unreachable: Set<string>
   html: Record<string, string>
 }
 
@@ -82,6 +86,8 @@ function setup(partial: Partial<World> = {}) {
       },
     },
     failing: new Set(),
+    redirecting: new Set(),
+    unreachable: new Set(),
     html: { '/regions/nz': '<html></html>', '/saved': '<html>saved</html>' },
     ...partial,
   }
@@ -89,27 +95,51 @@ function setup(partial: Partial<World> = {}) {
   let inFlight = 0
   let peak = 0
 
-  const fetch = vi.fn(async (input: string | Request) => {
-    const url = typeof input === 'string' ? input : input.url
-    requested.push(url)
-    inFlight++
-    peak = Math.max(peak, inFlight)
-    await new Promise((resolve) => setTimeout(resolve, 1))
-    inFlight--
-    if (world.failing.has(url)) return new Response('no', { status: 503 })
+  const fetch = vi.fn(
+    async (
+      input: string | Request,
+      init?: Parameters<typeof globalThis.fetch>[1],
+    ) => {
+      const url = typeof input === 'string' ? input : input.url
+      requested.push(url)
+      // Asked not to follow redirects: a page that redirects answers as one.
+      if (init?.redirect === 'manual') {
+        if (world.redirecting.has(url)) {
+          return {
+            type: 'opaqueredirect',
+            ok: false,
+            status: 0,
+            body: null,
+          } as unknown as Response
+        }
+        if (world.unreachable.has(url)) throw new TypeError('offline')
+      }
+      inFlight++
+      peak = Math.max(peak, inFlight)
+      await new Promise((resolve) => setTimeout(resolve, 1))
+      inFlight--
+      if (world.failing.has(url)) return new Response('no', { status: 503 })
 
-    if (url.startsWith('/api/chart-list')) {
-      const path = decodeURIComponent(url.split('path=')[1])
-      const list = world.lists[path]
-      if (!list) return new Response('{}', { status: 404 })
-      return Response.json({ path, title: 'Page', ...list })
-    }
-    if (url.startsWith('/api/fallback-image')) {
-      return slowBody(new Response('x'.repeat(CHART_BYTES), { status: 200 }))
-    }
-    if (world.html[url] !== undefined) return new Response(world.html[url])
-    return new Response('asset', { status: 200 })
-  })
+      if (url.startsWith('/api/chart-list')) {
+        const path = decodeURIComponent(url.split('path=')[1])
+        const list = world.lists[path]
+        if (!list) return new Response('{}', { status: 404 })
+        return Response.json({ path, title: 'Page', ...list })
+      }
+      if (url.startsWith('/api/fallback-image')) {
+        return slowBody(new Response('x'.repeat(CHART_BYTES), { status: 200 }))
+      }
+      if (world.html[url] !== undefined) {
+        const page = new Response(world.html[url])
+        // Followed to wherever it redirects, a browser says it was redirected.
+        if (world.redirecting.has(url)) {
+          Object.defineProperty(page, 'redirected', { value: true })
+        }
+        return page
+      }
+      return new Response('asset', { status: 200 })
+    },
+  )
 
   const caches = new FakeCaches()
   const deps = {
@@ -447,6 +477,87 @@ describe('a page with more than one address', () => {
     void _unused
 
     expect(sanitizeSavedPages([old])[0].aliases).toEqual([])
+  })
+})
+
+describe("keeping a page's other addresses true", () => {
+  const nz = {
+    '/': '<html>home</html>',
+    '/regions/nz': '<html>nz</html>',
+  }
+  const setupNz = () =>
+    setup({
+      lists: {
+        '/regions/nz': {
+          title: 'New Zealand',
+          issued: 100,
+          urls: [chart(1)],
+          ...{ path: '/regions/nz', aliases: ['/'] },
+        },
+      },
+      html: nz,
+    })
+
+  test('drops an address that has since started to redirect: the visitor chose another home page', async () => {
+    const { deps, world, caches } = setupNz()
+    const saved = await downloadPage('/regions/nz', deps)
+    expect(saved.aliases).toEqual(['/'])
+    world.redirecting.add('/')
+
+    const refreshed = await refreshPage(saved, deps)
+    await collectGarbage([refreshed], deps)
+
+    expect(refreshed.aliases).toEqual([])
+    expect(caches.urls(SAVED_PAGES_CACHE)).not.toContain('/')
+  })
+
+  test('adds an address that has since stopped redirecting, and keeps its page', async () => {
+    const { deps, world, caches } = setupNz()
+    world.redirecting.add('/')
+    const saved = await downloadPage('/regions/nz', deps)
+    expect(saved.aliases).toEqual([])
+    world.redirecting.delete('/')
+
+    const refreshed = await refreshPage(saved, deps)
+
+    expect(refreshed.aliases).toEqual(['/'])
+    expect(caches.urls(SAVED_PAGES_CACHE)).toContain('/')
+  })
+
+  test('leaves addresses as they were when it cannot be checked', async () => {
+    const { deps, world } = setupNz()
+    const saved = await downloadPage('/regions/nz', deps)
+    world.unreachable.add('/')
+
+    const refreshed = await refreshPage(saved, deps)
+
+    expect(refreshed.aliases).toEqual(['/'])
+  })
+
+  test('does not download a whole page just to see whether it redirects', async () => {
+    const { deps, requested, fetch } = setupNz()
+    const saved = await downloadPage('/regions/nz', deps)
+    requested.length = 0
+    fetch.mockClear()
+
+    await refreshPage(saved, deps)
+
+    const checks = fetch.mock.calls.filter(([url]) => url === '/')
+    expect(checks).toHaveLength(1)
+    expect(checks[0][1]).toMatchObject({
+      redirect: 'manual',
+      cache: 'no-store',
+    })
+  })
+
+  test('a page with no other addresses makes no such check', async () => {
+    const { deps, requested } = setup()
+    const saved = await downloadPage('/regions/nz', deps)
+    requested.length = 0
+
+    await refreshPage(saved, deps)
+
+    expect(requested).toEqual(['/api/chart-list?path=%2Fregions%2Fnz'])
   })
 })
 
