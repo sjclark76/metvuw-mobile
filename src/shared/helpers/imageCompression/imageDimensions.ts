@@ -1,6 +1,15 @@
 import type { ChartType } from '@/shared/types/ChartType'
 
 export const rainImageDimensions = { width: 565, height: 396 }
+
+/**
+ * The rectangle cut from every rain chart, in the pixels of the full 711x600
+ * chart: the part of the map the app shows. The same rectangle for every region,
+ * whatever its map covers, so it clips some charts (and, on the World chart, takes
+ * in blank space above the map). Anything that places something on a processed
+ * chart (see `chartGeometry`) must use it.
+ */
+export const rainCrop = { left: 73, top: 116, ...rainImageDimensions }
 export const radarImageDimensions = { width: 565, height: 540 }
 
 export const satelliteImageDimensions = { width: 840, height: 607 }
