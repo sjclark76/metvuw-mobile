@@ -24,6 +24,9 @@ const FLIP_AFTER = 0.55
  * and the rain colours); the white edge keeps it clear of red isobars and the
  * dark edge of pale rain.
  *
+ * On a very small screen (under 400px wide, where the chart is drawn smaller)
+ * the dot and the name are a little smaller.
+ *
  * The chart image is light in both themes (charts cannot be recoloured), so the
  * marker uses fixed colours, not the theme's. What is
  * pinned is only known in the browser, so nothing is drawn before the page is
@@ -60,12 +63,12 @@ export function PinMarkers({ region }: { region: RegionCode }) {
         >
           <span
             data-pin-dot
-            className="block size-[18px] rounded-full border-[3px] border-white bg-[#ff6a00] shadow-[0_0_0_1.5px_#1b1740,0_1px_5px_rgba(0,0,0,0.55)]"
+            className="block size-[18px] rounded-full border-[3px] border-white bg-[#ff6a00] shadow-[0_0_0_1.5px_#1b1740,0_1px_5px_rgba(0,0,0,0.55)] max-[400px]:size-3.5 max-[400px]:border-2"
           />
           <span
             data-pin-label
             className={clsx(
-              'absolute top-1/2 -translate-y-1/2 text-[11px] leading-none font-semibold whitespace-nowrap text-[#1b1740] [text-shadow:-1px_-1px_0_#fff,1px_-1px_0_#fff,-1px_1px_0_#fff,1px_1px_0_#fff,0_0_3px_#fff]',
+              'absolute top-1/2 -translate-y-1/2 text-[11px] leading-none font-semibold whitespace-nowrap text-[#1b1740] [text-shadow:-1px_-1px_0_#fff,1px_-1px_0_#fff,-1px_1px_0_#fff,1px_1px_0_#fff,0_0_3px_#fff] max-[400px]:text-[10px]',
               position.x > FLIP_AFTER ? 'right-full mr-2' : 'left-full ml-2',
             )}
           >
