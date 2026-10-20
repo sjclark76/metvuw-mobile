@@ -102,13 +102,34 @@ describe('useRainReadings', () => {
     })
     const { result } = renderHook(() =>
       useRainReadings(
-        props({ chartUrls: ['/a', '/b', '/c', '/d', '/e', '/f', '/g'] }),
+        props({
+          chartUrls: ['/a', '/b', '/c', '/d', '/e', '/f', '/g'],
+          current: 1,
+        }),
       ),
     )
 
     await waitFor(() => expect(result.current.size).toBe(7))
 
     expect(most).toBe(3)
+  })
+
+  test('reads the chart in view and its neighbours without waiting for the page to be idle', async () => {
+    const idle = vi.fn()
+    vi.stubGlobal('requestIdleCallback', idle)
+    try {
+      const { result } = renderHook(() =>
+        useRainReadings(
+          props({ chartUrls: ['/a', '/b', '/c', '/d'], current: 1 }),
+        ),
+      )
+
+      // Idle never comes: only the chart in view and the one either side are read.
+      await waitFor(() => expect(result.current.size).toBe(3))
+      expect([...result.current.keys()].sort()).toEqual(['/a', '/b', '/c'])
+    } finally {
+      vi.unstubAllGlobals()
+    }
   })
 
   test('says off the chart for a pin the region’s chart does not show', async () => {
