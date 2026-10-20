@@ -37,8 +37,11 @@ export function RainfallLegendSection() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <section className="sticky bottom-[calc(var(--footer-height,5rem)+0.25rem)] z-30 flex w-full justify-end px-2 py-1">
-      <div className="flex items-end gap-2">
+    // Fixed above the footer, not sticky, for the same reason the footer is: on an
+    // iPhone a sticky element flashes when the page jumps. The section keeps the
+    // room the button takes at the end of the page.
+    <section className="h-12 print:hidden">
+      <div className="fixed right-2 bottom-[calc(var(--footer-height,5rem)+0.25rem)] z-30 flex items-end gap-2">
         <AnimatePresence initial={false}>
           {isOpen && (
             <m.div
