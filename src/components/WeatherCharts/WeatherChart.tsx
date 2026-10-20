@@ -2,6 +2,7 @@
 import Card from '@/components/Card'
 import ChartCaption from '@/components/ChartCaption'
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
+import { PinMarkers } from '@/components/Pins/PinMarkers'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
 
@@ -31,13 +32,17 @@ export function WeatherChart(props: Props) {
   return (
     <Card
       weatherImage={
-        <WeatherImage
-          imageSrc={props.chart.url}
-          imageAlt={altTag}
-          chartType="Rain"
-          isHighPriority={props.index === 0}
-          loading={props.loading}
-        />
+        // The markers sit exactly on the image: it is a block as wide as this box.
+        <div className="relative">
+          <WeatherImage
+            imageSrc={props.chart.url}
+            imageAlt={altTag}
+            chartType="Rain"
+            isHighPriority={props.index === 0}
+            loading={props.loading}
+          />
+          <PinMarkers region={props.region.code} />
+        </div>
       }
       caption={
         <ChartCaption
