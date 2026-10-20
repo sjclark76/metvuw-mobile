@@ -101,8 +101,53 @@ const images = {
   png: () => ({ width: 760, height: 690, format: 'png' }),
 }
 
+// Rain charts are the chart's pale background with, over Wanaka (on the NZ chart:
+// 47.79% across and 68.71% down the cropped chart), a block in the colour of one
+// of metvuw's rain bands. Which band depends on the forecast hour, so a test can
+// tell the charts apart:
+//   006 and the hours not listed: no rain   012: 1 mm (magenta)
+//   018: 5 mm (blue)                         024: 20+ mm (red-orange)
+const RAIN_AT_WANAKA = { '012': '#ff00ff', '018': '#0000ff', '024': '#ff3f00' }
+const RAIN_BACKGROUND = '#e6e6ff'
+async function rainChart(hour) {
+  const width = 700
+  const height = 560
+  const input = RAIN_AT_WANAKA[hour]
+    ? [
+        {
+          input: await sharp({
+            create: {
+              width: 31,
+              height: 31,
+              channels: 3,
+              background: RAIN_AT_WANAKA[hour],
+            },
+          })
+            .png()
+            .toBuffer(),
+          // The crop starts at (73, 116) and is 565 x 396.
+          left: Math.round(73 + 0.4779 * 564) - 15,
+          top: Math.round(116 + 0.6871 * 395) - 15,
+        },
+      ]
+    : []
+  const buffer = await sharp({
+    create: { width, height, channels: 3, background: RAIN_BACKGROUND },
+  })
+    .composite(input)
+    .gif({ dither: 0 })
+    .toBuffer()
+  return { buffer, type: 'image/gif' }
+}
+
 const imageCache = new Map()
 async function image(path) {
+  const rain = path.match(/\/rain-\w+-(?:thumb-)?\d+-(\d{3})\.gif$/)
+  if (rain) {
+    const key = `rain-${rain[1]}`
+    if (!imageCache.has(key)) imageCache.set(key, await rainChart(rain[1]))
+    return imageCache.get(key)
+  }
   const extension = path.split('.').pop()
   const make = images[extension]
   if (!make) return undefined
