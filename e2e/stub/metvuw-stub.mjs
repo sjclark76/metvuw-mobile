@@ -26,10 +26,31 @@ const FORECAST_HOURS = [
   '060',
 ]
 const RADAR_CODES = ['nl', 'ak', 'bp', 'mh', 'np', 'wn', 'ch', 'wl', 'nv']
-const RADAR_TIMES = ['202610131500Z', '202610131510Z', '202610131520Z']
+// More radar and upper air charts than fit the first screen, where the app skips
+// rendering the rest until they are near (see defer-offscreen in globals.css).
+// Satellite's four already reach one, and tests rely on there being four.
+const RADAR_TIMES = [
+  '202610131500Z',
+  '202610131510Z',
+  '202610131520Z',
+  '202610131530Z',
+  '202610131540Z',
+  '202610131550Z',
+  '202610131600Z',
+  '202610131610Z',
+]
 const SATELLITE_DATES = ['2026101512', '2026101515', '2026101518', '2026101521']
 const BALLOONS = ['93112', '93417', '93844']
-const BALLOON_TIMES = ['202610111100', '202610112300', '202610121100']
+const BALLOON_TIMES = [
+  '202610111100',
+  '202610112300',
+  '202610121100',
+  '202610122300',
+  '202610131100',
+  '202610132300',
+  '202610141100',
+  '202610142300',
+]
 const FAILING_REGION = 'estonia'
 
 const page = (images) =>
