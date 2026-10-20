@@ -97,7 +97,11 @@ function assetsIn(html: string): string[] {
 
 async function keepPage(path: string, deps: Dependencies): Promise<void> {
   const response = await deps.fetch(path)
-  if (!response.ok) throw new Error(`could not download ${path}`)
+  // A page that redirects cannot be kept: browsers refuse to open a redirected
+  // response for a navigation, so what was saved would never be shown.
+  if (!response.ok || response.redirected) {
+    throw new Error(`could not download ${path}`)
+  }
   const copy = response.clone()
   const html = await response.text()
   await (await deps.caches.open(SAVED_PAGES_CACHE)).put(path, copy)

@@ -92,6 +92,13 @@ export async function chartListForPath(
 ): Promise<ChartList | undefined> {
   const path = cleanPath(rawPath)
   if (!path) return undefined
+  // The home page is the New Zealand forecast, under its own address.
+  if (path === '/') {
+    const nz = findRegionByCode('nz')
+    return nz
+      ? build(nz.name, path, await getRainChartDataForRegion(nz), false)
+      : undefined
+  }
   const [, section, code, ...rest] = path.split('/')
   if (rest.length > 0) return undefined
 

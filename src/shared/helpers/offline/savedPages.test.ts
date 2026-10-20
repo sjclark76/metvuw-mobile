@@ -174,6 +174,20 @@ describe('downloadPage', () => {
     await expect(downloadPage('/regions/nz', deps)).rejects.toThrow()
   })
 
+  test('fails when the page redirects, as a redirected page cannot be shown offline', async () => {
+    const { deps, fetch } = setup()
+    const original = fetch.getMockImplementation()!
+    fetch.mockImplementation(async (input) => {
+      const response = await original(input)
+      if ((typeof input === 'string' ? input : input.url) === '/regions/nz') {
+        Object.defineProperty(response, 'redirected', { value: true })
+      }
+      return response
+    })
+
+    await expect(downloadPage('/regions/nz', deps)).rejects.toThrow()
+  })
+
   test('fails when the page has no list of charts', async () => {
     const { deps } = setup()
 
