@@ -146,6 +146,21 @@ describe('<Navbar /> saved pages', () => {
     )
   })
 
+  test('counts pages, not their addresses: the home page is New Zealand', () => {
+    const store = createStore()
+    store.set(savedPagesAtom, [
+      { ...saved('/regions/nz'), aliases: ['/'] },
+      saved('/satellite'),
+    ])
+    render(
+      <Provider store={store}>
+        <Navbar />
+      </Provider>,
+    )
+
+    expect(screen.getByRole('link', { name: 'Saved (2)' })).toBeInTheDocument()
+  })
+
   test('shows no count when nothing is saved', () => {
     renderWithSaved()
 

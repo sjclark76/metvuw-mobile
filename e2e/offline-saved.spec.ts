@@ -83,12 +83,40 @@ test.describe('saving a page', () => {
     await page.reload()
 
     const [saved] = await savedPages(page)
-    expect(saved.path).toBe('/')
+    expect(saved.path).toBe('/regions/nz')
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(
       'New Zealand',
     )
     await expect(notice(page)).toContainText('Charts saved')
     await expect.poll(() => firstChartLoaded(page)).toBeGreaterThan(0)
+  })
+
+  test('saved from the home page, it is saved at the New Zealand page too', async ({
+    page,
+    context,
+  }) => {
+    await openControlled(page, '/')
+    await save(page)
+
+    // Marked in the menu...
+    await page.getByRole('button', { name: 'Menu' }).click()
+    await page.getByRole('button', { name: 'New Zealand' }).click()
+    await expect(
+      page.getByRole('link', { name: 'New Zealand Saved for offline' }),
+    ).toBeVisible()
+    // ...shown as saved on the New Zealand page itself...
+    await page.goto('/regions/nz')
+    await page.waitForSelector('main img')
+    await expect(saveButton(page)).toHaveAttribute('aria-pressed', 'true')
+    // ...and it opens at either address with no connection.
+    await context.setOffline(true)
+    for (const path of ['/', '/regions/nz']) {
+      await page.goto(path)
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+        'New Zealand',
+      )
+      await expect(notice(page)).toContainText('Charts saved')
+    }
   })
 
   test('marks the saved page in the menu, and counts it @mobile', async ({

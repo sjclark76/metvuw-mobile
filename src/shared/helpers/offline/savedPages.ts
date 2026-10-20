@@ -16,6 +16,8 @@ export const SAVED_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000
 /** What the app remembers about one saved page. */
 export interface SavedPage {
   path: string
+  /** Other addresses that show this same page, kept so it opens at each. */
+  aliases?: string[]
   title: string
   /** When its charts were issued (epoch ms). */
   issued: number | undefined
@@ -52,13 +54,20 @@ function isChartUrl(url: unknown): url is string {
   return typeof url === 'string' && url.startsWith(PROXY_PREFIX)
 }
 
+/** A path on this site: not another address, however it is written. */
+const isAddress = (value: unknown): value is string =>
+  typeof value === 'string' &&
+  value.startsWith('/') &&
+  !value.startsWith('//') &&
+  !value.startsWith('/\\')
+
 function isChartList(value: unknown): value is ChartList {
   if (typeof value !== 'object' || value === null) return false
   const list = value as Record<string, unknown>
   return (
-    typeof list.path === 'string' &&
-    list.path.startsWith('/') &&
-    !list.path.startsWith('//') &&
+    isAddress(list.path) &&
+    (list.aliases === undefined ||
+      (Array.isArray(list.aliases) && list.aliases.every(isAddress))) &&
     typeof list.title === 'string' &&
     (list.issued === undefined || typeof list.issued === 'number') &&
     Array.isArray(list.urls) &&
@@ -142,11 +151,22 @@ async function keepList(
   })
 
   await keepPage(list.path, deps)
-  // The way back to what was saved. Not worth failing a save over.
+  // The page's other addresses, and the way back to what was saved. Not worth
+  // failing a save over: an address that cannot be kept is just not recorded.
+  const aliases: string[] = []
+  for (const alias of list.aliases ?? []) {
+    try {
+      await keepPage(alias, deps)
+      aliases.push(alias)
+    } catch {
+      // Opens online as usual; offline it is not available at this address.
+    }
+  }
   await keepPage(SAVED_LIST_PATH, deps).catch(() => {})
 
   return {
     path: list.path,
+    aliases,
     title: list.title,
     issued: list.issued,
     refreshedAt: deps.now(),
@@ -206,7 +226,7 @@ export async function collectGarbage(
   const wantedCharts = new Set(saved.flatMap((page) => page.urls))
   const wantedPages = new Set([
     SAVED_LIST_PATH,
-    ...saved.map((page) => page.path),
+    ...saved.flatMap((page) => [page.path, ...(page.aliases ?? [])]),
   ])
 
   const charts = await deps.caches.open(SAVED_CHARTS_CACHE)
@@ -226,6 +246,11 @@ export function expiredPages(
   now: number,
 ): SavedPage[] {
   return saved.filter((page) => now - page.refreshedAt > SAVED_LIFETIME_MS)
+}
+
+/** Whether this saved page is the page at `path`, at any of its addresses. */
+export function coversPath(page: SavedPage, path: string): boolean {
+  return page.path === path || (page.aliases ?? []).includes(path)
 }
 
 const isSavedPage = (value: unknown): value is SavedPage => {
@@ -253,9 +278,16 @@ const isSavedPage = (value: unknown): value is SavedPage => {
 export function sanitizeSavedPages(stored: unknown): SavedPage[] {
   if (!Array.isArray(stored)) return []
   const seen = new Set<string>()
-  return stored.filter((page): page is SavedPage => {
-    if (!isSavedPage(page) || seen.has(page.path)) return false
-    seen.add(page.path)
-    return true
-  })
+  return stored
+    .filter((page): page is SavedPage => {
+      if (!isSavedPage(page) || seen.has(page.path)) return false
+      seen.add(page.path)
+      return true
+    })
+    .map((page) => ({
+      ...page,
+      aliases: Array.isArray(page.aliases)
+        ? page.aliases.filter(isAddress)
+        : [],
+    }))
 }

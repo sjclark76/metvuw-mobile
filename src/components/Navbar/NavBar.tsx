@@ -19,7 +19,7 @@ import {
 } from '@/shared/types/region'
 
 import { SavedMark } from '../SavedPages/SavedMark'
-import { useSavedPaths } from '../SavedPages/useSavedPaths'
+import { useSavedPageCount, useSavedPaths } from '../SavedPages/useSavedPaths'
 import SetHomePageIcon from '../SetHomePageIcon/SetHomePageIcon'
 import { ThemeMenu } from '../ThemeToggle'
 import DropDown from './components/DropDown'
@@ -57,6 +57,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useAtom(isMenuOpenAtom)
   const navRef = useRef<HTMLElement>(null) // Create a ref for the nav element
   const savedPaths = useSavedPaths()
+  const savedCount = useSavedPageCount()
 
   const handleClick = () => {
     setMenuOpen((prev) => !prev)
@@ -157,7 +158,7 @@ const Navbar = () => {
               {/* The count's room is held, so the menu does not shift once it is
                   known: what is saved is only known in the browser. */}
               <span className="inline-block min-w-[3ch]">
-                {savedPaths.size > 0 && `(${savedPaths.size})`}
+                {savedCount > 0 && `(${savedCount})`}
               </span>
             </Link>
           </div>

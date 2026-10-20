@@ -17,7 +17,22 @@ export function useSavedPaths(): ReadonlySet<string> {
   const { pages } = useSavedPageList()
 
   return useMemo(
-    () => (isMounted ? new Set(pages.map((page) => page.path)) : none),
+    () =>
+      isMounted
+        ? new Set(pages.flatMap((page) => [page.path, ...(page.aliases ?? [])]))
+        : none,
     [isMounted, pages],
   )
+}
+
+/**
+ * How many pages are saved. Not the number of addresses: one page can have two
+ * (the home page is the New Zealand forecast). Zero until the page is running in
+ * the browser, for the same reason as `useSavedPaths`.
+ */
+export function useSavedPageCount(): number {
+  const isMounted = useIsMounted()
+  const { pages } = useSavedPageList()
+
+  return isMounted ? pages.length : 0
 }

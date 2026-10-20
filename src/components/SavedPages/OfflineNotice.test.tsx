@@ -86,6 +86,15 @@ describe('<OfflineNotice />', () => {
     expect(screen.getByRole('status')).not.toHaveTextContent('issued')
   })
 
+  test('on a page reached at another of its addresses, says the same', () => {
+    state.path = '/'
+    state.pages = [saved({ path: '/regions/nz', aliases: ['/'] })]
+
+    render(<OfflineNotice />)
+
+    expect(screen.getByRole('status')).toHaveTextContent('Charts saved')
+  })
+
   test('says nothing on a page that is not saved: that is the offline page, or what was merely viewed', () => {
     state.pages = [saved({ path: '/satellite' })]
 

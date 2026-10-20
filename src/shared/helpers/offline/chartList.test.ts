@@ -44,6 +44,7 @@ describe('chartListForPath', () => {
     expect(list).toEqual({
       title: 'South Island',
       path: '/regions/nzsi',
+      aliases: [],
       issued: 1000,
       urls: [proxy('a', 'Rain'), proxy('b', 'Rain')],
     })
@@ -109,7 +110,7 @@ describe('chartListForPath', () => {
     expect((await chartListForPath('/satellite'))?.issued).toBe(10)
   })
 
-  test('the home page is the New Zealand forecast, kept under its own address', async () => {
+  test('the home page is the New Zealand forecast: one page with two addresses', async () => {
     vi.mocked(getRainChartDataForRegion).mockResolvedValue([
       { ...chart(proxy('a', 'Rain'), 1000), forecastDate: '' },
     ])
@@ -121,8 +122,18 @@ describe('chartListForPath', () => {
     )
     expect(list).toMatchObject({
       title: 'New Zealand',
-      path: '/',
+      path: '/regions/nz',
+      aliases: ['/'],
       urls: [proxy('a', 'Rain')],
+    })
+  })
+
+  test('the New Zealand region page is the same page, and says so', async () => {
+    vi.mocked(getRainChartDataForRegion).mockResolvedValue([])
+
+    expect(await chartListForPath('/regions/nz')).toMatchObject({
+      path: '/regions/nz',
+      aliases: ['/'],
     })
   })
 
@@ -130,8 +141,17 @@ describe('chartListForPath', () => {
     vi.mocked(getRainChartDataForRegion).mockResolvedValue([])
 
     expect(await chartListForPath('/?utm_source=x')).toMatchObject({
-      path: '/',
+      path: '/regions/nz',
+      aliases: ['/'],
     })
+  })
+
+  test('no other page has another address', async () => {
+    vi.mocked(getSatelliteChartData).mockResolvedValue([])
+    vi.mocked(getRainChartDataForRegion).mockResolvedValue([])
+
+    expect((await chartListForPath('/satellite'))?.aliases).toEqual([])
+    expect((await chartListForPath('/regions/nzsi'))?.aliases).toEqual([])
   })
 
   test.each([

@@ -151,6 +151,36 @@ describe('useSavedPage', () => {
     expect(result.current.saved).toBeDefined()
   })
 
+  test('a page saved at one address is saved at its others too', async () => {
+    const { store, wrapper } = setup()
+    vi.mocked(downloadPage).mockResolvedValue({
+      ...page('/regions/nz', 'NZ'),
+      aliases: ['/'],
+    })
+    const home = renderHook(() => useSavedPage('/'), { wrapper })
+    const region = renderHook(() => useSavedPage('/regions/nz'), { wrapper })
+    const other = renderHook(() => useSavedPage('/satellite'), { wrapper })
+
+    await act(() => home.result.current.save())
+
+    expect(savedPaths(store)).toEqual(['/regions/nz'])
+    expect(home.result.current.saved?.path).toBe('/regions/nz')
+    expect(region.result.current.saved?.path).toBe('/regions/nz')
+    expect(other.result.current.saved).toBeUndefined()
+  })
+
+  test('forgetting from one address forgets the page, not another page', async () => {
+    const { store, wrapper } = setup([
+      { ...page('/regions/nz'), aliases: ['/'] },
+      page('/satellite'),
+    ])
+    const { result } = renderHook(() => useSavedPage('/'), { wrapper })
+
+    await act(() => result.current.remove())
+
+    expect(savedPaths(store)).toEqual(['/satellite'])
+  })
+
   test('removing forgets the page and tidies up', async () => {
     const { store, wrapper } = setup([page('/regions/nz'), page('/satellite')])
     const { result } = renderHook(() => useSavedPage('/regions/nz'), {
