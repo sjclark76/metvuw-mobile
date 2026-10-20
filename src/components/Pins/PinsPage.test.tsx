@@ -178,6 +178,68 @@ describe('<PinsPage />', () => {
     })
   })
 
+  describe('the keyboard', () => {
+    const key = (el: Element, name: string) =>
+      fireEvent.keyDown(el, { key: name })
+
+    test('Arrow Down from the box goes to the first match, then down the matches', async () => {
+      vi.mocked(searchPlaces).mockResolvedValue([wanaka, lakeWanaka])
+      renderPage()
+      search('wana')
+      const box = screen.getByLabelText('Add a place')
+      await screen.findByRole('list', { name: 'Matching places' })
+
+      key(box, 'ArrowDown')
+      expect(screen.getByRole('button', { name: /^Wanaka/ })).toHaveFocus()
+
+      key(document.activeElement!, 'ArrowDown')
+      expect(screen.getByRole('button', { name: /Lake Wanaka/ })).toHaveFocus()
+
+      key(document.activeElement!, 'ArrowDown')
+      expect(screen.getByRole('button', { name: /Lake Wanaka/ })).toHaveFocus()
+    })
+
+    test('Arrow Up goes back up, and from the first match to the box', async () => {
+      vi.mocked(searchPlaces).mockResolvedValue([wanaka, lakeWanaka])
+      renderPage()
+      search('wana')
+      const box = screen.getByLabelText('Add a place')
+      await screen.findByRole('list', { name: 'Matching places' })
+      key(box, 'ArrowDown')
+      key(document.activeElement!, 'ArrowDown')
+
+      key(document.activeElement!, 'ArrowUp')
+      expect(screen.getByRole('button', { name: /^Wanaka/ })).toHaveFocus()
+
+      key(document.activeElement!, 'ArrowUp')
+      expect(box).toHaveFocus()
+    })
+
+    test('skips a place that is already pinned', async () => {
+      vi.mocked(searchPlaces).mockResolvedValue([wanaka, lakeWanaka])
+      renderPage([pinFromPlace(wanaka)])
+      search('wana')
+      await screen.findByRole('list', { name: 'Matching places' })
+
+      key(screen.getByLabelText('Add a place'), 'ArrowDown')
+
+      expect(screen.getByRole('button', { name: /Lake Wanaka/ })).toHaveFocus()
+    })
+
+    test('Enter on a match pins it', async () => {
+      vi.mocked(searchPlaces).mockResolvedValue([wanaka])
+      const { store } = renderPage()
+      search('wana')
+      await screen.findByRole('list', { name: 'Matching places' })
+      key(screen.getByLabelText('Add a place'), 'ArrowDown')
+
+      // A focused button is activated by Enter; the browser turns that into a click.
+      fireEvent.click(document.activeElement!)
+
+      expect(stored(store)).toHaveLength(1)
+    })
+  })
+
   describe('pinning', () => {
     test('tapping a match pins it at once, with the place’s own name', async () => {
       vi.mocked(searchPlaces).mockResolvedValue([wanaka])

@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useId, useRef, useState } from 'react'
+import { KeyboardEvent, useEffect, useId, useRef, useState } from 'react'
 
 import { pinId } from '@/shared/helpers/pins/pins'
 import {
@@ -30,6 +30,7 @@ export function PlaceSearch({
   const [status, setStatus] = useState<Status>('idle')
   const [announcement, setAnnouncement] = useState('')
   const input = useRef<HTMLInputElement>(null)
+  const list = useRef<HTMLUListElement>(null)
   const inputId = useId()
 
   useEffect(() => {
@@ -66,6 +67,31 @@ export function PlaceSearch({
     input.current?.focus()
   }
 
+  // The matches you can pin, in order: a place already pinned cannot be chosen.
+  const choices = () =>
+    Array.from(
+      list.current?.querySelectorAll('button:not(:disabled)') ?? [],
+    ).filter((el): el is HTMLButtonElement => el instanceof HTMLButtonElement)
+
+  // Arrow Down from the box goes to the first match; the arrows then move through
+  // the matches, and Arrow Up from the first goes back to the box.
+  const onInputKeyDown = (event: KeyboardEvent) => {
+    if (event.key !== 'ArrowDown') return
+    const first = choices()[0]
+    if (!first) return
+    event.preventDefault()
+    first.focus()
+  }
+  const onListKeyDown = (event: KeyboardEvent) => {
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return
+    event.preventDefault()
+    const all = choices()
+    const at = all.findIndex((el) => el === document.activeElement)
+    const next = at + (event.key === 'ArrowDown' ? 1 : -1)
+    if (next < 0) input.current?.focus()
+    else all[Math.min(next, all.length - 1)]?.focus()
+  }
+
   const message =
     status === 'failed'
       ? 'Could not load the list of places. Check your connection and try again.'
@@ -90,6 +116,7 @@ export function PlaceSearch({
           setQuery(event.target.value)
           setAnnouncement('')
         }}
+        onKeyDown={onInputKeyDown}
         autoComplete="off"
         autoCapitalize="off"
         spellCheck={false}
@@ -103,6 +130,8 @@ export function PlaceSearch({
 
       {results.length > 0 && (
         <ul
+          ref={list}
+          onKeyDown={onListKeyDown}
           aria-label="Matching places"
           className="border-rule divide-rule mt-1 divide-y border-y"
         >
