@@ -60,7 +60,7 @@ describe('bandInPatch', () => {
     expect(bandInPatch(patch(...fill('#0000ff', 25)))).toBe(4)
   })
 
-  test('takes the heaviest band, so a pin on the edge of a shower sees the shower', () => {
+  test('takes the band covering most of the patch', () => {
     expect(
       bandInPatch(
         patch(
@@ -69,12 +69,43 @@ describe('bandInPatch', () => {
           ...fill('#e6e6ff', 10),
         ),
       ),
+    ).toBe(0)
+  })
+
+  test('takes the heavier of two bands that cover as much', () => {
+    expect(
+      bandInPatch(
+        patch(
+          ...fill('#ff00ff', 6),
+          ...fill('#0000ff', 6),
+          ...fill('#e6e6ff', 13),
+        ),
+      ),
+    ).toBe(4)
+  })
+
+  test('counts the rain around the chart’s own markings', () => {
+    // A label's white and black over most of the patch, rain at its edges.
+    expect(
+      bandInPatch(
+        patch(
+          ...fill('#ffffff', 12),
+          ...fill('#000000', 8),
+          ...fill('#00ff00', 5),
+        ),
+      ),
     ).toBe(12)
   })
 
-  test('ignores a band with too few pixels to be more than a stray pixel', () => {
+  test('is undefined when rain only grazes the patch', () => {
     expect(
-      bandInPatch(patch(...fill('#ff00ff', 10), ...fill('#ff3f00', 2), clear)),
+      bandInPatch(patch(...fill('#0000ff', 2), ...fill('#e6e6ff', 23))),
+    ).toBeUndefined()
+  })
+
+  test('is not swayed by a stray pixel of a heavier band', () => {
+    expect(
+      bandInPatch(patch(...fill('#ff00ff', 10), ...fill('#ff3f00', 1), clear)),
     ).toBe(0)
   })
 

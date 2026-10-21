@@ -51,24 +51,35 @@ export function bandAt(red: number, green: number, blue: number) {
   return bandByColour.get(`#${hex(red)}${hex(green)}${hex(blue)}`)
 }
 
-// A band must fill this many pixels of a patch to count, so that one stray pixel
-// of a band's colour (a speck of text, say) does not.
-const MIN_PIXELS_IN_PATCH = 3
+// Rain must cover at least this share of a patch to count: enough that a shower
+// only grazing the edge of the patch, or a stray pixel of a band's colour, does not.
+const MIN_RAIN_SHARE = 0.12
 
 /**
- * The heaviest band in a patch of chart pixels (RGBA bytes, four to a pixel), as an
- * index into RAIN_BANDS, or undefined if the patch is clear of rain. A patch, not
- * a single pixel, so a pin on the edge of a shower or on a coastline is not
- * misread by one pixel.
+ * The band of rain in a patch of chart pixels (RGBA bytes, four to a pixel), as an
+ * index into RAIN_BANDS, or undefined if too little of the patch is rain. The band
+ * is the one covering most of the patch (the heavier of two that tie).
+ *
+ * A patch, not a single pixel: the chart draws its isobars, their labels and the
+ * wind barbs over the rain, so the pixels right at a place can be a label's white
+ * and black with rain all round it.
  */
 export function bandInPatch(pixels: ArrayLike<number>) {
   const counts = new Array<number>(RAIN_BANDS.length).fill(0)
+  let size = 0
+  let rain = 0
   for (let at = 0; at + 3 < pixels.length; at += 4) {
+    size++
+    if (pixels[at + 3] !== 255) continue
     const band = bandAt(pixels[at], pixels[at + 1], pixels[at + 2])
-    if (band !== undefined && pixels[at + 3] === 255) counts[band]++
+    if (band === undefined) continue
+    counts[band]++
+    rain++
   }
-  for (let band = counts.length - 1; band >= 0; band--) {
-    if (counts[band] >= MIN_PIXELS_IN_PATCH) return band
+  if (size === 0 || rain / size < MIN_RAIN_SHARE) return undefined
+  let best = 0
+  for (let band = 1; band < counts.length; band++) {
+    if (counts[band] >= counts[best]) best = band
   }
-  return undefined
+  return best
 }

@@ -64,17 +64,33 @@ describe('readRain', () => {
     })
   })
 
-  test('sees a shower the place is on the edge of, not only the pixel it is on', () => {
+  test('sees a shower that covers part of the dot, but not one that only grazes it', () => {
     const c = chart(100, 100, [{ x: 50, y: 40, size: 20, colour: GREEN }])
 
-    // 2 pixels left of the shower: its patch reaches in.
-    expect(readRain(c, { a: { x: 48 / 99, y: 50 / 99 } }).a).toEqual({
+    // 3 pixels left of the shower: it covers 4 of the patch's 13 columns.
+    expect(readRain(c, { a: { x: 47 / 99, y: 50 / 99 } }).a).toEqual({
       kind: 'rain',
       band: 12,
     })
-    // 5 pixels left: it does not.
-    expect(readRain(c, { a: { x: 45 / 99, y: 50 / 99 } }).a).toEqual({
+    // 6 pixels left: only one column, too little to count.
+    expect(readRain(c, { a: { x: 44 / 99, y: 50 / 99 } }).a).toEqual({
       kind: 'clear',
+    })
+  })
+
+  // A pin under an isobar's label or a wind barb: the chart draws them over the
+  // rain, so the pixels right at the pin are white and black, not rain.
+  test('sees rain under the chart’s own markings at the place', () => {
+    const LABEL = [0xff, 0xfe, 0xff, 255]
+    const c = chart(100, 100, [
+      { x: 30, y: 30, size: 40, colour: GREEN },
+      // A label 7 by 7 pixels, right over the place.
+      { x: 47, y: 47, size: 7, colour: LABEL },
+    ])
+
+    expect(readRain(c, { a: { x: 50 / 99, y: 50 / 99 } }).a).toEqual({
+      kind: 'rain',
+      band: 12,
     })
   })
 
