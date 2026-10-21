@@ -9,6 +9,7 @@ import { GoogleAdSense } from '@/components/GoogleAdSense'
 import GoogleTag from '@/components/GoogleTag'
 import { PinnedHeader } from '@/components/PinnedHeader'
 import { Providers } from '@/components/Providers/Providers'
+import { RefreshWhenStale } from '@/components/RefreshWhenStale'
 import { OfflineNotice } from '@/components/SavedPages/OfflineNotice'
 import { SavedPagesSync } from '@/components/SavedPages/SavedPagesSync'
 import { themeScript } from '@/components/ThemeToggle/themeScript'
@@ -50,6 +51,7 @@ export default function RootLayout({
             <FavoritePageRedirect />
             <UpdateNotification />
             <SavedPagesSync />
+            <RefreshWhenStale />
             <OfflineNotice />
             <main className="mx-auto">{children}</main>
           </Providers>

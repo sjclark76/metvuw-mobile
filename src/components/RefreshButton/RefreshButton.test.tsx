@@ -30,12 +30,14 @@ describe('<RefreshButton />', () => {
     expect(reload).toHaveBeenCalledTimes(1)
   })
 
-  // Phones refresh by pulling down, so the button only shows from `md` up.
-  test('is hidden on small screens', () => {
+  // An installed app has no pull-to-refresh, and a phone brought back to an old
+  // page has no other way to reload it, so the button shows at every size.
+  test('is shown on small screens too', () => {
     render(<RefreshButton />)
 
     const classes = screen.getByRole('button').className.split(' ')
-    expect(classes).toContain('hidden')
-    expect(classes).toContain('md:flex')
+    expect(classes).toContain('flex')
+    expect(classes).not.toContain('hidden')
+    expect(classes).not.toContain('md:flex')
   })
 })
