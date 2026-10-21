@@ -12,6 +12,7 @@ import {
 import { SkinnyChartData } from '@/shared/types/chartData'
 
 import RadarAndSatelliteImages from '../RadarAndSatelliteImages/RadarAndSatelliteImages'
+import { UpperAirExplainer } from './UpperAirExplainer'
 
 export function UpperAirPage({
   chartData,
@@ -42,6 +43,7 @@ export function UpperAirPage({
               eyebrow="Upper air"
               title={balloonLocations[balloonCode]}
             />
+            <UpperAirExplainer />
             <RadarAndSatelliteImages images={chartData} chartType="Upper Air" />
           </div>
           <FooterControl />

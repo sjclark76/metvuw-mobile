@@ -6,11 +6,13 @@ import { useState } from 'react'
 
 import { RAIN_BANDS } from '@/shared/helpers/rainBands'
 
+import { HowToReadChart } from './HowToReadChart'
+
 function RainfallLegend() {
   return (
     <div
       id="rainfall-legend"
-      className="border-rule bg-plate/90 max-h-[40vh] overflow-y-auto rounded-lg border p-2 shadow-lg backdrop-blur-[1px]"
+      className="border-rule bg-plate/90 max-h-[60vh] overflow-y-auto rounded-lg border p-2 shadow-lg backdrop-blur-[1px]"
     >
       <p className="text-ink mb-2 text-[11px] font-semibold">
         Rain in 6 hours (mm)
@@ -29,6 +31,7 @@ function RainfallLegend() {
           </li>
         ))}
       </ul>
+      <HowToReadChart />
     </div>
   )
 }

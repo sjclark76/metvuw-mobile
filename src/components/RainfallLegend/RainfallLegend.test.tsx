@@ -17,6 +17,17 @@ describe('RainfallLegendSection', () => {
     expect(swatches[19]).toBe('rgb(255, 63, 0)')
   })
 
+  test('explains how to read the chart under the key', () => {
+    render(<RainfallLegendSection />)
+    fireEvent.click(
+      screen.getByRole('button', { name: /show rainfall legend/i }),
+    )
+
+    expect(
+      screen.getByRole('region', { name: 'How to read this chart' }),
+    ).toBeInTheDocument()
+  })
+
   test('starts collapsed and toggles rainfall legend visibility', async () => {
     render(<RainfallLegendSection />)
 
