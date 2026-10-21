@@ -7,6 +7,31 @@ const DEFAULT_LIMIT = 8
 
 export interface PlaceSearch {
   search(query: string, limit?: number): Place[]
+  /** The place in the list nearest a point, and how far it is in km. */
+  nearest(
+    latitude: number,
+    longitude: number,
+  ): { place: Place; distanceKm: number } | undefined
+}
+
+const EARTH_RADIUS_KM = 6371
+const radians = (degrees: number) => (degrees * Math.PI) / 180
+
+/** The distance between two points on the earth, in km (the haversine formula). */
+export function distanceKm(
+  fromLatitude: number,
+  fromLongitude: number,
+  toLatitude: number,
+  toLongitude: number,
+): number {
+  const dLatitude = radians(toLatitude - fromLatitude)
+  const dLongitude = radians(toLongitude - fromLongitude)
+  const a =
+    Math.sin(dLatitude / 2) ** 2 +
+    Math.cos(radians(fromLatitude)) *
+      Math.cos(radians(toLatitude)) *
+      Math.sin(dLongitude / 2) ** 2
+  return 2 * EARTH_RADIUS_KM * Math.asin(Math.min(1, Math.sqrt(a)))
 }
 
 /**
@@ -22,7 +47,37 @@ export function createPlaceSearch(data: PlaceData): PlaceSearch {
   const keys = data.places.map(([name]) => normaliseText(name))
   const words = keys.map((key) => key.split(' '))
 
+  const placeAt = (index: number): Place => {
+    const [name, latitude, longitude, kind, , context] = data.places[index]
+    return {
+      name,
+      context: data.contexts[context],
+      kind: data.kinds[kind][1],
+      latitude: latitude / 1000,
+      longitude: longitude / 1000,
+    }
+  }
+
   return {
+    nearest(latitude, longitude) {
+      let best = -1
+      let bestKm = Infinity
+      for (let index = 0; index < data.places.length; index++) {
+        const [, placeLatitude, placeLongitude] = data.places[index]
+        const km = distanceKm(
+          latitude,
+          longitude,
+          placeLatitude / 1000,
+          placeLongitude / 1000,
+        )
+        if (km < bestKm) {
+          best = index
+          bestKm = km
+        }
+      }
+      return best < 0 ? undefined : { place: placeAt(best), distanceKm: bestKm }
+    },
+
     search(query, limit = DEFAULT_LIMIT) {
       const wanted = normaliseText(query)
       if (wanted.length < MIN_QUERY_LENGTH) return []
@@ -51,16 +106,9 @@ export function createPlaceSearch(data: PlaceData): PlaceSearch {
           data.places[a.index][0].localeCompare(data.places[b.index][0]),
       )
 
-      return found.slice(0, Math.max(0, limit)).map(({ index }) => {
-        const [name, latitude, longitude, kind, , context] = data.places[index]
-        return {
-          name,
-          context: data.contexts[context],
-          kind: data.kinds[kind][1],
-          latitude: latitude / 1000,
-          longitude: longitude / 1000,
-        }
-      })
+      return found
+        .slice(0, Math.max(0, limit))
+        .map(({ index }) => placeAt(index))
     },
   }
 }

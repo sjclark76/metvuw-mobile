@@ -24,9 +24,15 @@ describe('security headers', () => {
   test('denies powerful features the app does not use', () => {
     const policy = header('Permissions-Policy')?.value ?? ''
 
-    for (const feature of ['camera', 'microphone', 'geolocation', 'payment']) {
+    for (const feature of ['camera', 'microphone', 'payment']) {
       expect(policy).toContain(`${feature}=()`)
     }
+  })
+
+  test('allows location for this site only, for pinning where you are', () => {
+    const policy = header('Permissions-Policy')?.value ?? ''
+
+    expect(policy).toContain('geolocation=(self)')
   })
 
   test('sends exactly one Content-Security-Policy header', () => {
