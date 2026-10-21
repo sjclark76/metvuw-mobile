@@ -14,7 +14,7 @@ describe('<UpperAirExplainer />', () => {
     render(<UpperAirExplainer />)
 
     expect(screen.getByText(/Weather balloons/)).toHaveTextContent(
-      /11am and 11pm New Zealand time from Whenuapai, Paraparaumu and Invercargill/,
+      /11am and 11pm New Zealand standard time from Whenuapai, Paraparaumu and Invercargill/,
     )
   })
 
@@ -27,5 +27,15 @@ describe('<UpperAirExplainer />', () => {
     expect(
       screen.getByText(/2:00 to 2:40 am and 2:00 to 2:40 pm/),
     ).toBeInTheDocument()
+  })
+
+  test('says the times are standard time, and what the clocks do in summer', () => {
+    render(<UpperAirExplainer />)
+
+    expect(
+      screen.getByText(/New Zealand standard time: while daylight/),
+    ).toHaveTextContent(
+      /clocks are an hour ahead \(the charts are labelled NZDT then\)/,
+    )
   })
 })
