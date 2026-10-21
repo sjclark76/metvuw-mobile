@@ -80,7 +80,7 @@ describe('<SaveForOfflineButton />', () => {
     render(<SaveForOfflineButton />)
 
     expect(button()).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('status')).toHaveTextContent('Saved · up to date')
+    expect(screen.getByRole('status')).toHaveTextContent('Saved · Up to date')
   })
 
   test('says how long ago the forecast was issued once a newer one is due', () => {
@@ -89,7 +89,7 @@ describe('<SaveForOfflineButton />', () => {
     render(<SaveForOfflineButton />)
 
     expect(screen.getByRole('status')).toHaveTextContent(
-      'Saved · issued 17 hours ago',
+      'Saved · Issued 17 hours ago',
     )
   })
 
@@ -100,7 +100,7 @@ describe('<SaveForOfflineButton />', () => {
     render(<SaveForOfflineButton />)
 
     expect(screen.getByRole('status')).toHaveTextContent(
-      'Saved · issued 17 hours ago',
+      'Saved · Issued 17 hours ago',
     )
   })
 
