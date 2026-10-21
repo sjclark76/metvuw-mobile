@@ -1,11 +1,11 @@
 import { expect, Page, test } from '@playwright/test'
 
-// "Pin where I am", with the browser's location faked: a spot about 3 km north-east
+// "Pin my location", with the browser's location faked: a spot about 3 km north-east
 // of Lake Hawea, in Otago.
 const HERE = { latitude: -44.59, longitude: 169.285 }
 
 const locate = (page: Page) =>
-  page.getByRole('button', { name: 'Pin where I am' })
+  page.getByRole('button', { name: 'Pin my location' })
 const locateStatus = (page: Page) => page.locator('[data-locate-status]')
 const pinNames = (page: Page) => page.getByRole('button', { name: /^Remove / })
 
