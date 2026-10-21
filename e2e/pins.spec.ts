@@ -68,13 +68,14 @@ test.describe('pinning a place', () => {
   }) => {
     await pinWanaka(page)
     await page.goto('/regions/nz')
-    await page.waitForSelector('main img')
+    const chart = page.locator('main img').first()
+    const dot = markers(page).first().locator('[data-pin-dot]')
+    // Both are drawn only once the page is running; measure them when they are.
+    await expect(chart).toBeVisible()
+    await expect(dot).toBeVisible()
 
-    const image = (await page.locator('main img').first().boundingBox())!
-    const ring = (await markers(page)
-      .first()
-      .locator('[data-pin-dot]')
-      .boundingBox())!
+    const image = (await chart.boundingBox())!
+    const ring = (await dot.boundingBox())!
 
     expect(ring.x + ring.width / 2).toBeGreaterThan(
       image.x + image.width * 0.45,
