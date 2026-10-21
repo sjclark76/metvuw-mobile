@@ -9,7 +9,7 @@ import {
   searchPlaces,
 } from './load'
 import { normaliseText } from './normalise'
-import { createPlaceSearch } from './search'
+import { createPlaceSearch, distanceKm } from './search'
 import type { PlaceData } from './types'
 
 describe('normaliseText', () => {
@@ -259,6 +259,41 @@ describe('loading the places', () => {
 
     expect(found[0].name).toBe('Queenstown')
     vi.unstubAllGlobals()
+  })
+})
+
+describe('distanceKm', () => {
+  test('is zero from a point to itself', () => {
+    expect(distanceKm(-44.7, 169.13, -44.7, 169.13)).toBe(0)
+  })
+
+  test('is about 111 km for a degree of latitude', () => {
+    expect(distanceKm(-44, 169, -45, 169)).toBeCloseTo(111.2, 0)
+  })
+
+  test('is right for two real places: Wanaka to Queenstown, about 52 km', () => {
+    expect(distanceKm(-44.703, 169.132, -45.03, 168.663)).toBeCloseTo(51.6, 0)
+  })
+})
+
+describe('nearest', () => {
+  const { nearest } = createPlaceSearch(data)
+
+  test('finds the place nearest a point, and how far it is', () => {
+    const found = nearest(-44.71, 169.14)!
+
+    expect(found.place).toMatchObject({ name: 'Wanaka', context: 'Otago' })
+    expect(found.distanceKm).toBeCloseTo(1, 0)
+  })
+
+  test('finds the nearest of two close places', () => {
+    expect(nearest(-45.0325, 168.6595)!.place.name).toBe('Queenstown Bay')
+  })
+
+  test('finds nothing in an empty list', () => {
+    expect(createPlaceSearch({ ...data, places: [] }).nearest(0, 0)).toBe(
+      undefined,
+    )
   })
 })
 

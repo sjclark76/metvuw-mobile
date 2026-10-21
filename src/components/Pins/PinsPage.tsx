@@ -5,6 +5,7 @@ import { useIsMounted } from '@/components/Hooks/useIsMounted'
 import { loadPlaceSearch } from '@/shared/helpers/places'
 
 import { PinList } from './PinList'
+import { PinWhereIAm } from './PinWhereIAm'
 import { PlaceSearch } from './PlaceSearch'
 import { usePins } from './usePins'
 
@@ -27,6 +28,7 @@ export function PinsPage() {
   return (
     <>
       <PlaceSearch pinned={pinned} onPick={add} />
+      <PinWhereIAm pinned={pinned} onPick={add} />
       <h2 className="font-display text-ink mt-10 mb-3 text-2xl font-bold tracking-[0.04em] uppercase">
         Your pins
       </h2>

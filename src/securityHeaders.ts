@@ -57,6 +57,8 @@ export const securityHeaders = [
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   {
     key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=(), payment=()',
+    // Location is allowed for this site alone, for "Pin where I am"; the browser
+    // still asks the visitor first.
+    value: 'camera=(), microphone=(), geolocation=(self), payment=()',
   },
 ]
