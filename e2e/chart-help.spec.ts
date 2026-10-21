@@ -72,7 +72,7 @@ test.describe('what the upper air charts are', () => {
 
     await expect(text).toBeVisible()
     await expect(page.getByText(/Weather balloons carry/)).toContainText(
-      '11am and 11pm New Zealand time',
+      '11am and 11pm New Zealand standard time',
     )
   })
 

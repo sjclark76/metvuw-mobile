@@ -13,7 +13,8 @@ export function UpperAirExplainer() {
         <p>
           Weather balloons carry instruments high into the air and measure the
           temperature and wind on the way up. They are launched at 11am and 11pm
-          New Zealand time from Whenuapai, Paraparaumu and Invercargill.
+          New Zealand standard time from Whenuapai, Paraparaumu and
+          Invercargill.
         </p>
         <p>
           Each chart is a tephigram: a graph of how the temperature changes with
@@ -21,7 +22,9 @@ export function UpperAirExplainer() {
           cloud will form and how high the freezing level is.
         </p>
         <p className="text-ink-soft">
-          New charts appear about 2:00 to 2:40 am and 2:00 to 2:40 pm.
+          New charts appear about 2:00 to 2:40 am and 2:00 to 2:40 pm. These
+          times are New Zealand standard time: while daylight saving is on, the
+          clocks are an hour ahead (the charts are labelled NZDT then).
         </p>
       </div>
     </details>
