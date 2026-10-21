@@ -37,10 +37,18 @@ const CheckIcon = () => (
 )
 
 // Whether what is kept is the newest forecast, as far as can be told: the size of
-// it is on the Saved page, where it matters.
+// it is on the Saved page, where it matters. The button already shows that the page
+// is saved, so the words for that are only for a screen reader: that leaves the
+// room beside the button, on a phone, for the age.
 function savedMessage(issued: number | undefined, now: number) {
   const status = describeFreshness(freshness(issued, now))
-  return status ? `Saved · ${status}` : 'Saved'
+  if (!status) return 'Saved'
+  return (
+    <>
+      <span className="sr-only">Saved · </span>
+      {status.charAt(0).toUpperCase() + status.slice(1)}
+    </>
+  )
 }
 
 /**

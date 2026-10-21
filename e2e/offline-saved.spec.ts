@@ -60,6 +60,24 @@ const firstChartLoaded = (page: Page) =>
         ?.naturalWidth ?? 0,
   )
 
+// On a small phone the message beside the button has little room: it must be read
+// in full, not cut off with an ellipsis.
+test.describe('on a small phone', () => {
+  test.use({ viewport: { width: 360, height: 740 } })
+
+  test('the message beside the save button fits', async ({ page }) => {
+    await openControlled(page)
+
+    await save(page)
+
+    await expect(status(page)).toContainText(/Issued .+ ago/)
+    const fits = await status(page).evaluate(
+      (element) => element.scrollWidth <= element.clientWidth,
+    )
+    expect(fits).toBe(true)
+  })
+})
+
 test.describe('saving a page', () => {
   // The stub's forecast was issued on a fixed day in the past, so it is out of date.
   test('keeps every chart and the page, and says whether it is the newest forecast', async ({
@@ -70,7 +88,7 @@ test.describe('saving a page', () => {
     await save(page)
 
     await expect(saveButton(page)).toHaveAttribute('aria-pressed', 'true')
-    await expect(status(page)).toContainText(/^Saved · issued .+ ago/)
+    await expect(status(page)).toContainText(/^Saved · Issued .+ ago/)
     await page.goto('/saved')
     await expect(page.locator('[data-freshness]').first()).toContainText(
       /issued .+ ago/i,
