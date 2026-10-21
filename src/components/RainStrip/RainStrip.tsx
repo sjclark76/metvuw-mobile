@@ -159,12 +159,15 @@ export function RainStrip({
                       data-rain-cell={position}
                       data-reading={reading?.kind ?? 'unknown'}
                       onClick={() => onSeek(position)}
+                      // Edged top and bottom (and at the ends), so a dry week, all
+                      // the chart's pale lavender, still reads as a strip and not as
+                      // nothing; a faint line between cells shows each chart.
                       className={
-                        'absolute top-0 h-full -translate-x-1/2 first:rounded-l-sm last:rounded-r-sm ' +
+                        'border-ink/25 absolute top-0 h-full -translate-x-1/2 border-y first:rounded-l-sm first:border-l last:rounded-r-sm last:border-r ' +
                         (colour ? '' : 'bg-rule/40 ') +
                         (position === index
                           ? 'shadow-[inset_0_-3px_0_0_var(--color-ink)]'
-                          : '')
+                          : 'shadow-[inset_1px_0_0_0_rgb(0_0_0/0.07)]')
                       }
                       style={{
                         left: axis.percent(position),
