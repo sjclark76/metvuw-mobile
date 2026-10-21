@@ -12,8 +12,9 @@ export interface DecodedChart {
   data: ArrayLike<number>
 }
 
-// Half the side of the patch read around a place: a 5 by 5 patch.
-const PATCH_RADIUS = 2
+// Half the side of the patch read around a place: 13 by 13 pixels, about what the
+// pin's dot covers on a phone, so the strip reads what is under the dot.
+const PATCH_RADIUS = 6
 
 function patchAround(chart: DecodedChart, position: ChartPosition) {
   const centreX = Math.round(position.x * (chart.width - 1))
