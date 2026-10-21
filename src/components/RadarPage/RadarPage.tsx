@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { AnimationProvider } from '@/components/Animation/Animation'
 import { FooterControl } from '@/components/FooterControl'
 import { ImageProgressProvider } from '@/components/ImageProgress/ImageProgress'
+import { RadarKeySection } from '@/components/RadarKey'
 import SubHeader from '@/components/SubHeader'
 import { expectedLoadedImages } from '@/shared/helpers/imageLoading'
 import { SkinnyChartData } from '@/shared/types/chartData'
@@ -38,6 +39,7 @@ export function RadarPage({
             <SubHeader eyebrow="Radar" title={radarRegions[radarCode]} />
             <RadarAndSatelliteImages images={radarData} chartType="Radar" />
           </div>
+          <RadarKeySection />
           <FooterControl />
         </div>
       </AnimationProvider>
