@@ -33,6 +33,14 @@ export function PlaceSearch({
   const list = useRef<HTMLUListElement>(null)
   const inputId = useId()
 
+  // The page reaches the phone before its script has run, and the box can be typed
+  // in during that gap. React starts the box empty, so what was typed would be
+  // lost; take it from the box as the page comes alive.
+  useEffect(() => {
+    const typed = input.current?.value
+    if (typed) setQuery(typed)
+  }, [])
+
   useEffect(() => {
     // Nothing is looked for until there is enough to go on.
     if (query.trim().length < MIN_QUERY_LENGTH) {
