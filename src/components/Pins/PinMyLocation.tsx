@@ -45,7 +45,7 @@ const LocationIcon = () => (
  * make the pin, and kept on the device like any other pin; it is never sent
  * anywhere. Not shown where the browser cannot tell where it is.
  */
-export function PinWhereIAm({
+export function PinMyLocation({
   pinned,
   onPick,
 }: {
@@ -98,7 +98,7 @@ export function PinWhereIAm({
         className={`${actionClasses.secondary} gap-2`}
       >
         <LocationIcon />
-        Pin where I am
+        Pin my location
       </button>
       {/* Read out as it changes; not a "status" role, which is the search's. */}
       <p

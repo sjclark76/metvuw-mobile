@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import { pinFromPlace } from '@/shared/helpers/pins/pins'
 import { loadPlaceSearch, type Place } from '@/shared/helpers/places'
 
-import { PinWhereIAm } from './PinWhereIAm'
+import { PinMyLocation } from './PinMyLocation'
 
 vi.mock('@/shared/helpers/places', () => ({ loadPlaceSearch: vi.fn() }))
 
@@ -27,17 +27,19 @@ const getCurrentPosition = vi.fn((onSuccess: Success, onError: Failure) => {
   fail = onError
 })
 
-const button = () => screen.getByRole('button', { name: 'Pin where I am' })
+const button = () => screen.getByRole('button', { name: 'Pin my location' })
 const status = (container: HTMLElement) =>
   container.querySelector('[data-locate-status]')
 
 const renderButton = (pinned: string[] = []) => {
   const onPick = vi.fn()
-  const view = render(<PinWhereIAm pinned={new Set(pinned)} onPick={onPick} />)
+  const view = render(
+    <PinMyLocation pinned={new Set(pinned)} onPick={onPick} />,
+  )
   return { onPick, ...view }
 }
 
-describe('<PinWhereIAm />', () => {
+describe('<PinMyLocation />', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     Object.defineProperty(navigator, 'geolocation', {
@@ -56,7 +58,7 @@ describe('<PinWhereIAm />', () => {
 
     renderButton()
 
-    expect(screen.queryByRole('button', { name: 'Pin where I am' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Pin my location' })).toBeNull()
   })
 
   test('asks where the visitor is only when pressed', () => {
