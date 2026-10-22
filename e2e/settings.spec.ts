@@ -135,6 +135,80 @@ test.describe('the footer', () => {
   })
 })
 
+// The settings take effect at once: nothing here loads a page afresh after turning a
+// switch (the app is moved between by its own links), which is how it is used.
+test.describe('changing a setting while the app is open', () => {
+  async function toggleHere(page: Page, name: string) {
+    const toggle = page.getByRole('switch', { name })
+    const before = await toggle.getAttribute('aria-checked')
+    await toggle.click()
+    await expect(toggle).not.toHaveAttribute('aria-checked', before!)
+  }
+  async function goByMenu(page: Page, region: string) {
+    await page.getByRole('button', { name: 'Menu' }).click()
+    await page.getByRole('button', { name: 'New Zealand', exact: true }).click()
+    await page.getByRole('link', { name: region, exact: true }).click()
+  }
+
+  test('hides the viewer at once, and brings it back at once @mobile', async ({
+    page,
+  }) => {
+    await page.goto('/regions/nz')
+    await page.waitForSelector('main img')
+    await expect(viewer(page)).toBeVisible()
+    await page.getByRole('button', { name: 'Menu' }).click()
+    await page.getByRole('link', { name: 'Settings' }).click()
+
+    await toggleHere(page, 'Show the animated viewer')
+    await goByMenu(page, 'South Island')
+    await page.waitForSelector('main img')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'South Island',
+    )
+    await expect(viewer(page)).toBeHidden()
+
+    await page.getByRole('button', { name: 'Menu' }).click()
+    await page.getByRole('link', { name: 'Settings' }).click()
+    await toggleHere(page, 'Show the animated viewer')
+    await goByMenu(page, 'North Island')
+    await page.waitForSelector('main img')
+
+    await expect(viewer(page)).toBeVisible()
+  })
+
+  test('hides the slider at once, and the whole footer when the viewer goes too @mobile', async ({
+    page,
+  }) => {
+    await page.goto('/regions/nz')
+    await page.waitForSelector('main img')
+    await expect(slider(page)).toBeAttached()
+    await page.getByRole('button', { name: 'Menu' }).click()
+    await page.getByRole('link', { name: 'Settings' }).click()
+
+    await toggleHere(page, 'Show the time slider')
+    await toggleHere(page, 'Show the animated viewer')
+    await goByMenu(page, 'South Island')
+    await page.waitForSelector('main img')
+
+    await expect(footer(page)).toBeHidden()
+  })
+
+  test('takes effect on the page you come back to with the back button', async ({
+    page,
+  }) => {
+    await page.goto('/regions/nz')
+    await page.waitForSelector('main img')
+    await page.getByRole('button', { name: 'Menu' }).click()
+    await page.getByRole('link', { name: 'Settings' }).click()
+    await toggleHere(page, 'Show the animated viewer')
+
+    await page.goBack()
+    await page.waitForSelector('main img')
+
+    await expect(viewer(page)).toBeHidden()
+  })
+})
+
 test.describe('the home page', () => {
   test('is the one chosen: the app opens on it @mobile', async ({ page }) => {
     await page.goto('/settings')

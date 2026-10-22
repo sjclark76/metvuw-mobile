@@ -13,6 +13,7 @@ import { Providers } from '@/components/Providers/Providers'
 import { RefreshWhenStale } from '@/components/RefreshWhenStale'
 import { OfflineNotice } from '@/components/SavedPages/OfflineNotice'
 import { SavedPagesSync } from '@/components/SavedPages/SavedPagesSync'
+import { ApplyLayoutSettings } from '@/components/Settings/ApplyLayoutSettings'
 import { layoutScript } from '@/components/Settings/layoutScript'
 import { themeScript } from '@/components/ThemeToggle/themeScript'
 import { UpdateNotification } from '@/components/UpdateNotification'
@@ -59,6 +60,7 @@ export default function RootLayout({
             <SavedPagesSync />
             <RefreshWhenStale />
             <AppOpenedTracker />
+            <ApplyLayoutSettings />
             <OfflineNotice />
             <main className="mx-auto">{children}</main>
           </Providers>
