@@ -49,12 +49,15 @@ export const SAVED_LIST_PATH = '/saved'
 /** The Pins page: the places someone watches, and the way to add one. */
 export const PINS_PATH = '/pins'
 
+/** The Settings page: how the app is set up on this device. */
+export const SETTINGS_PATH = '/settings'
+
 /**
  * Pages kept whenever a page is saved, so they open with no connection: the list
  * of what is saved, and the pins. Neither is any one saved page's, so they stay
  * until nothing is saved (see `collectGarbage`, which never removes them).
  */
-export const KEPT_WITH_SAVED_PAGES = [SAVED_LIST_PATH, PINS_PATH]
+export const KEPT_WITH_SAVED_PAGES = [SAVED_LIST_PATH, PINS_PATH, SETTINGS_PATH]
 
 const listUrl = (path: string) =>
   `/api/chart-list?path=${encodeURIComponent(path)}`

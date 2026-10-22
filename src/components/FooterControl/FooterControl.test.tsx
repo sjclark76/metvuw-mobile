@@ -1,6 +1,8 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import { createStore, Provider } from 'jotai'
 
 import { AnimationProvider } from '@/components/Animation/Animation'
+import { showViewerAtom } from '@/components/Atoms/GlobalState'
 import { SkinnyChartData } from '@/shared/types/chartData'
 
 import { FooterControl } from './FooterControl'
@@ -197,6 +199,38 @@ describe('<FooterControl />', () => {
 
       expect(slider().value).toBe('2')
       vi.unstubAllGlobals()
+    })
+  })
+
+  describe('hiding the animated viewer in Settings', () => {
+    test('closes a viewer that is open when the setting is turned off', () => {
+      const store = createStore()
+      render(
+        <Provider store={store}>
+          <AnimationProvider count={charts.length} times={times}>
+            <FooterControl />
+          </AnimationProvider>
+        </Provider>,
+      )
+      open()
+      expect(screen.getByLabelText('Play animation')).toBeInTheDocument()
+
+      act(() => store.set(showViewerAtom, false))
+
+      expect(screen.queryByLabelText('Play animation')).toBeNull()
+    })
+
+    test('marks the viewer, the slider and the footer so the page can hide them', () => {
+      const { container } = renderFooter()
+
+      expect(container.querySelector('footer')).toHaveAttribute('data-footer')
+      expect(container.querySelector('[data-footer-viewer]')).toContainElement(
+        screen.getByLabelText('Show animated weather chart'),
+      )
+      expect(container.querySelector('[data-footer-slider]')).toContainElement(
+        slider(),
+      )
+      expect(container.querySelector('[data-footer-gap]')).not.toBeNull()
     })
   })
 })

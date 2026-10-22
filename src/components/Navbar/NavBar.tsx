@@ -180,6 +180,16 @@ const Navbar = () => {
             </Link>
           </div>
           <div className={headerText}>
+            <Link
+              href="/settings"
+              className="mr-1"
+              prefetch={false}
+              onClick={() => setMenuOpen(false)}
+            >
+              Settings
+            </Link>
+          </div>
+          <div className={headerText}>
             <a className="mr-1" href="mailto:metvuwmobile@gmail.com">
               Contact
             </a>

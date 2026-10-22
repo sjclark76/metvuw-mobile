@@ -109,3 +109,14 @@
   contain-intrinsic-size: auto
     calc((min(100vw, 44rem) - 0.75rem) * var(--chart-aspect, 0.701) + 5.32rem);
 }
+
+/* The footer's parts hidden in Settings (see Settings/layoutScript): the animated
+   viewer's button and controls, the time slider with the rain strip on it, and the
+   whole footer, with the gap that keeps the end of the page clear of it, when both
+   are hidden. The attributes are put on the page before it first paints. */
+html[data-hide-viewer] [data-footer-viewer],
+html[data-hide-slider] [data-footer-slider],
+html[data-hide-viewer][data-hide-slider] [data-footer],
+html[data-hide-viewer][data-hide-slider] [data-footer-gap] {
+  display: none;
+}

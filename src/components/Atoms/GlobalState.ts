@@ -61,12 +61,34 @@ const rainStripPinAtom = atomWithStorage<string>(
   { getOnInit: true },
 )
 
+/**
+ * Whether the footer has the animated viewer button, and whether it has the time
+ * slider (with the rain strip on it). Both are shown unless the visitor turns them
+ * off in Settings. Read on the first render, and also applied to the page by a
+ * script before it first paints (see `layoutScript`), so a hidden footer never
+ * flashes.
+ */
+const showViewerAtom = atomWithStorage<boolean>(
+  'showViewer',
+  true,
+  createJSONStorage(() => tolerantStorage),
+  { getOnInit: true },
+)
+const showSliderAtom = atomWithStorage<boolean>(
+  'showSlider',
+  true,
+  createJSONStorage(() => tolerantStorage),
+  { getOnInit: true },
+)
+
 export {
   favoritePageAtom,
   isMenuOpenAtom,
   pinsAtom,
   rainStripPinAtom,
   savedPagesAtom,
+  showSliderAtom,
+  showViewerAtom,
   themeAtom,
 }
 export type { ThemeChoice }
