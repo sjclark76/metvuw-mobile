@@ -62,7 +62,7 @@ export default function RootLayout({
             <AppOpenedTracker />
             <ApplyLayoutSettings />
             <OfflineNotice />
-            <main className="mx-auto">{children}</main>
+            <main className="mx-auto lg:pl-64 print:pl-0">{children}</main>
           </Providers>
         </div>
       </body>

@@ -3,11 +3,15 @@ import { createStore, Provider } from 'jotai'
 import { usePathname } from 'next/navigation'
 
 import { isMenuOpenAtom, savedPagesAtom } from '@/components/Atoms/GlobalState'
+import { useIsWide } from '@/components/Hooks/useIsWide'
 import { MenuLink } from '@/components/Navbar/types'
 
 import DropDown from './DropDown'
 
 vi.mock('next/navigation', () => ({ usePathname: vi.fn(() => '/') }))
+vi.mock('@/components/Hooks/useIsWide', () => ({
+  useIsWide: vi.fn(() => false),
+}))
 
 const links: MenuLink[] = [
   { key: 'nz', value: 'New Zealand', href: '/regions/nz' },
@@ -329,6 +333,100 @@ describe('<DropDown />', () => {
           'span.truncate',
         ),
       ).toHaveTextContent('New Zealand')
+    })
+  })
+
+  describe('in the side menu on a wide screen', () => {
+    const list = () =>
+      document.getElementById(toggle().getAttribute('aria-controls')!)!
+
+    afterEach(() => {
+      vi.mocked(useIsWide).mockReturnValue(false)
+      vi.mocked(usePathname).mockReturnValue('/')
+    })
+
+    test('has the list of the group with the current page in the page from the start, not hidden', () => {
+      vi.mocked(usePathname).mockReturnValue('/regions/nzsi')
+      renderMenu()
+
+      expect(list()).not.toHaveAttribute('hidden')
+      // Below the side menu's width the same list is hidden by the stylesheet.
+      expect(list().className).toContain('max-lg:hidden')
+    })
+
+    test('leaves the other groups closed', () => {
+      renderMenu()
+
+      expect(list()).toHaveAttribute('hidden')
+    })
+
+    test('says the current group is expanded, once the page is wide', () => {
+      vi.mocked(usePathname).mockReturnValue('/regions/nzsi')
+      vi.mocked(useIsWide).mockReturnValue(true)
+      renderMenu()
+
+      expect(toggle()).toHaveAttribute('aria-expanded', 'true')
+    })
+
+    test('closes the current group when its button is pressed, and opens it again', () => {
+      vi.mocked(usePathname).mockReturnValue('/regions/nzsi')
+      vi.mocked(useIsWide).mockReturnValue(true)
+      renderMenu()
+
+      fireEvent.click(toggle())
+      expect(list()).toHaveAttribute('hidden')
+      expect(toggle()).toHaveAttribute('aria-expanded', 'false')
+
+      fireEvent.click(toggle())
+      expect(list()).not.toHaveAttribute('hidden')
+      expect(toggle()).toHaveAttribute('aria-expanded', 'true')
+    })
+
+    test('opens a closed group when its button is pressed', () => {
+      vi.mocked(useIsWide).mockReturnValue(true)
+      renderMenu()
+
+      fireEvent.click(toggle())
+
+      expect(list()).not.toHaveAttribute('hidden')
+      expect(toggle()).toHaveAttribute('aria-expanded', 'true')
+    })
+
+    test('stays open when something else is pressed: it is part of the page', () => {
+      vi.mocked(useIsWide).mockReturnValue(true)
+      renderMenu()
+      fireEvent.click(toggle())
+
+      fireEvent.mouseDown(document.body)
+
+      expect(list()).not.toHaveAttribute('hidden')
+    })
+
+    test('stays open when a link in it is followed', () => {
+      vi.mocked(useIsWide).mockReturnValue(true)
+      renderMenu()
+      fireEvent.click(toggle())
+
+      fireEvent.click(screen.getByRole('link', { name: 'North Island' }))
+
+      expect(list()).not.toHaveAttribute('hidden')
+    })
+
+    test('opens again for another page in the group, after being closed by hand', () => {
+      vi.mocked(usePathname).mockReturnValue('/regions/nzsi')
+      vi.mocked(useIsWide).mockReturnValue(true)
+      const view = renderMenu()
+      fireEvent.click(toggle())
+      expect(list()).toHaveAttribute('hidden')
+
+      vi.mocked(usePathname).mockReturnValue('/regions/nzni')
+      view.rerender(
+        <Provider store={createStore()}>
+          <DropDown heading="New Zealand" links={links} />
+        </Provider>,
+      )
+
+      expect(list()).not.toHaveAttribute('hidden')
     })
   })
 })

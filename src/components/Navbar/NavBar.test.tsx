@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { createStore, Provider } from 'jotai'
+import { usePathname } from 'next/navigation'
 
 import { pinsAtom, savedPagesAtom } from '@/components/Atoms/GlobalState'
 
@@ -233,6 +234,78 @@ describe('<Navbar /> pins', () => {
     expect(screen.getByRole('button', { name: 'Menu' })).toHaveAttribute(
       'aria-expanded',
       'false',
+    )
+  })
+})
+
+describe('<Navbar /> as a side menu on a wide screen', () => {
+  afterEach(() => {
+    vi.mocked(usePathname).mockReturnValue('/')
+  })
+
+  test('names its sections, as headings', () => {
+    renderNavbar()
+
+    expect(
+      screen
+        .getAllByRole('heading', { level: 2, hidden: true })
+        .map((h) => h.textContent),
+    ).toEqual(['Forecast charts', 'Observations', 'Yours'])
+  })
+
+  test('shows the section titles only on a wide screen', () => {
+    renderNavbar()
+
+    screen
+      .getAllByRole('heading', { level: 2, hidden: true })
+      .forEach((heading) => {
+        expect(heading.className).toContain('hidden')
+        expect(heading.className).toContain('lg:flex')
+      })
+  })
+
+  test('keeps the saved and pinned counts in the same menu', () => {
+    const store = createStore()
+    store.set(pinsAtom, [
+      {
+        name: 'Wanaka',
+        context: 'Otago',
+        kind: 'Town',
+        latitude: -44.7,
+        longitude: 169.1,
+      },
+    ])
+    render(
+      <Provider store={store}>
+        <Navbar />
+      </Provider>,
+    )
+
+    expect(screen.getByRole('link', { name: /Pins/ })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Saved/ })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Settings' })).toBeInTheDocument()
+  })
+
+  test.each([
+    ['/satellite', 'Satellite'],
+    ['/saved', 'Saved'],
+    ['/pins', 'Pins'],
+    ['/settings', 'Settings'],
+  ])('marks %s as the current page', (path, name) => {
+    vi.mocked(usePathname).mockReturnValue(path)
+    renderNavbar()
+
+    expect(
+      screen.getByRole('link', { name: new RegExp(`^${name}`) }),
+    ).toHaveAttribute('aria-current', 'page')
+  })
+
+  test('marks no other link as the current page', () => {
+    vi.mocked(usePathname).mockReturnValue('/satellite')
+    renderNavbar()
+
+    expect(screen.getByRole('link', { name: /^Settings/ })).not.toHaveAttribute(
+      'aria-current',
     )
   })
 })

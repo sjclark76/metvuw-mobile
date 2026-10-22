@@ -32,6 +32,8 @@ export function SubHeader({
     'sticky print:static z-10 print:z-auto',
     menuOpen && 'top-[29rem]',
     !menuOpen && 'top-16',
+    // On a wide screen the menu is beside the page, not above it.
+    'lg:top-16',
   )
 
   return (
