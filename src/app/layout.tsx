@@ -3,6 +3,7 @@ import './globals.css'
 
 import React from 'react'
 
+import { AppOpenedTracker } from '@/components/Analytics/AppOpenedTracker'
 import FavoritePageRedirect from '@/components/FavoritePageRedirect/FavoritePageRedirect'
 import { favoritePageRedirectScript } from '@/components/FavoritePageRedirect/favoritePageRedirectScript'
 import { GoogleAdSense } from '@/components/GoogleAdSense'
@@ -52,6 +53,7 @@ export default function RootLayout({
             <UpdateNotification />
             <SavedPagesSync />
             <RefreshWhenStale />
+            <AppOpenedTracker />
             <OfflineNotice />
             <main className="mx-auto">{children}</main>
           </Providers>

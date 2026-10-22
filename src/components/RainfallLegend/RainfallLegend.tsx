@@ -4,6 +4,7 @@ import { AnimatePresence } from 'motion/react'
 import * as m from 'motion/react-m'
 import { useState } from 'react'
 
+import { track } from '@/shared/helpers/analytics/track'
 import { RAIN_BANDS } from '@/shared/helpers/rainBands'
 
 import { HowToReadChart } from './HowToReadChart'
@@ -61,7 +62,10 @@ export function RainfallLegendSection() {
         </AnimatePresence>
         <button
           type="button"
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={() => {
+            if (!isOpen) track('key_opened', { key: 'rainfall' })
+            setIsOpen((prev) => !prev)
+          }}
           aria-label={isOpen ? 'Hide rainfall legend' : 'Show rainfall legend'}
           aria-expanded={isOpen}
           aria-controls="rainfall-legend"

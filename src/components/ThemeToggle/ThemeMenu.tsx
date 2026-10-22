@@ -12,6 +12,7 @@ import {
 } from 'react'
 
 import { themeAtom, ThemeChoice } from '@/components/Atoms/GlobalState'
+import { track } from '@/shared/helpers/analytics/track'
 
 const choices: { value: ThemeChoice; label: string }[] = [
   { value: 'system', label: 'System' },
@@ -101,6 +102,7 @@ export function ThemeMenu() {
   }, [isOpen])
 
   const choose = (value: ThemeChoice) => {
+    track('theme_changed', { theme: value })
     setSaved(value)
     setIsOpen(false)
     buttonRef.current?.focus()

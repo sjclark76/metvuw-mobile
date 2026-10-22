@@ -40,4 +40,16 @@ describe('<RefreshButton />', () => {
     expect(classes).not.toContain('hidden')
     expect(classes).not.toContain('md:flex')
   })
+
+  test('counts the press, sent as a beacon so it gets out as the page reloads', () => {
+    window.gtag = vi.fn()
+    render(<RefreshButton />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Refresh page' }))
+
+    expect(window.gtag).toHaveBeenCalledWith('event', 'refresh_pressed', {
+      transport_type: 'beacon',
+    })
+    delete window.gtag
+  })
 })

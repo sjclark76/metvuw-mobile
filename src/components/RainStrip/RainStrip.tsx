@@ -1,9 +1,11 @@
 'use client'
 import { useAtom } from 'jotai'
-import { useId } from 'react'
+import { useEffect, useId } from 'react'
 
+import { useTrackOnce } from '@/components/Analytics/useTrackOnce'
 import { rainStripPinAtom } from '@/components/Atoms/GlobalState'
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
+import { track } from '@/shared/helpers/analytics/track'
 import { chartPosition } from '@/shared/helpers/chartGeometry'
 import { chartLabel, type Pin } from '@/shared/helpers/pins/pins'
 import { RAIN_BANDS } from '@/shared/helpers/rainBands'
@@ -60,6 +62,11 @@ export function RainStrip({
   const formatDate = useFormatDate()
   const [choice, setChoice] = useAtom(rainStripPinAtom)
   const selectId = useId()
+  const trackOnce = useTrackOnce()
+  const showing = pins.length > 0
+  useEffect(() => {
+    if (showing) trackOnce('rain_strip_shown')
+  }, [showing, trackOnce])
   if (pins.length === 0) return null
 
   const shown = chosenPins(pins, choice)
@@ -90,7 +97,12 @@ export function RainStrip({
         <select
           id={selectId}
           value={selected}
-          onChange={(event) => setChoice(event.target.value)}
+          onChange={(event) => {
+            track('rain_strip_pin_changed', {
+              all_pins: event.target.value === ALL_PINS,
+            })
+            setChoice(event.target.value)
+          }}
           className="border-rule bg-plate text-ink hover:bg-paper focus-visible:outline-cold min-h-8 w-full min-w-0 cursor-pointer appearance-none truncate rounded-full border py-1 pr-7 pl-3 font-mono text-xs font-semibold tracking-wide focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           {pins.map((pin) => (
@@ -158,7 +170,12 @@ export function RainStrip({
                       tabIndex={-1}
                       data-rain-cell={position}
                       data-reading={reading?.kind ?? 'unknown'}
-                      onClick={() => onSeek(position)}
+                      onClick={() => {
+                        track('rain_strip_cell_tapped', {
+                          all_pins: selected === ALL_PINS,
+                        })
+                        onSeek(position)
+                      }}
                       // Edged top and bottom (and at the ends), so a dry week, all
                       // the chart's pale lavender, still reads as a strip and not as
                       // nothing; a faint line between cells shows each chart.

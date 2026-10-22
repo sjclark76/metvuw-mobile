@@ -1,3 +1,6 @@
+'use client'
+import { track } from '@/shared/helpers/analytics/track'
+
 /**
  * What the upper air charts are, for someone who has never seen a tephigram. Closed
  * until asked for, so the charts stay first; the browser's own expand and collapse
@@ -5,7 +8,13 @@
  */
 export function UpperAirExplainer() {
   return (
-    <details className="border-rule mx-auto mb-4 max-w-176 border-y px-4 py-3 md:px-0">
+    <details
+      onToggle={(event) => {
+        if (event.currentTarget.open)
+          track('help_opened', { help: 'upper_air' })
+      }}
+      className="border-rule mx-auto mb-4 max-w-176 border-y px-4 py-3 md:px-0"
+    >
       <summary className="text-ink focus-visible:outline-cold cursor-pointer font-semibold focus-visible:outline-2 focus-visible:outline-offset-2">
         What are these charts?
       </summary>

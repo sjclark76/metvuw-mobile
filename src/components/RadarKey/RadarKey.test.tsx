@@ -96,4 +96,18 @@ describe('<RadarKeySection />', () => {
       within(panel).getByText(/Colours blend smoothly on the radar/),
     ).toBeInTheDocument()
   })
+
+  test('counts opening the key, not closing it', () => {
+    window.gtag = vi.fn()
+    render(<RadarKeySection />)
+
+    open()
+    fireEvent.click(screen.getByRole('button', { name: 'Hide radar key' }))
+
+    expect(window.gtag).toHaveBeenCalledTimes(1)
+    expect(window.gtag).toHaveBeenCalledWith('event', 'key_opened', {
+      key: 'radar',
+    })
+    delete window.gtag
+  })
 })

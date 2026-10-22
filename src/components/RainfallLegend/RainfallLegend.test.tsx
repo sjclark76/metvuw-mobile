@@ -58,4 +58,22 @@ describe('RainfallLegendSection', () => {
       expect(screen.queryByText('Rain in 6 hours (mm)')).not.toBeInTheDocument()
     })
   })
+
+  test('counts opening the key, not closing it', () => {
+    window.gtag = vi.fn()
+    render(<RainfallLegendSection />)
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /show rainfall legend/i }),
+    )
+    fireEvent.click(
+      screen.getByRole('button', { name: /hide rainfall legend/i }),
+    )
+
+    expect(window.gtag).toHaveBeenCalledTimes(1)
+    expect(window.gtag).toHaveBeenCalledWith('event', 'key_opened', {
+      key: 'rainfall',
+    })
+    delete window.gtag
+  })
 })

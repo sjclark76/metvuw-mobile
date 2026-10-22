@@ -2,11 +2,13 @@
 import clsx from 'clsx'
 import { ReactNode, useEffect, useRef } from 'react'
 
+import { useTrackOnce } from '@/components/Analytics/useTrackOnce'
 import { useAnimation } from '@/components/Animation/Animation'
 import { usePins } from '@/components/Pins/usePins'
 import { RainStrip } from '@/components/RainStrip/RainStrip'
 import { useChartsSettled } from '@/components/RainStrip/useChartsSettled'
 import { useRainReadings } from '@/components/RainStrip/useRainReadings'
+import { track } from '@/shared/helpers/analytics/track'
 import type { RegionCode } from '@/shared/types/region'
 
 import {
@@ -85,9 +87,16 @@ function FooterControl({
     index,
     onIndex: seek,
   })
-  const onSeek = (target: number) => {
+  const seekTo = (target: number) => {
     seek(target)
     if (!displayAnimated) scrollToChart(target)
+  }
+  // Dragging the slider asks for a chart many times a second: once per page says
+  // it is used.
+  const trackOnce = useTrackOnce()
+  const onSlide = (target: number) => {
+    trackOnce('slider_used')
+    seekTo(target)
   }
 
   // Things that stick above the footer (the rainfall legend) need to know how
@@ -151,7 +160,10 @@ function FooterControl({
                   ? 'Show static weather chart list'
                   : 'Show animated weather chart'
               }
-              onClick={toggleDisplay}
+              onClick={() => {
+                if (!displayAnimated) track('viewer_opened')
+                toggleDisplay()
+              }}
               className={solid}
             >
               {displayAnimated ? <CloseIcon /> : <OpenViewerIcon />}
@@ -161,7 +173,10 @@ function FooterControl({
               <>
                 <Control
                   label={playing ? 'Pause animation' : 'Play animation'}
-                  onClick={togglePlaying}
+                  onClick={() => {
+                    if (!playing) track('viewer_played')
+                    togglePlaying()
+                  }}
                   className={quiet}
                 >
                   {playing ? <PauseIcon /> : <PlayIcon />}
@@ -188,7 +203,7 @@ function FooterControl({
             times={times}
             index={index}
             max={max}
-            onSeek={onSeek}
+            onSeek={onSlide}
             glideMs={displayAnimated && playing ? intervalMs : undefined}
             above={
               rain && pins.length > 0
@@ -200,7 +215,7 @@ function FooterControl({
                       times={times}
                       index={index}
                       readings={readings}
-                      onSeek={onSeek}
+                      onSeek={seekTo}
                       axis={axis}
                     />
                   )
