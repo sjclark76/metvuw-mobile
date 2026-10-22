@@ -1,9 +1,11 @@
 'use client'
 import clsx from 'clsx'
+import { useAtomValue } from 'jotai'
 import { ReactNode, useEffect, useRef } from 'react'
 
 import { useTrackOnce } from '@/components/Analytics/useTrackOnce'
 import { useAnimation } from '@/components/Animation/Animation'
+import { showSliderAtom, showViewerAtom } from '@/components/Atoms/GlobalState'
 import { usePins } from '@/components/Pins/usePins'
 import { RainStrip } from '@/components/RainStrip/RainStrip'
 import { useChartsSettled } from '@/components/RainStrip/useChartsSettled'
@@ -71,14 +73,22 @@ function FooterControl({
   } = useAnimation()
 
   const { pins } = usePins()
+  const showViewer = useAtomValue(showViewerAtom)
+  const showSlider = useAtomValue(showSliderAtom)
   const chartsSettled = useChartsSettled()
   const readings = useRainReadings({
     region: rain?.region ?? 'nz',
     chartUrls: rain ? rain.chartUrls : [],
     current: index,
-    pins: rain ? pins : [],
+    // Nothing is read for a strip that is hidden.
+    pins: rain && showSlider ? pins : [],
     ready: chartsSettled,
   })
+
+  // A viewer that is open when it is turned off in Settings closes.
+  useEffect(() => {
+    if (!showViewer && displayAnimated) toggleDisplay()
+  }, [showViewer, displayAnimated, toggleDisplay])
 
   // In the list, the axis follows the chart in view and moves the list when it
   // is dragged. In the viewer the axis simply changes the chart shown.
@@ -139,7 +149,7 @@ function FooterControl({
 
   return (
     <>
-      <footer ref={footerRef} className={footerClasses}>
+      <footer ref={footerRef} data-footer className={footerClasses}>
         <div
           className={clsx(
             'mx-auto flex max-w-176 items-center gap-3',
@@ -149,6 +159,7 @@ function FooterControl({
           )}
         >
           <div
+            data-footer-viewer
             className={clsx(
               'flex items-center gap-1',
               displayAnimated && 'justify-center gap-3',
@@ -228,6 +239,7 @@ function FooterControl({
       <div
         ref={gapRef}
         aria-hidden="true"
+        data-footer-gap
         className="standalone:h-23 h-19 print:hidden pointer-coarse:h-22"
       />
     </>

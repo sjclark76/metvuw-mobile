@@ -177,7 +177,7 @@ export function TimeAxis({
     current === undefined ? '' : formatDate(current, 'EEE HH:mm')
 
   return (
-    <div className="min-w-0 grow basis-auto">
+    <div data-footer-slider className="min-w-0 grow basis-auto">
       {above?.({ percent, pixelsPerChart })}
       <div
         ref={axisRef} // Taller where there is a finger, so the bigger handle clears the label above it.

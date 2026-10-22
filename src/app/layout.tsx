@@ -13,6 +13,7 @@ import { Providers } from '@/components/Providers/Providers'
 import { RefreshWhenStale } from '@/components/RefreshWhenStale'
 import { OfflineNotice } from '@/components/SavedPages/OfflineNotice'
 import { SavedPagesSync } from '@/components/SavedPages/SavedPagesSync'
+import { layoutScript } from '@/components/Settings/layoutScript'
 import { themeScript } from '@/components/ThemeToggle/themeScript'
 import { UpdateNotification } from '@/components/UpdateNotification'
 import { config } from '@/config'
@@ -35,6 +36,10 @@ export default function RootLayout({
         <script
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: themeScript }}
+        />
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: layoutScript }}
         />
         <script
           suppressHydrationWarning

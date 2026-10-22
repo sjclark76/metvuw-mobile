@@ -159,24 +159,49 @@ test.describe('feature events', () => {
     expect(JSON.stringify(events)).not.toMatch(/Wanaka|Auckland/)
   })
 
+  // A press before the page has come alive does nothing, so each is repeated until it
+  // has opened what it opens (a press that has taken effect is not repeated).
+  const opens = async (
+    press: () => Promise<void>,
+    opened: () => Promise<boolean>,
+  ) => {
+    await expect(async () => {
+      if (!(await opened())) await press()
+      expect(await opened()).toBe(true)
+    }).toPass()
+  }
+
   test('counts opening the rainfall key, the radar key and the upper air help', async ({
     page,
   }) => {
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
-    await page.getByRole('button', { name: 'Show rainfall legend' }).click()
+    await opens(
+      () => page.getByRole('button', { name: /rainfall legend/ }).click(),
+      () => page.locator('#rainfall-legend').isVisible(),
+    )
     await page.goto('/radar/nl')
     await page.waitForSelector('main img')
-    await page.getByRole('button', { name: 'Show radar key' }).click()
+    await opens(
+      () => page.getByRole('button', { name: 'Show radar key' }).click(),
+      () => page.getByRole('region', { name: 'Radar key' }).isVisible(),
+    )
     await page.goto('/upperair')
     await page.waitForSelector('main img')
-    await page.getByText('What are these charts?').click()
+    await opens(
+      () => page.getByText('What are these charts?').click(),
+      () => page.getByText(/Each chart is a tephigram/).isVisible(),
+    )
 
-    expect(await sent(page)).toEqual([
-      { name: 'key_opened', params: { key: 'rainfall' } },
-      { name: 'key_opened', params: { key: 'radar' } },
-      { name: 'help_opened', params: { help: 'upper_air' } },
-    ])
+    // The browser announces that a details element has opened a moment after it
+    // has, so the last event can arrive just after the text is on screen.
+    await expect
+      .poll(() => sent(page))
+      .toEqual([
+        { name: 'key_opened', params: { key: 'rainfall' } },
+        { name: 'key_opened', params: { key: 'radar' } },
+        { name: 'help_opened', params: { help: 'upper_air' } },
+      ])
   })
 
   test('counts a change of theme', async ({ page }) => {

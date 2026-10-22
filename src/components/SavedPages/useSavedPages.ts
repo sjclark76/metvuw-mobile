@@ -38,7 +38,16 @@ export function useSavedPageList() {
     [store],
   )
 
-  return { pages, remove }
+  const removeAll = useCallback(async () => {
+    store.set(savedPagesAtom, [])
+    try {
+      await collectGarbage([], browserDependencies())
+    } catch {
+      // Forgotten either way; what is left over is swept up next time.
+    }
+  }, [store])
+
+  return { pages, remove, removeAll }
 }
 
 export type SaveStatus = 'idle' | 'saving' | 'failed'
