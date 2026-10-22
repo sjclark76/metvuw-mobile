@@ -97,7 +97,7 @@ const Navbar = () => {
   // The menu's sections, named, on a wide screen only: the phone menu is already as
   // tall as the screen allows.
   const sectionTitle =
-    'hidden lg:flex items-center gap-2 px-3 pt-4 pb-1 font-display text-[0.95rem] font-bold tracking-[0.1em] text-bar-ink/90 uppercase before:h-4 before:w-1 before:rounded-[1px] before:bg-[#ff6a00] first:pt-1'
+    'hidden lg:flex items-center gap-2 px-3 pt-4 pb-1 font-display text-[0.95rem] font-bold tracking-[0.1em] text-bar-ink/70 uppercase first:pt-1'
   const current = (href: string) => (pathname === href ? 'page' : undefined)
 
   return (
