@@ -1,5 +1,7 @@
 import { expect, Page, test } from '@playwright/test'
 
+import { openGroup, openMenu } from './menu-helpers'
+
 // Charts the visitor saves must open with no connection at all, as they were
 // saved, and be replaced by the newest as soon as there is one.
 
@@ -126,8 +128,8 @@ test.describe('saving a page', () => {
     await save(page)
 
     // Marked in the menu...
-    await page.getByRole('button', { name: 'Menu' }).click()
-    await page.getByRole('button', { name: 'New Zealand' }).click()
+    await openMenu(page)
+    await openGroup(page, 'New Zealand')
     await expect(
       page.getByRole('link', { name: 'New Zealand Saved for offline' }),
     ).toBeVisible()
@@ -152,8 +154,8 @@ test.describe('saving a page', () => {
     await openControlled(page)
     await save(page)
 
-    await page.getByRole('button', { name: 'Menu' }).click()
-    await page.getByRole('button', { name: 'New Zealand' }).click()
+    await openMenu(page)
+    await openGroup(page, 'New Zealand')
 
     await expect(
       page.getByRole('link', { name: 'New Zealand Saved for offline' }),

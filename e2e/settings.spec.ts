@@ -1,6 +1,8 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, Page, test } from '@playwright/test'
 
+import { openGroup, openMenu } from './menu-helpers'
+
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']
 
 const viewer = (page: Page) => page.getByLabel('Show animated weather chart')
@@ -21,7 +23,7 @@ async function setting(page: Page, name: string, on: boolean) {
 test.describe('the Settings page', () => {
   test('is in the menu @mobile', async ({ page }) => {
     await page.goto('/offline')
-    await page.getByRole('button', { name: 'Menu' }).click()
+    await openMenu(page)
 
     await page.getByRole('link', { name: 'Settings' }).click()
 
@@ -145,8 +147,8 @@ test.describe('changing a setting while the app is open', () => {
     await expect(toggle).not.toHaveAttribute('aria-checked', before!)
   }
   async function goByMenu(page: Page, region: string) {
-    await page.getByRole('button', { name: 'Menu' }).click()
-    await page.getByRole('button', { name: 'New Zealand', exact: true }).click()
+    await openMenu(page)
+    await openGroup(page, 'New Zealand')
     await page.getByRole('link', { name: region, exact: true }).click()
   }
 
@@ -156,7 +158,7 @@ test.describe('changing a setting while the app is open', () => {
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
     await expect(viewer(page)).toBeVisible()
-    await page.getByRole('button', { name: 'Menu' }).click()
+    await openMenu(page)
     await page.getByRole('link', { name: 'Settings' }).click()
 
     await toggleHere(page, 'Show the animated viewer')
@@ -167,7 +169,7 @@ test.describe('changing a setting while the app is open', () => {
     )
     await expect(viewer(page)).toBeHidden()
 
-    await page.getByRole('button', { name: 'Menu' }).click()
+    await openMenu(page)
     await page.getByRole('link', { name: 'Settings' }).click()
     await toggleHere(page, 'Show the animated viewer')
     await goByMenu(page, 'North Island')
@@ -182,7 +184,7 @@ test.describe('changing a setting while the app is open', () => {
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
     await expect(slider(page)).toBeAttached()
-    await page.getByRole('button', { name: 'Menu' }).click()
+    await openMenu(page)
     await page.getByRole('link', { name: 'Settings' }).click()
 
     await toggleHere(page, 'Show the time slider')
@@ -198,7 +200,7 @@ test.describe('changing a setting while the app is open', () => {
   }) => {
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
-    await page.getByRole('button', { name: 'Menu' }).click()
+    await openMenu(page)
     await page.getByRole('link', { name: 'Settings' }).click()
     await toggleHere(page, 'Show the animated viewer')
 

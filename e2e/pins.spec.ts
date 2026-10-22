@@ -1,5 +1,7 @@
 import { expect, Page, test } from '@playwright/test'
 
+import { openMenu } from './menu-helpers'
+
 // Pinning a place: search for it, see it marked on the charts, label it, remove it.
 // Wanaka is at 44.703S 169.132E; on the NZ chart that is 47.79% across and 68.71%
 // down the chart image (worked out apart from the app, from the chart calibration).
@@ -156,7 +158,7 @@ test.describe('pinning a place', () => {
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
 
-    await page.getByRole('button', { name: 'Menu' }).click()
+    await openMenu(page)
     await page.getByRole('link', { name: 'Pins (1)' }).click()
 
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pins')

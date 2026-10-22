@@ -1,6 +1,7 @@
 'use client'
 import { useAtom } from 'jotai'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useEffect, useRef } from 'react' // Import useEffect and useRef
 
 import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
@@ -57,6 +58,7 @@ const balloonLinks: MenuLink[] = Object.entries(balloonLocations).map(
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useAtom(isMenuOpenAtom)
   const navRef = useRef<HTMLElement>(null) // Create a ref for the nav element
+  const pathname = usePathname()
   const savedPaths = useSavedPaths()
   const savedCount = useSavedPageCount()
   const pinCount = usePinCount()
@@ -88,13 +90,20 @@ const Navbar = () => {
     }
   }, [menuOpen, setMenuOpen]) // Re-run effect if menuOpen or setMenuOpen changes
 
+  // In the side menu a link is a full-width row, left-aligned, with an orange edge
+  // when it is the page you are on; in the bar it is as wide as its words.
   const headerText =
-    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-bar-ink transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-white/10 focus:bg-white/15'
+    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-bar-ink transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-white/10 focus:bg-white/15 lg:flex lg:w-full lg:justify-start lg:pr-3 lg:pl-[9px] lg:border-l-[3px] lg:border-transparent lg:has-[[aria-current=page]]:border-[#ff6a00] lg:has-[[aria-current=page]]:bg-white/15'
+  // The menu's sections, named, on a wide screen only: the phone menu is already as
+  // tall as the screen allows.
+  const sectionTitle =
+    'hidden lg:flex items-center gap-2 px-3 pt-4 pb-1 font-display text-[0.95rem] font-bold tracking-[0.1em] text-bar-ink/90 uppercase before:h-4 before:w-1 before:rounded-[1px] before:bg-[#ff6a00] first:pt-1'
+  const current = (href: string) => (pathname === href ? 'page' : undefined)
 
   return (
     <nav
       ref={navRef} // Attach the ref to the nav element
-      className="text-bar-ink mx-auto flex max-w-176 flex-wrap items-center p-2 pl-4 2xl:max-w-none"
+      className="text-bar-ink mx-auto flex max-w-176 flex-wrap items-center p-2 pl-4 lg:min-h-16 lg:max-w-none"
     >
       <Link
         href="/"
@@ -118,7 +127,7 @@ const Navbar = () => {
           aria-label="Menu"
           aria-expanded={menuOpen}
           aria-controls="site-menu"
-          className="text-bar-ink focus-visible:outline-bar-ink inline-flex rounded-xs p-3 outline-hidden hover:bg-white/10 focus-visible:outline-2 2xl:hidden"
+          className="text-bar-ink focus-visible:outline-bar-ink inline-flex rounded-xs p-3 outline-hidden hover:bg-white/10 focus-visible:outline-2 lg:hidden"
           onClick={handleClick}
         >
           <HamburgerSvg />
@@ -128,18 +137,21 @@ const Navbar = () => {
         id="site-menu"
         className={`${
           menuOpen ? '' : 'hidden'
-        } w-full 2xl:inline-flex 2xl:w-auto 2xl:grow`}
+        } lg:bg-bar w-full lg:fixed lg:top-16 lg:bottom-0 lg:left-0 lg:block lg:w-64 lg:overflow-y-auto lg:border-r lg:border-white/10 lg:p-2 print:hidden`}
       >
-        <div className="flex w-full flex-col items-start 2xl:ml-auto 2xl:inline-flex 2xl:h-auto 2xl:w-auto 2xl:flex-row 2xl:items-center">
+        <div className="flex w-full flex-col items-start lg:items-stretch">
+          <h2 className={sectionTitle}>Forecast charts</h2>
           <DropDown heading="New Zealand" links={nzLinks} />
           <DropDown heading="Australia" links={australiaLinks} />
           <DropDown heading="Pacific" links={pacificLinks} />
           <DropDown heading="Europe" links={europeLinks} />
           <DropDown heading="Rest Of World" links={worldLinks} />
           <DropDown heading="Oceans" links={oceanLinks} />
+          <h2 className={sectionTitle}>Observations</h2>
           <div className={headerText}>
             <Link
               href="/satellite"
+              aria-current={current('/satellite')}
               className="mr-1 inline-flex items-center gap-2"
               onClick={() => setMenuOpen(false)}
             >
@@ -149,9 +161,11 @@ const Navbar = () => {
           </div>
           <DropDown heading="Radar" links={radarLinks} />
           <DropDown heading="Upper Air" links={balloonLinks} />
+          <h2 className={sectionTitle}>Yours</h2>
           <div className={headerText}>
             <Link
               href="/saved"
+              aria-current={current('/saved')}
               className="mr-1"
               prefetch={false}
               onClick={() => setMenuOpen(false)}
@@ -167,6 +181,7 @@ const Navbar = () => {
           <div className={headerText}>
             <Link
               href="/pins"
+              aria-current={current('/pins')}
               className="mr-1"
               prefetch={false}
               onClick={() => setMenuOpen(false)}
@@ -182,6 +197,7 @@ const Navbar = () => {
           <div className={headerText}>
             <Link
               href="/settings"
+              aria-current={current('/settings')}
               className="mr-1"
               prefetch={false}
               onClick={() => setMenuOpen(false)}

@@ -145,7 +145,7 @@ function FooterControl({
   // is a CSS media query, so it applies from the first paint; a hook that read
   // matchMedia after mount made the footer jump on every load.
   const footerClasses =
-    'fixed inset-x-0 bottom-0 z-20 border-t border-rule bg-plate px-4 pt-2.5 pb-2.5 standalone:pb-6 print:hidden'
+    'fixed inset-x-0 bottom-0 lg:left-64 z-20 border-t border-rule bg-plate px-4 pt-2.5 pb-2.5 standalone:pb-6 print:hidden'
 
   return (
     <>
