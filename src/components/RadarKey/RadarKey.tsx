@@ -4,6 +4,7 @@ import { AnimatePresence } from 'motion/react'
 import * as m from 'motion/react-m'
 import { useState } from 'react'
 
+import { track } from '@/shared/helpers/analytics/track'
 import { RADAR_BANDS, type RadarGroup } from '@/shared/helpers/radarBands'
 
 const CELL_PX = 24
@@ -109,7 +110,10 @@ export function RadarKeySection() {
         </AnimatePresence>
         <button
           type="button"
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={() => {
+            if (!isOpen) track('key_opened', { key: 'radar' })
+            setIsOpen((prev) => !prev)
+          }}
           aria-label={isOpen ? 'Hide radar key' : 'Show radar key'}
           aria-expanded={isOpen}
           aria-controls="radar-key"

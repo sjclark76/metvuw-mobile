@@ -259,4 +259,22 @@ describe('<ThemeMenu />', () => {
       expect(button()).toHaveAttribute('aria-expanded', 'true')
     })
   })
+
+  describe('counting', () => {
+    afterEach(() => {
+      delete window.gtag
+    })
+
+    test('counts a change of theme, with the theme chosen', () => {
+      window.gtag = vi.fn()
+      renderMenu()
+      open()
+
+      fireEvent.click(option('Dark'))
+
+      expect(window.gtag).toHaveBeenCalledWith('event', 'theme_changed', {
+        theme: 'dark',
+      })
+    })
+  })
 })

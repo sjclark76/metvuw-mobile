@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useIsMounted } from '@/components/Hooks/useIsMounted'
 import { useNow } from '@/components/Hooks/useNow'
 import { useOnline } from '@/components/Hooks/useOnline'
+import { track } from '@/shared/helpers/analytics/track'
 import {
   describeFreshness,
   freshness,
@@ -96,7 +97,10 @@ export function SaveForOfflineButton() {
             type="button"
             aria-pressed={!!saved}
             disabled={saving || cannotSave}
-            onClick={() => void (saved ? remove() : save())}
+            onClick={() => {
+              track(saved ? 'page_removed' : 'page_saved')
+              void (saved ? remove() : save())
+            }}
             className={clsx(
               'ring-ink/10 focus-visible:outline-cold inline-flex min-h-9 shrink-0 items-center gap-2 rounded-full px-3.5 text-sm font-semibold ring-1 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-60 pointer-coarse:min-h-11',
               saved

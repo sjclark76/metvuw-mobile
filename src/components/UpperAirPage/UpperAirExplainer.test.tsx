@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 
 import { UpperAirExplainer } from './UpperAirExplainer'
 
@@ -37,5 +37,22 @@ describe('<UpperAirExplainer />', () => {
     ).toHaveTextContent(
       /clocks are an hour ahead \(the charts are labelled NZDT then\)/,
     )
+  })
+
+  test('counts it being opened, not closed', () => {
+    window.gtag = vi.fn()
+    const { container } = render(<UpperAirExplainer />)
+    const details = container.querySelector('details')!
+
+    details.open = true
+    fireEvent(details, new Event('toggle'))
+    details.open = false
+    fireEvent(details, new Event('toggle'))
+
+    expect(window.gtag).toHaveBeenCalledTimes(1)
+    expect(window.gtag).toHaveBeenCalledWith('event', 'help_opened', {
+      help: 'upper_air',
+    })
+    delete window.gtag
   })
 })
