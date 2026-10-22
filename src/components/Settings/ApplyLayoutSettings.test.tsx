@@ -1,0 +1,70 @@
+import { act, render } from '@testing-library/react'
+import { createStore, Provider } from 'jotai'
+
+import { showSliderAtom, showViewerAtom } from '@/components/Atoms/GlobalState'
+
+import { ApplyLayoutSettings } from './ApplyLayoutSettings'
+
+const root = document.documentElement
+
+function renderIt() {
+  const store = createStore()
+  render(
+    <Provider store={store}>
+      <ApplyLayoutSettings />
+    </Provider>,
+  )
+  return store
+}
+
+describe('<ApplyLayoutSettings />', () => {
+  beforeEach(() => {
+    localStorage.clear()
+    root.removeAttribute('data-hide-viewer')
+    root.removeAttribute('data-hide-slider')
+  })
+
+  test('hides nothing while both are on', () => {
+    renderIt()
+
+    expect(root).not.toHaveAttribute('data-hide-viewer')
+    expect(root).not.toHaveAttribute('data-hide-slider')
+  })
+
+  test('hides the viewer the moment it is turned off, and shows it when it is turned on', () => {
+    const store = renderIt()
+
+    act(() => store.set(showViewerAtom, false))
+    expect(root).toHaveAttribute('data-hide-viewer')
+
+    act(() => store.set(showViewerAtom, true))
+    expect(root).not.toHaveAttribute('data-hide-viewer')
+  })
+
+  test('hides the slider the moment it is turned off, and shows it when it is turned on', () => {
+    const store = renderIt()
+
+    act(() => store.set(showSliderAtom, false))
+    expect(root).toHaveAttribute('data-hide-slider')
+
+    act(() => store.set(showSliderAtom, true))
+    expect(root).not.toHaveAttribute('data-hide-slider')
+  })
+
+  test('treats the two on their own', () => {
+    const store = renderIt()
+
+    act(() => store.set(showSliderAtom, false))
+
+    expect(root).toHaveAttribute('data-hide-slider')
+    expect(root).not.toHaveAttribute('data-hide-viewer')
+  })
+
+  test('hides what was already turned off when the app opens', () => {
+    localStorage.setItem('showViewer', 'false')
+
+    renderIt()
+
+    expect(root).toHaveAttribute('data-hide-viewer')
+  })
+})
