@@ -196,7 +196,32 @@ test.describe('saving a page', () => {
     // until the button has been drawn. (The list, not a chart: charts slide in.)
     await page.addInitScript(() => {
       const samples: number[] = []
-      ;(window as unknown as { samples: number[] }).samples = samples
+      // When the list moves: what is above it, and how tall each part is, so a
+      // failure says what changed.
+      const moves: unknown[] = []
+      const w = window as unknown as { samples: number[]; moves: unknown[] }
+      w.samples = samples
+      w.moves = moves
+      const describeAbove = (list: Element) => {
+        const parts: string[] = []
+        for (
+          let node: Element | null = list;
+          node && node.tagName !== 'BODY';
+          node = node.parentElement
+        ) {
+          for (
+            let sibling = node.previousElementSibling;
+            sibling;
+            sibling = sibling.previousElementSibling
+          ) {
+            parts.push(
+              `${sibling.tagName.toLowerCase()}.${String(sibling.className).split(' ')[0]}:${Math.round(sibling.getBoundingClientRect().height)}`,
+            )
+          }
+        }
+        return parts
+      }
+      let last = 0
       const sample = () => {
         const list = document
           .querySelector('[data-chart-index="0"]')
@@ -205,7 +230,18 @@ test.describe('saving a page', () => {
         const top = list
           ? Math.round(list.getBoundingClientRect().top + scrollY)
           : 0
-        if (top > 0) samples.push(top)
+        if (top > 0) {
+          samples.push(top)
+          if (last > 0 && top !== last && list) {
+            moves.push({
+              from: last,
+              to: top,
+              at: Math.round(performance.now()),
+              above: describeAbove(list),
+            })
+          }
+          last = top
+        }
         requestAnimationFrame(sample)
       }
       requestAnimationFrame(sample)
@@ -218,8 +254,14 @@ test.describe('saving a page', () => {
     const samples = await page.evaluate(
       () => (window as unknown as { samples: number[] }).samples,
     )
+    const moves = await page.evaluate(
+      () => (window as unknown as { moves: unknown[] }).moves,
+    )
     expect(samples.length).toBeGreaterThan(5)
-    expect(new Set(samples).size).toBe(1)
+    expect(
+      new Set(samples).size,
+      `the list of charts moved: ${JSON.stringify(moves)}`,
+    ).toBe(1)
   })
 })
 
