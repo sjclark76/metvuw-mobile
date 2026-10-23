@@ -57,6 +57,11 @@ const nextConfig: NextConfig = {
   },
   turbopack: {},
   poweredByHeader: false,
+  // The home page lives at /home/nz (see src/app/home/[region]/page.tsx), so it is
+  // rendered on its first visit and not at build time. The address stays /.
+  async rewrites() {
+    return [{ source: '/', destination: '/home/nz' }]
+  },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }]
   },

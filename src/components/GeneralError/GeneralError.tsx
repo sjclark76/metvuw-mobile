@@ -20,7 +20,6 @@ export function GeneralError({
   // The home link is a plain anchor on purpose: a full page load also recovers
   // from broken client state, and this component renders in global-error, outside
   // the layout, where client-side navigation is not available.
-  /* eslint-disable @next/next/no-html-link-for-pages */
   return (
     <StatusMessage
       role="alert"
@@ -47,5 +46,4 @@ export function GeneralError({
       again in a moment.
     </StatusMessage>
   )
-  /* eslint-enable @next/next/no-html-link-for-pages */
 }

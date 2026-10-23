@@ -9,14 +9,16 @@ import {
   getUpperAirChartDataForCode,
 } from '@/shared/helpers/dataSource/getWeatherChartData'
 
-import HomePage, { generateMetadata as homeMetadata } from './page'
+import HomePage, {
+  generateMetadata as homeMetadata,
+} from './home/[region]/page'
 import RadarRoute, {
   generateMetadata as radarMetadata,
 } from './radar/[code]/page'
 import RegionRoute, {
   generateMetadata as regionMetadata,
 } from './regions/[name]/page'
-import { generateMetadata as satelliteMetadata } from './satellite/page'
+import { generateMetadata as satelliteMetadata } from './satellite/[[...rest]]/page'
 import UpperAirRoute, {
   generateMetadata as upperAirMetadata,
 } from './upperair/[[...balloon]]/page'
@@ -97,7 +99,7 @@ describe('home page', () => {
   test('shows the New Zealand charts oldest first', async () => {
     vi.mocked(getRainChartDataForRegion).mockResolvedValue([rain(2), rain(1)])
 
-    const page = await HomePage()
+    const page = await HomePage({ params: Promise.resolve({ region: 'nz' }) })
 
     expect(getRainChartDataForRegion).toHaveBeenCalledWith(
       expect.objectContaining({ code: 'nz' }),
@@ -105,6 +107,12 @@ describe('home page', () => {
     expect(page.props.rainChartData.map((c: { url: string }) => c.url)).toEqual(
       ['https://x/1.gif', 'https://x/2.gif'],
     )
+  })
+
+  test('is only the New Zealand forecast: anything else at its address is not found', async () => {
+    await expect(
+      HomePage({ params: Promise.resolve({ region: 'nzsi' }) }),
+    ).rejects.toThrow()
   })
 
   test('is canonical at the site root', async () => {

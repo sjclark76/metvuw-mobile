@@ -7,9 +7,9 @@ import {
   getSatelliteChartData,
 } from '@/shared/helpers/dataSource/getWeatherChartData'
 
-import HomePage from './page'
+import HomePage from './home/[region]/page'
 import RadarRoute from './radar/[code]/page'
-import SatelliteRoute from './satellite/page'
+import SatelliteRoute from './satellite/[[...rest]]/page'
 
 vi.mock('@/shared/helpers/dataSource/getWeatherChartData', () => ({
   getRainChartDataForRegion: vi.fn(),
@@ -28,30 +28,42 @@ describe('pages treat failures and empty results differently', () => {
   test('home: a loader failure propagates', async () => {
     vi.mocked(getRainChartDataForRegion).mockRejectedValue(upstreamFailure)
 
-    await expect(HomePage()).rejects.toThrow(upstreamFailure)
+    await expect(
+      HomePage({ params: Promise.resolve({ region: 'nz' }) }),
+    ).rejects.toThrow(upstreamFailure)
   })
 
   test('home: an empty successful result shows NoForecast', async () => {
     vi.mocked(getRainChartDataForRegion).mockResolvedValue([])
 
-    expect((await HomePage()).type).toBe(NoForecast)
+    expect(
+      (await HomePage({ params: Promise.resolve({ region: 'nz' }) })).type,
+    ).toBe(NoForecast)
   })
 
   test('home: data renders the region page', async () => {
     vi.mocked(getRainChartDataForRegion).mockResolvedValue([rainChart])
 
-    expect((await HomePage()).type).toBe(RegionPage)
+    expect(
+      (await HomePage({ params: Promise.resolve({ region: 'nz' }) })).type,
+    ).toBe(RegionPage)
   })
 
   test('satellite: a loader failure propagates, empty shows NoForecast', async () => {
     vi.mocked(getSatelliteChartData).mockRejectedValue(upstreamFailure)
-    await expect(SatelliteRoute()).rejects.toThrow(upstreamFailure)
+    await expect(
+      SatelliteRoute({ params: Promise.resolve({}) }),
+    ).rejects.toThrow(upstreamFailure)
 
     vi.mocked(getSatelliteChartData).mockResolvedValue([])
-    expect((await SatelliteRoute()).type).toBe(NoForecast)
+    expect((await SatelliteRoute({ params: Promise.resolve({}) })).type).toBe(
+      NoForecast,
+    )
 
     vi.mocked(getSatelliteChartData).mockResolvedValue([chart])
-    expect((await SatelliteRoute()).type).toBe(SatellitePage)
+    expect((await SatelliteRoute({ params: Promise.resolve({}) })).type).toBe(
+      SatellitePage,
+    )
   })
 
   test('radar: a loader failure propagates, empty shows NoForecast', async () => {
