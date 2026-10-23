@@ -9,6 +9,14 @@ import { getsBalloonLocationCodeOrDefault } from '@/shared/types/balloonLocation
 
 export const revalidate = 3600
 
+// No pages are built ahead of time (so a build never needs metvuw.com to be up),
+// and each is rendered on its first visit and then cached for `revalidate`
+// seconds. Without this, a route with a parameter is rendered afresh on every
+// visit, and never cached at all.
+export function generateStaticParams() {
+  return []
+}
+
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
   return generateSEOMetadata({
