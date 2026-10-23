@@ -3,8 +3,10 @@ import { fireEvent, render } from '@testing-library/react'
 import WeatherImage from './WeatherImage'
 
 const markLoaded = vi.fn()
+const state = vi.hoisted(() => ({ mayLoad: true }))
 vi.mock('@/components/ImageProgress/ImageProgress', () => ({
   useMarkImageLoaded: () => markLoaded,
+  useMayLoadImage: () => state.mayLoad,
 }))
 
 const renderImage = (src: string | undefined = '/a.webp') =>
@@ -20,6 +22,7 @@ const renderImage = (src: string | undefined = '/a.webp') =>
 describe('WeatherImage progress reporting', () => {
   beforeEach(() => {
     markLoaded.mockClear()
+    state.mayLoad = true
   })
 
   test('reports the image once the browser has loaded it', () => {
@@ -56,5 +59,29 @@ describe('WeatherImage progress reporting', () => {
     fireEvent.load(image)
 
     expect(markLoaded).not.toHaveBeenCalled()
+  })
+
+  // With no address a browser says the image is complete, though nothing has been
+  // asked for: counting it would let every other chart start at once.
+  test('does not report an image that is waiting for the first chart', () => {
+    state.mayLoad = false
+    Object.defineProperty(HTMLImageElement.prototype, 'complete', {
+      configurable: true,
+      get: () => true,
+    })
+
+    const { container } = renderImage('/waiting.webp')
+
+    expect(container.querySelector('img')).not.toHaveAttribute('src')
+    expect(markLoaded).not.toHaveBeenCalled()
+    Reflect.deleteProperty(HTMLImageElement.prototype, 'complete')
+  })
+
+  test('gives an image its address once it may load', () => {
+    state.mayLoad = true
+
+    const { container } = renderImage('/ready.webp')
+
+    expect(container.querySelector('img')).toHaveAttribute('src', '/ready.webp')
   })
 })

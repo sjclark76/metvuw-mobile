@@ -49,7 +49,9 @@ test.describe('how to read the forecast chart', () => {
     ).toBeVisible()
     await page.evaluate(() =>
       Promise.all(
-        document.getAnimations().map((animation) => animation.finished),
+        document
+          .getAnimations()
+          .map((animation) => animation.finished.catch(() => undefined)),
       ),
     )
 
@@ -92,7 +94,9 @@ test.describe('what the upper air charts are', () => {
     await page.getByText('What are these charts?').click()
     await page.evaluate(() =>
       Promise.all(
-        document.getAnimations().map((animation) => animation.finished),
+        document
+          .getAnimations()
+          .map((animation) => animation.finished.catch(() => undefined)),
       ),
     )
 

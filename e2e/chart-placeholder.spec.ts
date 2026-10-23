@@ -23,7 +23,11 @@ for (const [name, path] of pages) {
       await page.goto(path)
       await page.waitForSelector('main img')
       await page.evaluate(() =>
-        Promise.all(document.getAnimations().map((a) => a.finished)),
+        Promise.all(
+          document
+            .getAnimations()
+            .map((a) => a.finished.catch(() => undefined)),
+        ),
       )
 
       const items = '[data-chart-index]'

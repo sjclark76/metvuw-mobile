@@ -4,6 +4,7 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   useSyncExternalStore,
@@ -75,6 +76,39 @@ export function useImageProgress(): number {
 
   if (!context || context.expected <= 0) return 0
   return Math.min(100, (loadedCount / context.expected) * 100)
+}
+
+// A first chart that never loads must not keep the others from loading for ever.
+const LATER_IMAGES_WAIT_MS = 4000
+
+/**
+ * Whether an image may start loading. The first chart of a page (what the page is
+ * measured by, and what the visitor wants to see first) goes at once; the others
+ * wait until it has loaded, or a few seconds have passed. They would otherwise all
+ * share a slow connection with it, and it would arrive no sooner than the last of
+ * them (measured: the first chart finished at about 3.3 s on a throttled phone with
+ * four charts going at once).
+ *
+ * True outside an ImageProgressProvider, and true on the server and while the page
+ * is coming alive for the first chart; false for the others at those times, so what
+ * the host rendered (no address on the later images) is what React hydrates.
+ */
+export function useMayLoadImage(isFirst: boolean): boolean {
+  const context = useContext(ImageProgressContext)
+  const loaded = useSyncExternalStore(
+    context?.store.subscribe ?? noopSubscribe,
+    context?.store.getLoadedCount ?? zero,
+    zero,
+  )
+  const [waited, setWaited] = useState(false)
+
+  useEffect(() => {
+    if (isFirst || !context) return
+    const timer = setTimeout(() => setWaited(true), LATER_IMAGES_WAIT_MS)
+    return () => clearTimeout(timer)
+  }, [isFirst, context])
+
+  return isFirst || !context || loaded > 0 || waited
 }
 
 /** Reports an image as loaded. Does nothing outside an ImageProgressProvider. */
