@@ -45,6 +45,7 @@ export function RainStrip({
   readings,
   onSeek,
   axis,
+  highlights = {},
 }: {
   region: RegionCode
   pins: readonly Pin[]
@@ -53,6 +54,8 @@ export function RainStrip({
   index: number
   readings: RainReadings
   onSeek: (index: number) => void
+  /** For each pin, the charts where heavy rain is ahead, outlined. */
+  highlights?: Readonly<Record<string, { from: number; to: number }>>
   /** Where each chart is on the time axis, so the cells line up with its ticks. */
   axis: {
     percent: (position: number) => string
@@ -184,7 +187,19 @@ export function RainStrip({
                         (colour ? '' : 'bg-rule/40 ') +
                         (position === index
                           ? 'shadow-[inset_0_-3px_0_0_var(--color-ink)]'
-                          : 'shadow-[inset_1px_0_0_0_rgb(0_0_0/0.07)]')
+                          : 'shadow-[inset_1px_0_0_0_rgb(0_0_0/0.07)]') +
+                        (highlights[pin.id] &&
+                        position >= highlights[pin.id].from &&
+                        position <= highlights[pin.id].to
+                          ? ' outline-ink z-10 outline-2 -outline-offset-1'
+                          : '')
+                      }
+                      data-heavy-rain={
+                        highlights[pin.id] &&
+                        position >= highlights[pin.id].from &&
+                        position <= highlights[pin.id].to
+                          ? ''
+                          : undefined
                       }
                       style={{
                         left: axis.percent(position),
