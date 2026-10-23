@@ -205,4 +205,35 @@ describe('<RainStrip />', () => {
       ).not.toBeNull()
     })
   })
+
+  describe('heavy rain ahead', () => {
+    test('outlines the cells where it falls, and no others', () => {
+      const store = createStore()
+      const { container } = render(
+        <Provider store={store}>
+          <RainStrip
+            region="nz"
+            pins={[wanaka]}
+            chartUrls={urls}
+            times={times}
+            index={0}
+            readings={new Map()}
+            onSeek={() => {}}
+            axis={axis}
+            highlights={{ [wanaka.id]: { from: 1, to: 2 } }}
+          />
+        </Provider>,
+      )
+
+      expect(
+        cells(container).map((cell) => cell.hasAttribute('data-heavy-rain')),
+      ).toEqual([false, true, true])
+    })
+
+    test('outlines nothing when there is none', () => {
+      const { container } = renderStrip()
+
+      expect(container.querySelectorAll('[data-heavy-rain]')).toHaveLength(0)
+    })
+  })
 })
