@@ -154,7 +154,9 @@ test.describe('on a large screen', () => {
         await group(page, 'Radar').click()
         await page.evaluate(() =>
           Promise.all(
-            document.getAnimations().map((animation) => animation.finished),
+            document
+              .getAnimations()
+              .map((animation) => animation.finished.catch(() => undefined)),
           ),
         )
 

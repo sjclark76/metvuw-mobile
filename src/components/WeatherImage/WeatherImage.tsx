@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react'
 
-import { useMarkImageLoaded } from '@/components/ImageProgress/ImageProgress'
+import {
+  useMarkImageLoaded,
+  useMayLoadImage,
+} from '@/components/ImageProgress/ImageProgress'
 import {
   isFallbackImageProxyUrl,
   withFallbackImageProxyVariant,
@@ -81,10 +84,14 @@ const WeatherImage = ({
   loading,
 }: WeatherImageProps) => {
   const markLoaded = useMarkImageLoaded()
+  const mayLoad = useMayLoadImage(isHighPriority)
   const imgRef = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
     const imageElement = imgRef.current
+    // An image with no address yet counts as complete to the browser: it must not be
+    // reported as loaded (it would also let every other chart start).
+    if (!mayLoad) return
 
     const handleLoad = () => {
       if (imageSrc) {
@@ -105,7 +112,7 @@ const WeatherImage = ({
         imageElement.removeEventListener('load', handleLoad)
       }
     }
-  }, [imageSrc, markLoaded])
+  }, [imageSrc, markLoaded, mayLoad])
 
   const attributes = extraImageAttribute(chartType, imageSrc)
 
@@ -115,9 +122,15 @@ const WeatherImage = ({
     )
   }
 
+  // A chart that has to wait for the first one has no address yet, and so no
+  // request: `srcSet` (the smaller sizes of the satellite and upper air charts)
+  // would start one just the same, so it waits too.
+  const waiting = !mayLoad
+  const { srcSet, ...otherAttributes } = attributes as { srcSet?: string }
   const commonProps = {
-    src: imageSrc,
-    ...attributes,
+    src: waiting ? undefined : imageSrc,
+    ...(waiting ? {} : { srcSet }),
+    ...otherAttributes,
     style: {
       display: 'block',
       width: '100%',

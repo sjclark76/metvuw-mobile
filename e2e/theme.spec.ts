@@ -199,7 +199,11 @@ test.describe('switching theme does not shift the layout', () => {
         if (path !== '/offline') await page.waitForSelector('main img')
         // Let entrance animations finish, and every chart settle at its real size.
         await page.evaluate(() =>
-          Promise.all(document.getAnimations().map((a) => a.finished)),
+          Promise.all(
+            document
+              .getAnimations()
+              .map((a) => a.finished.catch(() => undefined)),
+          ),
         )
         const light = await layout(page)
         expect(light.length).toBeGreaterThan(4)

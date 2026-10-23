@@ -20,7 +20,9 @@ async function openAndSettle(page: Page, path: string) {
   // Let the entrance animations finish: scanning mid-fade measures blended colours.
   await page.evaluate(() =>
     Promise.all(
-      document.getAnimations().map((animation) => animation.finished),
+      document
+        .getAnimations()
+        .map((animation) => animation.finished.catch(() => undefined)),
     ),
   )
 }

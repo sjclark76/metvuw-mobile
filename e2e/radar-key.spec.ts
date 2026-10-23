@@ -66,7 +66,9 @@ test.describe('the radar key', () => {
     await expect(page.getByRole('region', { name: 'Radar key' })).toBeVisible()
     await page.evaluate(() =>
       Promise.all(
-        document.getAnimations().map((animation) => animation.finished),
+        document
+          .getAnimations()
+          .map((animation) => animation.finished.catch(() => undefined)),
       ),
     )
 
