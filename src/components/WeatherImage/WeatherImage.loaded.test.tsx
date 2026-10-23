@@ -84,4 +84,14 @@ describe('WeatherImage progress reporting', () => {
 
     expect(container.querySelector('img')).toHaveAttribute('src', '/ready.webp')
   })
+
+  // WebKit gives an image with no address no height, so the cards of the charts that
+  // are waiting collapsed and the page jumped as they arrived.
+  test('holds its place while it waits, whatever the browser does with an image with no address', () => {
+    state.mayLoad = false
+
+    const { container } = renderImage('/waiting.webp')
+
+    expect(container.querySelector('img')!.style.aspectRatio).toBe('565 / 396')
+  })
 })

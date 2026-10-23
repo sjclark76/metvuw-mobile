@@ -76,6 +76,13 @@ function extraImageAttribute(
   }
 }
 
+function hasSize(attributes: object): attributes is {
+  width: number
+  height: number
+} {
+  return 'width' in attributes && 'height' in attributes
+}
+
 const WeatherImage = ({
   imageAlt,
   imageSrc,
@@ -136,6 +143,14 @@ const WeatherImage = ({
       width: '100%',
       maxWidth: '100%',
       height: 'auto',
+      // The room the chart will take, from its size, so a chart that is still
+      // waiting for the first to load holds its place: WebKit gives an image with
+      // no address no height at all, and the page then jumps as the charts arrive.
+      ...(hasSize(otherAttributes)
+        ? {
+            aspectRatio: `${otherAttributes.width} / ${otherAttributes.height}`,
+          }
+        : {}),
       ...(attributes &&
       typeof attributes === 'object' &&
       'style' in attributes &&
