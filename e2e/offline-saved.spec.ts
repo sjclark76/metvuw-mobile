@@ -224,14 +224,22 @@ test.describe('saving a page', () => {
         return parts
       }
       let last = 0
+      let fontFrames = 0
       const sample = () => {
         const list = document
           .querySelector('[data-chart-index="0"]')
           ?.closest('ul')
         // At first the list sits inside the loading placeholder, with no position.
-        const top = list
-          ? Math.round(list.getBoundingClientRect().top + scrollY)
-          : 0
+        // Not while the web fonts are still arriving: the title is set in the
+        // fallback font until they do, and may be a line taller in it. That is a
+        // different move from the one this is about.
+        // A frame after they are in, when the page has been laid out with them.
+        fontFrames = document.fonts.status === 'loaded' ? fontFrames + 1 : 0
+        const settled = fontFrames > 1
+        const top =
+          list && settled
+            ? Math.round(list.getBoundingClientRect().top + scrollY)
+            : 0
         if (top > 0) {
           samples.push(top)
           if (last > 0 && top !== last && list) {
