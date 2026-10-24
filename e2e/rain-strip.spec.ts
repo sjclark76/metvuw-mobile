@@ -1,5 +1,7 @@
 import { expect, Page, test } from '@playwright/test'
 
+import { revealFooter } from './footer-helpers'
+
 // The rain strip: for a pinned place, a cell for each chart, coloured by the band of
 // rain the chart shows there. The stub serves rain charts with a block of a known
 // band over Wanaka (see e2e/stub/metvuw-stub.mjs): hour 006 none, 012 band 1
@@ -59,6 +61,7 @@ test.describe('the rain strip', () => {
     await pin(page, wanaka)
     await page.goto('/regions/nz')
     await expect(cell(page, 3)).toHaveCSS('background-color', RED_ORANGE)
+    await revealFooter(page)
     await expect(reading(page)).toContainText('under 1 mm')
 
     await cell(page, 2).click()
@@ -135,8 +138,16 @@ test.describe('the rain strip', () => {
     await pin(page, wanaka)
     await page.goto('/regions/nz')
     await expect(cell(page, 3)).toHaveCSS('background-color', RED_ORANGE)
+    await revealFooter(page)
     const footer = page.locator('footer')
     await expect(footer).toHaveCSS('position', 'fixed')
+    // It slides up from below the screen, so wait for it to arrive.
+    await expect
+      .poll(async () => {
+        const box = (await footer.boundingBox())!
+        return Math.round(box.y + box.height)
+      })
+      .toBe(page.viewportSize()!.height)
 
     const seen = new Set<string>()
     await slider(page).focus()

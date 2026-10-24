@@ -169,6 +169,7 @@ test.describe('heavy rain ahead at a pin', () => {
     await expect(note(page)).toBeVisible()
   })
 
+  // A long warning wraps to two lines on a phone, a line more than is held for it.
   test('does not move the page when it arrives', async ({ page }) => {
     await page.addInitScript(() => {
       const samples: number[] = []

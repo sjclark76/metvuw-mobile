@@ -105,6 +105,8 @@ test.describe('time axis in the viewer', () => {
 
   test('sits on its own row above the controls', async ({ page }) => {
     await openList(page)
+    // On a phone the footer comes in once the top of the page has scrolled off.
+    await page.evaluate(() => window.scrollTo(0, 600))
     await page.getByLabel('Show animated weather chart').click()
     await expect(page.getByLabel('Play animation')).toBeVisible()
 
@@ -118,6 +120,8 @@ test.describe('time axis in the viewer', () => {
 
   test('lays the four controls out in one row', async ({ page }) => {
     await openList(page)
+    // On a phone the footer comes in once the top of the page has scrolled off.
+    await page.evaluate(() => window.scrollTo(0, 600))
     await page.getByLabel('Show animated weather chart').click()
 
     // Centres, not tops: the view switch is a little larger than the others.

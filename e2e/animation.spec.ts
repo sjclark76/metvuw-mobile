@@ -1,10 +1,13 @@
 import { expect, Page, test } from '@playwright/test'
 
+import { revealFooter } from './footer-helpers'
+
 // Four satellite charts, one second apart when playing.
 const slider = (page: Page) => page.getByLabel('Chart position')
 
 async function openViewer(page: Page) {
   await page.goto('/satellite')
+  await revealFooter(page)
   await page.getByLabel('Show animated weather chart').click()
   await expect(slider(page)).toBeVisible()
 }
