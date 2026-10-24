@@ -114,6 +114,18 @@
    viewer's button and controls, the time slider with the rain strip on it, and the
    whole footer, with the gap that keeps the end of the page clear of it, when both
    are hidden. The attributes are put on the page before it first paints. */
+/* The heavy rain note's place on a chart page: not there, unless the visitor has
+   pins and has not turned the warnings off, and then with room for its band
+   (a line, as tall as the band, min-h-11) so the page does not move when the
+   charts have been read. */
+[data-heavy-rain-slot] {
+  display: none;
+}
+html[data-has-pins]:not([data-hide-heavy-rain]) [data-heavy-rain-slot] {
+  display: block;
+  min-height: 2.75rem;
+}
+
 html[data-hide-viewer] [data-footer-viewer],
 html[data-hide-slider] [data-footer-slider],
 html[data-hide-viewer][data-hide-slider] [data-footer],

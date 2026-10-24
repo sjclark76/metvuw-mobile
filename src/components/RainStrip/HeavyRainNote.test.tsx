@@ -30,9 +30,18 @@ const heavy: PinHeavyRain = {
   rain: { level: 'heavy', from: 1, to: 4, atLeastMm: 30 },
 }
 
-const renderNote = (found: PinHeavyRain[], onSeek = vi.fn()) => {
+const renderNote = (
+  found: PinHeavyRain[],
+  { onSeek = vi.fn(), watching = true, checked = true } = {},
+) => {
   const view = render(
-    <HeavyRainNote found={found} times={times} onSeek={onSeek} />,
+    <HeavyRainNote
+      found={found}
+      times={times}
+      watching={watching}
+      checked={checked}
+      onSeek={onSeek}
+    />,
   )
   return { onSeek, ...view }
 }
@@ -46,10 +55,35 @@ describe('<HeavyRainNote />', () => {
     delete window.gtag
   })
 
-  test('shows nothing when no heavy rain is ahead', () => {
+  test('says it is checking until every chart has been read', () => {
+    renderNote([], { checked: false })
+
+    expect(note()).toBeNull()
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Checking rain at your pins…',
+    )
+  })
+
+  test('says no heavy rain is ahead once every chart has been read', () => {
     renderNote([])
 
     expect(note()).toBeNull()
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'No heavy rain ahead at your pins',
+    )
+  })
+
+  test('shows the warning, not the status, when rain is found before every chart is read', () => {
+    renderNote([veryHeavy], { checked: false })
+
+    expect(note()).not.toBeNull()
+    expect(screen.queryByRole('status')).toBeNull()
+  })
+
+  test('shows nothing when there is nothing to watch', () => {
+    const { container } = renderNote([], { watching: false })
+
+    expect(container).toBeEmptyDOMElement()
   })
 
   test('says very heavy rain is ahead, how much and until when', () => {
@@ -69,7 +103,8 @@ describe('<HeavyRainNote />', () => {
   })
 
   test('goes to the chart where it happens when a line is tapped', () => {
-    const { onSeek } = renderNote([veryHeavy])
+    const onSeek = vi.fn()
+    renderNote([veryHeavy], { onSeek })
 
     fireEvent.click(
       screen.getByRole('button', { name: /Very heavy rain ahead/ }),

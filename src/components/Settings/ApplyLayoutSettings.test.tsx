@@ -1,7 +1,13 @@
 import { act, render } from '@testing-library/react'
 import { createStore, Provider } from 'jotai'
 
-import { showSliderAtom, showViewerAtom } from '@/components/Atoms/GlobalState'
+import {
+  pinsAtom,
+  showHeavyRainAtom,
+  showSliderAtom,
+  showViewerAtom,
+} from '@/components/Atoms/GlobalState'
+import { pinFromPlace } from '@/shared/helpers/pins/pins'
 
 import { ApplyLayoutSettings } from './ApplyLayoutSettings'
 
@@ -22,6 +28,8 @@ describe('<ApplyLayoutSettings />', () => {
     localStorage.clear()
     root.removeAttribute('data-hide-viewer')
     root.removeAttribute('data-hide-slider')
+    root.removeAttribute('data-hide-heavy-rain')
+    root.removeAttribute('data-has-pins')
   })
 
   test('hides nothing while both are on', () => {
@@ -66,5 +74,36 @@ describe('<ApplyLayoutSettings />', () => {
     renderIt()
 
     expect(root).toHaveAttribute('data-hide-viewer')
+  })
+
+  test('hides the heavy rain note when it is turned off, and shows it when it is turned on', () => {
+    const store = renderIt()
+
+    act(() => store.set(showHeavyRainAtom, false))
+    expect(root).toHaveAttribute('data-hide-heavy-rain')
+
+    act(() => store.set(showHeavyRainAtom, true))
+    expect(root).not.toHaveAttribute('data-hide-heavy-rain')
+  })
+
+  test('says there are pins as soon as there is one, and not when there are none', () => {
+    const store = renderIt()
+    expect(root).not.toHaveAttribute('data-has-pins')
+
+    act(() =>
+      store.set(pinsAtom, [
+        pinFromPlace({
+          name: 'Wanaka',
+          context: 'Otago',
+          kind: 'Town',
+          latitude: -44.7,
+          longitude: 169.1,
+        }),
+      ]),
+    )
+    expect(root).toHaveAttribute('data-has-pins')
+
+    act(() => store.set(pinsAtom, []))
+    expect(root).not.toHaveAttribute('data-has-pins')
   })
 })

@@ -1,26 +1,15 @@
 'use client'
 import clsx from 'clsx'
 import { useAtomValue } from 'jotai'
-import { ReactNode, useEffect, useMemo, useRef } from 'react'
+import { ReactNode, useEffect, useRef } from 'react'
 
 import { useTrackOnce } from '@/components/Analytics/useTrackOnce'
 import { useAnimation } from '@/components/Animation/Animation'
-import {
-  showHeavyRainAtom,
-  showViewerAtom,
-} from '@/components/Atoms/GlobalState'
-import { useNow } from '@/components/Hooks/useNow'
+import { showViewerAtom } from '@/components/Atoms/GlobalState'
 import { usePins } from '@/components/Pins/usePins'
-import {
-  HeavyRainNote,
-  type PinHeavyRain,
-} from '@/components/RainStrip/HeavyRainNote'
 import { RainStrip } from '@/components/RainStrip/RainStrip'
-import { useChartsSettled } from '@/components/RainStrip/useChartsSettled'
-import { useRainReadings } from '@/components/RainStrip/useRainReadings'
+import { useRainWatch } from '@/components/RainStrip/RainWatch'
 import { track } from '@/shared/helpers/analytics/track'
-import { chartPosition } from '@/shared/helpers/chartGeometry'
-import { heavyRainAhead } from '@/shared/helpers/heavyRain'
 import type { RegionCode } from '@/shared/types/region'
 
 import {
@@ -84,42 +73,8 @@ function FooterControl({
 
   const { pins } = usePins()
   const showViewer = useAtomValue(showViewerAtom)
-  const showHeavyRain = useAtomValue(showHeavyRainAtom)
-  const chartsSettled = useChartsSettled()
-  const readings = useRainReadings({
-    region: rain?.region ?? 'nz',
-    chartUrls: rain ? rain.chartUrls : [],
-    current: index,
-    // Read even when the strip is hidden: the heavy rain note needs them.
-    pins: rain ? pins : [],
-    ready: chartsSettled,
-  })
-
-  // Heavy rain ahead at the pins this chart shows, from the charts read so far.
-  // Nothing until the clock is known in the browser (zero before then).
-  const now = useNow()
-  const heavyRain: PinHeavyRain[] = useMemo(() => {
-    if (!rain || now === 0 || !showHeavyRain) return []
-    return pins.flatMap((pin) => {
-      if (!chartPosition(rain.region, pin.latitude, pin.longitude)) return []
-      const found = heavyRainAhead(
-        rain.chartUrls.map((url) => readings.get(url)?.[pin.id]),
-        times,
-        now,
-      )
-      return found ? [{ pin, rain: found }] : []
-    })
-  }, [rain, pins, readings, times, now, showHeavyRain])
-  const highlights = useMemo(
-    () =>
-      Object.fromEntries(
-        heavyRain.map(({ pin, rain: found }) => [
-          pin.id,
-          { from: found.from, to: found.to },
-        ]),
-      ),
-    [heavyRain],
-  )
+  // Read for the page by its rain watch, which the heavy rain note shares.
+  const { readings, highlights } = useRainWatch()
 
   // A viewer that is open when it is turned off in Settings closes.
   useEffect(() => {
@@ -185,9 +140,6 @@ function FooterControl({
 
   return (
     <>
-      {rain && (
-        <HeavyRainNote found={heavyRain} times={times} onSeek={seekTo} />
-      )}
       <footer ref={footerRef} data-footer className={footerClasses}>
         <div
           className={clsx(
