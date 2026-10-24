@@ -86,11 +86,25 @@ describe('<HeavyRainNote />', () => {
     expect(container).toBeEmptyDOMElement()
   })
 
-  test('says very heavy rain is ahead, how much and until when', () => {
+  test('says very heavy rain is ahead, how much and from when', () => {
     renderNote([veryHeavy])
 
     expect(note()).toHaveTextContent('Very heavy rain ahead at Lake Hawea:')
-    expect(note()).toHaveTextContent(/20\+ mm in the 6 hours to \w{3} \d/)
+    expect(note()).toHaveTextContent(/20\+ mm in the 6 hours from \w{3} \d/)
+  })
+
+  test('starts the very heavy six hours before its chart, as the chart shows the six hours to it', () => {
+    renderNote([veryHeavy])
+
+    // The chart is for 18:00 UTC; the six hours it shows begin at 12:00 UTC.
+    const from = new Date(times[veryHeavy.rain.to] - 6 * HOUR)
+    const hour = from
+      .toLocaleString('en-NZ', { hour: 'numeric', hour12: true })
+      .replace(/\s/g, '')
+      .toLowerCase()
+    expect(note()?.textContent?.replace(/\s/g, '').toLowerCase()).toContain(
+      `from${from.toLocaleString('en-NZ', { weekday: 'short' })}${hour.replace(/(am|pm)/, ':00$1')}`.toLowerCase(),
+    )
   })
 
   test('says heavy rain is ahead, at least how much, and from when', () => {

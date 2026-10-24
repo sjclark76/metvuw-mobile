@@ -61,7 +61,7 @@ export function HeavyRainNote({
     rain.level === 'veryHeavy'
       ? {
           title: `Very heavy rain ahead at ${chartLabel(pin)}`,
-          detail: `20+ mm in the 6 hours to ${when(times[rain.to])}`,
+          detail: `20+ mm in the 6 hours from ${when(times[rain.to] - SIX_HOURS)}`,
         }
       : {
           title: `Heavy rain ahead at ${chartLabel(pin)}`,
