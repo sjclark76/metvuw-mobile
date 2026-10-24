@@ -80,6 +80,12 @@ const showSliderAtom = atomWithStorage<boolean>(
   createJSONStorage(() => tolerantStorage),
   { getOnInit: true },
 )
+const showHeavyRainAtom = atomWithStorage<boolean>(
+  'showHeavyRain',
+  true,
+  createJSONStorage(() => tolerantStorage),
+  { getOnInit: true },
+)
 
 export {
   favoritePageAtom,
@@ -87,6 +93,7 @@ export {
   pinsAtom,
   rainStripPinAtom,
   savedPagesAtom,
+  showHeavyRainAtom,
   showSliderAtom,
   showViewerAtom,
   themeAtom,

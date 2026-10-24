@@ -5,6 +5,7 @@ import {
   favoritePageAtom,
   pinsAtom,
   savedPagesAtom,
+  showHeavyRainAtom,
   showSliderAtom,
   showViewerAtom,
   themeAtom,
@@ -103,6 +104,24 @@ describe('<SettingsPage />', () => {
   })
   afterEach(() => {
     delete window.gtag
+  })
+
+  describe('warnings', () => {
+    test('has heavy rain warnings on until they are turned off, and counts it', () => {
+      const { store } = renderPage()
+      const toggle = screen.getByRole('switch', {
+        name: 'Show heavy rain warnings',
+      })
+
+      expect(toggle).toBeChecked()
+      fireEvent.click(toggle)
+
+      expect(store.get(showHeavyRainAtom)).toBe(false)
+      expect(window.gtag).toHaveBeenCalledWith('event', 'setting_changed', {
+        setting: 'heavy_rain',
+        value: false,
+      })
+    })
   })
 
   describe('the footer', () => {

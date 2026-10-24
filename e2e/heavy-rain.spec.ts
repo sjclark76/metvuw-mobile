@@ -77,22 +77,35 @@ test.describe('heavy rain ahead at a pin', () => {
     ).toHaveAttribute('aria-valuetext', 'Chart 4 of 10')
   })
 
-  test('closes, and stays closed for this forecast', async ({ page }) => {
+  test('is at the top of the page, and scrolls away with it', async ({
+    page,
+  }) => {
     await pin(page, wanaka)
     await page.goto('/regions/nz')
+    await expect(note(page)).toBeVisible()
+    const before = (await note(page).boundingBox())!.y
 
-    await page
-      .getByRole('button', { name: 'Close the heavy rain note' })
-      .click()
-    await expect(note(page)).toBeHidden()
-    await page.reload()
+    await page.evaluate(() => window.scrollTo(0, 300))
+
+    await expect
+      .poll(async () => (await note(page).boundingBox())!.y)
+      .toBeLessThan(before - 100)
+  })
+
+  test('is not shown when turned off in Settings', async ({ page }) => {
+    await pin(page, wanaka)
+    await page.addInitScript(() =>
+      localStorage.setItem('showHeavyRain', 'false'),
+    )
+    await page.goto('/regions/nz')
     await page.waitForSelector('main img')
     await expect(page.locator('[data-rain-cell="3"]')).toHaveAttribute(
-      'data-heavy-rain',
-      '',
+      'data-reading',
+      'rain',
     )
 
     await expect(note(page)).toBeHidden()
+    await expect(page.locator('[data-heavy-rain]')).toHaveCount(0)
   })
 
   test('says nothing for a pin where it stays dry', async ({ page }) => {

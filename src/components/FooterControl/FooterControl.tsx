@@ -5,7 +5,10 @@ import { ReactNode, useEffect, useMemo, useRef } from 'react'
 
 import { useTrackOnce } from '@/components/Analytics/useTrackOnce'
 import { useAnimation } from '@/components/Animation/Animation'
-import { showViewerAtom } from '@/components/Atoms/GlobalState'
+import {
+  showHeavyRainAtom,
+  showViewerAtom,
+} from '@/components/Atoms/GlobalState'
 import { useNow } from '@/components/Hooks/useNow'
 import { usePins } from '@/components/Pins/usePins'
 import {
@@ -81,6 +84,7 @@ function FooterControl({
 
   const { pins } = usePins()
   const showViewer = useAtomValue(showViewerAtom)
+  const showHeavyRain = useAtomValue(showHeavyRainAtom)
   const chartsSettled = useChartsSettled()
   const readings = useRainReadings({
     region: rain?.region ?? 'nz',
@@ -95,7 +99,7 @@ function FooterControl({
   // Nothing until the clock is known in the browser (zero before then).
   const now = useNow()
   const heavyRain: PinHeavyRain[] = useMemo(() => {
-    if (!rain || now === 0) return []
+    if (!rain || now === 0 || !showHeavyRain) return []
     return pins.flatMap((pin) => {
       if (!chartPosition(rain.region, pin.latitude, pin.longitude)) return []
       const found = heavyRainAhead(
@@ -105,7 +109,7 @@ function FooterControl({
       )
       return found ? [{ pin, rain: found }] : []
     })
-  }, [rain, pins, readings, times, now])
+  }, [rain, pins, readings, times, now, showHeavyRain])
   const highlights = useMemo(
     () =>
       Object.fromEntries(
@@ -182,12 +186,7 @@ function FooterControl({
   return (
     <>
       {rain && (
-        <HeavyRainNote
-          found={heavyRain}
-          times={times}
-          forecastKey={`${rain.region} ${rain.chartUrls[0] ?? ''}`}
-          onSeek={seekTo}
-        />
+        <HeavyRainNote found={heavyRain} times={times} onSeek={seekTo} />
       )}
       <footer ref={footerRef} data-footer className={footerClasses}>
         <div
