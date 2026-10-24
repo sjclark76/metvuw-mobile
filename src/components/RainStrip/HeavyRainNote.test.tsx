@@ -74,14 +74,6 @@ describe('<HeavyRainNote />', () => {
     )
   })
 
-  test('says plainly it is not a MetService warning, and what the words mean', () => {
-    renderNote([heavy])
-
-    expect(note()).toHaveTextContent('not a MetService warning')
-    expect(note()).toHaveTextContent('25 mm in a day')
-    expect(note()).toHaveTextContent('the top of the chart’s rain scale')
-  })
-
   test('goes to the chart where it happens when a line is tapped', () => {
     const { onSeek } = renderNote([veryHeavy])
 

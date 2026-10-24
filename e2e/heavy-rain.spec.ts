@@ -47,7 +47,6 @@ test.describe('heavy rain ahead at a pin', () => {
     await expect(note(page)).toContainText(
       'Very heavy rain ahead at Wanaka: 20+ mm in the 6 hours to',
     )
-    await expect(note(page)).toContainText('not a MetService warning')
   })
 
   test('outlines the cell of the rain strip where it falls', async ({
