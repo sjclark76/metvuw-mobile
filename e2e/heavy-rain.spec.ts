@@ -169,17 +169,24 @@ test.describe('heavy rain ahead at a pin', () => {
     await expect(note(page)).toBeVisible()
   })
 
-  test('does not move the page when it arrives @mobile', async ({ page }) => {
+  test('does not move the page when it arrives', async ({ page }) => {
     await page.addInitScript(() => {
       const samples: number[] = []
       ;(window as unknown as { samples: number[] }).samples = samples
+      let fontFrames = 0
       const sample = () => {
         const list = document
           .querySelector('[data-chart-index="0"]')
           ?.closest('ul')
-        const top = list
-          ? Math.round(list.getBoundingClientRect().top + scrollY)
-          : 0
+        // Not while the web fonts are still arriving: the title may be a line taller
+        // in the fallback font, which is a different move.
+        // A frame after they are in, when the page has been laid out with them.
+        fontFrames = document.fonts.status === 'loaded' ? fontFrames + 1 : 0
+        const settled = fontFrames > 1
+        const top =
+          list && settled
+            ? Math.round(list.getBoundingClientRect().top + scrollY)
+            : 0
         if (top > 0) samples.push(top)
         requestAnimationFrame(sample)
       }
