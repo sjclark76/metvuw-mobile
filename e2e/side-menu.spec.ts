@@ -32,7 +32,7 @@ test.describe('on a large screen', () => {
     expect(box.y + box.height).toBeCloseTo(900, 0)
   })
 
-  test('names its sections, and puts Saved, Pins, Settings and Contact under Yours', async ({
+  test('names its sections, and puts Saved, Places, Settings and Contact under Yours', async ({
     page,
   }) => {
     await open(page, '/regions/nzsi')
@@ -43,7 +43,7 @@ test.describe('on a large screen', () => {
       'Observations',
       'Yours',
     ])
-    for (const name of ['Saved', 'Pins', 'Settings', 'Contact']) {
+    for (const name of ['Saved', 'Places', 'Settings', 'Contact']) {
       await expect(
         menu(page).getByText(name, { exact: false }).first(),
       ).toBeVisible()

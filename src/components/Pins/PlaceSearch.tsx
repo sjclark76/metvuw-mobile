@@ -71,7 +71,7 @@ export function PlaceSearch({
   const pick = (place: Place) => {
     onPick(place)
     setQuery('')
-    setAnnouncement(`Pinned ${place.name}`)
+    setAnnouncement(`Added ${place.name}`)
     input.current?.focus()
   }
 
@@ -161,7 +161,7 @@ export function PlaceSearch({
                   </span>
                   {isPinned && (
                     <span className="text-ink-soft shrink-0 font-mono text-xs">
-                      Pinned
+                      Added
                     </span>
                   )}
                 </button>

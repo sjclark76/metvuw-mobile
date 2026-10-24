@@ -74,7 +74,7 @@ describe('<PinsPage />', () => {
     test('says how to pin the first place', () => {
       renderPage()
 
-      expect(screen.getByText(/No pins yet/)).toBeInTheDocument()
+      expect(screen.getByText(/No places yet/)).toBeInTheDocument()
     })
 
     test('credits GeoNames, as its licence asks', () => {
@@ -267,11 +267,11 @@ describe('<PinsPage />', () => {
       fireEvent.click(await screen.findByRole('button', { name: /Wanaka/ }))
 
       expect(screen.getByLabelText('Add a place')).toHaveValue('')
-      expect(screen.getByRole('status')).toHaveTextContent('Pinned Wanaka')
+      expect(screen.getByRole('status')).toHaveTextContent('Added Wanaka')
       expect(screen.getByLabelText('Add a place')).toHaveFocus()
-      const row = screen.getByText('Your pins').nextElementSibling!
+      const row = screen.getByText('Your places').nextElementSibling!
       expect(row).toHaveTextContent('Wanaka')
-      expect(screen.queryByText(/No pins yet/)).toBeNull()
+      expect(screen.queryByText(/No places yet/)).toBeNull()
     })
 
     test('shows a place that is already pinned as pinned, and cannot be pinned again', async () => {
@@ -280,7 +280,7 @@ describe('<PinsPage />', () => {
       search('wana')
 
       const match = await screen.findByRole('button', {
-        name: /Wanaka.*Pinned/s,
+        name: /Wanaka.*Added/s,
       })
 
       expect(match).toBeDisabled()
@@ -294,7 +294,7 @@ describe('<PinsPage />', () => {
       renderPage([pinFromPlace(wanaka), pinFromPlace(hooker)])
 
       const rows = within(
-        screen.getByText('Your pins').nextElementSibling as HTMLElement,
+        screen.getByText('Your places').nextElementSibling as HTMLElement,
       ).getAllByRole('listitem')
       expect(rows).toHaveLength(2)
       expect(rows[0]).toHaveTextContent('Wanaka')
@@ -345,7 +345,7 @@ describe('<PinsPage />', () => {
 
       fireEvent.click(screen.getByRole('button', { name: 'Remove Wanaka' }))
 
-      expect(screen.getByText(/No pins yet/)).toBeInTheDocument()
+      expect(screen.getByText(/No places yet/)).toBeInTheDocument()
     })
   })
 

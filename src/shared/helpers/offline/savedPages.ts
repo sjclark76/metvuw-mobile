@@ -46,7 +46,7 @@ const PROXY_PREFIX = '/api/fallback-image?'
 /** The list of saved pages. It has to open offline too, so it is kept with them. */
 export const SAVED_LIST_PATH = '/saved'
 
-/** The Pins page: the places someone watches, and the way to add one. */
+/** The Places page: the places someone watches, and the way to add one. */
 export const PINS_PATH = '/pins'
 
 /** The Settings page: how the app is set up on this device. */

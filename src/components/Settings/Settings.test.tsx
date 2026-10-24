@@ -264,34 +264,34 @@ describe('<SettingsPage />', () => {
   })
 
   describe('the data on this device', () => {
-    test('says there are no pins and no saved pages, and offers nothing to clear', () => {
+    test('says there are no places and no saved pages, and offers nothing to clear', () => {
       renderPage()
 
-      expect(screen.getByText('No pins.')).toBeInTheDocument()
+      expect(screen.getByText('No places.')).toBeInTheDocument()
       expect(screen.getByText('No saved pages.')).toBeInTheDocument()
       expect(
-        screen.getByRole('button', { name: 'Clear all pins' }),
+        screen.getByRole('button', { name: 'Clear all places' }),
       ).toBeDisabled()
       expect(
         screen.getByRole('button', { name: 'Clear all saved pages' }),
       ).toBeDisabled()
     })
 
-    test('counts the pins and links to them', () => {
+    test('counts the places and links to them', () => {
       renderPage((store) => store.set(pinsAtom, [wanaka]))
 
-      expect(screen.getByText(/1 pin on this device/)).toBeInTheDocument()
+      expect(screen.getByText(/1 place on this device/)).toBeInTheDocument()
       expect(
         screen.getAllByRole('link', { name: 'See them' })[0],
       ).toHaveAttribute('href', '/pins')
     })
 
-    test('asks before clearing the pins, and clears them when told to', async () => {
+    test('asks before clearing the places, and clears them when told to', async () => {
       const { store } = renderPage((s) => s.set(pinsAtom, [wanaka]))
 
-      fireEvent.click(screen.getByRole('button', { name: 'Clear all pins' }))
+      fireEvent.click(screen.getByRole('button', { name: 'Clear all places' }))
       expect(
-        screen.getByRole('alertdialog', { name: /Clear 1 pin\?/ }),
+        screen.getByRole('alertdialog', { name: /Clear 1 place\?/ }),
       ).toBeInTheDocument()
       expect(store.get(pinsAtom)).toHaveLength(1)
 
@@ -303,10 +303,10 @@ describe('<SettingsPage />', () => {
       expect(screen.queryByRole('alertdialog')).toBeNull()
     })
 
-    test('keeps the pins when told not to clear them', () => {
+    test('keeps the places when told not to clear them', () => {
       const { store } = renderPage((s) => s.set(pinsAtom, [wanaka]))
 
-      fireEvent.click(screen.getByRole('button', { name: 'Clear all pins' }))
+      fireEvent.click(screen.getByRole('button', { name: 'Clear all places' }))
       fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
 
       expect(store.get(pinsAtom)).toHaveLength(1)

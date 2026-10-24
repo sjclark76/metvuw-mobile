@@ -186,7 +186,7 @@ const Navbar = () => {
               prefetch={false}
               onClick={() => setMenuOpen(false)}
             >
-              Pins{' '}
+              Places{' '}
               {/* Room for the count is held, as for Saved: what is pinned is only
                   known in the browser. */}
               <span className="inline-block min-w-[3ch]">
