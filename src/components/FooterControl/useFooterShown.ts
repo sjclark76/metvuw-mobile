@@ -14,6 +14,11 @@ const BAR_PX = 64
  * has no such mark. Before this runs the stylesheet hides it, which is also how
  * the page begins, so it does not appear and then go.
  *
+ * Using the footer keeps it up. Dragging the time axis back to the first chart
+ * scrolls the page to the top, which would take the footer from under the
+ * finger; so once it has been touched it stays until the visitor takes hold of
+ * the page itself (a touch, the wheel or a key anywhere but on it).
+ *
  * An attribute rather than state: the stylesheet decides on which screens it
  * applies, and nothing needs rendering again when it changes.
  */
@@ -31,15 +36,40 @@ export function useFooterShown({ viewerOpen }: { viewerOpen: boolean }) {
       return () => root.removeAttribute('data-footer-shown')
     }
 
+    let wanted = false
+    let holding = false
+    const apply = () => set(wanted || holding)
     const observer = new IntersectionObserver(
-      ([entry]) =>
+      ([entry]) => {
         // Above the bar, as opposed to still below it or across it.
-        set(!entry.isIntersecting && entry.boundingClientRect.top < BAR_PX),
+        wanted = !entry.isIntersecting && entry.boundingClientRect.top < BAR_PX
+        apply()
+      },
       { rootMargin: `-${BAR_PX}px 0px 0px 0px` },
     )
+    const inFooter = (event: Event) =>
+      event.target instanceof Element && !!event.target.closest('[data-footer]')
+    const hold = (event: Event) => {
+      if (!inFooter(event)) return
+      holding = true
+      apply()
+    }
+    const release = (event: Event) => {
+      if (!holding || inFooter(event)) return
+      holding = false
+      apply()
+    }
+    document.addEventListener('pointerdown', hold, true)
+    document.addEventListener('keydown', hold, true)
+    for (const name of ['touchstart', 'wheel', 'keydown'])
+      document.addEventListener(name, release, { capture: true, passive: true })
     observer.observe(end)
     return () => {
       observer.disconnect()
+      document.removeEventListener('pointerdown', hold, true)
+      document.removeEventListener('keydown', hold, true)
+      for (const name of ['touchstart', 'wheel', 'keydown'])
+        document.removeEventListener(name, release, true)
       root.removeAttribute('data-footer-shown')
     }
   }, [viewerOpen])
