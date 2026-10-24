@@ -7,7 +7,6 @@ import { useTrackOnce } from '@/components/Analytics/useTrackOnce'
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
 import { track } from '@/shared/helpers/analytics/track'
 import type { HeavyRain } from '@/shared/helpers/heavyRain'
-import { HEAVY_DAY_MM } from '@/shared/helpers/heavyRain'
 import { chartLabel, type Pin } from '@/shared/helpers/pins/pins'
 
 const SIX_HOURS = 6 * 60 * 60 * 1000
@@ -144,11 +143,6 @@ export function HeavyRainNote({
                   <li className="text-ink-soft text-sm">and {more} more</li>
                 )}
               </ul>
-              <p className="text-ink-soft mt-2 text-xs leading-snug">
-                From metvuw’s forecast charts, not a MetService warning. Heavy:{' '}
-                {HEAVY_DAY_MM} mm in a day (NIWA’s heavy rainfall day). Very
-                heavy: the top of the chart’s rain scale.
-              </p>
             </div>
             <button
               type="button"
