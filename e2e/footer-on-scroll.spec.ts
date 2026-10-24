@@ -37,6 +37,65 @@ test.describe('the footer on a phone', () => {
     await expect(footer(page)).toBeHidden()
   })
 
+  test('stays while the time axis is used to go back to the first chart @mobile', async ({
+    page,
+  }) => {
+    await page.goto('/regions/nz')
+    await page.waitForSelector('main img')
+    await scrollTo(page, 1500)
+    const slider = page.getByRole('slider', { name: 'Chart position' })
+    await expect(slider).toBeVisible()
+
+    await slider.focus()
+    await page.keyboard.press('Home')
+    await expect
+      .poll(
+        () =>
+          page.evaluate(
+            () =>
+              document
+                .querySelector('[data-chart-index="0"]')!
+                .getBoundingClientRect().top,
+          ),
+        { timeout: 5000 },
+      )
+      .toBeLessThan(200)
+
+    await expect(footer(page)).toBeVisible()
+  })
+
+  test('goes again when the page is scrolled by hand after that @mobile', async ({
+    page,
+  }) => {
+    await page.goto('/regions/nz')
+    await page.waitForSelector('main img')
+    await scrollTo(page, 1500)
+    const slider = page.getByRole('slider', { name: 'Chart position' })
+    await slider.focus()
+    await page.keyboard.press('Home')
+    await expect
+      .poll(
+        () =>
+          page.evaluate(
+            () =>
+              document
+                .querySelector('[data-chart-index="0"]')!
+                .getBoundingClientRect().top,
+          ),
+        { timeout: 5000 },
+      )
+      .toBeLessThan(200)
+
+    // A finger on the page, away from the footer.
+    await page.evaluate(() =>
+      document
+        .querySelector('main')!
+        .dispatchEvent(new Event('touchstart', { bubbles: true })),
+    )
+
+    await expect(footer(page)).toBeHidden()
+  })
+
   test('stays when the animated viewer is open', async ({ page }) => {
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
