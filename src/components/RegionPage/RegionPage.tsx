@@ -5,6 +5,7 @@ import React, { useMemo } from 'react'
 import { AnimationProvider } from '@/components/Animation/Animation'
 import { useInitShowAds } from '@/components/Atoms/AdState'
 import { FooterControl } from '@/components/FooterControl'
+import { PageTopEnd } from '@/components/FooterControl/PageTopEnd'
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
 import { ImageProgressProvider } from '@/components/ImageProgress/ImageProgress'
 import { RainfallLegendSection } from '@/components/RainfallLegend'
@@ -64,6 +65,7 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
                 detail={issued}
               />
               <HeavyRainSlot />
+              <PageTopEnd />
               <WeatherChartsWithAnimation
                 region={region}
                 charts={rainChartData}

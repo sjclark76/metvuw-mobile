@@ -1,5 +1,7 @@
 import { expect, Page, test } from '@playwright/test'
 
+import { revealFooter } from './footer-helpers'
+
 // Which features are used, counted as Google Analytics events. The tag is faked: it
 // keeps what it is sent in session storage (so it survives a reload), and the tests
 // read that. Where the events carry details, they are only what was done, never a
@@ -52,6 +54,7 @@ test.describe('feature events', () => {
   }) => {
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
+    await revealFooter(page)
 
     await page.getByLabel('Show animated weather chart').click()
     await page.getByLabel('Play animation').click()
@@ -64,6 +67,7 @@ test.describe('feature events', () => {
   }) => {
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
+    await revealFooter(page)
 
     await page.getByRole('slider', { name: 'Chart position' }).focus()
     for (let step = 0; step < 5; step++) await page.keyboard.press('ArrowRight')
@@ -139,6 +143,7 @@ test.describe('feature events', () => {
       ),
     )
     await page.goto('/regions/nz')
+    await revealFooter(page)
     await expect(page.locator('[data-rain-cell]').first()).toBeVisible()
 
     await page

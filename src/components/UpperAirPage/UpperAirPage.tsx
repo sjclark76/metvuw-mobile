@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 
 import { AnimationProvider } from '@/components/Animation/Animation'
 import { FooterControl } from '@/components/FooterControl'
+import { PageTopEnd } from '@/components/FooterControl/PageTopEnd'
 import { ImageProgressProvider } from '@/components/ImageProgress/ImageProgress'
 import SubHeader from '@/components/SubHeader'
 import { expectedLoadedImages } from '@/shared/helpers/imageLoading'
@@ -44,6 +45,7 @@ export function UpperAirPage({
               title={balloonLocations[balloonCode]}
             />
             <UpperAirExplainer />
+            <PageTopEnd />
             <RadarAndSatelliteImages images={chartData} chartType="Upper Air" />
           </div>
           <FooterControl />

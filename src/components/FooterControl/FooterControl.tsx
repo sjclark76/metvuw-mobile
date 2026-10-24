@@ -22,6 +22,7 @@ import {
 } from './icons'
 import { TimeAxis } from './TimeAxis'
 import { useChartScrollSync } from './useChartScrollSync'
+import { useFooterShown } from './useFooterShown'
 
 const control =
   'grid shrink-0 place-items-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cold'
@@ -99,6 +100,9 @@ function FooterControl({
     trackOnce('slider_used')
     seekTo(target)
   }
+
+  // On a small screen the footer comes in once the top of the page has gone.
+  useFooterShown({ viewerOpen: displayAnimated })
 
   // Things that stick above the footer (the rainfall legend) need to know how
   // tall it is, and it is taller in the viewer, where the axis has its own row.

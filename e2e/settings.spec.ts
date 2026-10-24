@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, Page, test } from '@playwright/test'
 
+import { revealFooter } from './footer-helpers'
 import { openGroup, openMenu } from './menu-helpers'
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']
@@ -47,6 +48,7 @@ test.describe('the footer', () => {
   }) => {
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
+    await revealFooter(page)
 
     await expect(viewer(page)).toBeVisible()
     await expect(slider(page)).toBeAttached()
@@ -60,6 +62,7 @@ test.describe('the footer', () => {
 
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
+    await revealFooter(page)
 
     await expect(viewer(page)).toBeHidden()
     await expect(page.locator('footer [data-footer-slider]')).toBeVisible()
@@ -87,6 +90,7 @@ test.describe('the footer', () => {
 
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
+    await revealFooter(page)
 
     await expect(slider(page)).toBeHidden()
     await expect(page.locator('[data-rain-strip]')).toBeHidden()
@@ -132,6 +136,7 @@ test.describe('the footer', () => {
 
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
+    await revealFooter(page)
 
     await expect(viewer(page)).toBeVisible()
   })
@@ -157,6 +162,7 @@ test.describe('changing a setting while the app is open', () => {
   }) => {
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
+    await revealFooter(page)
     await expect(viewer(page)).toBeVisible()
     await openMenu(page)
     await page.getByRole('link', { name: 'Settings' }).click()
@@ -174,6 +180,7 @@ test.describe('changing a setting while the app is open', () => {
     await toggleHere(page, 'Show the animated viewer')
     await goByMenu(page, 'North Island')
     await page.waitForSelector('main img')
+    await revealFooter(page)
 
     await expect(viewer(page)).toBeVisible()
   })
@@ -183,6 +190,7 @@ test.describe('changing a setting while the app is open', () => {
   }) => {
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
+    await revealFooter(page)
     await expect(slider(page)).toBeAttached()
     await openMenu(page)
     await page.getByRole('link', { name: 'Settings' }).click()

@@ -126,6 +126,33 @@ html[data-has-pins]:not([data-hide-heavy-rain]) [data-heavy-rain-slot] {
   min-height: 2.75rem;
 }
 
+/* On a small screen, or a short one (a phone on its side), the footer slides out of
+   sight while the top of the page is showing, so the first screen is mostly chart,
+   and in when it has scrolled away (see FooterControl/useFooterShown). The sliding is
+   a transform, which does not move the page. It is hidden once out of sight so it
+   cannot be tabbed to, and what sits above it drops to the bottom meanwhile. */
+[data-footer] {
+  transition: transform 0.2s ease-out;
+}
+@media (max-width: 767px), (max-height: 500px) {
+  html:not([data-footer-shown]) [data-footer] {
+    transform: translateY(100%);
+    visibility: hidden;
+    transition:
+      transform 0.2s ease-out,
+      visibility 0s linear 0.2s;
+  }
+  html:not([data-footer-shown]) {
+    --footer-height: 0px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-footer],
+  html:not([data-footer-shown]) [data-footer] {
+    transition: none;
+  }
+}
+
 html[data-hide-viewer] [data-footer-viewer],
 html[data-hide-slider] [data-footer-slider],
 html[data-hide-viewer][data-hide-slider] [data-footer],

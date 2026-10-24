@@ -3,6 +3,7 @@ import React, { useMemo } from 'react'
 
 import { AnimationProvider } from '@/components/Animation/Animation'
 import { FooterControl } from '@/components/FooterControl'
+import { PageTopEnd } from '@/components/FooterControl/PageTopEnd'
 import { ImageProgressProvider } from '@/components/ImageProgress/ImageProgress'
 import SubHeader from '@/components/SubHeader'
 import { expectedLoadedImages } from '@/shared/helpers/imageLoading'
@@ -36,6 +37,7 @@ export function SatellitePage({
           {/* This div contains the main page content and grows to fill space */}
           <div className="flex-grow">
             <SubHeader eyebrow="Satellite imagery" title="New Zealand" />
+            <PageTopEnd />
             <RadarAndSatelliteImages
               images={satelliteData}
               chartType="Satellite"

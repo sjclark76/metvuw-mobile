@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 
 import { AnimationProvider } from '@/components/Animation/Animation'
 import { FooterControl } from '@/components/FooterControl'
+import { PageTopEnd } from '@/components/FooterControl/PageTopEnd'
 import { ImageProgressProvider } from '@/components/ImageProgress/ImageProgress'
 import { RadarKeySection } from '@/components/RadarKey'
 import SubHeader from '@/components/SubHeader'
@@ -37,6 +38,7 @@ export function RadarPage({
           {/* This div contains the main page content and grows to fill space */}
           <div className="flex-grow">
             <SubHeader eyebrow="Radar" title={radarRegions[radarCode]} />
+            <PageTopEnd />
             <RadarAndSatelliteImages images={radarData} chartType="Radar" />
           </div>
           <RadarKeySection />
