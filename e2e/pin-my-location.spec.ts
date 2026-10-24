@@ -1,11 +1,11 @@
 import { expect, Page, test } from '@playwright/test'
 
-// "Pin my location", with the browser's location faked: a spot about 3 km north-east
+// "Add my location", with the browser's location faked: a spot about 3 km north-east
 // of Lake Hawea, in Otago.
 const HERE = { latitude: -44.59, longitude: 169.285 }
 
 const locate = (page: Page) =>
-  page.getByRole('button', { name: 'Pin my location' })
+  page.getByRole('button', { name: 'Add my location' })
 const locateStatus = (page: Page) => page.locator('[data-locate-status]')
 const pinNames = (page: Page) => page.getByRole('button', { name: /^Remove / })
 
@@ -20,7 +20,7 @@ test.describe('with location allowed', () => {
     await locate(page).click()
 
     await expect(locateStatus(page)).toContainText(
-      /^Pinned Near .+ · \d+ km [NESW]{1,2}$/,
+      /^Added Near .+ · \d+ km [NESW]{1,2}$/,
     )
     await expect(pinNames(page)).toHaveCount(1)
     await expect(
@@ -45,7 +45,7 @@ test.describe('with location allowed', () => {
 
     await locate(page).click()
 
-    await expect(locateStatus(page)).toHaveText('Already pinned')
+    await expect(locateStatus(page)).toHaveText('Already added')
     await expect(pinNames(page)).toHaveCount(1)
   })
 })
@@ -105,6 +105,6 @@ test.describe('with no connection', () => {
     await context.setOffline(true)
     await locate(page).click()
 
-    await expect(locateStatus(page)).toContainText(/^Pinned Near /)
+    await expect(locateStatus(page)).toContainText(/^Added Near /)
   })
 })

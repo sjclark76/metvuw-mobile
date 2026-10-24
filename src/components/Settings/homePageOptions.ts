@@ -66,7 +66,7 @@ export const homePageGroups: HomePageGroup[] = [
     options: [
       { path: '/satellite', label: 'Satellite' },
       { path: '/saved', label: 'Saved' },
-      { path: '/pins', label: 'Pins' },
+      { path: '/pins', label: 'Places' },
     ],
   },
 ]

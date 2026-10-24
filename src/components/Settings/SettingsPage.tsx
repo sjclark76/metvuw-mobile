@@ -58,7 +58,7 @@ export function SettingsPage() {
         />
         <ToggleRow
           label="Show the time slider"
-          description="Hiding the slider also hides the rain strip for your pins. You can still scroll down the page to move through the times."
+          description="Hiding the slider also hides the rain strip for your places. You can still scroll down the page to move through the times."
           checked={showSlider}
           onChange={(checked) => {
             track('setting_changed', { setting: 'slider', value: checked })
@@ -77,7 +77,7 @@ export function SettingsPage() {
         </div>
         <ToggleRow
           label="Show heavy rain warnings"
-          description="A note at the top of a chart page when the charts show heavy rain ahead at a place you have pinned."
+          description="A note at the top of a chart page when the charts show heavy rain ahead at a place you have added."
           checked={showHeavyRain}
           onChange={(checked) => {
             track('setting_changed', {

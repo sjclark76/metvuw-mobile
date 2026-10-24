@@ -60,7 +60,7 @@ describe('<HeavyRainNote />', () => {
 
     expect(note()).toBeNull()
     expect(screen.getByRole('status')).toHaveTextContent(
-      'Checking rain at your pins…',
+      'Checking rain at your places…',
     )
   })
 
@@ -69,7 +69,7 @@ describe('<HeavyRainNote />', () => {
 
     expect(note()).toBeNull()
     expect(screen.getByRole('status')).toHaveTextContent(
-      'No heavy rain ahead at your pins',
+      'No heavy rain ahead at your places',
     )
   })
 

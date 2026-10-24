@@ -16,7 +16,7 @@ const messages = {
   denied:
     'Location is turned off for this site. Allow it in your browser settings, or search for the place.',
   unavailable: 'Couldn’t find where you are. Try again outside, or search.',
-  already: 'Already pinned',
+  already: 'Already added',
 } as const
 
 type Status = keyof typeof messages | { pinned: string }
@@ -87,7 +87,7 @@ export function PinMyLocation({
   }
 
   const message =
-    typeof status === 'string' ? messages[status] : `Pinned ${status.pinned}`
+    typeof status === 'string' ? messages[status] : `Added ${status.pinned}`
 
   return (
     <div className="mt-4">
@@ -98,7 +98,7 @@ export function PinMyLocation({
         className={`${actionClasses.secondary} gap-2`}
       >
         <LocationIcon />
-        Pin my location
+        Add my location
       </button>
       {/* Read out as it changes; not a "status" role, which is the search's. */}
       <p

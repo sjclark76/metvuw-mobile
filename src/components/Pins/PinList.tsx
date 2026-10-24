@@ -83,8 +83,8 @@ export function PinList({
   if (pins.length === 0) {
     return (
       <p className="text-ink">
-        No pins yet. Search for a place above and tap it to pin it: it is marked
-        on the charts that show it.
+        No places yet. Search for a place above and tap it to add it: it is
+        marked on the charts that show it.
       </p>
     )
   }

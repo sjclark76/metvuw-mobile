@@ -185,7 +185,7 @@ describe('downloadPage', () => {
     expect(caches.urls(SAVED_PAGES_CACHE)).toContain('/regions/nz')
   })
 
-  test('also keeps the list of saved pages, the Pins page and Settings, so all open offline', async () => {
+  test('also keeps the list of saved pages, the Places page and Settings, so all open offline', async () => {
     const { deps, caches } = setup()
 
     await downloadPage('/regions/nz', deps)
@@ -209,7 +209,7 @@ describe('downloadPage', () => {
     ])
   })
 
-  test('saving still works when the Pins page cannot be kept', async () => {
+  test('saving still works when the Places page cannot be kept', async () => {
     const { deps, caches } = setup({ failing: new Set(['/pins']) })
 
     await expect(downloadPage('/regions/nz', deps)).resolves.toBeDefined()
@@ -397,7 +397,7 @@ describe('collectGarbage', () => {
     await collectGarbage([], deps)
 
     expect(caches.urls(SAVED_CHARTS_CACHE)).toEqual([])
-    // Only the list of saved pages, the Pins page and Settings stay: they are not
+    // Only the list of saved pages, the Places page and Settings stay: they are not
     // any one page's.
     expect(caches.urls(SAVED_PAGES_CACHE)).toEqual([
       '/pins',

@@ -280,18 +280,18 @@ test.describe('the data on this device', () => {
       }
     })
     await page.goto('/settings')
-    await expect(page.getByText('1 pin on this device.')).toBeVisible()
+    await expect(page.getByText('1 place on this device.')).toBeVisible()
 
-    await page.getByRole('button', { name: 'Clear all pins' }).click()
-    await expect(page.getByRole('alertdialog')).toContainText('Clear 1 pin?')
+    await page.getByRole('button', { name: 'Clear all places' }).click()
+    await expect(page.getByRole('alertdialog')).toContainText('Clear 1 place?')
     await page.getByRole('button', { name: 'Yes, clear' }).click()
 
-    await expect(page.getByText('No pins.')).toBeVisible()
+    await expect(page.getByText('No places.')).toBeVisible()
     await page.goto('/pins')
-    await expect(page.getByText(/No pins yet/)).toBeVisible()
+    await expect(page.getByText(/No places yet/)).toBeVisible()
   })
 
-  test('keeps the pins when asked not to clear them', async ({ page }) => {
+  test('keeps the places when asked not to clear them', async ({ page }) => {
     await page.addInitScript(() =>
       localStorage.setItem(
         'pins',
@@ -308,10 +308,10 @@ test.describe('the data on this device', () => {
     )
     await page.goto('/settings')
 
-    await page.getByRole('button', { name: 'Clear all pins' }).click()
+    await page.getByRole('button', { name: 'Clear all places' }).click()
     await page.getByRole('button', { name: 'Cancel' }).click()
 
-    await expect(page.getByText('1 pin on this device.')).toBeVisible()
+    await expect(page.getByText('1 place on this device.')).toBeVisible()
   })
 })
 

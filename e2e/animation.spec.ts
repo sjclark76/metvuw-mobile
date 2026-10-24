@@ -5,15 +5,21 @@ import { revealFooter } from './footer-helpers'
 // Four satellite charts, one second apart when playing.
 const slider = (page: Page) => page.getByLabel('Chart position')
 
+// On a phone the footer, and so the button, is only there once the top of the page
+// has scrolled off, and the viewer opens on the chart in view. So the viewer is
+// opened, and then taken to the first chart, which is where these tests start.
 async function openViewer(page: Page) {
   await page.goto('/satellite')
   await revealFooter(page)
   await page.getByLabel('Show animated weather chart').click()
   await expect(slider(page)).toBeVisible()
+  await slider(page).focus()
+  await page.keyboard.press('Home')
+  await expect(slider(page)).toHaveAttribute('aria-valuetext', 'Chart 1 of 4')
 }
 
 test.describe('animated viewer', () => {
-  test('opens on the first chart with controls, and closes back to the list @mobile', async ({
+  test('opens with controls, and closes back to the list @mobile', async ({
     page,
   }) => {
     await openViewer(page)

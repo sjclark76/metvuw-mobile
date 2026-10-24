@@ -151,18 +151,18 @@ describe('<RainStrip />', () => {
     test('has a selector of the pins, and all pins', () => {
       renderStrip({ pins })
 
-      const select = screen.getByLabelText('Pin for the rain strip')
+      const select = screen.getByLabelText('Place for the rain strip')
       expect(
         within(select)
           .getAllByRole('option')
           .map((o) => o.textContent),
-      ).toEqual(['Wanaka', 'Auckland', 'All pins'])
+      ).toEqual(['Wanaka', 'Auckland', 'All places'])
     })
 
     test('has no selector with one pin', () => {
       renderStrip({ pins: [wanaka] })
 
-      expect(screen.queryByLabelText('Pin for the rain strip')).toBeNull()
+      expect(screen.queryByLabelText('Place for the rain strip')).toBeNull()
     })
 
     test('shows the first pin until another is chosen', () => {
@@ -177,7 +177,7 @@ describe('<RainStrip />', () => {
     test('shows the pin that was chosen, and remembers it', () => {
       const { container, store } = renderStrip({ pins })
 
-      fireEvent.change(screen.getByLabelText('Pin for the rain strip'), {
+      fireEvent.change(screen.getByLabelText('Place for the rain strip'), {
         target: { value: auckland.id },
       })
 
@@ -191,7 +191,9 @@ describe('<RainStrip />', () => {
       const { container } = renderStrip({ pins, choice: 'all' })
 
       expect(container.querySelectorAll('[data-rain-row]')).toHaveLength(2)
-      expect(screen.getByLabelText('Pin for the rain strip')).toHaveValue('all')
+      expect(screen.getByLabelText('Place for the rain strip')).toHaveValue(
+        'all',
+      )
       expect(
         screen.getByText('Auckland', { selector: 'span' }),
       ).toBeInTheDocument()
