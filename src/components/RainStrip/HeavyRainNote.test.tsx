@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 
 import { type Pin, pinFromPlace } from '@/shared/helpers/pins/pins'
 
@@ -32,12 +32,7 @@ const heavy: PinHeavyRain = {
 
 const renderNote = (found: PinHeavyRain[], onSeek = vi.fn()) => {
   const view = render(
-    <HeavyRainNote
-      found={found}
-      times={times}
-      forecastKey="nz run-1"
-      onSeek={onSeek}
-    />,
+    <HeavyRainNote found={found} times={times} onSeek={onSeek} />,
   )
   return { onSeek, ...view }
 }
@@ -45,7 +40,6 @@ const note = () => screen.queryByRole('region', { name: 'Heavy rain ahead' })
 
 describe('<HeavyRainNote />', () => {
   beforeEach(() => {
-    localStorage.clear()
     window.gtag = vi.fn()
   })
   afterEach(() => {
@@ -97,43 +91,10 @@ describe('<HeavyRainNote />', () => {
     expect(note()).toHaveTextContent('and 2 more')
   })
 
-  test('closes, and stays closed for this forecast', () => {
-    const { unmount } = renderNote([veryHeavy])
-
-    act(() =>
-      fireEvent.click(
-        screen.getByRole('button', { name: 'Close the heavy rain note' }),
-      ),
-    )
-    unmount()
-    renderNote([veryHeavy])
-
-    expect(note()).toBeNull()
-  })
-
-  test('comes back for the next forecast', () => {
-    localStorage.setItem('heavyRainDismissed', JSON.stringify(['nz run-0']))
-
-    renderNote([veryHeavy])
-
-    expect(note()).not.toBeNull()
-  })
-
-  test('is not upset by what was saved being unreadable', () => {
-    localStorage.setItem('heavyRainDismissed', '{not json')
-
-    renderNote([veryHeavy])
-
-    expect(note()).not.toBeNull()
-  })
-
-  test('counts being shown, once, and being tapped and closed', () => {
+  test('counts being shown, once, and being tapped', () => {
     renderNote([veryHeavy, heavy])
     fireEvent.click(
       screen.getByRole('button', { name: /Very heavy rain ahead/ }),
-    )
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Close the heavy rain note' }),
     )
 
     const sent = vi
@@ -142,7 +103,6 @@ describe('<HeavyRainNote />', () => {
     expect(sent).toEqual([
       ['heavy_rain_shown', { level: 'veryHeavy' }],
       ['heavy_rain_opened', { level: 'veryHeavy' }],
-      ['heavy_rain_closed', undefined],
     ])
   })
 

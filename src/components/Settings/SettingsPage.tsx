@@ -1,7 +1,11 @@
 'use client'
 import { useAtom } from 'jotai'
 
-import { showSliderAtom, showViewerAtom } from '@/components/Atoms/GlobalState'
+import {
+  showHeavyRainAtom,
+  showSliderAtom,
+  showViewerAtom,
+} from '@/components/Atoms/GlobalState'
 import { useIsMounted } from '@/components/Hooks/useIsMounted'
 import { track } from '@/shared/helpers/analytics/track'
 
@@ -26,6 +30,7 @@ export function SettingsPage() {
   const isMounted = useIsMounted()
   const [showViewer, setShowViewer] = useAtom(showViewerAtom)
   const [showSlider, setShowSlider] = useAtom(showSliderAtom)
+  const [showHeavyRain, setShowHeavyRain] = useAtom(showHeavyRainAtom)
 
   if (!isMounted) return null
 
@@ -65,6 +70,23 @@ export function SettingsPage() {
             With both turned off the footer is not shown at all.
           </p>
         )}
+      </section>
+      <section aria-labelledby="settings-warnings" className="pt-2">
+        <div id="settings-warnings">
+          <Heading>Warnings</Heading>
+        </div>
+        <ToggleRow
+          label="Show heavy rain warnings"
+          description="A note at the top of a chart page when the charts show heavy rain ahead at a place you have pinned."
+          checked={showHeavyRain}
+          onChange={(checked) => {
+            track('setting_changed', {
+              setting: 'heavy_rain',
+              value: checked,
+            })
+            setShowHeavyRain(checked)
+          }}
+        />
       </section>
       <section aria-labelledby="settings-data" className="pt-2">
         <div id="settings-data">
