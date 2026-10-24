@@ -100,15 +100,15 @@ test.describe('the rain strip', () => {
   }) => {
     await pin(page, wanaka, auckland)
     await page.goto('/regions/nz')
-    const select = page.getByLabel('Pin for the rain strip')
+    const select = page.getByLabel('Place for the rain strip')
     await expect(select.locator('option')).toHaveText([
       'Wanaka',
       'Auckland',
-      'All pins',
+      'All places',
     ])
     await expect(page.locator('[data-rain-row]')).toHaveCount(1)
 
-    await select.selectOption({ label: 'All pins' })
+    await select.selectOption({ label: 'All places' })
 
     await expect(page.locator('[data-rain-row]')).toHaveCount(2)
     const auckland_row = page.locator('[data-rain-row]').nth(1)
@@ -127,7 +127,7 @@ test.describe('the rain strip', () => {
     await page.reload()
 
     await expect(page.locator('[data-rain-row]')).toHaveCount(2)
-    await expect(page.getByLabel('Pin for the rain strip')).toHaveValue('all')
+    await expect(page.getByLabel('Place for the rain strip')).toHaveValue('all')
   })
 
   // The footer is fixed, not sticky, so it does not flash when the page jumps to a
@@ -151,11 +151,13 @@ test.describe('the rain strip', () => {
 
     const seen = new Set<string>()
     await slider(page).focus()
-    for (let step = 0; step < 9; step++) {
+    // Where the page was scrolled to to bring the footer in decides where this starts.
+    const start = Number(await slider(page).inputValue())
+    for (let step = 1; step <= 9 - start; step++) {
       await page.keyboard.press('ArrowRight')
       await expect(slider(page)).toHaveAttribute(
         'aria-valuetext',
-        `Chart ${step + 2} of 10`,
+        `Chart ${start + step + 1} of 10`,
       )
       const box = (await footer.boundingBox())!
       seen.add(`${box.y + box.height}:${box.height}`)
@@ -177,6 +179,13 @@ test.describe('the rain strip', () => {
 
     const lastChart = page.locator('[data-chart-index="9"]')
     await expect(lastChart).toBeVisible()
+    // On a phone the footer slides up from below the screen: wait for it to arrive.
+    await expect
+      .poll(async () => {
+        const box = (await page.locator('footer').boundingBox())!
+        return Math.round(box.y + box.height)
+      })
+      .toBe(page.viewportSize()!.height)
     const chart = (await lastChart.boundingBox())!
     const footer = (await page.locator('footer').boundingBox())!
     expect(chart.y + chart.height).toBeLessThanOrEqual(footer.y)

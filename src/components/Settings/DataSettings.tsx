@@ -86,7 +86,7 @@ function ClearRow({
 }
 
 /**
- * What the app keeps on this device, with a way to clear each: the pins, and the
+ * What the app keeps on this device, with a way to clear each: the places, and the
  * pages saved for offline use. Clearing asks first, because it cannot be undone.
  */
 export function DataSettings() {
@@ -96,15 +96,15 @@ export function DataSettings() {
   return (
     <>
       <ClearRow
-        title="Pins"
+        title="Places"
         href="/pins"
         count={pins.length}
         summary={
           pins.length === 0
-            ? 'No pins.'
-            : `${plural(pins.length, 'pin', 'pins')} on this device.`
+            ? 'No places.'
+            : `${plural(pins.length, 'place', 'places')} on this device.`
         }
-        confirmText={`Clear ${plural(pins.length, 'pin', 'pins')}? This cannot be undone.`}
+        confirmText={`Clear ${plural(pins.length, 'place', 'places')}? This cannot be undone.`}
         onClear={() => pins.forEach((pin) => remove(pin.id))}
       />
       <ClearRow

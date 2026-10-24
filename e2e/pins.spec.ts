@@ -14,7 +14,7 @@ async function pinWanaka(page: Page) {
   await page.goto('/pins')
   await addPlace(page).fill('wanaka')
   await page.getByRole('button', { name: /^Wanaka\s+Town · Otago/ }).click()
-  await expect(page.getByRole('status')).toContainText('Pinned Wanaka')
+  await expect(page.getByRole('status')).toContainText('Added Wanaka')
 }
 
 test.describe('pinning a place', () => {
@@ -29,7 +29,7 @@ test.describe('pinning a place', () => {
     await addPlace(page).fill('wanaka')
     await page.getByRole('button', { name: /^Wanaka\s+Town · Otago/ }).click()
 
-    await expect(page.getByRole('status')).toContainText('Pinned Wanaka')
+    await expect(page.getByRole('status')).toContainText('Added Wanaka')
     await expect(
       page.getByRole('button', { name: 'Remove Wanaka' }),
     ).toBeVisible()
@@ -142,7 +142,7 @@ test.describe('pinning a place', () => {
   test('removes the marker when the pin is removed', async ({ page }) => {
     await pinWanaka(page)
     await page.getByRole('button', { name: 'Remove Wanaka' }).click()
-    await expect(page.getByText(/No pins yet/)).toBeVisible()
+    await expect(page.getByText(/No places yet/)).toBeVisible()
 
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
@@ -159,9 +159,11 @@ test.describe('pinning a place', () => {
     await page.waitForSelector('main img')
 
     await openMenu(page)
-    await page.getByRole('link', { name: 'Pins (1)' }).click()
+    await page.getByRole('link', { name: 'Places (1)' }).click()
 
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pins')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'My places',
+    )
   })
 
   test('does not move the charts when the markers appear @mobile', async ({
@@ -217,9 +219,9 @@ test.describe('with no connection', () => {
     await page.waitForSelector('main img')
   }
 
-  // The Pins page is never visited online here: it opens because saving a page kept it
+  // The Places page is never visited online here: it opens because saving a page kept it
   // (as visiting it would also have let the browser keep it, and prove nothing).
-  test('the Pins page opens, with its pins, once a page has been saved, though it was never visited', async ({
+  test('the Places page opens, with its places, once a page has been saved, though it was never visited', async ({
     page,
     context,
   }) => {
@@ -244,13 +246,15 @@ test.describe('with no connection', () => {
     await context.setOffline(true)
     await page.goto('/pins')
 
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pins')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'My places',
+    )
     await expect(
       page.getByRole('button', { name: 'Remove Wanaka' }),
     ).toBeVisible()
   })
 
-  test('a place can be searched for offline after the Pins page has been opened online', async ({
+  test('a place can be searched for offline after the Places page has been opened online', async ({
     page,
     context,
   }) => {

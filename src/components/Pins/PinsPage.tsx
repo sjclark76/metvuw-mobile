@@ -35,7 +35,7 @@ export function PinsPage() {
       <PlaceSearch pinned={pinned} onPick={pinFrom('search')} />
       <PinMyLocation pinned={pinned} onPick={pinFrom('location')} />
       <h2 className="font-display text-ink mt-10 mb-3 text-2xl font-bold tracking-[0.04em] uppercase">
-        Your pins
+        Your places
       </h2>
       {isMounted && (
         <PinList

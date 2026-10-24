@@ -106,8 +106,8 @@ test.describe('feature events', () => {
     }) => {
       await page.goto('/pins')
 
-      await page.getByRole('button', { name: 'Pin my location' }).click()
-      await expect(page.locator('[data-locate-status]')).toContainText('Pinned')
+      await page.getByRole('button', { name: 'Add my location' }).click()
+      await expect(page.locator('[data-locate-status]')).toContainText('Added')
 
       const events = await sent(page)
       expect(events).toEqual([
@@ -147,8 +147,8 @@ test.describe('feature events', () => {
     await expect(page.locator('[data-rain-cell]').first()).toBeVisible()
 
     await page
-      .getByLabel('Pin for the rain strip')
-      .selectOption({ label: 'All pins' })
+      .getByLabel('Place for the rain strip')
+      .selectOption({ label: 'All places' })
     await page.locator('[data-rain-cell="2"]').first().click()
 
     const events = await sent(page)

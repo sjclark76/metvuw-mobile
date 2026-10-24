@@ -129,7 +129,7 @@ test.describe('heavy rain ahead at a pin', () => {
     const slot = page.locator('[data-heavy-rain-slot]')
     await expect(slot).toBeVisible()
     expect((await slot.boundingBox())!.height).toBeGreaterThanOrEqual(44)
-    await expect(slot).toContainText('Checking rain at your pins')
+    await expect(slot).toContainText('Checking rain at your places')
   })
 
   test('says no heavy rain for a pin where it stays dry', async ({ page }) => {
@@ -142,7 +142,7 @@ test.describe('heavy rain ahead at a pin', () => {
 
     await expect(note(page)).toBeHidden()
     await expect(page.locator('[data-heavy-rain-slot]')).toContainText(
-      'No heavy rain ahead at your pins',
+      'No heavy rain ahead at your places',
     )
   })
 

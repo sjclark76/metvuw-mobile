@@ -11,6 +11,24 @@ export async function revealFooter(page: Page) {
     .locator('[data-page-top-end]')
     .waitFor({ state: 'attached' })
     .catch(() => undefined)
+  // And the charts drawn, or the page moves under the scroll.
+  await page
+    .locator('[data-chart-index="0"]')
+    .first()
+    .waitFor({ state: 'attached' })
+    .catch(() => undefined)
+  await page
+    .waitForFunction(
+      () => {
+        const image = document.querySelector<HTMLImageElement>(
+          '[data-chart-index="0"] img',
+        )
+        return !image || image.complete
+      },
+      undefined,
+      { timeout: 3000 },
+    )
+    .catch(() => undefined)
   await page.evaluate(() => {
     const end = document.querySelector('[data-page-top-end]')
     if (end) window.scrollTo(0, end.getBoundingClientRect().top + scrollY - 63)

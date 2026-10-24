@@ -27,7 +27,7 @@ const getCurrentPosition = vi.fn((onSuccess: Success, onError: Failure) => {
   fail = onError
 })
 
-const button = () => screen.getByRole('button', { name: 'Pin my location' })
+const button = () => screen.getByRole('button', { name: 'Add my location' })
 const status = (container: HTMLElement) =>
   container.querySelector('[data-locate-status]')
 
@@ -58,7 +58,7 @@ describe('<PinMyLocation />', () => {
 
     renderButton()
 
-    expect(screen.queryByRole('button', { name: 'Pin my location' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Add my location' })).toBeNull()
   })
 
   test('asks where the visitor is only when pressed', () => {
@@ -88,7 +88,7 @@ describe('<PinMyLocation />', () => {
       }),
     )
     expect(status(container)).toHaveTextContent(
-      'Pinned Near Lake Hawea · 3 km NE',
+      'Added Near Lake Hawea · 3 km NE',
     )
     expect(button()).toBeEnabled()
   })
@@ -123,7 +123,7 @@ describe('<PinMyLocation />', () => {
     )
 
     expect(onPick).not.toHaveBeenCalled()
-    expect(status(container)).toHaveTextContent('Already pinned')
+    expect(status(container)).toHaveTextContent('Already added')
   })
 
   test('says how to turn location on when it is refused', () => {

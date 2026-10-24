@@ -94,7 +94,7 @@ export function RainStrip({
   const selector = (
     <>
       <label htmlFor={selectId} className="sr-only">
-        Pin for the rain strip
+        Place for the rain strip
       </label>
       <span className="relative inline-flex max-w-[55%] min-w-0">
         <select
@@ -113,7 +113,7 @@ export function RainStrip({
               {chartLabel(pin)}
             </option>
           ))}
-          <option value={ALL_PINS}>All pins</option>
+          <option value={ALL_PINS}>All places</option>
         </select>
         <svg
           aria-hidden="true"

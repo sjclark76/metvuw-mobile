@@ -204,10 +204,10 @@ describe('<Navbar /> pins', () => {
     )
   }
 
-  test('has a Pins link to the Pins page', () => {
+  test('has a Pins link to the Places page', () => {
     renderWithPins()
 
-    expect(screen.getByRole('link', { name: 'Pins' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Places' })).toHaveAttribute(
       'href',
       '/pins',
     )
@@ -216,20 +216,20 @@ describe('<Navbar /> pins', () => {
   test('says how many places are pinned', () => {
     renderWithPins('Wanaka', 'Hooker Hut', 'Queenstown')
 
-    expect(screen.getByRole('link', { name: 'Pins (3)' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Places (3)' })).toBeInTheDocument()
   })
 
   test('shows no count when nothing is pinned', () => {
     renderWithPins()
 
-    expect(screen.queryByRole('link', { name: /Pins \(/ })).toBeNull()
+    expect(screen.queryByRole('link', { name: /Places \(/ })).toBeNull()
   })
 
   test('closes the menu after choosing it', () => {
     renderWithPins()
     fireEvent.click(screen.getByRole('button', { name: 'Menu' }))
 
-    fireEvent.click(screen.getByRole('link', { name: 'Pins' }))
+    fireEvent.click(screen.getByRole('link', { name: 'Places' }))
 
     expect(screen.getByRole('button', { name: 'Menu' })).toHaveAttribute(
       'aria-expanded',
@@ -281,7 +281,7 @@ describe('<Navbar /> as a side menu on a wide screen', () => {
       </Provider>,
     )
 
-    expect(screen.getByRole('link', { name: /Pins/ })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Places/ })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Saved/ })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Settings' })).toBeInTheDocument()
   })
@@ -289,7 +289,7 @@ describe('<Navbar /> as a side menu on a wide screen', () => {
   test.each([
     ['/satellite', 'Satellite'],
     ['/saved', 'Saved'],
-    ['/pins', 'Pins'],
+    ['/pins', 'Places'],
     ['/settings', 'Settings'],
   ])('marks %s as the current page', (path, name) => {
     vi.mocked(usePathname).mockReturnValue(path)

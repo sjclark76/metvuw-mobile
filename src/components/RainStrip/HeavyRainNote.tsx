@@ -107,8 +107,8 @@ export function HeavyRainNote({
       ) : (
         <p role="status" className={`${band} border-rule text-ink-soft`}>
           {checked
-            ? 'No heavy rain ahead at your pins'
-            : 'Checking rain at your pins…'}
+            ? 'No heavy rain ahead at your places'
+            : 'Checking rain at your places…'}
         </p>
       )}
     </>
