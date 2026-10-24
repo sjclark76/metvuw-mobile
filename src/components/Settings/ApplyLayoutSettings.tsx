@@ -2,7 +2,12 @@
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 
-import { showSliderAtom, showViewerAtom } from '@/components/Atoms/GlobalState'
+import {
+  showHeavyRainAtom,
+  showSliderAtom,
+  showViewerAtom,
+} from '@/components/Atoms/GlobalState'
+import { usePins } from '@/components/Pins/usePins'
 
 /**
  * Keeps the page's `data-hide-viewer` and `data-hide-slider` in step with the
@@ -14,6 +19,8 @@ import { showSliderAtom, showViewerAtom } from '@/components/Atoms/GlobalState'
 export function ApplyLayoutSettings() {
   const showViewer = useAtomValue(showViewerAtom)
   const showSlider = useAtomValue(showSliderAtom)
+  const showHeavyRain = useAtomValue(showHeavyRainAtom)
+  const hasPins = usePins().pins.length > 0
 
   useEffect(() => {
     const root = document.documentElement
@@ -21,7 +28,9 @@ export function ApplyLayoutSettings() {
       hidden ? root.setAttribute(name, '') : root.removeAttribute(name)
     set('data-hide-viewer', !showViewer)
     set('data-hide-slider', !showSlider)
-  }, [showViewer, showSlider])
+    set('data-hide-heavy-rain', !showHeavyRain)
+    set('data-has-pins', hasPins)
+  }, [showViewer, showSlider, showHeavyRain, hasPins])
 
   return null
 }

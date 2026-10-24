@@ -52,4 +52,15 @@ describe('applyStoredLayout', () => {
     ).not.toThrow()
     expect(attributes.size).toBe(0)
   })
+
+  test('hides the heavy rain note when it was turned off', () => {
+    expect(run({ showHeavyRain: 'false' })).toEqual(
+      new Set(['data-hide-heavy-rain']),
+    )
+  })
+
+  test('holds room for the heavy rain note when there are pins', () => {
+    expect(run({ pins: '[{"id":"a"}]' })).toEqual(new Set(['data-has-pins']))
+    expect(run({ pins: '[]' })).toEqual(new Set())
+  })
 })

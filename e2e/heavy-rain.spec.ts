@@ -106,9 +106,33 @@ test.describe('heavy rain ahead at a pin', () => {
 
     await expect(note(page)).toBeHidden()
     await expect(page.locator('[data-heavy-rain]')).toHaveCount(0)
+    await expect(page.locator('[data-heavy-rain-slot]')).toBeHidden()
   })
 
-  test('says nothing for a pin where it stays dry', async ({ page }) => {
+  test('has no place on the page for a visitor with no pins', async ({
+    page,
+  }) => {
+    await page.goto('/regions/nz')
+    await page.waitForSelector('main img')
+
+    await expect(page.locator('[data-heavy-rain-slot]')).toBeHidden()
+  })
+
+  test('holds its place from the start, and says it is checking', async ({
+    page,
+  }) => {
+    await pin(page, wanaka)
+    // Charts that never arrive keep the check going.
+    await page.route(/\.(webp|png|gif)(\?.*)?$/, (route) => route.abort())
+    await page.goto('/regions/nz', { waitUntil: 'domcontentloaded' })
+
+    const slot = page.locator('[data-heavy-rain-slot]')
+    await expect(slot).toBeVisible()
+    expect((await slot.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+    await expect(slot).toContainText('Checking rain at your pins')
+  })
+
+  test('says no heavy rain for a pin where it stays dry', async ({ page }) => {
     await pin(page, auckland)
     await page.goto('/regions/nz')
     await expect(page.locator('[data-rain-cell="9"]')).not.toHaveAttribute(
@@ -117,6 +141,9 @@ test.describe('heavy rain ahead at a pin', () => {
     )
 
     await expect(note(page)).toBeHidden()
+    await expect(page.locator('[data-heavy-rain-slot]')).toContainText(
+      'No heavy rain ahead at your pins',
+    )
   })
 
   test('says nothing once the heavy rain is past', async ({ page }) => {
