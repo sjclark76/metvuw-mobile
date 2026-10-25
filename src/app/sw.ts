@@ -4,6 +4,7 @@ import {
   CacheableResponsePlugin,
   CacheFirst,
   ExpirationPlugin,
+  NetworkOnly,
   Serwist,
 } from 'serwist'
 
@@ -54,6 +55,15 @@ const serwist = new Serwist({
           viewedChart.handle(options),
       },
     },
+    // A page is never kept as it was seen. A kept page points at the files of the
+    // build it came from, and once the app has updated those are gone; on an
+    // iPhone the browser does not hold on to them either, so the page opened with
+    // no connection as bare text. With no connection a page is one the visitor
+    // saved (below) or the offline page, both of which have what they need.
+    {
+      matcher: ({ request }) => request.destination === 'document',
+      handler: new NetworkOnly(),
+    },
     ...defaultCache,
   ],
 })
@@ -75,6 +85,14 @@ serwist.setCatchHandler(async ({ request }) => {
 
   // For any other request, return a standard network error.
   return Response.error()
+})
+
+// Pages kept by earlier versions of the worker (as pages, or among the others)
+// are not used any more.
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    Promise.all([caches.delete('pages'), caches.delete('others')]),
+  )
 })
 
 serwist.addEventListeners()
