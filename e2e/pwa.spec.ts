@@ -67,7 +67,9 @@ test.describe('service worker', () => {
     await page.waitForSelector('main img')
   })
 
-  test('charts already viewed still show offline', async ({
+  // Charts are kept as they are seen, but the page around them is not: it would
+  // point at the files of the build it came from (see offline-unsaved.spec.ts).
+  test('charts already viewed are kept, though the page is the offline page until it is saved', async ({
     page,
     context,
   }) => {
@@ -88,16 +90,7 @@ test.describe('service worker', () => {
     await context.setOffline(true)
     await page.reload()
 
-    await expect(page.getByText("You're Offline")).toBeHidden()
-    await expect
-      .poll(() =>
-        page.evaluate(
-          () =>
-            (document.querySelector('main img') as HTMLImageElement | null)
-              ?.naturalWidth,
-        ),
-      )
-      .toBeGreaterThan(0)
+    await expect(page.getByText("You're Offline")).toBeVisible()
   })
 
   test('coming back online does not reload the page', async ({
