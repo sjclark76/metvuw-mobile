@@ -10,7 +10,6 @@ import { regions } from '@/shared/types/region'
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     '/',
-    '/offline',
     '/satellite',
     ...regions.map((region) => `/regions/${region.code}`),
     ...Object.keys(radarRegions).map((code) => `/radar/${code}`),

@@ -4,7 +4,7 @@ test.describe('upper air page', () => {
   test('should render page correctly @mobile', async ({ page }) => {
     await page.goto('/upperair/93112')
 
-    await expect(page).toHaveTitle('metvuw mobile | Upper Air Data')
+    await expect(page).toHaveTitle('Whenuapai upper air charts | metvuw mobile')
 
     await expect(
       page.getByRole('heading', { name: 'Whenuapai', level: 1 }),

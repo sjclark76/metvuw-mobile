@@ -5,7 +5,7 @@ import NoForecast from '@/components/NoForecast'
 import { RadarPage } from '@/components/RadarPage'
 import { getRadarChartDataForCode } from '@/shared/helpers/dataSource/getWeatherChartData'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { isRadarCode } from '@/shared/types/radarRegions'
+import { isRadarCode, radarRegions } from '@/shared/types/radarRegions'
 
 type Props = {
   params: Promise<{ code: string }>
@@ -23,10 +23,11 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // read route params
   const code = (await params).code
+  const station = isRadarCode(code) ? radarRegions[code] : code
 
   return generateSEOMetadata({
-    title: `metvuw mobile | Radar`,
-    description: `Radar charts. Optimized for mobile devices. Sourced from metvuw.com`,
+    title: `${station} rain radar | metvuw mobile`,
+    description: `Rain radar for ${station}, easy to read on a phone. Charts from metvuw.com.`,
     url: `radar/${code}`,
   })
 }

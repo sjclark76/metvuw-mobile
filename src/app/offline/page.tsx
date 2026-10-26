@@ -4,7 +4,10 @@ import Link from 'next/link'
 import { ReloadWhenOnline } from '@/components/ReloadWhenOnline'
 import StatusMessage, { actionClasses } from '@/components/StatusMessage'
 
-export const metadata: Metadata = { title: 'metvuw mobile | Offline' }
+export const metadata: Metadata = {
+  title: 'metvuw mobile | Offline',
+  robots: { index: false },
+}
 
 export default function OfflinePage() {
   return (

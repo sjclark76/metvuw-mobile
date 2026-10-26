@@ -5,7 +5,10 @@ import NoForecast from '@/components/NoForecast'
 import { UpperAirPage } from '@/components/UpperAirPage'
 import { getUpperAirChartDataForCode } from '@/shared/helpers/dataSource/getWeatherChartData'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
-import { getsBalloonLocationCodeOrDefault } from '@/shared/types/balloonLocations'
+import {
+  balloonLocations,
+  getsBalloonLocationCodeOrDefault,
+} from '@/shared/types/balloonLocations'
 
 export const revalidate = 3600
 
@@ -19,10 +22,12 @@ export function generateStaticParams() {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
+  const code = getsBalloonLocationCodeOrDefault(params.balloon?.at(0))
+  const station = code ? balloonLocations[code] : 'New Zealand'
   return generateSEOMetadata({
-    title: `metvuw mobile | Upper Air Data`,
-    description: `Upper Air Data Optimized for mobile devices. Sourced from metvuw.com`,
-    url: `upperair/${getsBalloonLocationCodeOrDefault(params.balloon?.at(0))}`,
+    title: `${station} upper air charts | metvuw mobile`,
+    description: `Upper air charts from the weather balloon launched at ${station}, easy to read on a phone. Charts from metvuw.com.`,
+    url: `upperair/${code}`,
   })
 }
 interface Props {

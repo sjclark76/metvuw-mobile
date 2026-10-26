@@ -4,7 +4,9 @@ test.describe('homepage', () => {
   test('should render page correctly @mobile', async ({ page }) => {
     await page.goto('/')
 
-    await expect(page).toHaveTitle('metvuw mobile | nz')
+    await expect(page).toHaveTitle(
+      'New Zealand rain & wind forecast | metvuw mobile',
+    )
 
     await expect(
       page.getByRole('heading', { name: 'New Zealand', level: 1 }),

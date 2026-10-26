@@ -7,10 +7,10 @@ import sitemap from './sitemap'
 const paths = () =>
   sitemap().map((entry) => entry.url.replace(config.baseUrl, ''))
 
-// The hand-written public/sitemap.xml this replaces listed exactly these pages.
+// The hand-written public/sitemap.xml this replaces listed these pages, and the
+// offline page, which is a page to be shown when there is no connection.
 const previouslyListed = [
   '/',
-  '/offline',
   '/satellite',
   ...[
     'nz',
@@ -64,6 +64,10 @@ describe('sitemap', () => {
         Object.keys(radarRegions).map((code) => `/radar/${code}`),
       ),
     )
+  })
+
+  test('leaves out the offline page, which is not for searching', () => {
+    expect(paths()).not.toContain('/offline')
   })
 
   test('lists each page once', () => {

@@ -20,11 +20,11 @@ export function generateStaticParams() {
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
   // read route params
-  const regionName = params.name
+  const regionName = findRegionByCode(params.name)?.name ?? params.name
   return generateSEOMetadata({
-    title: `metvuw mobile | ${regionName}`,
-    description: `metvuw ${regionName} wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
-    url: `regions/${regionName}`,
+    title: `${regionName} rain & wind forecast | metvuw mobile`,
+    description: `Rain and wind forecast charts for ${regionName}, every six hours for the next ten days, easy to read on a phone. Charts from metvuw.com.`,
+    url: `regions/${params.name}`,
   })
 }
 
