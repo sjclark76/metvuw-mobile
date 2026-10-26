@@ -34,10 +34,10 @@ interface Props {
 
 export async function generateMetadata(): Promise<Metadata> {
   // read route params
-  const regionName = HOME_REGION
+  const regionName = findRegionByCode(HOME_REGION)?.name ?? HOME_REGION
   return generateSEOMetadata({
-    title: `metvuw mobile | ${regionName}`,
-    description: `metvuw ${regionName} wind & rain forecast charts. Optimized for mobile devices. Sourced from metvuw.com`,
+    title: `${regionName} rain & wind forecast | metvuw mobile`,
+    description: `Rain and wind forecast charts for ${regionName}, every six hours for the next ten days, easy to read on a phone. Charts from metvuw.com.`,
     url: `${config.baseUrl}`,
   })
 }

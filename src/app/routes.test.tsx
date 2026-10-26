@@ -8,6 +8,9 @@ import {
   getSatelliteChartData,
   getUpperAirChartDataForCode,
 } from '@/shared/helpers/dataSource/getWeatherChartData'
+import { balloonLocations } from '@/shared/types/balloonLocations'
+import { radarRegions } from '@/shared/types/radarRegions'
+import { regions } from '@/shared/types/region'
 
 import HomePage, {
   generateMetadata as homeMetadata,
@@ -89,9 +92,50 @@ describe('region page', () => {
       params: Promise.resolve({ name: 'nzsi' }),
     })
 
-    expect(metadata.title).toBe('metvuw mobile | nzsi')
-    expect(metadata.description).toContain('nzsi')
+    expect(metadata.title).toBe(
+      'South Island rain & wind forecast | metvuw mobile',
+    )
+    expect(metadata.description).toContain('South Island')
+    expect(metadata.description).not.toContain('nzsi')
     expect(metadata.alternates?.canonical).toBe('regions/nzsi')
+  })
+})
+
+describe('page titles', () => {
+  test('are different for every region, radar and weather balloon, and say what each is', async () => {
+    const titles = [
+      ...(await Promise.all(
+        regions.map(
+          async (r) =>
+            (
+              await regionMetadata({
+                params: Promise.resolve({ name: r.code }),
+              })
+            ).title,
+        ),
+      )),
+      ...(await Promise.all(
+        Object.keys(radarRegions).map(
+          async (code) =>
+            (await radarMetadata({ params: Promise.resolve({ code }) })).title,
+        ),
+      )),
+      ...(await Promise.all(
+        Object.keys(balloonLocations).map(
+          async (code) =>
+            (
+              await upperAirMetadata({
+                params: Promise.resolve({ balloon: [code] }),
+              })
+            ).title,
+        ),
+      )),
+    ]
+
+    expect(new Set(titles).size).toBe(titles.length)
+    for (const title of titles) {
+      expect(String(title).length).toBeLessThanOrEqual(60)
+    }
   })
 })
 
@@ -118,7 +162,9 @@ describe('home page', () => {
   test('is canonical at the site root', async () => {
     const metadata = await homeMetadata()
 
-    expect(metadata.title).toBe('metvuw mobile | nz')
+    expect(metadata.title).toBe(
+      'New Zealand rain & wind forecast | metvuw mobile',
+    )
     expect(metadata.alternates?.canonical).toBe(config.baseUrl)
   })
 })
@@ -139,7 +185,7 @@ describe('radar page', () => {
       params: Promise.resolve({ code: 'ak' }),
     })
 
-    expect(metadata.title).toBe('metvuw mobile | Radar')
+    expect(metadata.title).toBe('Auckland rain radar | metvuw mobile')
     expect(metadata.alternates?.canonical).toBe('radar/ak')
   })
 })
@@ -196,7 +242,7 @@ describe('upper air page', () => {
       params: Promise.resolve({ balloon: ['93417'] }),
     })
 
-    expect(metadata.title).toBe('metvuw mobile | Upper Air Data')
+    expect(metadata.title).toBe('Paraparaumu upper air charts | metvuw mobile')
     expect(metadata.alternates?.canonical).toBe('upperair/93417')
   })
 })

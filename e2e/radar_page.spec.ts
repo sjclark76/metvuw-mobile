@@ -4,7 +4,7 @@ test.describe('radar page', () => {
   test('should render page correctly @mobile', async ({ page }) => {
     await page.goto('/radar/nl')
 
-    await expect(page).toHaveTitle('metvuw mobile | Radar')
+    await expect(page).toHaveTitle('Northland rain radar | metvuw mobile')
 
     await expect(
       page.getByRole('heading', { name: 'Northland', level: 1 }),

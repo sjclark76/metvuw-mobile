@@ -8,7 +8,9 @@ test.describe('region pages', () => {
   test('show a region and its charts @mobile', async ({ page }) => {
     await page.goto('/regions/nzsi')
 
-    await expect(page).toHaveTitle('metvuw mobile | nzsi')
+    await expect(page).toHaveTitle(
+      'South Island rain & wind forecast | metvuw mobile',
+    )
     await expect(
       page.getByRole('heading', { name: 'South Island', level: 1 }),
     ).toBeVisible()
