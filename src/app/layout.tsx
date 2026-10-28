@@ -7,7 +7,7 @@ import { AppOpenedTracker } from '@/components/Analytics/AppOpenedTracker'
 import FavoritePageRedirect from '@/components/FavoritePageRedirect/FavoritePageRedirect'
 import { favoritePageRedirectScript } from '@/components/FavoritePageRedirect/favoritePageRedirectScript'
 import { GoogleAdSense } from '@/components/GoogleAdSense'
-import GoogleTag from '@/components/GoogleTag'
+import GoogleTag, { GoogleTagSetup } from '@/components/GoogleTag'
 import { PinnedHeader } from '@/components/PinnedHeader'
 import { Providers } from '@/components/Providers/Providers'
 import { RefreshWhenStale } from '@/components/RefreshWhenStale'
@@ -46,6 +46,8 @@ export default function RootLayout({
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: favoritePageRedirectScript }}
         />
+        {/* Before the app's own code, so no event is sent before gtag exists. */}
+        <GoogleTagSetup />
       </head>
       <body className="bg-paper text-ink font-sans">
         <GoogleTag />
