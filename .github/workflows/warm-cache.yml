@@ -4,7 +4,7 @@ name: Warm cache after deploy
 # was Poor for that (#2611). This renders every page, and its first chart, as
 # soon as a production deploy is live, so visitors find them cached.
 #
-# Attack Mode challenges this runner, so a Vercel WAF custom rule lets
+# Bot Protection challenges this runner, so a Vercel WAF custom rule lets
 # POST /api/warm through when it carries the x-warm-token header. The route
 # itself checks the token against WARM_SECRET.
 on:
@@ -19,11 +19,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      # A function may run for 60 s at most, so the route warms what it can in
+      # that time and says which page to carry on from (`next`), until done.
       - name: Warm every page
         env:
           WARM_SECRET: ${{ secrets.WARM_SECRET }}
         run: |
-          curl --fail-with-body --silent --show-error --max-time 300 \
-            --retry 3 --retry-delay 20 --retry-all-errors \
-            -X POST -H "x-warm-token: $WARM_SECRET" \
-            https://www.metvuwmobile.com/api/warm
+          next=0
+          failed=0
+          while [ "$next" != "null" ]; do
+            body=$(curl --fail-with-body --silent --show-error --max-time 70 \
+              --retry 3 --retry-delay 20 --retry-all-errors \
+              -X POST -H "x-warm-token: $WARM_SECRET" \
+              "https://www.metvuwmobile.com/api/warm?from=$next")
+            echo "$body"
+            [ "$(jq -r .ok <<<"$body")" = "true" ] || failed=1
+            next=$(jq -r .next <<<"$body")
+          done
+          exit $failed
