@@ -6,7 +6,6 @@ import { SoundingGlance } from './SoundingGlance'
 
 const full: SoundingSummary = {
   freezing: { kind: 'height', m: 970 },
-  snowLevelM: 700,
   cloud: [
     { fromM: 581, toM: 918 },
     { fromM: 1071, toM: 1433 },
@@ -34,9 +33,7 @@ describe('<SoundingGlance />', () => {
   test('says what the balloon found, in plain words', () => {
     renderGlance(full)
 
-    expect(panel()).toHaveTextContent(
-      'Freezing level 970 m · snow possible down to about 700 m',
-    )
+    expect(panel()).toHaveTextContent('Freezing level 970 m')
     expect(panel()).toHaveTextContent('Cloud 600 – 900 m, 1,100 – 1,400 m')
     expect(panel()).toHaveTextContent(
       'Wind W 33 kt at 1 km · W 47 kt at 3 km · SW 56 kt at 5 km',
@@ -71,14 +68,10 @@ describe('<SoundingGlance />', () => {
   })
 
   test('says freezing at ground level', () => {
-    renderGlance({
-      ...full,
-      freezing: { kind: 'ground' },
-      snowLevelM: undefined,
-    })
+    renderGlance({ ...full, freezing: { kind: 'ground' } })
 
     expect(panel()).toHaveTextContent('Freezing at ground level')
-    expect(panel()).not.toHaveTextContent('snow possible')
+    expect(panel()).not.toHaveTextContent(/snow/i)
   })
 
   test('states a gap, and leaves out what it cannot say', () => {

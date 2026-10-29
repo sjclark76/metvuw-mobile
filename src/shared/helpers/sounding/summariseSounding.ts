@@ -19,7 +19,6 @@ export interface SoundingSummary {
   /** Set when the readings start above 500 m: where they start, to 100 m. */
   gapBelowM?: number
   freezing?: Freezing
-  snowLevelM?: number
   /** Lowest first, at most 3. Empty means dry. */
   cloud: CloudLayer[]
   /** False when there is none, or when the readings start too high to tell. */
@@ -32,8 +31,6 @@ export interface SoundingSummary {
 // A balloon whose readings start higher than this has missed the layer where
 // fog, low cloud and inversions are, so nothing is said about it.
 const LOW_COMPLETE_M = 500
-// Snow usually falls this far below the freezing level before it melts.
-const SNOW_BELOW_FREEZING_M = 300
 // Air within this of its dew point is close to saturated: cloud.
 const CLOUD_SPREAD_C = 3
 const CLOUD_MIN_THICKNESS_M = 150
@@ -145,15 +142,9 @@ export function summariseSounding(sounding: Sounding): SoundingSummary {
   const lowestM = levels[0].heightM
   const lowComplete = lowestM <= LOW_COMPLETE_M
 
+  // No snow level: a balloon measures the air, not whether anything will fall,
+  // so a snow level would read as a forecast.
   const freezing = freezingLevel(levels, lowComplete)
-  // Snow falls about 300 m below the freezing level, but never below the
-  // lowest reading: if that is the ground we say so, if not we don't know.
-  let snowLevelM: number | undefined
-  if (freezing?.kind === 'height') {
-    const snowM = freezing.m - SNOW_BELOW_FREEZING_M
-    if (snowM >= lowestM) snowLevelM = roundTo(snowM, 100)
-    else if (lowComplete) snowLevelM = roundTo(lowestM, 100)
-  }
 
   const winds = [1, 3, 5].flatMap((atKm) => {
     const level = nearestLevel(levels, atKm * 1000)
@@ -165,7 +156,6 @@ export function summariseSounding(sounding: Sounding): SoundingSummary {
   return {
     gapBelowM: lowComplete ? undefined : roundTo(lowestM, 100),
     freezing,
-    snowLevelM,
     cloud: cloudLayers(levels),
     inversion: lowComplete && hasInversion(levels),
     winds,

@@ -30,9 +30,8 @@ describe('summariseSounding', () => {
       expect(summary.gapBelowM).toBeUndefined()
     })
 
-    test('finds the freezing level, and the snow level 300 m below it', () => {
+    test('finds the freezing level', () => {
       expect(summary.freezing).toEqual({ kind: 'height', m: 970 })
-      expect(summary.snowLevelM).toBe(700)
     })
 
     test('finds the cloud layers, lowest first', () => {
@@ -88,7 +87,6 @@ describe('summariseSounding', () => {
       const summary = summarise([level(1500, -1), level(2000, -4)])
 
       expect(summary.freezing).toBeUndefined()
-      expect(summary.snowLevelM).toBeUndefined()
     })
 
     test('is interpolated between levels, to 10 m', () => {
@@ -96,18 +94,6 @@ describe('summariseSounding', () => {
         kind: 'height',
         m: 200,
       })
-    })
-
-    test('puts the snow level no lower than the lowest reading', () => {
-      expect(summarise([level(0, 1), level(200, -1)]).snowLevelM).toBe(0)
-    })
-
-    test('is left out where the balloon did not measure low enough', () => {
-      const summary = summarise([level(1468, 0.1), level(1492, -0.1)])
-
-      expect(summary.freezing).toEqual({ kind: 'height', m: 1480 })
-      expect(summary.gapBelowM).toBe(1500)
-      expect(summary.snowLevelM).toBeUndefined()
     })
   })
 
