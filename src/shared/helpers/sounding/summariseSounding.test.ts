@@ -101,6 +101,14 @@ describe('summariseSounding', () => {
     test('puts the snow level no lower than the lowest reading', () => {
       expect(summarise([level(0, 1), level(200, -1)]).snowLevelM).toBe(0)
     })
+
+    test('is left out where the balloon did not measure low enough', () => {
+      const summary = summarise([level(1468, 0.1), level(1492, -0.1)])
+
+      expect(summary.freezing).toEqual({ kind: 'height', m: 1480 })
+      expect(summary.gapBelowM).toBe(1500)
+      expect(summary.snowLevelM).toBeUndefined()
+    })
   })
 
   describe('cloud', () => {
