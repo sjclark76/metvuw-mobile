@@ -5,6 +5,7 @@ import NoForecast from '@/components/NoForecast'
 import { UpperAirPage } from '@/components/UpperAirPage'
 import { getUpperAirChartDataForCode } from '@/shared/helpers/dataSource/getWeatherChartData'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
+import { fetchSounding } from '@/shared/helpers/sounding/fetchSounding'
 import {
   balloonLocations,
   getsBalloonLocationCodeOrDefault,
@@ -46,12 +47,20 @@ export default async function Page(props: Props) {
     return notFound()
   }
 
-  const chartData = await getUpperAirChartDataForCode(balloonLocationCode)
-  if (chartData.length === 0) {
+  // metvuw's charts and the balloon data, side by side: neither waits on the other.
+  const [chartData, sounding] = await Promise.all([
+    getUpperAirChartDataForCode(balloonLocationCode),
+    fetchSounding(balloonLocationCode),
+  ])
+  if (chartData.length === 0 && !sounding) {
     return <NoForecast />
   }
 
   return (
-    <UpperAirPage balloonCode={balloonLocationCode} chartData={chartData} />
+    <UpperAirPage
+      balloonCode={balloonLocationCode}
+      chartData={chartData}
+      sounding={sounding}
+    />
   )
 }
