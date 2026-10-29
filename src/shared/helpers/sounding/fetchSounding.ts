@@ -14,6 +14,7 @@ const HALF_DAY_MS = 12 * 60 * 60 * 1000
 // Two days of launches: enough to get past a missed one, few enough to be kind
 // to Wyoming, which rate-limits.
 const MOST_LAUNCHES = 4
+// The whole search, not each request, so a slow Wyoming costs a page at most this.
 const TIMEOUT_MS = 10_000
 
 /** The last 00 or 12 UTC at or before `now`: balloons go up at those times. */
@@ -48,7 +49,7 @@ export function soundingUrl(
  * data (400, or a page with no table) is passed over for the one before it. Any
  * other failure, including Wyoming saying it is too busy (503), ends the search:
  * asking again would only add to its load. Only 200 responses are cached, so the
- * next render of the page asks again.
+ * next render of the page asks again. The whole search shares one 10 s timeout.
  */
 export async function fetchSounding(
   station: BalloonLocationCode,
@@ -56,12 +57,16 @@ export async function fetchSounding(
 ): Promise<FetchedSounding | undefined> {
   let launchUTC = latestLaunchUTC(now)
   let withoutTable = 0
+  const signal = AbortSignal.timeout(TIMEOUT_MS)
   try {
     for (let tried = 0; tried < MOST_LAUNCHES; tried++) {
       const sourceUrl = soundingUrl(station, launchUTC)
       const response = await fetch(sourceUrl, {
-        signal: AbortSignal.timeout(TIMEOUT_MS),
-        next: { revalidate: 3600 },
+        signal,
+        // The newest launch may not be published yet, so look again within the
+        // hour. An earlier one never changes once it has data, so keep it a day:
+        // Wyoming rate-limits, and a 503 hides the panel until the page refreshes.
+        next: { revalidate: tried === 0 ? 3600 : 86_400 },
       })
       if (response.ok) {
         const sounding = parseSounding(await response.text())

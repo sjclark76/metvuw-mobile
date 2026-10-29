@@ -69,6 +69,19 @@ describe('fetchSounding', () => {
       '2026-10-29 00:00:00',
     ])
     expect(fetched?.launchUTC).toBe(Date.UTC(2026, 9, 29, 0))
+    expect(fetchMock.mock.calls[0][1]).toMatchObject({
+      next: { revalidate: 3600 },
+    })
+    expect(fetchMock.mock.calls[1][1]).toMatchObject({
+      next: { revalidate: 86400 },
+    })
+    expect(fetchMock.mock.calls[2][1]).toMatchObject({
+      next: { revalidate: 86400 },
+    })
+    const signal = fetchMock.mock.calls[0][1].signal
+    expect(signal).toBeInstanceOf(AbortSignal)
+    expect(fetchMock.mock.calls[1][1].signal).toBe(signal)
+    expect(fetchMock.mock.calls[2][1].signal).toBe(signal)
   })
 
   test('gives up after four launches', async () => {
