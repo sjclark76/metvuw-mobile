@@ -9,6 +9,8 @@ name: Warm cache after deploy
 # itself checks the token against WARM_SECRET.
 on:
   deployment_status:
+# It only calls the site: the GITHUB_TOKEN needs no access to the repo.
+permissions: {}
 jobs:
   warm:
     if: >-
