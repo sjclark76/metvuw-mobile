@@ -1,4 +1,11 @@
-import { expect, test } from '@playwright/test'
+import { expect, type Page, test } from '@playwright/test'
+
+// Where the page is, as the page itself says. Not `toHaveURL`: after a redirect
+// Firefox sometimes loads the target a second time (with or without the app's
+// JavaScript), and Playwright can then wait on that load for ever, reporting
+// the URL as "" although the page is there.
+const pathOf = (page: Page) =>
+  expect.poll(() => page.evaluate(() => location.pathname))
 
 const homeStatus = async (
   context: import('@playwright/test').BrowserContext,
@@ -30,6 +37,7 @@ test.describe('favourite page', () => {
 
   test('opening the app lands on the favourite without rendering the home page', async ({
     page,
+    context,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto('/regions/nzsi')
@@ -38,8 +46,11 @@ test.describe('favourite page', () => {
       page.getByLabel('Use this page as my home page'),
     ).toHaveAttribute('aria-pressed', 'true')
 
+    // Opened in a new tab, as the app is.
+    const app = await context.newPage()
+    await app.setViewportSize({ width: 1280, height: 800 })
     const homeStatuses: number[] = []
-    page.on('response', (response) => {
+    app.on('response', (response) => {
       // Only the page navigation: the logo links home, so the app may also
       // prefetch '/' once it has loaded.
       if (
@@ -49,9 +60,9 @@ test.describe('favourite page', () => {
         homeStatuses.push(response.status())
       }
     })
-    await page.goto('/')
+    await app.goto('/')
 
-    await expect(page).toHaveURL(/\/regions\/nzsi$/)
+    await pathOf(app).toBe('/regions/nzsi')
     // The home page document was never served. (Not asserted as exactly [307]:
     // Firefox does not report the redirect hop through the response event.)
     expect(homeStatuses).not.toContain(200)
@@ -60,6 +71,7 @@ test.describe('favourite page', () => {
   // The installed app launches at '/', through its service worker.
   test('the installed app, with its service worker in control, still lands on the favourite', async ({
     page,
+    context,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto('/regions/nzsi')
@@ -73,11 +85,17 @@ test.describe('favourite page', () => {
       }
     })
 
-    await page.goto('/')
+    // A new tab, as the installed app opens; the worker controls it too.
+    const app = await context.newPage()
+    await app.setViewportSize({ width: 1280, height: 800 })
+    await app.goto('/')
 
-    await expect(page).toHaveURL(/\/regions\/nzsi$/)
+    await pathOf(app).toBe('/regions/nzsi')
+    expect(
+      await app.evaluate(() => Boolean(navigator.serviceWorker.controller)),
+    ).toBe(true)
     await expect(
-      page.getByLabel('Use this page as my home page'),
+      app.getByLabel('Use this page as my home page'),
     ).toHaveAttribute('aria-pressed', 'true')
   })
 
