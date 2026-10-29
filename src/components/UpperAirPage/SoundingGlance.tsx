@@ -41,7 +41,7 @@ export function SoundingGlance({
   launchUTC: number
   sourceUrl: string
 }) {
-  const { freezing, snowLevelM, cloud, winds, tempAt3kmC, stability } = summary
+  const { freezing, cloud, winds, tempAt3kmC, stability } = summary
   // Without cloud, say how high the dry air was checked: no readings below a gap.
   const dry =
     summary.gapBelowM === undefined
@@ -71,8 +71,6 @@ export function SoundingGlance({
         {freezing?.kind === 'height' && (
           <Line icon="❄︎">
             <b>Freezing level {formatHeight(freezing.m)} m</b>
-            {snowLevelM !== undefined &&
-              ` · snow possible down to about ${formatHeight(snowLevelM)} m`}
           </Line>
         )}
         <Line icon="☁︎">

@@ -13,7 +13,7 @@ The University of Wyoming publishes each balloon sounding as text: height, tempe
 On each station's page (Whenuapai 93112, Paraparaumu 93417, Invercargill 93844):
 
 1. **An "At a glance" panel at the top**, from the newest launch with data. Each line appears only when the data supports it (see the rules below):
-   - freezing level, and the snow level about 300 m below it;
+   - freezing level (no snow level: the balloon measures the air, not whether anything will fall, so a snow level would read as a forecast);
    - cloud layers, or "Dry: no cloud layers";
    - an inversion near the ground: "fog, haze or smog can be trapped";
    - wind at 1, 3 and 5 km;
@@ -52,7 +52,6 @@ Heights are metres above sea level, as Wyoming gives them. A sounding is **low-c
 | Line | Rule | Left out when |
 |---|---|---|
 | Freezing level | First height, going up, where temperature drops to 0 °C or below (interpolated between levels, rounded to 10 m). "At ground level" when the lowest reading is ≤ 0 °C and the sounding is low-complete. | The sounding isn't low-complete and its lowest reading is already ≤ 0 °C. |
-| Snow level | Freezing level − 300 m, rounded to 100 m. If that's below the lowest reading: the lowest reading (rounded to 100 m) for a low-complete sounding. Worded "about". | No freezing level, or below the lowest reading of a sounding that isn't low-complete. |
 | Cloud | Layers where temperature − dew point ≤ 3 °C, ≥ 150 m thick, below 9 km. Layers less than 100 m apart are merged; at most 3 are listed, lowest first. None: "Dry: no cloud layers", or with a gap note "Dry above N m: no cloud layers" (N as in the gap note). | Never left out. |
 | Inversion | Below 1.5 km, temperature rises by ≥ 1 °C over ≥ 100 m of height. | The sounding isn't low-complete. |
 | Wind | At 1, 3 and 5 km: the reading nearest each height, if within 150 m. 8 compass points (where it blows from) and knots. | No reading within 150 m. |
