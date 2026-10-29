@@ -10,6 +10,10 @@ declare global {
   }
 }
 
+// AdSense answers within a second or two. With no answer by then it was blocked
+// (an ad blocker, or a network filter), and the card goes rather than stay empty.
+const NO_ANSWER_MS = 10_000
+
 export function AdCard() {
   const adRef = useRef<HTMLModElement>(null)
   const adPushed = useRef(false)
@@ -44,7 +48,17 @@ export function AdCard() {
         attributeFilter: ['data-ad-status'],
       })
 
-      return () => observer.disconnect()
+      const noAnswer = setTimeout(() => {
+        if (!adRef.current?.getAttribute('data-ad-status')) {
+          observer.disconnect()
+          setAdFilled(false)
+        }
+      }, NO_ANSWER_MS)
+
+      return () => {
+        observer.disconnect()
+        clearTimeout(noAnswer)
+      }
     }
   }, [])
 
@@ -53,10 +67,9 @@ export function AdCard() {
   if (adFilled === false || !slotId) return null
 
   return (
-    <div
-      className="bg-plate ring-ink/10 mb-5 w-full rounded-xl pb-3 shadow-lg ring-1"
-      style={{ display: adFilled === null ? 'none' : undefined }}
-    >
+    // Shown, and its room held (min-h-50), while AdSense fills it: AdSense sizes
+    // the ad to the slot's width, and will not fill a hidden slot, which has none.
+    <div className="bg-plate ring-ink/10 mb-5 w-full rounded-xl pb-3 shadow-lg ring-1">
       <div className="flex min-h-50 items-center justify-center rounded-t-xl p-4">
         <ins
           ref={adRef}
@@ -66,6 +79,11 @@ export function AdCard() {
           data-ad-slot={slotId}
           data-ad-format="auto"
           data-full-width-responsive="true"
+          // Test ads outside production: not counted, so looking at them to
+          // check how they look is not invalid traffic.
+          {...(process.env.NODE_ENV === 'production'
+            ? {}
+            : { 'data-adtest': 'on' })}
         />
       </div>
       <div className="flex items-center justify-around rounded-lg pt-3">
