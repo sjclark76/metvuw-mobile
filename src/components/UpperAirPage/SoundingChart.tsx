@@ -1,3 +1,5 @@
+import { useId } from 'react'
+
 import type {
   Sounding,
   SoundingLevel,
@@ -69,6 +71,7 @@ export function SoundingChart({
   const freezingM =
     summary.freezing?.kind === 'height' ? summary.freezing.m : undefined
   const when = balloonTime(launchUTC)
+  const clipId = useId()
 
   return (
     <figure className="mx-auto max-w-176 px-4 md:px-0">
@@ -79,6 +82,18 @@ export function SoundingChart({
           aria-label="Balloon sounding: temperature and dew point by height, with cloud, the freezing level and wind"
           className="block w-full font-mono text-[11px]"
         >
+          {/* Readings outside the temperature range are cut at the plot's edge,
+              rather than drawn over the wind column. */}
+          <defs>
+            <clipPath id={clipId}>
+              <rect
+                x={LEFT}
+                y={TOP}
+                width={RIGHT - LEFT}
+                height={BOTTOM - TOP}
+              />
+            </clipPath>
+          </defs>
           {[0, 2, 4, 6, 8, 10].map((km) => (
             <g key={km}>
               <line
@@ -131,6 +146,7 @@ export function SoundingChart({
               <rect
                 key={layer.fromM}
                 data-cloud
+                clipPath={`url(#${clipId})`}
                 x={LEFT}
                 width={RIGHT - LEFT}
                 y={y(Math.min(layer.toM, TOP_M))}
@@ -160,6 +176,7 @@ export function SoundingChart({
           )}
           <path
             data-line="dew-point"
+            clipPath={`url(#${clipId})`}
             d={path((level) => level.dewPointC)}
             fill="none"
             strokeWidth={2.2}
@@ -167,6 +184,7 @@ export function SoundingChart({
           />
           <path
             data-line="temperature"
+            clipPath={`url(#${clipId})`}
             d={path((level) => level.tempC)}
             fill="none"
             strokeWidth={2.6}
