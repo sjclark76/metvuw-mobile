@@ -8,6 +8,8 @@ import {
   getSatelliteChartData,
   getUpperAirChartDataForCode,
 } from '@/shared/helpers/dataSource/getWeatherChartData'
+import { fetchSounding } from '@/shared/helpers/sounding/fetchSounding'
+import { showOwnChart } from '@/shared/helpers/sounding/showOwnChart'
 import {
   balloonLocations,
   getsBalloonLocationCodeOrDefault,
@@ -140,12 +142,28 @@ export async function chartListForPath(
     case 'upperair': {
       const station = getsBalloonLocationCodeOrDefault(code)
       if (station === false) return undefined
-      return build(
+      const [charts, sounding] = await Promise.all([
+        getUpperAirChartDataForCode(station),
+        fetchSounding(station),
+      ])
+      const list = build(
         `Upper air, ${balloonLocations[station]}`,
         path,
-        await getUpperAirChartDataForCode(station),
+        charts,
         true,
       )
+      // Where our chart replaces metvuw's, the page is "issued" when the balloon
+      // went up, so each new balloon refreshes a saved copy.
+      if (
+        sounding &&
+        showOwnChart(
+          charts.map((chart) => chart.imageDateUTC),
+          sounding.launchUTC,
+        )
+      ) {
+        list.issued = sounding.launchUTC
+      }
+      return list
     }
     default:
       return undefined

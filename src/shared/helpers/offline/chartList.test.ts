@@ -5,6 +5,10 @@ import {
   getSatelliteChartData,
   getUpperAirChartDataForCode,
 } from '@/shared/helpers/dataSource/getWeatherChartData'
+import {
+  type FetchedSounding,
+  fetchSounding,
+} from '@/shared/helpers/sounding/fetchSounding'
 import { ChartType } from '@/shared/types/ChartType'
 
 import { chartListForPath } from './chartList'
@@ -15,6 +19,17 @@ vi.mock('@/shared/helpers/dataSource/getWeatherChartData', () => ({
   getSatelliteChartData: vi.fn(),
   getUpperAirChartDataForCode: vi.fn(),
 }))
+
+vi.mock('@/shared/helpers/sounding/fetchSounding', () => ({
+  fetchSounding: vi.fn(),
+}))
+
+const balloon = (launchUTC: number) =>
+  ({
+    launchUTC,
+    sounding: { levels: [] },
+    sourceUrl: 'https://weather.uwyo.edu/x',
+  }) as unknown as FetchedSounding
 
 const proxy = (name: string, chartType: ChartType) =>
   buildFallbackImageProxyUrl({
@@ -30,7 +45,10 @@ const small = (name: string, chartType: ChartType) =>
 
 const chart = (url: string, imageDateUTC: number) => ({ url, imageDateUTC })
 
-beforeEach(() => vi.resetAllMocks())
+beforeEach(() => {
+  vi.resetAllMocks()
+  vi.mocked(fetchSounding).mockResolvedValue(undefined)
+})
 
 describe('chartListForPath', () => {
   test('lists a region page: its title, when it was issued, and every chart', async () => {
@@ -77,6 +95,47 @@ describe('chartListForPath', () => {
       proxy('u1', 'Upper Air'),
       small('u1', 'Upper Air'),
     ])
+  })
+
+  test('an upper air page showing our chart is issued when the balloon went up', async () => {
+    vi.mocked(getUpperAirChartDataForCode).mockResolvedValue([
+      chart(proxy('u1', 'Upper Air'), Date.UTC(2026, 9, 12, 11)),
+    ])
+    vi.mocked(fetchSounding).mockResolvedValue(
+      balloon(Date.UTC(2026, 9, 29, 12)),
+    )
+
+    const list = await chartListForPath('/upperair/93417')
+
+    expect(fetchSounding).toHaveBeenCalledWith('93417')
+    expect(list?.issued).toBe(Date.UTC(2026, 9, 29, 12))
+    expect(list?.urls).toEqual([
+      proxy('u1', 'Upper Air'),
+      small('u1', 'Upper Air'),
+    ])
+  })
+
+  test("an upper air page with metvuw's charts current keeps their time", async () => {
+    vi.mocked(getUpperAirChartDataForCode).mockResolvedValue([
+      chart(proxy('u1', 'Upper Air'), Date.UTC(2026, 9, 29, 13)),
+    ])
+    vi.mocked(fetchSounding).mockResolvedValue(
+      balloon(Date.UTC(2026, 9, 29, 12)),
+    )
+
+    const list = await chartListForPath('/upperair/93417')
+
+    expect(list?.issued).toBe(Date.UTC(2026, 9, 29, 13))
+  })
+
+  test('an upper air page with no balloon keeps its metvuw time', async () => {
+    vi.mocked(getUpperAirChartDataForCode).mockResolvedValue([
+      chart(proxy('u1', 'Upper Air'), 7),
+    ])
+
+    const list = await chartListForPath('/upperair/93417')
+
+    expect(list?.issued).toBe(7)
   })
 
   test('the upper air page without a station is the default station', async () => {
