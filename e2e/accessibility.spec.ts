@@ -7,6 +7,7 @@ const pages = [
   ['satellite', '/satellite'],
   ['radar', '/radar/nl'],
   ['upper air', '/upperair'],
+  ['upper air, with our chart', '/upperair/93844'],
   ['offline', '/offline'],
 ] as const
 
@@ -16,7 +17,8 @@ async function openAndSettle(page: Page, path: string) {
   await page.goto(path)
   await page.waitForSelector('nav')
   // Chart pages render their content after the first paint.
-  if (path !== '/offline') await page.waitForSelector('main img')
+  if (path !== '/offline')
+    await page.waitForSelector('main img, main [role="img"]')
   // Let the entrance animations finish: scanning mid-fade measures blended colours.
   await page.evaluate(() =>
     Promise.all(

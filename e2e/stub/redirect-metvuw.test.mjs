@@ -25,6 +25,18 @@ describe('redirectMetvuw', () => {
     )
   })
 
+  test('sends the University of Wyoming to the stub too', async () => {
+    const { calls, fetch } = setup()
+
+    await fetch(
+      'https://weather.uwyo.edu/wsgi/sounding?id=93844&type=TEXT%3ALIST',
+    )
+
+    expect(requestedUrl(calls[0])).toBe(
+      `${STUB}/wsgi/sounding?id=93844&type=TEXT%3ALIST`,
+    )
+  })
+
   test('accepts a URL object', async () => {
     const { calls, fetch } = setup()
 

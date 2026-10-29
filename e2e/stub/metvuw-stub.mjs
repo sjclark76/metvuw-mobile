@@ -6,6 +6,7 @@
 // Test conventions:
 //   - region "estonia" always answers 502, to exercise the error state
 //   - every other known region lists the same ten forecast charts
+import { readFileSync } from 'node:fs'
 import http from 'node:http'
 
 import sharp from 'sharp'
@@ -53,6 +54,22 @@ const BALLOON_TIMES = [
 ]
 const FAILING_REGION = 'estonia'
 
+// Balloon soundings, as the University of Wyoming serves them. Invercargill gets
+// a complete one and Paraparaumu one missing its lowest readings; Whenuapai, the
+// default page most tests use, gets none, so it stays as it was.
+const sounding = (name) =>
+  readFileSync(
+    new URL(
+      `../../src/shared/helpers/sounding/fixtures/${name}`,
+      import.meta.url,
+    ),
+    'utf8',
+  )
+const SOUNDINGS = {
+  93844: sounding('invercargill-2026102912.html'),
+  93417: sounding('whenuapai-2026102800.html'),
+}
+
 const page = (images) =>
   `<!doctype html><html><body>${images
     .map((src) => `<img src="${src}">`)
@@ -80,6 +97,15 @@ const pages = {
   '/satellite': () => ({
     body: page(SATELLITE_DATES.map((d) => `./small/${d}.jpg`)),
   }),
+  '/wsgi/sounding': (query) => {
+    const body = SOUNDINGS[query.get('id') ?? '']
+    return body
+      ? { body }
+      : {
+          status: 400,
+          body: `Unable to retrieve the data for ${query.get('id')} at ${query.get('datetime')}.`,
+        }
+  },
   '/upperair': () => ({
     body: page(
       BALLOONS.flatMap((b) =>
