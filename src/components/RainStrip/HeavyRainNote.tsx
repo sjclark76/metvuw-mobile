@@ -1,14 +1,17 @@
 'use client'
+import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 
 import { useTrackOnce } from '@/components/Analytics/useTrackOnce'
 import { useAnimation } from '@/components/Animation/Animation'
+import { rainStripPinAtom } from '@/components/Atoms/GlobalState'
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
 import { useIsMounted } from '@/components/Hooks/useIsMounted'
 import { track } from '@/shared/helpers/analytics/track'
 import type { HeavyRain } from '@/shared/helpers/heavyRain'
 import { chartLabel, type Pin } from '@/shared/helpers/pins/pins'
 
+import { ALL_PINS } from './describeRain'
 import { useRainWatch } from './RainWatch'
 
 const SIX_HOURS = 6 * 60 * 60 * 1000
@@ -48,6 +51,7 @@ export function HeavyRainNote({
 }) {
   const formatDate = useFormatDate()
   const trackOnce = useTrackOnce()
+  const [stripChoice, setStripChoice] = useAtom(rainStripPinAtom)
   const showing = found.length > 0
   const strongest = found.some((f) => f.rain.level === 'veryHeavy')
     ? 'veryHeavy'
@@ -89,6 +93,9 @@ export function HeavyRainNote({
                     type="button"
                     onClick={() => {
                       track('heavy_rain_opened', { level: entry.rain.level })
+                      // The note covers every place, the strip one: the strip
+                      // shows the place tapped, so the two agree (#2619).
+                      if (stripChoice !== ALL_PINS) setStripChoice(entry.pin.id)
                       onSeek(entry.rain.from)
                     }}
                     className="text-ink focus-visible:outline-cold rounded-sm text-left focus-visible:outline-2 focus-visible:outline-offset-2"
