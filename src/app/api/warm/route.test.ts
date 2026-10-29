@@ -12,9 +12,9 @@ vi.mock('@/shared/helpers/offline/chartList', () => ({
 
 const fetchMock = vi.fn()
 
-const post = (token?: string) =>
+const post = (token?: string, query = '') =>
   POST(
-    new NextRequest('https://www.example.com/api/warm', {
+    new NextRequest(`https://www.example.com/api/warm${query}`, {
       method: 'POST',
       headers: token ? { 'x-warm-token': token } : {},
     }),
@@ -81,7 +81,12 @@ describe('POST /api/warm', () => {
       'https://www.example.com/api/fallback-image?later',
     )
     expect(response.status).toBe(200)
-    expect(await response.json()).toEqual({ ok: true, warmed: 4, failed: [] })
+    expect(await response.json()).toEqual({
+      ok: true,
+      warmed: 4,
+      failed: [],
+      next: null,
+    })
   })
 
   test('reports the pages that failed, and carries on with the rest', async () => {
@@ -97,6 +102,7 @@ describe('POST /api/warm', () => {
       ok: false,
       warmed: 3,
       failed: ['/regions/nz 502'],
+      next: null,
     })
   })
 
@@ -109,6 +115,66 @@ describe('POST /api/warm', () => {
       ok: false,
       warmed: 2,
       failed: ['/regions/nz charts', '/radar/nz charts'],
+      next: null,
+    })
+  })
+
+  describe('within the 60 s a function is allowed', () => {
+    const tenPages = Array.from({ length: 10 }, (_, n) => ({
+      url: `https://metvuwmobile.com/regions/r${n}`,
+    }))
+
+    afterEach(() => vi.useRealTimers())
+
+    test('carries on from the page it is given', async () => {
+      vi.mocked(sitemap).mockReturnValue(tenPages)
+
+      const response = await post('secret', '?from=8')
+
+      const pages = fetchMock.mock.calls
+        .map(([url]) => String(url))
+        .filter((url) => !url.includes('fallback-image'))
+      expect(pages).toEqual([
+        'https://www.example.com/regions/r8',
+        'https://www.example.com/regions/r9',
+      ])
+      expect((await response.json()).next).toBeNull()
+    })
+
+    test('stops starting pages when its time is up, and says where to carry on', async () => {
+      vi.useFakeTimers()
+      vi.mocked(sitemap).mockReturnValue(tenPages)
+      // Each page takes 20 s, so the time is up after the first four.
+      fetchMock.mockImplementation(async (url) => {
+        if (!String(url).includes('fallback-image')) {
+          vi.setSystemTime(Date.now() + 20_000)
+        }
+        return new Response('ok')
+      })
+
+      const response = await post('secret')
+
+      expect(await response.json()).toMatchObject({ next: 4 })
+    })
+
+    test('reports a page that takes too long, and does not wait for it', async () => {
+      vi.useFakeTimers()
+      fetchMock.mockImplementation(async (url) =>
+        String(url) === 'https://www.example.com/regions/nz'
+          ? new Promise(() => {})
+          : new Response('ok'),
+      )
+
+      const responding = post('secret')
+      await vi.advanceTimersByTimeAsync(15_000)
+      const response = await responding
+
+      expect(await response.json()).toEqual({
+        ok: false,
+        warmed: 2,
+        failed: ['/regions/nz timed out'],
+        next: null,
+      })
     })
   })
 })
