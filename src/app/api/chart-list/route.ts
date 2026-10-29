@@ -14,6 +14,10 @@ const CHART_LIST_CACHE_CONTROL = 'public, max-age=0, s-maxage=300'
  * is saved, so this answers the same question the page does (which charts?) in a
  * form the saving code can read.
  */
+// An upper air page's list waits for the balloon data, which can take Wyoming
+// 8 to 12 s; Vercel stops a function at 10 s by default.
+export const maxDuration = 60
+
 export async function GET(request: NextRequest) {
   const path = request.nextUrl.searchParams.get('path')
   if (!path) {

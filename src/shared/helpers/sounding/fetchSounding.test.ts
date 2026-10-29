@@ -84,6 +84,17 @@ describe('fetchSounding', () => {
     expect(fetchMock.mock.calls[2][1].signal).toBe(signal)
   })
 
+  // Wyoming can take 8 to 12 s to send a sounding it hasn't sent lately.
+  test('gives Wyoming 25 s in all', async () => {
+    const timeout = vi.spyOn(AbortSignal, 'timeout')
+    fetchMock.mockResolvedValue(new Response(page))
+
+    await fetchSounding('93844', NOW)
+
+    expect(timeout).toHaveBeenCalledWith(25_000)
+    timeout.mockRestore()
+  })
+
   test('gives up after four launches', async () => {
     fetchMock.mockImplementation(
       async () => new Response('Unable to retrieve the data', { status: 400 }),

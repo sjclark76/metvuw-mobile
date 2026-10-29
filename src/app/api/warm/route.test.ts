@@ -25,7 +25,8 @@ describe('POST /api/warm', () => {
     vi.resetAllMocks()
     vi.stubEnv('WARM_SECRET', 'secret')
     vi.stubGlobal('fetch', fetchMock)
-    fetchMock.mockResolvedValue(new Response('ok'))
+    // A new response each time: each can be read only once.
+    fetchMock.mockImplementation(async () => new Response('ok'))
     vi.mocked(sitemap).mockReturnValue([
       { url: 'https://metvuwmobile.com/regions/nz' },
       { url: 'https://metvuwmobile.com/radar/nz' },
@@ -157,6 +158,22 @@ describe('POST /api/warm', () => {
       expect(await response.json()).toMatchObject({ next: 4 })
     })
 
+    // An upper air page streams the balloon data in when Wyoming answers: it is
+    // only rendered, and cached, if the page is read to the end.
+    test('reads each page to the end', async () => {
+      const responses: Response[] = []
+      fetchMock.mockImplementation(async () => {
+        const response = new Response('ok')
+        responses.push(response)
+        return response
+      })
+
+      await post('secret')
+
+      expect(responses.length).toBeGreaterThan(0)
+      expect(responses.every((response) => response.bodyUsed)).toBe(true)
+    })
+
     test('reports a page that takes too long, and does not wait for it', async () => {
       vi.useFakeTimers()
       fetchMock.mockImplementation(async (url) =>
@@ -165,8 +182,15 @@ describe('POST /api/warm', () => {
           : new Response('ok'),
       )
 
-      const responding = post('secret')
-      await vi.advanceTimersByTimeAsync(15_000)
+      let answered = false
+      const responding = post('secret').then((response) => {
+        answered = true
+        return response
+      })
+      // A slow page is given 25 s: the balloon data alone can take 12.
+      await vi.advanceTimersByTimeAsync(20_000)
+      expect(answered).toBe(false)
+      await vi.advanceTimersByTimeAsync(5_000)
       const response = await responding
 
       expect(await response.json()).toEqual({

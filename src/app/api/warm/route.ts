@@ -20,7 +20,7 @@ const CONCURRENCY = 4
 /** No new pages after this, leaving room for the last ones to finish. */
 const BUDGET_MS = 30_000
 /** A page (with its chart) that takes longer than this is reported, not waited for. */
-const PAGE_TIMEOUT_MS = 15_000
+const PAGE_TIMEOUT_MS = 25_000
 
 function isAuthorised(request: NextRequest): boolean {
   const secret = process.env.WARM_SECRET
@@ -39,6 +39,9 @@ async function warmPage(
   const failed: string[] = []
 
   const page = await fetch(`${origin}${path}`, { cache: 'no-store' })
+  // Read to the end: an upper air page streams the balloon data in, and is only
+  // rendered (and cached) whole if someone reads it all.
+  await page.arrayBuffer()
   if (page.ok) warmed++
   else failed.push(`${path} ${page.status}`)
 
@@ -47,6 +50,8 @@ async function warmPage(
     const firstChart = (await chartListForPath(path))?.urls[0]
     if (firstChart) {
       const chart = await fetch(`${origin}${firstChart}`, { cache: 'no-store' })
+      // Read to the end too: the CDN keeps only an image it has sent whole.
+      await chart.arrayBuffer()
       if (chart.ok) warmed++
       else failed.push(`${firstChart} ${chart.status}`)
     }

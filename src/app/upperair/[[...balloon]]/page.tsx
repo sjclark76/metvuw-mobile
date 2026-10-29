@@ -1,8 +1,10 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
 import NoForecast from '@/components/NoForecast'
 import { UpperAirPage } from '@/components/UpperAirPage'
+import { UpperAirPageWithSounding } from '@/components/UpperAirPage/UpperAirPageWithSounding'
 import { getUpperAirChartDataForCode } from '@/shared/helpers/dataSource/getWeatherChartData'
 import generateSEOMetadata from '@/shared/helpers/generateSEOMetadata'
 import { fetchSounding } from '@/shared/helpers/sounding/fetchSounding'
@@ -12,6 +14,11 @@ import {
 } from '@/shared/types/balloonLocations'
 
 export const revalidate = 3600
+
+// The balloon data can take Wyoming 8 to 12 s to send. Vercel stops a function
+// at 10 s by default, before the answer comes, so it is never cached and every
+// render times out; a minute (the most the plan allows) lets it come.
+export const maxDuration = 60
 
 // No pages are built ahead of time (so a build never needs metvuw.com to be up),
 // and each is rendered on its first visit and then cached for `revalidate`
@@ -47,20 +54,37 @@ export default async function Page(props: Props) {
     return notFound()
   }
 
-  // metvuw's charts and the balloon data, side by side: neither waits on the other.
-  const [chartData, sounding] = await Promise.all([
-    getUpperAirChartDataForCode(balloonLocationCode),
-    fetchSounding(balloonLocationCode),
-  ])
-  if (chartData.length === 0 && !sounding) {
-    return <NoForecast />
+  // Asked for at once, but not waited for: it can take Wyoming 8 to 12 s.
+  const sounding = fetchSounding(balloonLocationCode)
+  const chartData = await getUpperAirChartDataForCode(balloonLocationCode)
+
+  if (chartData.length === 0) {
+    // Nothing of metvuw's to show meanwhile: the page is the balloon's or none.
+    const fetched = await sounding
+    if (!fetched) return <NoForecast />
+    return (
+      <UpperAirPage
+        balloonCode={balloonLocationCode}
+        chartData={chartData}
+        sounding={fetched}
+      />
+    )
   }
 
+  // metvuw's charts are sent straight away; the balloon's panel (and our chart,
+  // if metvuw's are older) replace them when it answers. Once the answer is
+  // cached it comes at once, and the page is sent whole.
   return (
-    <UpperAirPage
-      balloonCode={balloonLocationCode}
-      chartData={chartData}
-      sounding={sounding}
-    />
+    <Suspense
+      fallback={
+        <UpperAirPage balloonCode={balloonLocationCode} chartData={chartData} />
+      }
+    >
+      <UpperAirPageWithSounding
+        balloonCode={balloonLocationCode}
+        chartData={chartData}
+        sounding={sounding}
+      />
+    </Suspense>
   )
 }
