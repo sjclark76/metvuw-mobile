@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+
 import NoForecast from '@/components/NoForecast'
 import RegionPage from '@/components/RegionPage/RegionPage'
 import { UpperAirPage } from '@/components/UpperAirPage'
@@ -8,6 +11,8 @@ import {
   getSatelliteChartData,
   getUpperAirChartDataForCode,
 } from '@/shared/helpers/dataSource/getWeatherChartData'
+import { fetchSounding } from '@/shared/helpers/sounding/fetchSounding'
+import { parseSounding } from '@/shared/helpers/sounding/parseSounding'
 import { balloonLocations } from '@/shared/types/balloonLocations'
 import { radarRegions } from '@/shared/types/radarRegions'
 import { regions } from '@/shared/types/region'
@@ -239,6 +244,30 @@ describe('upper air page', () => {
     vi.mocked(getUpperAirChartDataForCode).mockResolvedValue([])
 
     expect((await route(['93417'])).type).toBe(NoForecast)
+  })
+
+  test('shows the page when metvuw has no charts but a balloon has flown', async () => {
+    vi.mocked(getUpperAirChartDataForCode).mockResolvedValue([])
+    vi.mocked(fetchSounding).mockResolvedValueOnce({
+      launchUTC: Date.UTC(2026, 9, 29, 12),
+      sounding: parseSounding(
+        readFileSync(
+          join(
+            __dirname,
+            '../shared/helpers/sounding/fixtures/invercargill-2026102912.html',
+          ),
+          'utf8',
+        ),
+      ),
+      sourceUrl: 'https://weather.uwyo.edu/wsgi/sounding?id=93844',
+    })
+
+    const page = await route(['93844'])
+
+    expect(page.type).not.toBe(NoForecast)
+    expect(page.type).toBe(UpperAirPage)
+    expect(page.props.chartData).toEqual([])
+    expect(page.props.sounding?.launchUTC).toBe(Date.UTC(2026, 9, 29, 12))
   })
 
   test('gives each station its own canonical address', async () => {
