@@ -146,13 +146,14 @@ export function summariseSounding(sounding: Sounding): SoundingSummary {
   const lowComplete = lowestM <= LOW_COMPLETE_M
 
   const freezing = freezingLevel(levels, lowComplete)
-  const snowLevelM =
-    freezing?.kind === 'height'
-      ? Math.max(
-          roundTo(freezing.m - SNOW_BELOW_FREEZING_M, 100),
-          roundTo(lowestM, 100),
-        )
-      : undefined
+  // Snow falls about 300 m below the freezing level, but never below the
+  // lowest reading: if that is the ground we say so, if not we don't know.
+  let snowLevelM: number | undefined
+  if (freezing?.kind === 'height') {
+    const snowM = freezing.m - SNOW_BELOW_FREEZING_M
+    if (snowM >= lowestM) snowLevelM = roundTo(snowM, 100)
+    else if (lowComplete) snowLevelM = roundTo(lowestM, 100)
+  }
 
   const winds = [1, 3, 5].flatMap((atKm) => {
     const level = nearestLevel(levels, atKm * 1000)
