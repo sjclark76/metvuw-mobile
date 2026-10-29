@@ -35,7 +35,10 @@ describe('fetchSounding', () => {
     fetchMock.mockReset()
     vi.stubGlobal('fetch', fetchMock)
   })
-  afterEach(() => vi.unstubAllGlobals())
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    vi.restoreAllMocks()
+  })
 
   test('returns the latest launch when it has data', async () => {
     fetchMock.mockResolvedValue(new Response(page))
@@ -78,6 +81,7 @@ describe('fetchSounding', () => {
   })
 
   test('stops at once when Wyoming is too busy, without asking again', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     fetchMock.mockResolvedValue(
       new Response('The server is too busy, try again later.', {
         status: 503,
@@ -86,12 +90,54 @@ describe('fetchSounding', () => {
 
     expect(await fetchSounding('93844', NOW)).toBeUndefined()
     expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn).toHaveBeenCalledWith(
+      '[sounding] 93844 2026-10-30 00:00: Wyoming answered 503',
+    )
   })
 
-  test('stops when the request fails or times out', async () => {
-    fetchMock.mockRejectedValue(new DOMException('timed out', 'TimeoutError'))
+  test('stops and warns on a 500', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    fetchMock.mockResolvedValue(new Response('oops', { status: 500 }))
 
     expect(await fetchSounding('93844', NOW)).toBeUndefined()
     expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(warn).toHaveBeenCalledWith(
+      '[sounding] 93844 2026-10-30 00:00: Wyoming answered 500',
+    )
+  })
+
+  test('warns when Wyoming returns pages with no table', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    fetchMock.mockImplementation(async () => new Response('<html>none</html>'))
+
+    expect(await fetchSounding('93844', NOW)).toBeUndefined()
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn).toHaveBeenCalledWith(
+      "[sounding] 93844: Wyoming's page had no table for 4 launch(es); has its format changed?",
+    )
+  })
+
+  test('does not warn when every launch is a 400', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    fetchMock.mockImplementation(
+      async () => new Response('Unable to retrieve the data', { status: 400 }),
+    )
+
+    expect(await fetchSounding('93844', NOW)).toBeUndefined()
+    expect(warn).not.toHaveBeenCalled()
+  })
+
+  test('stops when the request fails or times out', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    fetchMock.mockRejectedValue(
+      Object.assign(new Error('timed out'), { name: 'TimeoutError' }),
+    )
+
+    expect(await fetchSounding('93844', NOW)).toBeUndefined()
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(warn).toHaveBeenCalledWith(
+      '[sounding] 93844: TimeoutError asking Wyoming',
+    )
   })
 })

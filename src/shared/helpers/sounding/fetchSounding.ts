@@ -55,6 +55,7 @@ export async function fetchSounding(
   now: Date = new Date(),
 ): Promise<FetchedSounding | undefined> {
   let launchUTC = latestLaunchUTC(now)
+  let withoutTable = 0
   try {
     for (let tried = 0; tried < MOST_LAUNCHES; tried++) {
       const sourceUrl = soundingUrl(station, launchUTC)
@@ -67,14 +68,35 @@ export async function fetchSounding(
         if (sounding.levels.length > 0) {
           return { launchUTC, sounding, sourceUrl }
         }
+        withoutTable++
       } else if (response.status !== 400) {
+        const datetime = new Date(launchUTC)
+          .toISOString()
+          .replace('T', ' ')
+          .slice(0, 16)
+
+        // eslint-disable-next-line no-console
+        console.warn(
+          `[sounding] ${station} ${datetime}: Wyoming answered ${response.status}`,
+        )
+        await response.body?.cancel()
         return undefined
       }
       launchUTC -= HALF_DAY_MS
     }
-  } catch {
+  } catch (error) {
     // A network error or the timeout, while asking or while reading the page.
+    // eslint-disable-next-line no-console
+    console.warn(
+      `[sounding] ${station}: ${error instanceof Error ? error.name : 'error'} asking Wyoming`,
+    )
     return undefined
+  }
+  if (withoutTable > 0) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `[sounding] ${station}: Wyoming's page had no table for ${withoutTable} launch(es); has its format changed?`,
+    )
   }
   return undefined
 }
