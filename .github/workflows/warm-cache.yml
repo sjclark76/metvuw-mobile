@@ -1,0 +1,27 @@
+name: Warm cache after deploy
+# Each deploy empties Vercel's page cache, and a page rendered afresh takes 3 to
+# 4 s (metvuw.com is scraped first): the region pages' Largest Contentful Paint
+# was Poor for that (#2611). This renders every page, and its first chart, as
+# soon as a production deploy is live, so visitors find them cached.
+#
+# Attack Mode challenges this runner, so a Vercel WAF custom rule lets
+# POST /api/warm through when it carries the x-warm-token header. The route
+# itself checks the token against WARM_SECRET.
+on:
+  deployment_status:
+jobs:
+  warm:
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Warm every page
+        env:
+          WARM_SECRET: ${{ secrets.WARM_SECRET }}
+        run: |
+          curl --fail-with-body --silent --show-error --max-time 300 \
+            --retry 3 --retry-delay 20 --retry-all-errors \
+            -X POST -H "x-warm-token: $WARM_SECRET" \
+            https://www.metvuwmobile.com/api/warm
