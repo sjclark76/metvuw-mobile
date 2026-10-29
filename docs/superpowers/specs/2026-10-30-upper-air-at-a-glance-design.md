@@ -53,7 +53,7 @@ Heights are metres above sea level, as Wyoming gives them. A sounding is **low-c
 |---|---|---|
 | Freezing level | First height, going up, where temperature drops to 0 °C or below (interpolated between levels, rounded to 10 m). "At ground level" when the lowest reading is ≤ 0 °C and the sounding is low-complete. | The sounding isn't low-complete and its lowest reading is already ≤ 0 °C. |
 | Snow level | Freezing level − 300 m, rounded to 100 m, not below the lowest reading. Worded "about". | No freezing level. |
-| Cloud | Layers where temperature − dew point ≤ 3 °C, ≥ 150 m thick, below 9 km. Layers less than 100 m apart are merged; at most 3 are listed, lowest first. None: "Dry: no cloud layers". | Never left out. |
+| Cloud | Layers where temperature − dew point ≤ 3 °C, ≥ 150 m thick, below 9 km. Layers less than 100 m apart are merged; at most 3 are listed, lowest first. None: "Dry: no cloud layers", or with a gap note "Dry above N m: no cloud layers" (N as in the gap note). | Never left out. |
 | Inversion | Below 1.5 km, temperature rises by ≥ 1 °C over ≥ 100 m of height. | The sounding isn't low-complete. |
 | Wind | At 1, 3 and 5 km: the reading nearest each height, if within 150 m. 8 compass points (where it blows from) and knots. | No reading within 150 m. |
 | Temperature at 3 km | The reading nearest 3,000 m, if within 150 m. | No reading within 150 m. |
