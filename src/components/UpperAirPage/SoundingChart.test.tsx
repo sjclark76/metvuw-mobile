@@ -50,6 +50,16 @@ describe('<SoundingChart />', () => {
     )
   })
 
+  test('labels the temperature axis up to 20°, and keeps the freezing label left of the line', () => {
+    const { container } = renderChart()
+
+    expect(screen.getByText('20°')).toBeInTheDocument()
+    expect(screen.getByText('-80°')).toBeInTheDocument()
+    const label = container.querySelector('[data-freezing] text')
+    expect(label).toHaveAttribute('x', '38')
+    expect(label).toHaveAttribute('text-anchor', 'start')
+  })
+
   test('shows the wind at each kilometre up to 9 km', () => {
     const { container } = renderChart()
 
