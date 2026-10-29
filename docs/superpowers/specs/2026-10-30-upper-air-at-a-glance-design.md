@@ -34,8 +34,15 @@ Only the latest launch with data is used: no history, time axis or animation for
 ## Data
 
 - **Source:** `https://weather.uwyo.edu/wsgi/sounding?datetime=<YYYY-MM-DD HH:00:00>&id=<station>&src=UNKNOWN&type=TEXT:LIST`. Launches are at 00 and 12 UTC. The levels are a fixed-width table in the page (`PRES HGHT TEMP DWPT RELH MIXR DRCT SPED THTA THTE THTV`), with indices (`Lifted Index`, `Most Unstable CAPE`) below it. The CSV export returned one row in testing, so it isn't used.
-- **Finding the launch:** start at the most recent 00 or 12 UTC at or before now, and step back one launch at a time, up to 4 launches (2 days), until one has table rows. Each request has a 10 s timeout and is cached for an hour (`next: { revalidate: 3600 }`).
-- **Reliability seen (22–29 Oct 2026, 48 launches):** 34 complete from the ground, 9 missing the lowest 1.2–2.4 km, 5 with no data. The gaps cluster by station: Whenuapai started high for 3 days, and Paraparaumu had no data for 2.5 days.
+- **Finding the launch:** start at the most recent 00 or 12 UTC at or before now, and step back one launch at a time, up to 4 launches (2 days). Each request has a 10 s timeout and is cached for an hour (`next: { revalidate: 3600 }`; Next stores only 200 responses). Wyoming's answers decide the next step:
+
+  | Answer | Meaning | Next |
+  |---|---|---|
+  | 200 with table rows | data | use it |
+  | 200 with no rows, or 400 ("Unable to retrieve the data for …") | no data for that launch | step back one launch |
+  | 503 ("The server is too busy, try again later."), any other status, or a timeout | can't ask now | stop: no panel or chart of ours this render |
+
+- **Reliability seen (22–29 Oct 2026, 48 launches):** all 48 have data. 39 start from the ground, 9 miss the lowest 1.2–2.4 km (clustered: Whenuapai started high for 3 days). Wyoming rate-limits: about 1 request in 5 got "too busy" even 6 s apart, so we never retry or step back on a 503.
 - **Terms:** check Wyoming's terms of use before release.
 
 ## Rules
@@ -61,13 +68,13 @@ All on the server. The page renders the panel as text and our chart as inline SV
 
 | Unit | File | Job |
 |---|---|---|
-| `fetchSounding(station, now)` | `src/shared/helpers/sounding/fetchSounding.ts` | Finds the newest launch with data (up to 4 tries). Returns the page text and launch time, or `undefined`. The only network code. |
+| `fetchSounding(station, now)` | `src/shared/helpers/sounding/fetchSounding.ts` | Finds the newest launch with data (up to 4 tries). Returns the launch time and the parsed sounding, or `undefined`. The only network code. |
 | `parseSounding(text)` | `src/shared/helpers/sounding/parseSounding.ts` | Page text → levels (pressure, height, temperature, dew point, wind direction and speed) and indices. Pure. |
 | `summariseSounding(sounding)` | `src/shared/helpers/sounding/summariseSounding.ts` | The rules above → the lines to show and any gap note. Pure. |
 | `SoundingGlance` | `src/components/UpperAirPage/SoundingGlance.tsx` | The "At a glance" panel. Server component. |
 | `SoundingChart` | `src/components/UpperAirPage/SoundingChart.tsx` | Our chart, as SVG. Server component. |
 
-`src/app/upperair/[[...balloon]]/page.tsx` fetches the sounding alongside metvuw's charts and passes both to `UpperAirPage`, which shows the panel and chooses the chart.
+`src/app/upperair/[[...balloon]]/page.tsx` fetches the sounding alongside metvuw's charts and passes both to `UpperAirPage`, which shows the panel and chooses the chart (`showOwnChart`, in `src/shared/helpers/sounding/showOwnChart.ts`). With our chart there is no footer (time axis and viewer): it steps through metvuw's series, which isn't shown. "No forecast" appears only when there are neither metvuw charts nor a sounding.
 
 ## Tests
 
@@ -77,10 +84,10 @@ All on the server. The page renders the panel as text and our chart as inline SV
   - Paraparaumu 28 Oct 00 UTC, no data.
 - **Fetching:** stepping back across launches, the 10 s timeout, giving up after 4, and the URL for each station and time (network mocked).
 - **Components:** each line shown or left out, the gap note, the source line and link, and our chart's freezing line, cloud bands and wind arrows.
-- **End to end:** the e2e stub (`e2e/stub`) serves a saved sounding, so tests never call Wyoming:
-  - the panel appears on each station page;
-  - our chart replaces metvuw's when the stub's metvuw charts are older;
-  - the page is as today when the stub returns no sounding.
+- **End to end:** the e2e stub (`e2e/stub`) also answers for `weather.uwyo.edu`, so tests never call Wyoming. Its metvuw charts are from 11–14 Oct 2026, older than any launch, so:
+  - Invercargill (93844) gets the complete sounding: the panel and our chart, no footer;
+  - Paraparaumu (93417) gets the incomplete one: the panel with the gap note, and our chart;
+  - Whenuapai (93112, the default page many tests use) gets "no data" for every launch: the page is as today.
 
 ## Not in this work
 
