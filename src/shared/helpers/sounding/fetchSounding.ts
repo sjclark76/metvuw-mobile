@@ -15,7 +15,7 @@ const HALF_DAY_MS = 12 * 60 * 60 * 1000
 // to Wyoming, which rate-limits.
 const MOST_LAUNCHES = 4
 // The whole search, not each request, so a slow Wyoming costs a page at most this.
-const TIMEOUT_MS = 10_000
+const TIMEOUT_MS = 25_000
 
 /** The last 00 or 12 UTC at or before `now`: balloons go up at those times. */
 export function latestLaunchUTC(now: Date): number {
@@ -49,7 +49,8 @@ export function soundingUrl(
  * data (400, or a page with no table) is passed over for the one before it. Any
  * other failure, including Wyoming saying it is too busy (503), ends the search:
  * asking again would only add to its load. Only 200 responses are cached, so the
- * next render of the page asks again. The whole search shares one 10 s timeout.
+ * next render of the page asks again. The whole search shares one 25 s timeout:
+ * Wyoming can take 8 to 12 s to send a sounding it has not sent lately.
  */
 export async function fetchSounding(
   station: BalloonLocationCode,

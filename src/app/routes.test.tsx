@@ -1,9 +1,12 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
+import { Suspense } from 'react'
+
 import NoForecast from '@/components/NoForecast'
 import RegionPage from '@/components/RegionPage/RegionPage'
 import { UpperAirPage } from '@/components/UpperAirPage'
+import { UpperAirPageWithSounding } from '@/components/UpperAirPage/UpperAirPageWithSounding'
 import { config } from '@/config'
 import {
   getRadarChartDataForCode,
@@ -29,6 +32,7 @@ import RegionRoute, {
 import { generateMetadata as satelliteMetadata } from './satellite/[[...rest]]/page'
 import UpperAirRoute, {
   generateMetadata as upperAirMetadata,
+  maxDuration as upperAirMaxDuration,
 } from './upperair/[[...balloon]]/page'
 
 vi.mock('next/navigation', () => ({
@@ -220,8 +224,42 @@ describe('upper air page', () => {
     const page = await route()
 
     expect(getUpperAirChartDataForCode).toHaveBeenCalledWith('93112')
-    expect(page.type).toBe(UpperAirPage)
-    expect(page.props.balloonCode).toBe('93112')
+    expect(page.props.fallback.props.balloonCode).toBe('93112')
+  })
+
+  // The balloon data can take Wyoming 8 to 12 s: metvuw's charts are sent at
+  // once, and the balloon's panel (and our chart) follow when it answers.
+  test("sends metvuw's charts at once, and the balloon's page when it comes", async () => {
+    vi.mocked(getUpperAirChartDataForCode).mockResolvedValue([chart])
+    const fetched = {
+      launchUTC: Date.UTC(2026, 9, 29, 12),
+      sounding: { levels: [] },
+      sourceUrl: 'https://weather.uwyo.edu/wsgi/sounding?id=93844',
+    }
+    vi.mocked(fetchSounding).mockResolvedValueOnce(fetched)
+
+    const page = await route(['93844'])
+
+    expect(page.type).toBe(Suspense)
+    expect(page.props.fallback.type).toBe(UpperAirPage)
+    expect(page.props.fallback.props).toEqual({
+      balloonCode: '93844',
+      chartData: [chart],
+    })
+    const waiting = page.props.children
+    expect(waiting.type).toBe(UpperAirPageWithSounding)
+    const full = await UpperAirPageWithSounding(waiting.props)
+    expect(full.type).toBe(UpperAirPage)
+    expect(full.props).toEqual({
+      balloonCode: '93844',
+      chartData: [chart],
+      sounding: fetched,
+    })
+  })
+
+  // Vercel stops a function at 10 s by default: too soon for Wyoming.
+  test('may run for a minute, to wait for the balloon data', () => {
+    expect(upperAirMaxDuration).toBe(60)
   })
 
   test('shows the station that was asked for', async () => {

@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 
 import { ChartList, chartListForPath } from '@/shared/helpers/offline/chartList'
 
-import { GET } from './route'
+import { GET, maxDuration } from './route'
 
 vi.mock('@/shared/helpers/offline/chartList', () => ({
   chartListForPath: vi.fn(),
@@ -81,5 +81,11 @@ describe('GET /api/chart-list', () => {
     expect(response.headers.get('Cache-Control')).toBe(
       'public, max-age=0, s-maxage=30',
     )
+  })
+
+  // An upper air page's list waits for the balloon data, which can take Wyoming
+  // 8 to 12 s; Vercel would stop the function at 10.
+  test('may run for a minute', () => {
+    expect(maxDuration).toBe(60)
   })
 })
