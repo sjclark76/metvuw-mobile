@@ -42,6 +42,11 @@ export function SoundingGlance({
   sourceUrl: string
 }) {
   const { freezing, snowLevelM, cloud, winds, tempAt3kmC, stability } = summary
+  // Without cloud, say how high the dry air was checked: no readings below a gap.
+  const dry =
+    summary.gapBelowM === undefined
+      ? 'Dry: no cloud layers'
+      : `Dry above ${formatHeight(summary.gapBelowM)} m: no cloud layers`
 
   return (
     <section
@@ -72,7 +77,7 @@ export function SoundingGlance({
         )}
         <Line icon="☁︎">
           {cloud.length === 0 ? (
-            'Dry: no cloud layers'
+            dry
           ) : (
             <>
               <b>Cloud</b>{' '}

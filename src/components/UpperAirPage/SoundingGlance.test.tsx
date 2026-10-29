@@ -92,6 +92,7 @@ describe('<SoundingGlance />', () => {
     expect(panel()).toHaveTextContent(
       'No readings below 1,500 m from this balloon',
     )
+    expect(panel()).toHaveTextContent('Dry above 1,500 m: no cloud layers')
     expect(panel()).not.toHaveTextContent('Freezing')
     expect(panel()).not.toHaveTextContent('Wind')
     expect(panel()).not.toHaveTextContent('°C at 3,000 m')
