@@ -39,6 +39,10 @@ vi.mock('@/shared/helpers/dataSource/getWeatherChartData', () => ({
   getUpperAirChartDataForCode: vi.fn(),
 }))
 
+vi.mock('@/shared/helpers/sounding/fetchSounding', () => ({
+  fetchSounding: vi.fn().mockResolvedValue(undefined),
+}))
+
 const day = (d: number) => Date.UTC(2026, 9, d)
 const rain = (d: number) => ({
   imageDateUTC: day(d),
