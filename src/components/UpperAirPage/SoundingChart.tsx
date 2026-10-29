@@ -218,10 +218,45 @@ export function SoundingChart({
             : `This chart is drawn from ${when}'s balloon.`}
         </p>
         <p>
-          <span className="text-warm">Red: temperature.</span>{' '}
-          <span className="text-cold">Blue: dew point.</span> Where they meet,
-          the air is saturated: cloud. Arrows show where the wind blows to, with
-          its speed in knots. ·{' '}
+          {/* The words aren't coloured: the red text fails contrast at caption size. */}
+          <span className="inline-flex items-center gap-1">
+            <svg
+              aria-hidden="true"
+              width="14"
+              height="4"
+              className="inline-block"
+            >
+              <line
+                x1="0"
+                y1="2"
+                x2="14"
+                y2="2"
+                strokeWidth="3"
+                className="stroke-warm"
+              />
+            </svg>
+            temperature
+          </span>{' '}
+          <span className="inline-flex items-center gap-1">
+            <svg
+              aria-hidden="true"
+              width="14"
+              height="4"
+              className="inline-block"
+            >
+              <line
+                x1="0"
+                y1="2"
+                x2="14"
+                y2="2"
+                strokeWidth="3"
+                className="stroke-cold"
+              />
+            </svg>
+            dew point
+          </span>{' '}
+          Where they meet, the air is saturated: cloud. Arrows show where the
+          wind blows to, with its speed in knots. ·{' '}
           <a href={sourceUrl} className="underline underline-offset-2">
             University of Wyoming data
           </a>
