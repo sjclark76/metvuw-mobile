@@ -15,7 +15,7 @@
 - Wyoming URL: `https://weather.uwyo.edu/wsgi/sounding?` + `URLSearchParams({ datetime: 'YYYY-MM-DD HH:00:00', id: <station>, src: 'UNKNOWN', type: 'TEXT:LIST' })`. Launches are 00 and 12 UTC.
 - Wyoming answers: 200 with rows → use; 200 with no rows or 400 → step back one launch; 503, any other status, an error or a timeout → stop (`undefined`). Never retry. At most 4 launches. 10 s timeout per request. `next: { revalidate: 3600 }`.
 - "Low-complete": the lowest reading is at or below 500 m.
-- Copy, exactly: "At a glance"; "Freezing level N m"; " · snow possible down to about N m"; "Freezing at ground level"; "Cloud A – B m" (layers joined by ", "); "Dry: no cloud layers"; "Inversion near the ground: fog, haze or smog can be trapped"; "Wind W 33 kt at 1 km · …"; "N °C at 3,000 m"; "Unstable: thunderstorms possible"; "Stable: thunderstorms unlikely"; "No readings below N m from this balloon"; source line "From Thursday 1:00am's balloon · University of Wyoming data. What the balloon measured, not a forecast."
+- Copy, exactly: "At a glance"; "Freezing level N m"; " · snow possible down to about N m"; "Freezing at ground level"; "Cloud A – B m" (layers joined by ", "); "Dry: no cloud layers"; "Inversion near the ground: fog, haze or smog can be trapped"; "Wind W 33 kt at 1 km · …"; "N °C at 3,000 m"; "Unstable: thunderstorms possible"; "Stable: thunderstorms unlikely"; "No readings below N m from this balloon"; source line "From Friday 1:00am's balloon · University of Wyoming data. What the balloon measured, not a forecast."
 - Heights in copy are rounded to 100 m (freezing level to 10 m), with thousands separators ("1,500"). Negative temperatures use the minus sign "−".
 - Times are New Zealand time: `formatInTimeZone(time, format, DEFAULT_TIME_ZONE)` from `@/shared/helpers/timeZone`.
 - No new client JavaScript: the new components have no `'use client'`.
@@ -860,7 +860,7 @@ const full: SoundingSummary = {
   tempAt3kmC: -14,
   stability: 'stable',
 }
-// Thursday 30 October 2026, 1:00am in New Zealand.
+// Friday 30 October 2026, 1:00am in New Zealand.
 const LAUNCH = Date.UTC(2026, 9, 29, 12)
 const SOURCE = 'https://weather.uwyo.edu/wsgi/sounding?id=93844'
 
@@ -889,7 +889,7 @@ describe('<SoundingGlance />', () => {
     renderGlance(full)
 
     expect(panel()).toHaveTextContent(
-      "From Thursday 1:00am's balloon · University of Wyoming data. What the balloon measured, not a forecast.",
+      "From Friday 1:00am's balloon · University of Wyoming data. What the balloon measured, not a forecast.",
     )
     expect(
       screen.getByRole('link', { name: 'University of Wyoming data' }),
@@ -962,7 +962,7 @@ export const formatHeight = (m: number) => m.toLocaleString('en-NZ')
 export const formatTemperature = (c: number) =>
   `${Math.round(c) < 0 ? '−' : ''}${Math.abs(Math.round(c))}`
 
-/** When the balloon went up, as people say it: "Thursday 1:00am". */
+/** When the balloon went up, as people say it: "Friday 1:00am". */
 export const balloonTime = (launchUTC: number) =>
   formatInTimeZone(launchUTC, 'EEEE h:mmaaa', DEFAULT_TIME_ZONE)
 
@@ -1075,7 +1075,7 @@ export function SoundingGlance({
 - [ ] **Step 4: Run the tests to see them pass**
 
 Run: `npx vitest run src/components/UpperAirPage/SoundingGlance.test.tsx`
-Expected: PASS, 7 tests. If the "Thursday 1:00am" assertion fails, print `balloonTime(LAUNCH)` and check `formatInTimeZone`'s argument order in `src/shared/helpers/timeZone.ts`.
+Expected: PASS, 7 tests. If the "Friday 1:00am" assertion fails, print `balloonTime(LAUNCH)` and check `formatInTimeZone`'s argument order in `src/shared/helpers/timeZone.ts`.
 
 - [ ] **Step 5: Lint and commit**
 
@@ -1163,7 +1163,7 @@ describe('<SoundingChart />', () => {
     renderChart(Date.UTC(2026, 9, 12, 11))
 
     expect(screen.getByRole('figure')).toHaveTextContent(
-      "metvuw's charts stop at 13 Oct; this chart is drawn from Thursday 1:00am's balloon.",
+      "metvuw's charts stop at 13 Oct; this chart is drawn from Friday 1:00am's balloon.",
     )
   })
 
@@ -1171,7 +1171,7 @@ describe('<SoundingChart />', () => {
     renderChart()
 
     expect(screen.getByRole('figure')).toHaveTextContent(
-      "This chart is drawn from Thursday 1:00am's balloon.",
+      "This chart is drawn from Friday 1:00am's balloon.",
     )
   })
 
