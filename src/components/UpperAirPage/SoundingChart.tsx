@@ -20,8 +20,8 @@ const RIGHT = 300
 const TOP = 24
 const BOTTOM = 440
 const TOP_M = 10_000
-const MIN_C = -90
-const MAX_C = 15
+const MIN_C = -80
+const MAX_C = 35
 // One point per 100 m is plenty to draw: a sounding has thousands of levels.
 const POINT_EVERY_M = 100
 
@@ -113,7 +113,7 @@ export function SoundingChart({
               </text>
             </g>
           ))}
-          {[-80, -60, -40, -20, 0].map((c) => (
+          {[-80, -60, -40, -20, 0, 20].map((c) => (
             <text
               key={c}
               x={x(c)}
@@ -165,9 +165,9 @@ export function SoundingChart({
                 className="stroke-warm"
               />
               <text
-                x={RIGHT - 4}
+                x={LEFT + 4}
                 y={y(freezingM) - 5}
-                textAnchor="end"
+                textAnchor="start"
                 className="fill-warm"
               >
                 FREEZING {formatHeight(freezingM)} m
