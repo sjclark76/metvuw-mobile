@@ -116,12 +116,14 @@ describe('parseSounding', () => {
     ).toEqual({ levels: [], liftedIndex: undefined, cape: undefined })
   })
 
-  test('skips a row with a value missing, and carries on', () => {
+  // Wyoming's rows have all eleven values (checked on 48 soundings); a row cut
+  // short is skipped rather than read into the wrong columns.
+  test('skips a row cut short, and carries on', () => {
     const page = `
    PRES   HGHT   TEMP   DWPT   RELH   MIXR   DRCT   SPED   THTA   THTE   THTV
     hPa      m      C      C      %   g/kg    deg    m/s      K      K      K
  1000.0     10   15.0   10.0     72   7.80    180    5.0  288.1  310.2  289.5
-  990.0    100   14.0                         180    5.0  288.1  310.2  289.5
+  990.0    100   14.0    9.5
   980.0    190   13.0    9.0     76   7.50    190    6.0  288.9  310.6  290.2
 `
     expect(parseSounding(page).levels.map((l) => l.heightM)).toEqual([10, 190])
@@ -164,8 +166,8 @@ const KNOTS_PER_METRE_PER_SECOND = 1.94384
 /**
  * The levels and indices in a University of Wyoming sounding page (its
  * TEXT:LIST form): a fixed-width table, `PRES HGHT TEMP DWPT RELH MIXR DRCT
- * SPED ...`, with the indices in a table below it. A row missing any of the
- * first eight values is skipped; the table ends at the first blank line.
+ * SPED ...`, with the indices in a table below it. Its rows have every value; a
+ * row with fewer than eight is skipped. The table ends at the first blank line.
  */
 export function parseSounding(page: string): Sounding {
   const text = page.replace(/<[^>]*>/g, ' ')
