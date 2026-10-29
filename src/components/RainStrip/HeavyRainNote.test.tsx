@@ -1,5 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
+import { createStore, Provider } from 'jotai'
 
+import { rainStripPinAtom } from '@/components/Atoms/GlobalState'
 import { type Pin, pinFromPlace } from '@/shared/helpers/pins/pins'
 
 import { HeavyRainNote, type PinHeavyRain } from './HeavyRainNote'
@@ -32,18 +34,32 @@ const heavy: PinHeavyRain = {
 
 const renderNote = (
   found: PinHeavyRain[],
-  { onSeek = vi.fn(), watching = true, checked = true } = {},
+  {
+    onSeek = vi.fn(),
+    watching = true,
+    checked = true,
+    choice,
+  }: {
+    onSeek?: (index: number) => void
+    watching?: boolean
+    checked?: boolean
+    choice?: string
+  } = {},
 ) => {
+  const store = createStore()
+  if (choice) store.set(rainStripPinAtom, choice)
   const view = render(
-    <HeavyRainNote
-      found={found}
-      times={times}
-      watching={watching}
-      checked={checked}
-      onSeek={onSeek}
-    />,
+    <Provider store={store}>
+      <HeavyRainNote
+        found={found}
+        times={times}
+        watching={watching}
+        checked={checked}
+        onSeek={onSeek}
+      />
+    </Provider>,
   )
-  return { onSeek, ...view }
+  return { store, onSeek, ...view }
 }
 const note = () => screen.queryByRole('region', { name: 'Heavy rain ahead' })
 
@@ -125,6 +141,26 @@ describe('<HeavyRainNote />', () => {
     )
 
     expect(onSeek).toHaveBeenCalledWith(2)
+  })
+
+  test('shows the tapped place in the rain strip, so the two agree', () => {
+    const { store } = renderNote([veryHeavy, heavy], { choice: hawea.id })
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /Heavy rain ahead at Wanaka/ }),
+    )
+
+    expect(store.get(rainStripPinAtom)).toBe('wanaka')
+  })
+
+  test('leaves the rain strip on all places, where the tapped one is already shown', () => {
+    const { store } = renderNote([veryHeavy, heavy], { choice: 'all' })
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /Heavy rain ahead at Wanaka/ }),
+    )
+
+    expect(store.get(rainStripPinAtom)).toBe('all')
   })
 
   test('shows three pins, then says how many more', () => {

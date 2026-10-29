@@ -77,6 +77,22 @@ test.describe('heavy rain ahead at a pin', () => {
     ).toHaveAttribute('aria-valuetext', 'Chart 4 of 10')
   })
 
+  test('shows the tapped place in the rain strip, when it shows another', async ({
+    page,
+  }) => {
+    // The strip shows the first pin, Auckland, which stays dry (#2619).
+    await pin(page, auckland, wanaka)
+    await page.goto('/regions/nz')
+    const strip = page.getByLabel('Place for the rain strip')
+    await expect(strip.locator('option:checked')).toHaveText('Auckland')
+
+    await note(page)
+      .getByRole('button', { name: /Very heavy rain ahead at Wanaka/ })
+      .click()
+
+    await expect(strip.locator('option:checked')).toHaveText('Wanaka')
+  })
+
   test('is at the top of the page, and scrolls away with it', async ({
     page,
   }) => {
