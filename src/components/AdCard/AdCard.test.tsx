@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react'
+import { act, render, waitFor } from '@testing-library/react'
 
 import { config } from '@/config'
 
@@ -32,6 +32,31 @@ describe('<AdCard />', () => {
     expect(unit).toHaveAttribute('data-ad-client', config.adsenseClientId)
   })
 
+  // Test ads are not counted, so seeing the ads outside production (to check how
+  // they look) cannot be taken for invalid traffic.
+  test('asks for test ads outside production', () => {
+    vi.stubEnv('NEXT_PUBLIC_ADSENSE_SLOT_ID', '1234567890')
+    vi.stubEnv('NODE_ENV', 'development')
+
+    const { container } = render(<AdCard />)
+
+    expect(container.querySelector('ins.adsbygoogle')).toHaveAttribute(
+      'data-adtest',
+      'on',
+    )
+  })
+
+  test('asks for real ads in production', () => {
+    vi.stubEnv('NEXT_PUBLIC_ADSENSE_SLOT_ID', '1234567890')
+    vi.stubEnv('NODE_ENV', 'production')
+
+    const { container } = render(<AdCard />)
+
+    expect(container.querySelector('ins.adsbygoogle')).not.toHaveAttribute(
+      'data-adtest',
+    )
+  })
+
   describe('filling', () => {
     beforeEach(() => {
       vi.stubEnv('NEXT_PUBLIC_ADSENSE_SLOT_ID', '1234567890')
@@ -56,24 +81,24 @@ describe('<AdCard />', () => {
       expect(window.adsbygoogle).toHaveLength(1)
     })
 
-    // Hidden until AdSense says it has an ad, so an empty box is never shown.
-    test('stays hidden until AdSense fills it', () => {
+    // Shown, with its room held, while AdSense fills it: a hidden slot has no
+    // width, and AdSense will not fill a slot with no width.
+    test('holds its room while AdSense fills it, so the ad has a width', () => {
       const { container } = render(<AdCard />)
 
-      expect(container.firstElementChild).toHaveStyle({ display: 'none' })
+      expect(container.firstElementChild).not.toHaveStyle({ display: 'none' })
+      expect(container.querySelector('ins.adsbygoogle')).toBeInTheDocument()
     })
 
-    test('shows itself, with its Sponsored label, once AdSense fills it', async () => {
+    test('stays, with its Sponsored label, once AdSense fills it', async () => {
+      vi.useFakeTimers()
       const { container } = render(<AdCard />)
 
       setStatus(container, 'filled')
+      await act(() => vi.advanceTimersByTimeAsync(60_000))
 
-      await waitFor(() =>
-        expect(container.firstElementChild).not.toHaveStyle({
-          display: 'none',
-        }),
-      )
       expect(container).toHaveTextContent('Sponsored')
+      vi.useRealTimers()
     })
 
     test('removes itself when AdSense has no ad', async () => {
@@ -94,6 +119,18 @@ describe('<AdCard />', () => {
       const { container } = render(<AdCard />)
 
       expect(container).toBeEmptyDOMElement()
+    })
+
+    // AdSense blocked (an ad blocker, or a network filter): nothing answers, and an
+    // empty box would stay in the list.
+    test('removes itself when AdSense does not answer', async () => {
+      vi.useFakeTimers()
+      const { container } = render(<AdCard />)
+
+      await act(() => vi.advanceTimersByTimeAsync(10_000))
+
+      expect(container).toBeEmptyDOMElement()
+      vi.useRealTimers()
     })
 
     test('stops watching for the ad status when it unmounts', () => {
