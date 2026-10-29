@@ -57,3 +57,6 @@ signing-key-info.txt
 
 # TypeScript incremental build cache
 *.tsbuildinfo
+
+# self-signed certificate for `npm run dev:ads`
+certificates/

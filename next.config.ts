@@ -26,6 +26,9 @@ const withSerwist = withSerwistInit({
 })
 
 const nextConfig: NextConfig = {
+  // `npm run dev:ads` serves dev at a subdomain of the site, where AdSense will
+  // serve (test) ads; Next blocks dev requests from other origins by default.
+  allowedDevOrigins: ['local.metvuwmobile.com'],
   output: 'standalone', // This can help avoid some Vercel-specific optimizations
   webpack: (config, { dev, isServer }) => {
     // This modification is to prevent the development server from
