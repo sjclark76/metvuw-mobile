@@ -25,7 +25,7 @@ On each station's page (Whenuapai 93112, Paraparaumu 93417, Invercargill 93844):
    - metvuw's series, as today, while metvuw's newest tephigram is at least as recent as the launch used;
    - otherwise our chart in its place, with a note: "metvuw's charts stop at 12 Oct; this chart is drawn from Thursday's balloon."
 
-   Our chart shows height (0–10 km) against temperature (−90 to 15 °C): the temperature and dew point lines, shaded cloud layers, a dashed freezing level, and wind arrows with speeds in knots at each kilometre. The arrows point where the wind blows to, and a line under the chart says so; the panel names where it blows from ("westerly"), as forecasts do. It credits Wyoming.
+   Our chart shows height (0–10 km) against temperature (−80 to 35 °C; lines are clipped at the plot's edge): the temperature and dew point lines, shaded cloud layers, a dashed freezing level, and wind arrows with speeds in knots at each kilometre. The arrows point where the wind blows to, and a line under the chart says so; the panel names where it blows from ("westerly"), as forecasts do. It credits Wyoming.
 3. **Gaps are stated, never guessed.** When readings start above 500 m: "No readings below 2,200 m from this balloon" (with the actual height). When the newest launch has no data, the panel and chart use the latest launch that has, and say which.
 4. **When Wyoming is unavailable** (no data in the last 4 launches, an error or a timeout), there's no panel and no chart of ours. The page is as it is today.
 
@@ -34,7 +34,7 @@ Only the latest launch with data is used: no history, time axis or animation for
 ## Data
 
 - **Source:** `https://weather.uwyo.edu/wsgi/sounding?datetime=<YYYY-MM-DD HH:00:00>&id=<station>&src=UNKNOWN&type=TEXT:LIST`. Launches are at 00 and 12 UTC. The levels are a fixed-width table in the page (`PRES HGHT TEMP DWPT RELH MIXR DRCT SPED THTA THTE THTV`), with indices (`Lifted Index`, `Most Unstable CAPE`) below it. The CSV export returned one row in testing, so it isn't used.
-- **Finding the launch:** start at the most recent 00 or 12 UTC at or before now, and step back one launch at a time, up to 4 launches (2 days). Each request has a 10 s timeout and is cached for an hour (`next: { revalidate: 3600 }`; Next stores only 200 responses). Wyoming's answers decide the next step:
+- **Finding the launch:** start at the most recent 00 or 12 UTC at or before now, and step back one launch at a time, up to 4 launches (2 days). One 10 s time limit covers the whole search. The newest launch is cached for an hour and earlier launches for a day, since a launch's data doesn't change once published (`next: { revalidate }`; Next stores only 200 responses). Every stop other than a 400 is logged with `console.warn`, as is a run of 200s with no table (a likely format change). Wyoming's answers decide the next step:
 
   | Answer | Meaning | Next |
   |---|---|---|
@@ -52,7 +52,7 @@ Heights are metres above sea level, as Wyoming gives them. A sounding is **low-c
 | Line | Rule | Left out when |
 |---|---|---|
 | Freezing level | First height, going up, where temperature drops to 0 °C or below (interpolated between levels, rounded to 10 m). "At ground level" when the lowest reading is ≤ 0 °C and the sounding is low-complete. | The sounding isn't low-complete and its lowest reading is already ≤ 0 °C. |
-| Snow level | Freezing level − 300 m, rounded to 100 m, not below the lowest reading. Worded "about". | No freezing level. |
+| Snow level | Freezing level − 300 m, rounded to 100 m. If that's below the lowest reading: the lowest reading (rounded to 100 m) for a low-complete sounding. Worded "about". | No freezing level, or below the lowest reading of a sounding that isn't low-complete. |
 | Cloud | Layers where temperature − dew point ≤ 3 °C, ≥ 150 m thick, below 9 km. Layers less than 100 m apart are merged; at most 3 are listed, lowest first. None: "Dry: no cloud layers", or with a gap note "Dry above N m: no cloud layers" (N as in the gap note). | Never left out. |
 | Inversion | Below 1.5 km, temperature rises by ≥ 1 °C over ≥ 100 m of height. | The sounding isn't low-complete. |
 | Wind | At 1, 3 and 5 km: the reading nearest each height, if within 150 m. 8 compass points (where it blows from) and knots. | No reading within 150 m. |
@@ -60,11 +60,11 @@ Heights are metres above sea level, as Wyoming gives them. A sounding is **low-c
 | Stability | Lifted index ≤ −2 or CAPE ≥ 500 J/kg: "Unstable: thunderstorms possible". Otherwise "Stable: thunderstorms unlikely". | Either index is missing. |
 | Gap note | "No readings below N m from this balloon", N rounded to 100 m. | The sounding is low-complete. |
 
-**Ours or metvuw's:** ours replaces metvuw's when the time of metvuw's newest chart is earlier than the launch used, or metvuw has no charts.
+**Ours or metvuw's:** ours replaces metvuw's when metvuw's newest chart is more than 2 hours older than the launch used (metvuw names charts at the actual launch, 11 and 23 UTC; Wyoming at the nominal 00 and 12 UTC), or metvuw has no charts.
 
 ## Where the logic lives
 
-All on the server. The page renders the panel as text and our chart as inline SVG, with no new client JavaScript. Upper air pages already render on the server and are cached for an hour, and the post-deploy warm-up (`/api/warm`) renders them, so visitors never wait for Wyoming. Pages saved for offline use keep the panel and chart as they were when saved.
+All on the server. The page renders the panel as text and our chart as inline SVG, with no new client JavaScript. Upper air pages already render on the server and are cached for an hour, and the post-deploy warm-up (`/api/warm`) renders them, so visitors never wait for Wyoming. Pages saved for offline use keep the panel and chart as they were when saved. When our chart is shown, the page's offline chart list gives the balloon's launch as its issue time, so each new balloon refreshes a saved page.
 
 | Unit | File | Job |
 |---|---|---|
