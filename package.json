@@ -7,6 +7,7 @@
   },
   "scripts": {
     "dev": "next dev -p 3002",
+    "dev:ads": "node scripts/ads-preview/preview.mjs",
     "prod": "rm -rf ./.next && npm run build && npm run start",
     "build": "next build --webpack",
     "start": "next start -p 3002",
