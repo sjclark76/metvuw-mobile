@@ -82,4 +82,28 @@ describe('<SoundingChart />', () => {
       screen.getByRole('link', { name: 'University of Wyoming data' }),
     ).toHaveAttribute('href', SOURCE)
   })
+
+  test('keeps the lines inside the plot, even for readings outside its range', () => {
+    const { container } = renderChart()
+
+    const clip = container.querySelector('clipPath rect')
+    expect(clip).toHaveAttribute('x', '34')
+    expect(clip).toHaveAttribute('width', '266')
+    const id = container.querySelector('clipPath')?.getAttribute('id')
+    for (const line of container.querySelectorAll('[data-line]')) {
+      expect(line).toHaveAttribute('clip-path', `url(#${id})`)
+    }
+  })
+
+  test('points each wind arrow where the wind blows to', () => {
+    const { container } = renderChart()
+
+    // At 1 km the wind is from the west (about 270°): the arrow turns to point east.
+    const arrow = container.querySelector('[data-wind] g')
+    const degrees = Number(
+      arrow?.getAttribute('transform')?.match(/rotate\(([\d.]+)\)/)?.[1],
+    )
+    expect(degrees).toBeGreaterThan(400)
+    expect(degrees).toBeLessThan(500)
+  })
 })
