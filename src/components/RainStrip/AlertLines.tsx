@@ -6,7 +6,7 @@ import {
   type PinAlert,
 } from '@/shared/helpers/warnings/alertsForPins'
 
-import { MOST_SHOWN } from './band'
+import { band, MOST_SHOWN } from './band'
 
 /** "A", "A and B", "A, B and C". */
 const joinNames = (names: string[]) =>
@@ -42,11 +42,8 @@ export function AlertLines({
   const when = (time: number) => formatDate(time, 'EEE h:mmaaa')
 
   return (
-    <section
-      aria-label="Weather alerts"
-      className="bg-plate mb-2 px-3 py-2.5 text-sm leading-snug"
-    >
-      <ul aria-live="polite" className="space-y-1.5">
+    <section aria-label="Weather alerts" className="mb-2">
+      <ul aria-live="polite" className="space-y-2">
         {shown.map(({ alert, pins, upcoming, mapTimeUTC }) => {
           const chart = nearestChartIndex(times, mapTimeUTC)
           const time = upcoming ? alert.onsetUTC : alert.expiresUTC
@@ -57,43 +54,48 @@ export function AlertLines({
               style={
                 alert.colourHex ? { borderColor: alert.colourHex } : undefined
               }
-              className={`border-l-4 pl-2 ${alert.colourHex ? '' : 'border-rule'}`}
+              // The same block as the heavy rain band's, edged in the alert's colour.
+              className={`${band} ${alert.colourHex ? '' : 'border-rule'}`}
             >
-              <div>
-                <strong className="font-semibold">
-                  {alert.headline} at {joinNames(pins.map(chartLabel))}:
-                </strong>{' '}
-                {upcoming ? 'from' : 'until'}{' '}
-                <time dateTime={new Date(time).toISOString()}>
-                  {when(time)}
-                </time>
-              </div>
-              <div className="mt-0.5 flex flex-wrap gap-x-4 text-xs">
-                {chart !== undefined && (
-                  <button
-                    type="button"
-                    onClick={() => onSeek(chart)}
+              <div className="min-w-0">
+                <div>
+                  <strong className="font-semibold">
+                    {alert.headline} at {joinNames(pins.map(chartLabel))}:
+                  </strong>{' '}
+                  {upcoming ? 'from' : 'until'}{' '}
+                  <time dateTime={new Date(time).toISOString()}>
+                    {when(time)}
+                  </time>
+                </div>
+                <div className="mt-0.5 flex flex-wrap gap-x-4 text-xs">
+                  {chart !== undefined && (
+                    <button
+                      type="button"
+                      onClick={() => onSeek(chart)}
+                      className={action}
+                    >
+                      Map for {when(times[chart])}
+                    </button>
+                  )}
+                  <a
+                    href={alert.web}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={action}
                   >
-                    Map for {when(times[chart])}
-                  </button>
-                )}
-                <a
-                  href={alert.web}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={action}
-                >
-                  On MetService{' '}
-                  <span className="sr-only">(opens in a new tab)</span>
-                </a>
+                    On MetService{' '}
+                    <span className="sr-only">(opens in a new tab)</span>
+                  </a>
+                </div>
               </div>
             </li>
           )
         })}
-        {more > 0 && <li className="text-ink-soft">and {more} more</li>}
+        {more > 0 && (
+          <li className="text-ink-soft px-3 text-sm">and {more} more</li>
+        )}
       </ul>
-      <p className="text-ink-soft mt-2 text-xs">
+      <p className="text-ink-soft mt-2 px-3 text-xs">
         Alerts from{' '}
         <a
           href="https://www.metservice.com"
