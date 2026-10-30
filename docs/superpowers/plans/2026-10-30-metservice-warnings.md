@@ -1147,6 +1147,8 @@ const covering = (
   upcoming = false,
 ): PinAlert => ({ alert: alert(extra), pins: pins.map(pin), upcoming })
 const region = () => screen.getByRole('region', { name: 'Weather alerts' })
+// The alert lines only: the region also holds the credit's two links.
+const lines = () => within(within(region()).getByRole('list'))
 
 describe('<AlertLines />', () => {
   test('shows nothing without alerts', () => {
@@ -1165,15 +1167,15 @@ describe('<AlertLines />', () => {
     expect(link).toHaveAttribute('target', '_blank')
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')
     expect(link.textContent).toMatch(
-      /^Strong Wind Watch at Wanaka: until [A-Z][a-z]{2} \\d{1,2}:\\d{2}(am|pm)$/,
+      /^Strong Wind Watch at Wanaka: until [A-Z][a-z]{2} \d{1,2}:\d{2}(am|pm)$/,
     )
   })
 
   test('says when an alert that has not started will', () => {
     render(<AlertLines alerts={[covering(['Wanaka'], {}, true)]} />)
 
-    expect(within(region()).getByRole('link').textContent).toMatch(
-      /^Strong Wind Watch at Wanaka: from [A-Z][a-z]{2} \\d{1,2}:\\d{2}(am|pm)$/,
+    expect(lines().getByRole('link').textContent).toMatch(
+      /^Strong Wind Watch at Wanaka: from [A-Z][a-z]{2} \d{1,2}:\d{2}(am|pm)$/,
     )
   })
 
@@ -1184,7 +1186,7 @@ describe('<AlertLines />', () => {
   ])('names the places %j as %s', (names, expected) => {
     render(<AlertLines alerts={[covering(names)]} />)
 
-    expect(within(region()).getByRole('link').textContent).toContain(
+    expect(lines().getByRole('link').textContent).toContain(
       `Strong Wind Watch at ${expected}:`,
     )
   })
@@ -1195,7 +1197,7 @@ describe('<AlertLines />', () => {
       <AlertLines alerts={[{ alert: alert(), pins: [labelled], upcoming: false }]} />,
     )
 
-    expect(within(region()).getByRole('link').textContent).toContain(
+    expect(lines().getByRole('link').textContent).toContain(
       'at The bach:',
     )
   })
@@ -1224,7 +1226,7 @@ describe('<AlertLines />', () => {
       />,
     )
 
-    expect(within(region()).getAllByRole('link')).toHaveLength(3)
+    expect(lines().getAllByRole('link')).toHaveLength(3)
     expect(region()).toHaveTextContent('and 2 more')
   })
 

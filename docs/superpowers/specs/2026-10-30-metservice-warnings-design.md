@@ -61,7 +61,7 @@ XML is read with `cheerio` in XML mode, which the app already depends on. Conten
 - **Route:** 200 with its cache header, and 502.
 - **Matching:** a pin inside, outside and just past an edge; two pins in one alert become one line; expired dropped; not-yet-started; the worst first.
 - **Component:** lines, link, credit, "and N more", the neutral edge, switched off in Settings.
-- **End to end:** the e2e stub also answers for `alerts.metservice.com` (the fetch shim in `e2e/stub/redirect-metvuw.mjs` gains that host). One stub alert has a polygon around Wanaka. Wanaka's band shows it above the heavy rain line, linked to MetService; Auckland's shows none; with the feed down the band is as before.
+- **End to end:** the e2e stub also answers for `alerts.metservice.com` (the fetch shim in `e2e/stub/redirect-metvuw.mjs` gains that host). One stub alert has a polygon around Christchurch (and nowhere the other specs put a pin). Christchurch's band shows it above the heavy rain line, linked to MetService; Auckland's shows none; it is off when weather warnings are off in Settings; and the browser asks only `/api/warnings`. "With the feed down the band is as before" is covered by the hook, fetcher and route unit tests.
 
 ## Not in this work
 
