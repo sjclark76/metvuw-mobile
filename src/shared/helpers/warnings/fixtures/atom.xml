@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://alerts.metservice.com/cap/atom</id>
+  <link href="https://metservice.com"/>
+  <updated>2026-10-30T10:37:09+13:00</updated>
+  <title>Current Watches, Warnings and Advisories for New Zealand issued by MetService</title>
+  <rights>Copyright Meteorological Service of New Zealand Limited, 2026. Licensed under Creative Commons BY 4.0.</rights>
+  <entry>
+    <title>Strong Wind Watch</title>
+    <id>2.49.0.0.554.0.severeweather.nz.20261029205033134.1</id>
+    <category term="Met" />
+    <summary>Westerly winds are expected to strengthen from late this morning and may approach severe gale in exposed places, most likely this afternoon. Chance of upgrading to a Warning: Moderate.</summary>
+    <updated>2026-10-30T09:50:33+13:00</updated>
+    <published>2026-10-30T09:50:33+13:00</published>
+    <author>
+      <name>Meteorological Service of New Zealand Limited</name>
+    </author>
+    <link rel="related" type="application/cap+xml" href="https://alerts.metservice.com/cap/alert?id=2.49.0.0.554.0.severeweather.nz.20261029205033134.1"/>
+  </entry>
+  <entry>
+    <title>Strong Wind Watch</title>
+    <id>2.49.0.0.554.0.severeweather.nz.20261029205033134.0</id>
+    <category term="Met" />
+    <summary>Southwest winds may approach severe gale in exposed places. Chance of upgrading to a Warning: Moderate.</summary>
+    <updated>2026-10-30T09:50:33+13:00</updated>
+    <published>2026-10-30T09:50:33+13:00</published>
+    <author>
+      <name>Meteorological Service of New Zealand Limited</name>
+    </author>
+    <link rel="related" type="application/cap+xml" href="https://alerts.metservice.com/cap/alert?id=2.49.0.0.554.0.severeweather.nz.20261029205033134.0"/>
+  </entry>
+  <entry>
+    <title>Road Snowfall Warning</title>
+    <id>2.49.0.0.554.0.roadsnow.lewispass.20261029212818927.0</id>
+    <category term="Met" />
+    <summary>Another period of snow showers is expected Friday evening and a further 1 to 2 cm may accumulate above 700 metres. </summary>
+    <updated>2026-10-30T10:28:18+13:00</updated>
+    <published>2026-10-30T10:28:18+13:00</published>
+    <author>
+      <name>Meteorological Service of New Zealand Limited</name>
+    </author>
+    <link rel="related" type="application/cap+xml" href="https://alerts.metservice.com/cap/alert?id=2.49.0.0.554.0.roadsnow.lewispass.20261029212818927.0"/>
+  </entry>
+  <entry>
+    <title>Road Snowfall Warning</title>
+    <id>2.49.0.0.554.0.roadsnow.desertroad.20261029213709999.0</id>
+    <category term="Met" />
+    <summary>Snow showers lowering to the higher parts of the road from late this evening. However, snow is not expected to settle until early Saturday when 1 cm may accumulate about the summit and lesser amounts down to 800 metres.</summary>
+    <updated>2026-10-30T10:37:09+13:00</updated>
+    <published>2026-10-30T10:37:09+13:00</published>
+    <author>
+      <name>Meteorological Service of New Zealand Limited</name>
+    </author>
+    <link rel="related" type="application/cap+xml" href="https://alerts.metservice.com/cap/alert?id=2.49.0.0.554.0.roadsnow.desertroad.20261029213709999.0"/>
+  </entry>
+</feed>
