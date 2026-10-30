@@ -98,8 +98,66 @@ describe('fetchWarnings', () => {
         ),
     )
 
-    expect(await fetchWarnings(NOW)).toEqual([])
+    await expect(fetchWarnings(NOW)).rejects.toThrow(
+      '4 feed entries but no alert links',
+    )
     expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  test('fails when the feed is not an Atom feed', async () => {
+    serve(() => new Response('<html><body>maintenance</body></html>'))
+
+    await expect(fetchWarnings(NOW)).rejects.toThrow('not an Atom feed')
+  })
+
+  test('follows the good links and logs the one it ignores', async () => {
+    serve(
+      () =>
+        new Response(
+          atom.replace(
+            `https://alerts.metservice.com/cap/alert?id=${WIND_ID}`,
+            `https://evil.example/cap/alert?id=${WIND_ID}`,
+          ),
+        ),
+    )
+
+    const alerts = await fetchWarnings(NOW)
+
+    expect(alerts.map((alert) => alert.id)).toEqual([SNOW_ID])
+    expect(fetchMock).toHaveBeenCalledTimes(4)
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringMatching(/^\[warnings\] feed link ignored: https:\/\/evil/),
+    )
+    expect(
+      warn.mock.calls.filter(([m]: [string]) => /feed link ignored/.test(m)),
+    ).toHaveLength(1)
+  })
+
+  test('an alert that is not a CAP alert counts as failed', async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      const address = new URL(String(url))
+      if (address.pathname === '/cap/atom') return new Response(atom)
+      if (address.searchParams.get('id') === WIND_ID)
+        return new Response('<html>maintenance</html>')
+      return new Response(alertsById[address.searchParams.get('id') ?? ''])
+    })
+
+    const alerts = await fetchWarnings(NOW)
+
+    expect(alerts.map((alert) => alert.id)).toEqual([SNOW_ID])
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringMatching(/skipped: not a CAP alert$/),
+    )
+  })
+
+  test('throws when every alert is not a CAP alert', async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      const address = new URL(String(url))
+      if (address.pathname === '/cap/atom') return new Response(atom)
+      return new Response('<html>maintenance</html>')
+    })
+
+    await expect(fetchWarnings(NOW)).rejects.toThrow('all 4 alerts failed')
   })
 
   test('logs each alert it skips, with why', async () => {
@@ -115,7 +173,7 @@ describe('fetchWarnings', () => {
     }
   })
 
-  test('logs the error name when an alert request fails', async () => {
+  test('logs the error name and message when an alert request fails', async () => {
     fetchMock.mockImplementation(async (url: string) => {
       const address = new URL(String(url))
       if (address.pathname === '/cap/atom') return new Response(atom)
@@ -128,7 +186,7 @@ describe('fetchWarnings', () => {
       SNOW_ID,
     ])
     expect(warn).toHaveBeenCalledWith(
-      expect.stringMatching(/skipped: TimeoutError$/),
+      expect.stringMatching(/skipped: TimeoutError: x$/),
     )
   })
 
