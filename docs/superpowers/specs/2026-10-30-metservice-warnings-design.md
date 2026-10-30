@@ -39,14 +39,14 @@ All matching is in the browser, so pins never leave the device.
 3. **`alertsForPins(alerts, pins, now)`** (pure) tests each pin against each alert's polygons (ray casting), drops expired alerts, groups the pins inside each alert, and sorts worst first.
 4. **`RainWatchProvider`** puts the matched alerts in its context beside the heavy rain results; **`HeavyRainNote`** renders them with `AlertLines`.
 
-**Layout shift (accepted).** Alerts arrive after the page has loaded, so a visitor with an alert at one of their pins sees the band grow once, about a third of a second in. Only those visitors are affected, which should not move the page's Core Web Vitals score (75th percentile). Remembering the last alert count to hold room before paint was considered and left out; revisit if Search Console shows a problem.
+**Layout shift (accepted).** Alerts arrive after the page has loaded, so a visitor with an alert at one of their pins sees the band grow once: about a third of a second in when the server's answer is cached, and up to about 8 s in when it is not and MetService is slow. Only those visitors are affected, which should not move the page's Core Web Vitals score (75th percentile). Remembering the last alert count to hold room before paint was considered and left out; revisit if Search Console shows a problem.
 
 ## Where the logic lives
 
 | Unit | File | Job |
 |---|---|---|
-| `parseCapAlert(xml, now)` | `src/shared/helpers/warnings/parseCapAlert.ts` | One CAP alert to the fields above, or `undefined` if dropped. Pure. |
-| `fetchWarnings(now)` | `src/shared/helpers/warnings/fetchWarnings.ts` | The feed, then each alert (a failing alert is logged and skipped; if every alert fails, or the feed does, it throws and the route answers 502), each with a 10 s limit. The only network code. |
+| `parseCapAlert(xml, now)` | `src/shared/helpers/warnings/parseCapAlert.ts` | One CAP document to its alerts (one per `info` block), or `[]` if dropped. Pure. |
+| `fetchWarnings(now)` | `src/shared/helpers/warnings/fetchWarnings.ts` | The feed, then each alert, all sharing one 8 s limit. A failing alert is logged and skipped; the feed failing, not being an Atom feed, listing entries but no usable links, or every alert failing, throws and the route answers 502. The only network code. |
 | `GET /api/warnings` | `src/app/api/warnings/route.ts` | The cached JSON, or the 502. |
 | `alertsForPins` | `src/shared/helpers/warnings/alertsForPins.ts` | Matching, expiry, grouping, order. Pure. |
 | `useWeatherAlerts` | `src/components/RainStrip/useWeatherAlerts.ts` | The client fetch. |
