@@ -85,13 +85,35 @@ describe('fetchSounding', () => {
   })
 
   // Wyoming can take 8 to 12 s to send a sounding it hasn't sent lately.
-  test('gives Wyoming 25 s in all', async () => {
+  // A launch's data isn't ready for an hour or two, and asking early costs a
+  // slow "no data" answer before the one that has it.
+  test('starts with the newest launch at least 2 hours old', async () => {
+    fetchMock.mockResolvedValue(new Response(page))
+
+    const fetched = await fetchSounding(
+      '93844',
+      new Date('2026-10-30T01:30:00Z'),
+    )
+
+    expect(datetimeOf(fetchMock.mock.calls[0])).toBe('2026-10-29 12:00:00')
+    expect(fetched?.launchUTC).toBe(Date.UTC(2026, 9, 29, 12))
+  })
+
+  test('starts with the newest launch once it is 2 hours old', async () => {
+    fetchMock.mockResolvedValue(new Response(page))
+
+    await fetchSounding('93844', new Date('2026-10-30T02:00:00Z'))
+
+    expect(datetimeOf(fetchMock.mock.calls[0])).toBe('2026-10-30 00:00:00')
+  })
+
+  test('gives Wyoming 50 s in all', async () => {
     const timeout = vi.spyOn(AbortSignal, 'timeout')
     fetchMock.mockResolvedValue(new Response(page))
 
     await fetchSounding('93844', NOW)
 
-    expect(timeout).toHaveBeenCalledWith(25_000)
+    expect(timeout).toHaveBeenCalledWith(50_000)
     timeout.mockRestore()
   })
 

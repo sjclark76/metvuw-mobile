@@ -15,7 +15,13 @@ const HALF_DAY_MS = 12 * 60 * 60 * 1000
 // to Wyoming, which rate-limits.
 const MOST_LAUNCHES = 4
 // The whole search, not each request, so a slow Wyoming costs a page at most this.
-const TIMEOUT_MS = 25_000
+// Wyoming can take 20 s to send a sounding it hasn't sent lately, after a few
+// seconds for a launch with no data yet. The page streams the balloon in, so
+// nobody waits for this; the page itself may run for 60 s.
+const TIMEOUT_MS = 50_000
+// A launch's data isn't ready for an hour or two: asking sooner costs a slow
+// "no data" answer before the launch that has it.
+const READY_AFTER_MS = 2 * 60 * 60 * 1000
 
 /** The last 00 or 12 UTC at or before `now`: balloons go up at those times. */
 export function latestLaunchUTC(now: Date): number {
@@ -49,14 +55,14 @@ export function soundingUrl(
  * data (400, or a page with no table) is passed over for the one before it. Any
  * other failure, including Wyoming saying it is too busy (503), ends the search:
  * asking again would only add to its load. Only 200 responses are cached, so the
- * next render of the page asks again. The whole search shares one 25 s timeout:
- * Wyoming can take 8 to 12 s to send a sounding it has not sent lately.
+ * next render of the page asks again. The whole search shares one 50 s timeout.
+ * It starts with the newest launch at least 2 hours old.
  */
 export async function fetchSounding(
   station: BalloonLocationCode,
   now: Date = new Date(),
 ): Promise<FetchedSounding | undefined> {
-  let launchUTC = latestLaunchUTC(now)
+  let launchUTC = latestLaunchUTC(new Date(now.getTime() - READY_AFTER_MS))
   let withoutTable = 0
   const signal = AbortSignal.timeout(TIMEOUT_MS)
   try {
