@@ -152,8 +152,9 @@ export async function chartListForPath(
         charts,
         true,
       )
-      // Where our chart replaces metvuw's, the page is "issued" when the balloon
-      // went up, so each new balloon refreshes a saved copy.
+      // Where our chart replaces metvuw's, the page draws it itself: it has no
+      // images to keep, and is "issued" when the balloon went up, so each new
+      // balloon refreshes a saved copy.
       if (
         sounding &&
         showOwnChart(
@@ -162,6 +163,7 @@ export async function chartListForPath(
         )
       ) {
         list.issued = sounding.launchUTC
+        list.urls = []
       }
       return list
     }
