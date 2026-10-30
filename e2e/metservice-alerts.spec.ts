@@ -1,4 +1,4 @@
-import { expect, type Page, test } from '@playwright/test'
+import { expect, type Page, type Request, test } from '@playwright/test'
 
 // MetService's alerts for a pin, above the heavy rain heads-up. The stub has one
 // wind watch, around Christchurch (see e2e/stub/metvuw-stub.mjs).
@@ -62,8 +62,10 @@ test.describe('MetService alerts for a pin', () => {
 
   test('shows no alert for a pin outside its area', async ({ page }) => {
     await pin(page, auckland)
+    const answered = page.waitForResponse(/\/api\/warnings$/)
 
     await page.goto('/regions/nz')
+    await answered
 
     await expect(page.locator('[data-heavy-rain-slot]')).toBeVisible()
     await expect(alerts(page)).toHaveCount(0)
@@ -72,6 +74,8 @@ test.describe('MetService alerts for a pin', () => {
   test('shows no alert when weather warnings are off in Settings', async ({
     page,
   }) => {
+    const urls: string[] = []
+    page.on('request', (request) => urls.push(request.url()))
     await pin(page, christchurch)
     await page.addInitScript(() =>
       localStorage.setItem('showHeavyRain', 'false'),
@@ -80,6 +84,7 @@ test.describe('MetService alerts for a pin', () => {
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
 
+    expect(urls.filter((url) => /\/api\/warnings/.test(url))).toEqual([])
     await expect(alerts(page)).toHaveCount(0)
     await expect(page.locator('[data-heavy-rain-slot]')).toBeHidden()
   })
@@ -87,16 +92,20 @@ test.describe('MetService alerts for a pin', () => {
   test('asks the server for the alerts, not MetService, and sends it nothing of the pins', async ({
     page,
   }) => {
-    const requests: string[] = []
-    page.on('request', (request) => requests.push(request.url()))
+    const requests: Request[] = []
+    page.on('request', (request) => requests.push(request))
     await pin(page, christchurch)
 
     await page.goto('/regions/nz')
     await expect(alerts(page)).toBeVisible()
 
-    const asked = requests.filter((url) =>
-      /\/api\/warnings|metservice\.com/.test(url),
+    const asked = requests.filter((request) =>
+      /\/api\/warnings|metservice\.com/.test(request.url()),
     )
-    expect(asked).toEqual([expect.stringMatching(/\/api\/warnings$/)])
+    expect(asked.map((request) => request.url())).toEqual([
+      expect.stringMatching(/\/api\/warnings$/),
+    ])
+    expect(asked[0].method()).toBe('GET')
+    expect(asked[0].postData()).toBeNull()
   })
 })
