@@ -35,9 +35,10 @@ export async function GET(request: NextRequest) {
         { status: 404 },
       )
     }
-    if (list.urls.length === 0) {
+    if (list.urls.length === 0 && list.issued === undefined) {
       // Nothing was published. Saying so, rather than returning an empty list,
-      // stops a refresh replacing saved charts with none.
+      // stops a refresh replacing saved charts with none. (A page that draws its
+      // chart in the page has no images but is dated: that is a list.)
       return NextResponse.json(
         { ok: false, message: 'no charts available' },
         {

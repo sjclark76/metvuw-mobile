@@ -350,6 +350,58 @@ describe('refreshPage', () => {
     expect(requested).toEqual(['/api/chart-list?path=%2Fregions%2Fnz'])
   })
 
+  // A page showing the balloon's chart in the page itself has no images; what
+  // says it is current is the balloon's launch time.
+  test('saves a page with no images, which is dated', async () => {
+    const { deps, requested } = setup({
+      lists: { '/upperair/93844': { issued: 500, urls: [] } },
+      html: { '/upperair/93844': '<html>chart</html>' },
+    })
+
+    const saved = await downloadPage('/upperair/93844', deps)
+
+    expect(saved.urls).toEqual([])
+    expect(saved.issued).toBe(500)
+    expect(requested.filter((url) => url.startsWith('/api/fallback'))).toEqual(
+      [],
+    )
+  })
+
+  test('refreshes a page with no images when a new balloon has flown, downloading no images', async () => {
+    const { deps, world, requested } = setup({
+      lists: { '/upperair/93844': { issued: 500, urls: [] } },
+      html: { '/upperair/93844': '<html>chart</html>' },
+    })
+    const saved = await downloadPage('/upperair/93844', deps)
+    world.lists['/upperair/93844'] = { issued: 900, urls: [] }
+    requested.length = 0
+
+    const refreshed = await refreshPage(saved, deps)
+
+    expect(refreshed.issued).toBe(900)
+    expect(requested.filter((url) => url.startsWith('/api/fallback'))).toEqual(
+      [],
+    )
+  })
+
+  // When the balloon data can't be had, the page's list falls back to metvuw's
+  // old charts: an older date than the saved page's, which must not replace it.
+  test('does not replace a page with an older list, as when the balloon data failed', async () => {
+    const { deps, world, requested } = setup({
+      lists: { '/upperair/93844': { issued: 900, urls: [] } },
+      html: { '/upperair/93844': '<html>chart</html>' },
+    })
+    const saved = await downloadPage('/upperair/93844', deps)
+    world.lists['/upperair/93844'] = { issued: 100, urls: [chart(1)] }
+    requested.length = 0
+
+    const refreshed = await refreshPage(saved, deps)
+
+    expect(refreshed.issued).toBe(900)
+    expect(refreshed.urls).toEqual([])
+    expect(requested).toEqual(['/api/chart-list?path=%2Fupperair%2F93844'])
+  })
+
   test('replaces the charts when there is a new run, downloading only the new ones', async () => {
     const { deps, world, requested } = setup()
     const saved = await downloadPage('/regions/nz', deps)

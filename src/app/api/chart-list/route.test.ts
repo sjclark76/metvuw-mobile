@@ -72,6 +72,20 @@ describe('GET /api/chart-list', () => {
     )
   })
 
+  // The page shows our chart, drawn in the page: no images, but dated.
+  test('returns a list with no images when it has an issue time', async () => {
+    vi.mocked(chartListForPath).mockResolvedValue({
+      ...list,
+      issued: 1000,
+      urls: [],
+    })
+
+    const response = await get('?path=%2Fupperair%2F93844')
+
+    expect(response.status).toBe(200)
+    expect((await response.json()).urls).toEqual([])
+  })
+
   test('returns 502, briefly cached, when the charts cannot be fetched', async () => {
     vi.mocked(chartListForPath).mockRejectedValue(new Error('upstream down'))
 

@@ -84,7 +84,9 @@ function isChartList(value: unknown): value is ChartList {
     typeof list.title === 'string' &&
     (list.issued === undefined || typeof list.issued === 'number') &&
     Array.isArray(list.urls) &&
-    list.urls.length > 0 &&
+    // No images is fine for a dated page (one that draws its chart in the page);
+    // with no images and no date, nothing was published.
+    (list.urls.length > 0 || typeof list.issued === 'number') &&
     list.urls.every(isChartUrl)
   )
 }
@@ -273,10 +275,17 @@ export async function refreshPage(
   deps: Dependencies,
 ): Promise<SavedPage> {
   const list = await fetchList(saved.path, deps)
+  // A list older than what is saved never replaces it: when the balloon data
+  // can't be had, an upper air page's list falls back to metvuw's old charts.
+  const older =
+    list.issued !== undefined &&
+    saved.issued !== undefined &&
+    list.issued < saved.issued
   const unchanged =
-    list.issued === saved.issued &&
-    list.urls.length === saved.urls.length &&
-    list.urls.every((url, i) => url === saved.urls[i])
+    older ||
+    (list.issued === saved.issued &&
+      list.urls.length === saved.urls.length &&
+      list.urls.every((url, i) => url === saved.urls[i]))
   if (unchanged) {
     return {
       ...saved,

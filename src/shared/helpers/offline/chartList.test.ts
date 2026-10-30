@@ -109,10 +109,33 @@ describe('chartListForPath', () => {
 
     expect(fetchSounding).toHaveBeenCalledWith('93417')
     expect(list?.issued).toBe(Date.UTC(2026, 9, 29, 12))
-    expect(list?.urls).toEqual([
-      proxy('u1', 'Upper Air'),
-      small('u1', 'Upper Air'),
+  })
+
+  // The page shows our chart, drawn in the page itself: metvuw's images aren't
+  // shown, so saving or refreshing doesn't download them.
+  test('an upper air page showing our chart lists no images', async () => {
+    vi.mocked(getUpperAirChartDataForCode).mockResolvedValue([
+      chart(proxy('u1', 'Upper Air'), Date.UTC(2026, 9, 12, 11)),
     ])
+    vi.mocked(fetchSounding).mockResolvedValue(
+      balloon(Date.UTC(2026, 9, 29, 12)),
+    )
+
+    const list = await chartListForPath('/upperair/93417')
+
+    expect(list?.urls).toEqual([])
+  })
+
+  test('an upper air page with no metvuw charts but a balloon is issued with the balloon', async () => {
+    vi.mocked(getUpperAirChartDataForCode).mockResolvedValue([])
+    vi.mocked(fetchSounding).mockResolvedValue(
+      balloon(Date.UTC(2026, 9, 29, 12)),
+    )
+
+    const list = await chartListForPath('/upperair/93417')
+
+    expect(list?.issued).toBe(Date.UTC(2026, 9, 29, 12))
+    expect(list?.urls).toEqual([])
   })
 
   test("an upper air page with metvuw's charts current keeps their time", async () => {
@@ -136,6 +159,10 @@ describe('chartListForPath', () => {
     const list = await chartListForPath('/upperair/93417')
 
     expect(list?.issued).toBe(7)
+    expect(list?.urls).toEqual([
+      proxy('u1', 'Upper Air'),
+      small('u1', 'Upper Air'),
+    ])
   })
 
   test('the upper air page without a station is the default station', async () => {
