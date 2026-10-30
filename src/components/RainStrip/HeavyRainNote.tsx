@@ -32,7 +32,9 @@ export interface PinHeavyRain {
  * always the same height for a visitor with pins, which the page holds room for
  * from its first paint (`data-heavy-rain-slot`, see Settings/layoutScript), so it
  * is neither missed nor moves the page when the charts have been read.
- * MetService's alerts for those pins come first, above these lines.
+ * MetService's alerts for those pins come first, above these lines. They arrive
+ * after the page loads and can make the band grow once (an accepted shift, see
+ * the spec): the room held is for the chart lines only.
  */
 export function HeavyRainNote({
   found,
