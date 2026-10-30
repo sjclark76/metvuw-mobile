@@ -70,21 +70,46 @@ const SOUNDINGS = {
   93417: sounding('whenuapai-2026102800.html'),
 }
 
-// MetService's alert feed. One wind watch covers Christchurch (and nowhere the
-// other e2e specs put a pin), until 2099, so the page always has it.
-const ALERT_ID = 'stub-wind-christchurch'
+// MetService's alert feed. Two alerts cover Christchurch (and nowhere the other
+// e2e specs put a pin), both until 2099, so the page always has them.
+const capAlert = ({ id, event, severity, headline, colour, hex }) =>
+  `<?xml version="1.0" encoding="UTF-8"?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2"><identifier>${id}</identifier><sender>https://www.metservice.com</sender><sent>2026-10-01T00:00:00+13:00</sent><status>Actual</status><msgType>Alert</msgType><scope>Public</scope><info><category>Met</category><event>${event}</event><severity>${severity}</severity><onset>2026-10-01T00:00:00+13:00</onset><expires>2099-01-01T00:00:00+13:00</expires><headline>${headline}</headline><web>https://metservice.com/warnings/home</web><parameter><valueName>ColourCode</valueName><value>${colour}</value></parameter><parameter><valueName>ColourCodeHex</valueName><value>${hex}</value></parameter><area><areaDesc>Christchurch</areaDesc><polygon>-43.70,172.40 -43.70,172.90 -43.40,172.90 -43.40,172.40 -43.70,172.40</polygon></area></info></alert>`
+// Listed with the milder first, so a test of the order shown means something.
+const ALERTS = {
+  'stub-rain-christchurch': capAlert({
+    id: 'stub-rain-christchurch',
+    event: 'rain',
+    severity: 'Minor',
+    headline: 'Heavy Rain Watch',
+    colour: 'Yellow',
+    hex: '#FFEB18',
+  }),
+  'stub-wind-christchurch': capAlert({
+    id: 'stub-wind-christchurch',
+    event: 'wind',
+    severity: 'Moderate',
+    headline: 'Strong Wind Watch',
+    colour: 'Orange',
+    hex: '#FF8918',
+  }),
+}
 const ALERT_FEED = `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>https://alerts.metservice.com/cap/atom</id>
-  <title>Current Watches, Warnings and Advisories for New Zealand issued by MetService</title>
+  <title>Current Watches, Warnings and Advisories for New Zealand issued by MetService</title>${Object.keys(
+    ALERTS,
+  )
+    .map(
+      (id) => `
   <entry>
-    <title>Strong Wind Watch</title>
-    <id>${ALERT_ID}</id>
-    <link rel="related" type="application/cap+xml" href="https://alerts.metservice.com/cap/alert?id=${ALERT_ID}"/>
-  </entry>
+    <title>${id}</title>
+    <id>${id}</id>
+    <link rel="related" type="application/cap+xml" href="https://alerts.metservice.com/cap/alert?id=${id}"/>
+  </entry>`,
+    )
+    .join('')}
 </feed>`
-const ALERT = `<?xml version="1.0" encoding="UTF-8"?>
-<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2"><identifier>${ALERT_ID}</identifier><sender>https://www.metservice.com</sender><sent>2026-10-01T00:00:00+13:00</sent><status>Actual</status><msgType>Alert</msgType><scope>Public</scope><info><category>Met</category><event>wind</event><severity>Moderate</severity><onset>2026-10-01T00:00:00+13:00</onset><expires>2099-01-01T00:00:00+13:00</expires><headline>Strong Wind Watch</headline><web>https://metservice.com/warnings/home</web><parameter><valueName>ColourCode</valueName><value>Orange</value></parameter><parameter><valueName>ColourCodeHex</valueName><value>#FF8918</value></parameter><area><areaDesc>Christchurch</areaDesc><polygon>-43.70,172.40 -43.70,172.90 -43.40,172.90 -43.40,172.40 -43.70,172.40</polygon></area></info></alert>`
 
 const page = (images) =>
   `<!doctype html><html><body>${images
@@ -123,10 +148,10 @@ const pages = {
         }
   },
   '/cap/atom': () => ({ body: ALERT_FEED }),
-  '/cap/alert': (query) =>
-    query.get('id') === ALERT_ID
-      ? { body: ALERT }
-      : { status: 404, body: 'Not found' },
+  '/cap/alert': (query) => {
+    const body = ALERTS[query.get('id') ?? '']
+    return body ? { body } : { status: 404, body: 'Not found' }
+  },
   '/upperair': () => ({
     body: page(
       BALLOONS.flatMap((b) =>
