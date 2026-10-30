@@ -8,11 +8,16 @@ import { useNow } from '@/components/Hooks/useNow'
 import { usePins } from '@/components/Pins/usePins'
 import { chartPosition } from '@/shared/helpers/chartGeometry'
 import { heavyRainAhead } from '@/shared/helpers/heavyRain'
+import {
+  alertsForPins,
+  type PinAlert,
+} from '@/shared/helpers/warnings/alertsForPins'
 import type { RegionCode } from '@/shared/types/region'
 
 import type { PinHeavyRain } from './HeavyRainNote'
 import { useChartsSettled } from './useChartsSettled'
 import { type RainReadings, useRainReadings } from './useRainReadings'
+import { useWeatherAlerts } from './useWeatherAlerts'
 
 interface RainWatch {
   /** What each chart shows at each pin, as far as it has been read. */
@@ -25,6 +30,8 @@ interface RainWatch {
   watching: boolean
   /** Whether every chart has been read at every pin on this chart. */
   checked: boolean
+  /** MetService alerts covering the visitor's pins, worst first. */
+  alerts: readonly PinAlert[]
 }
 
 const RainWatchContext = createContext<RainWatch | null>(null)
@@ -48,6 +55,8 @@ export function RainWatchProvider({
   const { index, times } = useAnimation()
   const { pins } = usePins()
   const showHeavyRain = useAtomValue(showHeavyRainAtom)
+  // Fetched at page load, in step with the charts being read; matched below.
+  const alerts = useWeatherAlerts(showHeavyRain && pins.length > 0)
   const chartsSettled = useChartsSettled()
   const readings = useRainReadings({
     region,
@@ -91,8 +100,9 @@ export function RainWatchProvider({
         chartUrls.every((url) =>
           onChart.every((pin) => pin.id in (readings.get(url) ?? {})),
         ),
+      alerts: watching && now !== 0 ? alertsForPins(alerts, pins, now) : [],
     }
-  }, [pins, region, showHeavyRain, now, chartUrls, readings, times])
+  }, [pins, region, showHeavyRain, now, chartUrls, readings, times, alerts])
 
   return (
     <RainWatchContext.Provider value={value}>
@@ -107,6 +117,7 @@ const NOTHING: RainWatch = {
   highlights: {},
   watching: false,
   checked: false,
+  alerts: [],
 }
 
 /** What the page's rain watch has found; nothing on a page without one. */
