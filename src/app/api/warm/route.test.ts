@@ -201,4 +201,43 @@ describe('POST /api/warm', () => {
       })
     })
   })
+
+  // Wyoming refuses ("too busy") a burst of requests, and each upper air page
+  // asks it for its balloon: those pages go one at a time, after the rest.
+  test('warms the upper air pages last, one at a time, 3 s apart, each station before /upperair', async () => {
+    vi.useFakeTimers()
+    vi.mocked(sitemap).mockReturnValue(
+      ['/upperair', '/regions/nz', '/upperair/93112', '/upperair/93844'].map(
+        (path) => ({ url: `https://metvuwmobile.com${path}` }),
+      ),
+    )
+    const pages = () =>
+      fetchMock.mock.calls
+        .map(([url]) => new URL(String(url)).pathname)
+        .filter((path) => !path.startsWith('/api/'))
+
+    const responding = post('secret')
+    await vi.advanceTimersByTimeAsync(0)
+    expect(pages()).toEqual(['/regions/nz', '/upperair/93112'])
+
+    await vi.advanceTimersByTimeAsync(3_000)
+    expect(pages()).toEqual([
+      '/regions/nz',
+      '/upperair/93112',
+      '/upperair/93844',
+    ])
+
+    await vi.advanceTimersByTimeAsync(3_000)
+    expect(pages()).toEqual([
+      '/regions/nz',
+      '/upperair/93112',
+      '/upperair/93844',
+      '/upperair',
+    ])
+    expect(await (await responding).json()).toMatchObject({
+      ok: true,
+      next: null,
+    })
+    vi.useRealTimers()
+  })
 })

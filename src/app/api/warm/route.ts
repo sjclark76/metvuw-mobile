@@ -21,6 +21,29 @@ const CONCURRENCY = 4
 const BUDGET_MS = 30_000
 /** A page (with its chart) that takes longer than this is reported, not waited for. */
 const PAGE_TIMEOUT_MS = 25_000
+/**
+ * Between upper air pages. Each asks the University of Wyoming for its balloon,
+ * and Wyoming answers a burst of requests with "too busy", which leaves the page
+ * without its panel for the hour it is cached.
+ */
+const UPPER_AIR_GAP_MS = 3_000
+
+const isUpperAir = (path: string) =>
+  path === '/upperair' || path.startsWith('/upperair/')
+
+/**
+ * The other pages first; then the upper air stations, one at a time; then
+ * /upperair, which shows the default station, whose balloon is cached by then.
+ */
+function warmingOrder(paths: string[]): string[] {
+  return [
+    ...paths.filter((path) => !isUpperAir(path)),
+    ...paths.filter((path) => isUpperAir(path) && path !== '/upperair'),
+    ...paths.filter((path) => path === '/upperair'),
+  ]
+}
+
+const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 function isAuthorised(request: NextRequest): boolean {
   const secret = process.env.WARM_SECRET
@@ -87,7 +110,8 @@ export async function POST(request: NextRequest) {
   // The origin it was called on, not the canonical one: that may be the bare
   // domain, which redirects every request to www.
   const origin = request.nextUrl.origin
-  const paths = sitemap().map(({ url }) => new URL(url).pathname)
+  const paths = warmingOrder(sitemap().map(({ url }) => new URL(url).pathname))
+  const firstUpperAir = paths.findIndex(isUpperAir)
   const from = Math.max(
     0,
     Number.parseInt(request.nextUrl.searchParams.get('from') ?? '0', 10) || 0,
@@ -98,16 +122,23 @@ export async function POST(request: NextRequest) {
   const failed: string[] = []
   let i = from
   while (i < paths.length && Date.now() - started < BUDGET_MS) {
+    // Upper air pages one at a time, apart; the rest a few at a time, up to them.
+    let batch: string[]
+    if (isUpperAir(paths[i])) {
+      if (i > firstUpperAir) await pause(UPPER_AIR_GAP_MS)
+      batch = [paths[i]]
+    } else {
+      const end = firstUpperAir === -1 ? paths.length : firstUpperAir
+      batch = paths.slice(i, Math.min(i + CONCURRENCY, end))
+    }
     const results = await Promise.all(
-      paths
-        .slice(i, i + CONCURRENCY)
-        .map((path) => warmPageInTime(origin, path)),
+      batch.map((path) => warmPageInTime(origin, path)),
     )
     for (const result of results) {
       warmed += result.warmed
       failed.push(...result.failed)
     }
-    i += CONCURRENCY
+    i += batch.length
   }
 
   return NextResponse.json({
