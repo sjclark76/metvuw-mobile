@@ -83,6 +83,8 @@ test.describe('MetService alerts for a pin', () => {
 
     await page.goto('/regions/nz')
     await page.waitForSelector('main img')
+    // Hydration and the charts' requests are done: the hook has had its chance.
+    await page.waitForLoadState('networkidle')
 
     expect(urls.filter((url) => /\/api\/warnings/.test(url))).toEqual([])
     await expect(alerts(page)).toHaveCount(0)
