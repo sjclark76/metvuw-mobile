@@ -55,8 +55,12 @@ export function RainWatchProvider({
   const { index, times } = useAnimation()
   const { pins } = usePins()
   const showHeavyRain = useAtomValue(showHeavyRainAtom)
-  // Fetched at page load, in step with the charts being read; matched below.
-  const alerts = useWeatherAlerts(showHeavyRain && pins.length > 0)
+  // Fetched at page load, in step with the charts being read, and only when a pin
+  // is on this chart (the band is for those); matched against all pins below.
+  const anyPinOnChart = pins.some((pin) =>
+    chartPosition(region, pin.latitude, pin.longitude),
+  )
+  const alerts = useWeatherAlerts(showHeavyRain && anyPinOnChart)
   const chartsSettled = useChartsSettled()
   const readings = useRainReadings({
     region,

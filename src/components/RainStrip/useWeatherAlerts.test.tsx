@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react'
+import { act, renderHook, waitFor } from '@testing-library/react'
 
 import type { WeatherAlert } from '@/shared/helpers/warnings/parseCapAlert'
 
@@ -59,6 +59,7 @@ describe('useWeatherAlerts', () => {
 
     const { result } = renderHook(() => useWeatherAlerts(true))
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    await act(async () => {})
 
     expect(result.current).toEqual([])
   })
@@ -68,6 +69,7 @@ describe('useWeatherAlerts', () => {
 
     const { result } = renderHook(() => useWeatherAlerts(true))
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    await act(async () => {})
 
     expect(result.current).toEqual([])
   })
@@ -77,7 +79,38 @@ describe('useWeatherAlerts', () => {
 
     const { result } = renderHook(() => useWeatherAlerts(true))
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    await act(async () => {})
 
     expect(result.current).toEqual([])
+  })
+
+  test('aborts the request in flight when it is switched off', async () => {
+    fetchMock.mockReturnValue(new Promise(() => {}))
+
+    const { rerender } = renderHook(
+      ({ enabled }) => useWeatherAlerts(enabled),
+      {
+        initialProps: { enabled: true },
+      },
+    )
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    expect(fetchMock.mock.calls[0][1].signal.aborted).toBe(false)
+    rerender({ enabled: false })
+
+    expect(fetchMock.mock.calls[0][1].signal.aborted).toBe(true)
+  })
+
+  test('starts a fetch when it is switched on', async () => {
+    fetchMock.mockResolvedValue(Response.json({ alerts: [alert] }))
+
+    const { result, rerender } = renderHook(
+      ({ enabled }) => useWeatherAlerts(enabled),
+      { initialProps: { enabled: false } },
+    )
+    expect(fetchMock).not.toHaveBeenCalled()
+    rerender({ enabled: true })
+    await waitFor(() => expect(result.current).toEqual([alert]))
+
+    expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 })
