@@ -25,19 +25,39 @@ export async function fetchWarnings(
   if (!feed.ok) throw new Error(`feed answered ${feed.status}`)
 
   const $ = cheerio.load(await feed.text(), { xml: true })
-  const links = $('entry > link[rel="related"]')
+  if ($('feed').length === 0) throw new Error('the feed is not an Atom feed')
+  const entries = $('entry').length
+  const hrefs = $('entry > link[rel="related"]')
     .toArray()
     .map((link) => $(link).attr('href') ?? '')
-    .filter((href) => href.startsWith(ALERT_PREFIX))
+  const links = hrefs.filter((href) => href.startsWith(ALERT_PREFIX))
+  if (entries > 0 && links.length === 0) {
+    throw new Error(`${entries} feed entries but no alert links`)
+  }
+  for (const href of hrefs) {
+    if (!href.startsWith(ALERT_PREFIX)) {
+      // eslint-disable-next-line no-console
+      console.warn(`[warnings] feed link ignored: ${href}`)
+    }
+  }
 
   const outcomes = await Promise.all(
     links.map(async (link) => {
       try {
         const response = await fetch(link, options)
         if (!response.ok) return skipped(link, `answered ${response.status}`)
-        return parseCapAlert(await response.text(), now)
+        const body = await response.text()
+        if (
+          cheerio.load(body, { xml: true })('alert > identifier').length === 0
+        ) {
+          return skipped(link, 'not a CAP alert')
+        }
+        return parseCapAlert(body, now)
       } catch (error) {
-        return skipped(link, error instanceof Error ? error.name : 'error')
+        return skipped(
+          link,
+          error instanceof Error ? `${error.name}: ${error.message}` : 'error',
+        )
       }
     }),
   )
