@@ -57,8 +57,11 @@ const round2 = (value: number) => Math.round(value * 100) / 100
 function parsePolygon(text: string): Polygon {
   const points: Polygon = []
   for (const pair of text.trim().split(/\s+/)) {
-    const [latitude, longitude] = pair.split(',').map(Number)
-    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) continue
+    const parts = pair.split(',')
+    if (parts.length !== 2 || parts.some((part) => part.trim() === '')) continue
+    const [latitude, longitude] = parts.map(Number)
+    if (!Number.isFinite(latitude) || Math.abs(latitude) > 90) continue
+    if (!Number.isFinite(longitude) || Math.abs(longitude) > 180) continue
     const point: [number, number] = [round2(latitude), round2(longitude)]
     const last = points.at(-1)
     if (!last || last[0] !== point[0] || last[1] !== point[1]) {
