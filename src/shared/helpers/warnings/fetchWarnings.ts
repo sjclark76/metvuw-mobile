@@ -6,7 +6,9 @@ const FEED = 'https://alerts.metservice.com/cap/atom'
 // Only alerts on MetService's own host are followed: the feed names them.
 const ALERT_PREFIX = 'https://alerts.metservice.com/cap/alert?'
 // The feed asks to be read every 5 minutes.
-const REVALIDATE_SECONDS = 300
+const FEED_REVALIDATE_SECONDS = 300
+// An alert's document never changes (an update gets a new id).
+const ALERT_REVALIDATE_SECONDS = 3600
 // The route may run 10 s: the feed and all its alerts share 8.
 const TIMEOUT_MS = 8_000
 
@@ -17,11 +19,11 @@ const TIMEOUT_MS = 8_000
 export async function fetchWarnings(
   now: Date = new Date(),
 ): Promise<WeatherAlert[]> {
-  const options = {
-    signal: AbortSignal.timeout(TIMEOUT_MS),
-    next: { revalidate: REVALIDATE_SECONDS },
-  }
-  const feed = await fetch(FEED, options)
+  const signal = AbortSignal.timeout(TIMEOUT_MS)
+  const feed = await fetch(FEED, {
+    signal,
+    next: { revalidate: FEED_REVALIDATE_SECONDS },
+  })
   if (!feed.ok) throw new Error(`feed answered ${feed.status}`)
 
   const $ = cheerio.load(await feed.text(), { xml: true })
@@ -44,7 +46,10 @@ export async function fetchWarnings(
   const outcomes = await Promise.all(
     links.map(async (link) => {
       try {
-        const response = await fetch(link, options)
+        const response = await fetch(link, {
+          signal,
+          next: { revalidate: ALERT_REVALIDATE_SECONDS },
+        })
         if (!response.ok) return skipped(link, `answered ${response.status}`)
         const body = await response.text()
         if (

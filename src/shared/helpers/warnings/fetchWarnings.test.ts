@@ -48,7 +48,7 @@ describe('fetchWarnings', () => {
     )
   })
 
-  test('keeps each answer for 5 minutes, and gives up together after 8 s', async () => {
+  test('keeps the feed 5 minutes and each alert an hour, and gives up together after 8 s', async () => {
     const timeout = vi.spyOn(AbortSignal, 'timeout')
 
     await fetchWarnings(NOW)
@@ -56,10 +56,10 @@ describe('fetchWarnings', () => {
     expect(timeout).toHaveBeenCalledTimes(1)
     expect(timeout).toHaveBeenCalledWith(8_000)
     const signal = fetchMock.mock.calls[0][1].signal
-    for (const [, options] of fetchMock.mock.calls) {
-      expect(options.next).toEqual({ revalidate: 300 })
+    fetchMock.mock.calls.forEach(([, options], index) => {
+      expect(options.next).toEqual({ revalidate: index === 0 ? 300 : 3600 })
       expect(options.signal).toBe(signal)
-    }
+    })
     timeout.mockRestore()
   })
 
