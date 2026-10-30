@@ -25,12 +25,18 @@ const serve = (feed: () => Response = () => new Response(atom)) =>
   })
 
 describe('fetchWarnings', () => {
+  let warn: ReturnType<typeof vi.spyOn>
+
   beforeEach(() => {
     fetchMock.mockReset()
     vi.stubGlobal('fetch', fetchMock)
+    warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     serve()
   })
-  afterEach(() => vi.unstubAllGlobals())
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    warn.mockRestore()
+  })
 
   test('reads the feed, then each alert it lists', async () => {
     const alerts = await fetchWarnings(NOW)
@@ -94,5 +100,63 @@ describe('fetchWarnings', () => {
 
     expect(await fetchWarnings(NOW)).toEqual([])
     expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  test('logs each alert it skips, with why', async () => {
+    const alerts = await fetchWarnings(NOW)
+
+    expect(alerts.map((alert) => alert.id)).toEqual([WIND_ID, SNOW_ID])
+    expect(warn).toHaveBeenCalledTimes(2)
+    for (const [message] of warn.mock.calls) {
+      expect(message).toMatch(
+        /^\[warnings\] alert https:\/\/alerts\.metservice\.com\/cap\/alert\?id=/,
+      )
+      expect(message).toMatch(/skipped: answered 404$/)
+    }
+  })
+
+  test('logs the error name when an alert request fails', async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      const address = new URL(String(url))
+      if (address.pathname === '/cap/atom') return new Response(atom)
+      if (address.searchParams.get('id') === WIND_ID)
+        throw Object.assign(new Error('x'), { name: 'TimeoutError' })
+      return new Response(alertsById[address.searchParams.get('id') ?? ''])
+    })
+
+    expect((await fetchWarnings(NOW)).map((alert) => alert.id)).toEqual([
+      SNOW_ID,
+    ])
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringMatching(/skipped: TimeoutError$/),
+    )
+  })
+
+  test('throws when every alert fails, so the route says the warnings are unavailable', async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      const address = new URL(String(url))
+      if (address.pathname === '/cap/atom') return new Response(atom)
+      return new Response('busy', { status: 503 })
+    })
+
+    await expect(fetchWarnings(NOW)).rejects.toThrow('all 4 alerts failed')
+    expect(warn).toHaveBeenCalledTimes(4)
+  })
+
+  test('an empty feed is not a failure', async () => {
+    serve(
+      () => new Response('<feed xmlns="http://www.w3.org/2005/Atom"></feed>'),
+    )
+
+    expect(await fetchWarnings(NOW)).toEqual([])
+    expect(warn).not.toHaveBeenCalled()
+  })
+
+  test('an alert that loads but has ended is not a failure', async () => {
+    const after = new Date('2026-10-30T09:00:00Z')
+
+    expect(await fetchWarnings(after)).toEqual([])
+    // Only the two 404s: the loaded alerts have ended, so they are not failures.
+    expect(warn).toHaveBeenCalledTimes(2)
   })
 })
