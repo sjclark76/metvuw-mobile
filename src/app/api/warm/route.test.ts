@@ -202,42 +202,82 @@ describe('POST /api/warm', () => {
     })
   })
 
-  // Wyoming refuses ("too busy") a burst of requests, and each upper air page
-  // asks it for its balloon: those pages go one at a time, after the rest.
-  test('warms the upper air pages last, one at a time, 3 s apart, each station before /upperair', async () => {
-    vi.useFakeTimers()
-    vi.mocked(sitemap).mockReturnValue(
-      ['/upperair', '/regions/nz', '/upperair/93112', '/upperair/93844'].map(
-        (path) => ({ url: `https://metvuwmobile.com${path}` }),
-      ),
-    )
+  // An upper air page streams in its balloon, which Wyoming can take 50 s to
+  // send: each is warmed alone, at the start of a call, so it has the call's
+  // minute to finish; the caller asks again for the next.
+  describe('the upper air pages', () => {
+    const sitemapOf = (...paths: string[]) =>
+      vi
+        .mocked(sitemap)
+        .mockReturnValue(
+          paths.map((path) => ({ url: `https://metvuwmobile.com${path}` })),
+        )
     const pages = () =>
       fetchMock.mock.calls
         .map(([url]) => new URL(String(url)).pathname)
         .filter((path) => !path.startsWith('/api/'))
 
-    const responding = post('secret')
-    await vi.advanceTimersByTimeAsync(0)
-    expect(pages()).toEqual(['/regions/nz', '/upperair/93112'])
+    test('are warmed last, one a call, each station before /upperair', async () => {
+      sitemapOf(
+        '/upperair',
+        '/regions/nz',
+        '/upperair/93112',
+        '/upperair/93844',
+      )
 
-    await vi.advanceTimersByTimeAsync(3_000)
-    expect(pages()).toEqual([
-      '/regions/nz',
-      '/upperair/93112',
-      '/upperair/93844',
-    ])
-
-    await vi.advanceTimersByTimeAsync(3_000)
-    expect(pages()).toEqual([
-      '/regions/nz',
-      '/upperair/93112',
-      '/upperair/93844',
-      '/upperair',
-    ])
-    expect(await (await responding).json()).toMatchObject({
-      ok: true,
-      next: null,
+      expect(await (await post('secret')).json()).toMatchObject({ next: 2 })
+      expect(await (await post('secret', '?from=2')).json()).toMatchObject({
+        next: 3,
+      })
+      expect(await (await post('secret', '?from=3')).json()).toMatchObject({
+        next: null,
+      })
+      expect(pages()).toEqual([
+        '/regions/nz',
+        '/upperair/93112',
+        '/upperair/93844',
+        '/upperair',
+      ])
     })
-    vi.useRealTimers()
+
+    test('waits for the next call when the call is under way', async () => {
+      vi.useFakeTimers()
+      sitemapOf('/regions/nz', '/upperair/93112')
+      fetchMock.mockImplementation(async (url) => {
+        // The other pages take 6 s.
+        if (String(url).endsWith('/regions/nz')) {
+          vi.setSystemTime(Date.now() + 6_000)
+        }
+        return new Response('ok')
+      })
+
+      expect(await (await post('secret')).json()).toMatchObject({ next: 1 })
+      expect(pages()).toEqual(['/regions/nz'])
+      vi.useRealTimers()
+    })
+
+    test('are given 52 s', async () => {
+      vi.useFakeTimers()
+      sitemapOf('/upperair/93112')
+      fetchMock.mockImplementation(async (url) =>
+        String(url).endsWith('/upperair/93112')
+          ? new Promise(() => {})
+          : new Response('ok'),
+      )
+
+      let answered = false
+      const responding = post('secret').then((response) => {
+        answered = true
+        return response
+      })
+      await vi.advanceTimersByTimeAsync(51_000)
+      expect(answered).toBe(false)
+      await vi.advanceTimersByTimeAsync(1_000)
+
+      expect(await (await responding).json()).toMatchObject({
+        failed: ['/upperair/93112 timed out'],
+      })
+      vi.useRealTimers()
+    })
   })
 })

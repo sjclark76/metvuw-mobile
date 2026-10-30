@@ -22,11 +22,14 @@ const BUDGET_MS = 30_000
 /** A page (with its chart) that takes longer than this is reported, not waited for. */
 const PAGE_TIMEOUT_MS = 25_000
 /**
- * Between upper air pages. Each asks the University of Wyoming for its balloon,
- * and Wyoming answers a burst of requests with "too busy", which leaves the page
- * without its panel for the hour it is cached.
+ * An upper air page streams in its balloon from the University of Wyoming,
+ * which can take 50 s (see fetchSounding), and Wyoming answers a burst of
+ * requests "too busy". So each is warmed alone, at the start of a call, with
+ * the rest of the call's minute to finish; the caller asks again for the next.
  */
-const UPPER_AIR_GAP_MS = 3_000
+const UPPER_AIR_PAGE_TIMEOUT_MS = 52_000
+/** An upper air page is only started this early in a call. */
+const UPPER_AIR_START_BY_MS = 5_000
 
 const isUpperAir = (path: string) =>
   path === '/upperair' || path.startsWith('/upperair/')
@@ -42,8 +45,6 @@ function warmingOrder(paths: string[]): string[] {
     ...paths.filter((path) => path === '/upperair'),
   ]
 }
-
-const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 function isAuthorised(request: NextRequest): boolean {
   const secret = process.env.WARM_SECRET
@@ -85,13 +86,13 @@ async function warmPage(
   return { warmed, failed }
 }
 
-function warmPageInTime(origin: string, path: string) {
+function warmPageInTime(origin: string, path: string, timeoutMs: number) {
   let timer: ReturnType<typeof setTimeout> | undefined
   const timedOut = new Promise<{ warmed: number; failed: string[] }>(
     (resolve) => {
       timer = setTimeout(
         () => resolve({ warmed: 0, failed: [`${path} timed out`] }),
-        PAGE_TIMEOUT_MS,
+        timeoutMs,
       )
     },
   )
@@ -122,17 +123,24 @@ export async function POST(request: NextRequest) {
   const failed: string[] = []
   let i = from
   while (i < paths.length && Date.now() - started < BUDGET_MS) {
-    // Upper air pages one at a time, apart; the rest a few at a time, up to them.
-    let batch: string[]
     if (isUpperAir(paths[i])) {
-      if (i > firstUpperAir) await pause(UPPER_AIR_GAP_MS)
-      batch = [paths[i]]
-    } else {
-      const end = firstUpperAir === -1 ? paths.length : firstUpperAir
-      batch = paths.slice(i, Math.min(i + CONCURRENCY, end))
+      // One a call, and only at its start: the next call does the next.
+      if (Date.now() - started > UPPER_AIR_START_BY_MS) break
+      const result = await warmPageInTime(
+        origin,
+        paths[i],
+        UPPER_AIR_PAGE_TIMEOUT_MS,
+      )
+      warmed += result.warmed
+      failed.push(...result.failed)
+      i++
+      break
     }
+    // The other pages a few at a time, up to the upper air ones.
+    const end = firstUpperAir === -1 ? paths.length : firstUpperAir
+    const batch = paths.slice(i, Math.min(i + CONCURRENCY, end))
     const results = await Promise.all(
-      batch.map((path) => warmPageInTime(origin, path)),
+      batch.map((path) => warmPageInTime(origin, path, PAGE_TIMEOUT_MS)),
     )
     for (const result of results) {
       warmed += result.warmed
