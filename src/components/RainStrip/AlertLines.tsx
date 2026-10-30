@@ -43,7 +43,8 @@ export function AlertLines({
 
   return (
     <section aria-label="Weather alerts" className="mb-2">
-      <ul aria-live="polite" className="space-y-2">
+      {/* Side by side where there is room, stacked on a phone; blocks in a row are as tall as each other. */}
+      <ul aria-live="polite" className="grid gap-2 md:grid-cols-2">
         {shown.map(({ alert, pins, upcoming, mapTimeUTC }) => {
           const chart = nearestChartIndex(times, mapTimeUTC)
           const time = upcoming ? alert.onsetUTC : alert.expiresUTC
@@ -92,7 +93,9 @@ export function AlertLines({
           )
         })}
         {more > 0 && (
-          <li className="text-ink-soft px-3 text-sm">and {more} more</li>
+          <li className="text-ink-soft px-3 text-sm md:col-span-full">
+            and {more} more
+          </li>
         )}
       </ul>
       <p className="text-ink-soft mt-2 px-3 text-xs">
