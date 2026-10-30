@@ -107,10 +107,10 @@ describe('<SettingsPage />', () => {
   })
 
   describe('warnings', () => {
-    test('has heavy rain warnings on until they are turned off, and counts it', () => {
+    test('has weather warnings on until they are turned off, and counts it', () => {
       const { store } = renderPage()
       const toggle = screen.getByRole('switch', {
-        name: 'Show heavy rain warnings',
+        name: 'Show weather warnings',
       })
 
       expect(toggle).toBeChecked()

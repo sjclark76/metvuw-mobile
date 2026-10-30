@@ -10,20 +10,19 @@ import { useIsMounted } from '@/components/Hooks/useIsMounted'
 import { track } from '@/shared/helpers/analytics/track'
 import type { HeavyRain } from '@/shared/helpers/heavyRain'
 import { chartLabel, type Pin } from '@/shared/helpers/pins/pins'
+import type { PinAlert } from '@/shared/helpers/warnings/alertsForPins'
 
+import { AlertLines } from './AlertLines'
+import { band, MOST_SHOWN } from './band'
 import { ALL_PINS } from './describeRain'
 import { useRainWatch } from './RainWatch'
 
 const SIX_HOURS = 6 * 60 * 60 * 1000
-const MOST_SHOWN = 3
 
 export interface PinHeavyRain {
   pin: Pin
   rain: HeavyRain
 }
-
-const band =
-  'flex min-h-11 items-center gap-3 border-l-4 bg-plate px-3 py-2.5 text-sm leading-snug'
 
 /**
  * What the forecast charts show at the visitor's pins, in a band under the top of
@@ -33,6 +32,7 @@ const band =
  * always the same height for a visitor with pins, which the page holds room for
  * from its first paint (`data-heavy-rain-slot`, see Settings/layoutScript), so it
  * is neither missed nor moves the page when the charts have been read.
+ * MetService's alerts for those pins come first, above these lines.
  */
 export function HeavyRainNote({
   found,
@@ -40,6 +40,7 @@ export function HeavyRainNote({
   watching,
   checked,
   onSeek,
+  alerts = [],
 }: {
   found: readonly PinHeavyRain[]
   times: readonly number[]
@@ -48,6 +49,8 @@ export function HeavyRainNote({
   /** Whether every chart has been read at those pins. */
   checked: boolean
   onSeek: (index: number) => void
+  /** MetService alerts for the pins, shown above what the charts say. */
+  alerts?: readonly PinAlert[]
 }) {
   const formatDate = useFormatDate()
   const trackOnce = useTrackOnce()
@@ -79,6 +82,7 @@ export function HeavyRainNote({
 
   return (
     <>
+      <AlertLines alerts={alerts} />
       {showing ? (
         <section
           aria-label="Heavy rain ahead"
@@ -130,7 +134,7 @@ export function HeavyRainNote({
  */
 export function HeavyRainSlot() {
   const mounted = useIsMounted()
-  const { heavyRain, watching, checked } = useRainWatch()
+  const { heavyRain, watching, checked, alerts } = useRainWatch()
   const { times, seek } = useAnimation()
   return (
     <div
@@ -143,6 +147,7 @@ export function HeavyRainSlot() {
         times={times}
         watching={watching}
         checked={checked}
+        alerts={alerts}
         onSeek={(index) => {
           seek(index)
           document

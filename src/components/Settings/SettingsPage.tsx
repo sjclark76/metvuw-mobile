@@ -76,8 +76,8 @@ export function SettingsPage() {
           <Heading>Warnings</Heading>
         </div>
         <ToggleRow
-          label="Show heavy rain warnings"
-          description="A note at the top of a chart page when the charts show heavy rain ahead at a place you have added."
+          label="Show weather warnings"
+          description="Notes at the top of a chart page: official MetService alerts for a place you have added, and heavy rain the charts show ahead there."
           checked={showHeavyRain}
           onChange={(checked) => {
             track('setting_changed', {
