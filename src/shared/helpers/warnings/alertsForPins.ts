@@ -13,6 +13,8 @@ export interface PinAlert {
   pins: Pin[]
   /** Not yet started: the note says when it will, not when it ends. */
   upcoming: boolean
+  /** The time its map is for: its start, or now if it is under way (epoch ms). */
+  mapTimeUTC: number
 }
 
 const COLOUR_RANK: Record<AlertColour, number> = {
@@ -71,8 +73,35 @@ export function alertsForPins(
         ),
       )
       return inside.length > 0
-        ? [{ alert, pins: inside, upcoming: alert.onsetUTC > now }]
+        ? [
+            {
+              alert,
+              pins: inside,
+              upcoming: alert.onsetUTC > now,
+              mapTimeUTC: Math.max(alert.onsetUTC, now),
+            },
+          ]
         : []
     })
     .sort(worstFirst)
+}
+
+/**
+ * The chart nearest a time (the earlier of two equally near), or undefined
+ * without charts. A time outside them gives the first or last.
+ */
+export function nearestChartIndex(
+  times: readonly number[],
+  time: number,
+): number | undefined {
+  let nearest: number | undefined
+  times.forEach((chartTime, index) => {
+    if (
+      nearest === undefined ||
+      Math.abs(chartTime - time) < Math.abs(times[nearest] - time)
+    ) {
+      nearest = index
+    }
+  })
+  return nearest
 }

@@ -3,7 +3,7 @@ import { join } from 'node:path'
 
 import type { Pin } from '@/shared/helpers/pins/pins'
 
-import { alertsForPins } from './alertsForPins'
+import { alertsForPins, nearestChartIndex } from './alertsForPins'
 import { parseCapAlert } from './parseCapAlert'
 
 const fixture = (name: string) =>
@@ -108,5 +108,43 @@ describe('alertsForPins', () => {
     const found = alertsForPins([plain, wind], [dannevirke, lewisPass], EARLY)
 
     expect(found.map((f) => f.alert.id)).toEqual([wind.id, 'plain'])
+  })
+
+  describe('the time its map is for', () => {
+    test('is the start, for an alert that has yet to start', () => {
+      const [found] = alertsForPins([wind], [dannevirke], EARLY)
+
+      expect(found.mapTimeUTC).toBe(wind.onsetUTC)
+    })
+
+    test('is now, for an alert already under way', () => {
+      const during = Date.UTC(2026, 9, 30, 1)
+      const [found] = alertsForPins([wind], [dannevirke], during)
+
+      expect(found.mapTimeUTC).toBe(during)
+    })
+  })
+})
+
+describe('nearestChartIndex', () => {
+  const hour = 60 * 60 * 1000
+  const times = [0, 6 * hour, 12 * hour, 18 * hour]
+
+  test('is the chart nearest the time', () => {
+    expect(nearestChartIndex(times, 7 * hour)).toBe(1)
+    expect(nearestChartIndex(times, 10 * hour)).toBe(2)
+  })
+
+  test('is the first or last chart for a time before or after them all', () => {
+    expect(nearestChartIndex(times, -50 * hour)).toBe(0)
+    expect(nearestChartIndex(times, 99 * hour)).toBe(3)
+  })
+
+  test('is the earlier chart for a time exactly between two', () => {
+    expect(nearestChartIndex(times, 3 * hour)).toBe(0)
+  })
+
+  test('is nothing without charts', () => {
+    expect(nearestChartIndex([], 5)).toBeUndefined()
   })
 })
