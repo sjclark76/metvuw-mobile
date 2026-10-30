@@ -64,6 +64,13 @@ const serwist = new Serwist({
       matcher: ({ request }) => request.destination === 'document',
       handler: new NetworkOnly(),
     },
+    // An official warning is better absent than a day old: the default rule for
+    // API paths would serve a cached answer for up to 24 hours when the network
+    // is slow or down.
+    {
+      matcher: ({ url }) => url.pathname === '/api/warnings',
+      handler: new NetworkOnly(),
+    },
     ...defaultCache,
   ],
 })
