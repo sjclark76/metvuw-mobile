@@ -29,6 +29,23 @@ describe('parseCapAlert', () => {
       })
     })
 
+    test('skips a malformed coordinate instead of reading it as longitude 0', () => {
+      const ring =
+        '-40.1,176.1 -40.1, abc,def -40.2,176.2 -41.5,999 -40.3,176.3'
+      const xml = wind.replace(
+        /<polygon>[^<]*<\/polygon>/,
+        `<polygon>${ring}</polygon>`,
+      )
+
+      const [polygon] = parseCapAlert(xml, NOW)[0].areas[0].polygons
+
+      expect(polygon).toEqual([
+        [-40.1, 176.1],
+        [-40.2, 176.2],
+        [-40.3, 176.3],
+      ])
+    })
+
     test('has its area, with the polygon rounded to 2 places and no repeated points', () => {
       expect(alerts[0].areas).toHaveLength(1)
       expect(alerts[0].areas[0].description).toBe(
