@@ -12,7 +12,7 @@ const TIMEOUT_MS = 8_000
 
 /**
  * MetService's current alerts: the Atom feed, then each alert it links. An alert
- * that cannot be had is left out; the feed failing throws.
+ * that cannot be had is logged and left out; if all of them fail, so does this.
  */
 export async function fetchWarnings(
   now: Date = new Date(),
@@ -30,15 +30,26 @@ export async function fetchWarnings(
     .map((link) => $(link).attr('href') ?? '')
     .filter((href) => href.startsWith(ALERT_PREFIX))
 
-  const alerts = await Promise.all(
+  const outcomes = await Promise.all(
     links.map(async (link) => {
       try {
         const response = await fetch(link, options)
-        return response.ok ? parseCapAlert(await response.text(), now) : []
-      } catch {
-        return []
+        if (!response.ok) return skipped(link, `answered ${response.status}`)
+        return parseCapAlert(await response.text(), now)
+      } catch (error) {
+        return skipped(link, error instanceof Error ? error.name : 'error')
       }
     }),
   )
-  return alerts.flat()
+  if (links.length > 0 && outcomes.every((outcome) => outcome === null)) {
+    throw new Error(`all ${links.length} alerts failed`)
+  }
+  return outcomes.flatMap((outcome) => outcome ?? [])
+}
+
+/** Logs an alert that could not be had, and marks it failed (null). */
+function skipped(link: string, reason: string): null {
+  // eslint-disable-next-line no-console
+  console.warn(`[warnings] alert ${link} skipped: ${reason}`)
+  return null
 }
