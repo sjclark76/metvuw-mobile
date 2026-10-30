@@ -1,6 +1,7 @@
 import { render, screen, within } from '@testing-library/react'
 
 import type { Pin } from '@/shared/helpers/pins/pins'
+import { formatInTimeZone, getBrowserTimeZone } from '@/shared/helpers/timeZone'
 import type { PinAlert } from '@/shared/helpers/warnings/alertsForPins'
 import type { WeatherAlert } from '@/shared/helpers/warnings/parseCapAlert'
 
@@ -53,17 +54,61 @@ describe('<AlertLines />', () => {
     expect(link).toHaveAttribute('href', 'https://metservice.com/warnings/home')
     expect(link).toHaveAttribute('target', '_blank')
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')
-    expect(link.textContent).toMatch(
-      /^Strong Wind Watch at Wanaka: until [A-Z][a-z]{2} \d{1,2}:\d{2}(am|pm)$/,
+    expect(link.querySelector('strong')).toHaveTextContent(
+      'Strong Wind Watch at Wanaka:',
+    )
+    expect(link.querySelector('span.underline')?.textContent).toMatch(
+      /^until [A-Z][a-z]{2} \d{1,2}:\d{2}(am|pm)$/,
+    )
+  })
+
+  test('names each link as opening in a new tab, for screen readers', () => {
+    render(<AlertLines alerts={[covering(['Wanaka'])]} />)
+
+    expect(
+      lines().getByRole('link', { name: /\(opens in a new tab\)$/ }),
+    ).toBeInTheDocument()
+  })
+
+  test('announces the alerts, which arrive after the page loads', () => {
+    render(<AlertLines alerts={[covering(['Wanaka'])]} />)
+
+    expect(within(region()).getByRole('list')).toHaveAttribute(
+      'aria-live',
+      'polite',
     )
   })
 
   test('says when an alert that has not started will', () => {
     render(<AlertLines alerts={[covering(['Wanaka'], {}, true)]} />)
 
-    expect(lines().getByRole('link').textContent).toMatch(
-      /^Strong Wind Watch at Wanaka: from [A-Z][a-z]{2} \d{1,2}:\d{2}(am|pm)$/,
+    const link = lines().getByRole('link')
+    expect(link.querySelector('strong')).toHaveTextContent(
+      'Strong Wind Watch at Wanaka:',
     )
+    expect(link.querySelector('span.underline')?.textContent).toMatch(
+      /^from [A-Z][a-z]{2} \d{1,2}:\d{2}(am|pm)$/,
+    )
+  })
+
+  test('shows the onset after from, and the expiry after until', () => {
+    const at = (instant: number) =>
+      formatInTimeZone(instant, 'EEE h:mmaaa', getBrowserTimeZone())
+    render(
+      <AlertLines
+        alerts={[
+          covering(['A'], { id: 'up' }, true),
+          covering(['B'], { id: 'now' }, false),
+        ]}
+      />,
+    )
+
+    const [from, until] = lines()
+      .getAllByRole('link')
+      .map((link) => link.querySelector('span.underline')?.textContent)
+    expect(from).toBe(`from ${at(alert().onsetUTC)}`)
+    expect(until).toBe(`until ${at(alert().expiresUTC)}`)
+    expect(from?.replace('from ', '')).not.toBe(until?.replace('until ', ''))
   })
 
   test.each([
@@ -102,6 +147,7 @@ describe('<AlertLines />', () => {
     const [coloured, plain] = within(region()).getAllByRole('listitem')
     expect(coloured).toHaveStyle({ borderColor: '#FFEB18' })
     expect(plain.getAttribute('style') ?? '').not.toContain('border-color')
+    expect(plain).toHaveClass('border-rule')
   })
 
   test('shows three lines, then says how many more', () => {
@@ -129,5 +175,18 @@ describe('<AlertLines />', () => {
     expect(
       within(region()).getByRole('link', { name: 'CC BY 4.0' }),
     ).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/')
+  })
+
+  test('shows focus on the credit links as on the alert lines', () => {
+    render(<AlertLines alerts={[covering(['Wanaka'])]} />)
+
+    for (const name of ['MetService', 'CC BY 4.0']) {
+      expect(within(region()).getByRole('link', { name })).toHaveClass(
+        'focus-visible:outline-cold',
+        'rounded-sm',
+        'focus-visible:outline-2',
+        'focus-visible:outline-offset-2',
+      )
+    }
   })
 })

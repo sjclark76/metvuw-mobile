@@ -29,7 +29,7 @@ export function AlertLines({ alerts }: { alerts: readonly PinAlert[] }) {
       aria-label="Weather alerts"
       className="bg-plate mb-2 px-3 py-2.5 text-sm leading-snug"
     >
-      <ul className="space-y-1.5">
+      <ul aria-live="polite" className="space-y-1.5">
         {shown.map(({ alert, pins, upcoming }) => (
           <li
             key={alert.id}
@@ -53,6 +53,7 @@ export function AlertLines({ alerts }: { alerts: readonly PinAlert[] }) {
                   ? `from ${when(alert.onsetUTC)}`
                   : `until ${when(alert.expiresUTC)}`}
               </span>
+              <span className="sr-only"> (opens in a new tab)</span>
             </a>
           </li>
         ))}
@@ -62,14 +63,14 @@ export function AlertLines({ alerts }: { alerts: readonly PinAlert[] }) {
         Alerts from{' '}
         <a
           href="https://www.metservice.com"
-          className="underline underline-offset-2"
+          className="focus-visible:outline-cold rounded-sm underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           MetService
         </a>
         , licensed{' '}
         <a
           href="https://creativecommons.org/licenses/by/4.0/"
-          className="underline underline-offset-2"
+          className="focus-visible:outline-cold rounded-sm underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           CC BY 4.0
         </a>
