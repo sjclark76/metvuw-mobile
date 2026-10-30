@@ -37,6 +37,14 @@ describe('redirectMetvuw', () => {
     )
   })
 
+  test('sends MetService alerts to the stub too', async () => {
+    const { calls, fetch } = setup()
+
+    await fetch('https://alerts.metservice.com/cap/atom')
+
+    expect(requestedUrl(calls[0])).toBe(`${STUB}/cap/atom`)
+  })
+
   test('accepts a URL object', async () => {
     const { calls, fetch } = setup()
 
