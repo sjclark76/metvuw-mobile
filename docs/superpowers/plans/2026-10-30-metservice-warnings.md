@@ -590,7 +590,7 @@ const TIMEOUT_MS = 8_000
 
 /**
  * MetService's current alerts: the Atom feed, then each alert it links. An alert
- * that cannot be had is left out; the feed failing throws.
+ * that cannot be had is logged and left out; if all of them fail, so does this.
  */
 export async function fetchWarnings(
   now: Date = new Date(),

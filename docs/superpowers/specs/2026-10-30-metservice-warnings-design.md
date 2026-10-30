@@ -46,7 +46,7 @@ All matching is in the browser, so pins never leave the device.
 | Unit | File | Job |
 |---|---|---|
 | `parseCapAlert(xml, now)` | `src/shared/helpers/warnings/parseCapAlert.ts` | One CAP alert to the fields above, or `undefined` if dropped. Pure. |
-| `fetchWarnings(now)` | `src/shared/helpers/warnings/fetchWarnings.ts` | The feed, then each alert (a failing alert is skipped, a failing feed throws), each with a 10 s limit. The only network code. |
+| `fetchWarnings(now)` | `src/shared/helpers/warnings/fetchWarnings.ts` | The feed, then each alert (a failing alert is logged and skipped; if every alert fails, or the feed does, it throws and the route answers 502), each with a 10 s limit. The only network code. |
 | `GET /api/warnings` | `src/app/api/warnings/route.ts` | The cached JSON, or the 502. |
 | `alertsForPins` | `src/shared/helpers/warnings/alertsForPins.ts` | Matching, expiry, grouping, order. Pure. |
 | `useWeatherAlerts` | `src/components/RainStrip/useWeatherAlerts.ts` | The client fetch. |
