@@ -35,9 +35,10 @@ test.describe('MetService alerts for a pin', () => {
     await page.goto('/regions/nz')
 
     await expect(alerts(page)).toBeVisible()
-    const link = alerts(page).getByRole('link', {
-      name: /Strong Wind Watch at Christchurch: until/,
-    })
+    await expect(alerts(page)).toContainText(
+      /Strong Wind Watch at Christchurch: until [A-Z][a-z]{2} \d{1,2}:\d{2}(am|pm)/,
+    )
+    const link = alerts(page).getByRole('link', { name: /On MetService/ })
     await expect(link).toHaveAttribute(
       'href',
       'https://metservice.com/warnings/home',
@@ -46,6 +47,21 @@ test.describe('MetService alerts for a pin', () => {
     await expect(alerts(page)).toContainText(
       'Alerts from MetService, licensed CC BY 4.0; areas simplified.',
     )
+  })
+
+  // The alert is already under way, so its map is for now: past all of the
+  // stub's charts (from 15 Oct), which is the last of the ten.
+  test('opens the map for the time of the alert @mobile', async ({ page }) => {
+    await pin(page, christchurch)
+    await page.goto('/regions/nz')
+
+    await alerts(page)
+      .getByRole('button', { name: /^Map for / })
+      .click()
+
+    await expect(
+      page.getByRole('slider', { name: 'Chart position' }),
+    ).toHaveAttribute('aria-valuetext', 'Chart 10 of 10')
   })
 
   test('shows the alert above what the charts say', async ({ page }) => {

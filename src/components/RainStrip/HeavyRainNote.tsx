@@ -84,7 +84,7 @@ export function HeavyRainNote({
 
   return (
     <>
-      <AlertLines alerts={alerts} />
+      <AlertLines alerts={alerts} times={times} onSeek={onSeek} />
       {showing ? (
         <section
           aria-label="Heavy rain ahead"
