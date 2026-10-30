@@ -11,8 +11,8 @@
       "allowedVersions": "<7"
     },
     {
-      "description": "Vercel builds only on Node.js 24.x and 22.x: with engines.node at 26.x the deploy fails ('invalid or discontinued Node.js Version'). Keep Node (engines, CI) and its types on 24 until Vercel offers 26 in Project Settings.",
-      "matchPackageNames": ["node", "@types/node"],
+      "description": "Vercel builds only on Node.js 24.x and 22.x: with engines.node at 26.x the deploy fails ('invalid or discontinued Node.js Version'). Keep Node (engines, and CI's setup-node, which Renovate tracks as actions/node-versions) and its types on 24 until Vercel offers 26 in Project Settings.",
+      "matchPackageNames": ["node", "@types/node", "actions/node-versions"],
       "allowedVersions": "<25"
     }
   ]
