@@ -51,6 +51,16 @@ export function soundingUrl(
 }
 
 /**
+ * An error as a few words for the log. Node's fetch puts the reason (ENOTFOUND,
+ * ECONNRESET, ...) in `cause.code`, and its own message is just "fetch failed".
+ */
+function describeError(error: unknown): string {
+  if (!(error instanceof Error)) return 'error'
+  const code = (error.cause as { code?: unknown } | undefined)?.code
+  return typeof code === 'string' ? `${error.name} (${code})` : error.name
+}
+
+/**
  * The newest sounding with data for a station, or undefined. A launch with no
  * data (400, or a page with no table) is passed over for the one before it. Any
  * other failure, including Wyoming saying it is too busy (503), ends the search:
@@ -100,7 +110,7 @@ export async function fetchSounding(
     // A network error or the timeout, while asking or while reading the page.
     // eslint-disable-next-line no-console
     console.warn(
-      `[sounding] ${station}: ${error instanceof Error ? error.name : 'error'} asking Wyoming`,
+      `[sounding] ${station}: ${describeError(error)} asking Wyoming`,
     )
     return undefined
   }

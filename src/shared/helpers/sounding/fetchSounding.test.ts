@@ -186,4 +186,36 @@ describe('fetchSounding', () => {
       '[sounding] 93844: TimeoutError asking Wyoming',
     )
   })
+
+  // Node's fetch hides the real reason in `cause`: without it a DNS failure and
+  // a dropped connection both log as "TypeError".
+  test('says why a network failure happened, when the error says', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    fetchMock.mockRejectedValue(
+      new TypeError('fetch failed', {
+        cause: Object.assign(new Error('getaddrinfo ENOTFOUND'), {
+          code: 'ENOTFOUND',
+        }),
+      }),
+    )
+
+    await fetchSounding('93844', NOW)
+
+    expect(warn).toHaveBeenCalledWith(
+      '[sounding] 93844: TypeError (ENOTFOUND) asking Wyoming',
+    )
+  })
+
+  test('ignores a cause with no code', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    fetchMock.mockRejectedValue(
+      new TypeError('fetch failed', { cause: new Error('boom') }),
+    )
+
+    await fetchSounding('93844', NOW)
+
+    expect(warn).toHaveBeenCalledWith(
+      '[sounding] 93844: TypeError asking Wyoming',
+    )
+  })
 })
