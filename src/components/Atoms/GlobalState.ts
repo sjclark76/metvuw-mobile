@@ -87,7 +87,20 @@ const showHeavyRainAtom = atomWithStorage<boolean>(
   { getOnInit: true },
 )
 
+/**
+ * How times are written: 24-hour (14:00) or 12-hour (2:00pm). Not read on the
+ * first render: the server draws 24-hour, so a saved 12-hour choice arrives after
+ * mount rather than causing a hydration mismatch.
+ */
+type ClockChoice = '24h' | '12h'
+const clockAtom = atomWithStorage<ClockChoice>(
+  'clock',
+  '24h',
+  createJSONStorage(() => tolerantStorage),
+)
+
 export {
+  clockAtom,
   favoritePageAtom,
   isMenuOpenAtom,
   pinsAtom,
@@ -98,4 +111,4 @@ export {
   showViewerAtom,
   themeAtom,
 }
-export type { ThemeChoice }
+export type { ClockChoice, ThemeChoice }
