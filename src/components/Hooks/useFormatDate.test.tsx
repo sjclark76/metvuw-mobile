@@ -6,6 +6,13 @@ import { clockAtom, type ClockChoice } from '@/components/Atoms/GlobalState'
 
 import { useFormatDate } from './useFormatDate'
 
+// The hook shows times in the viewer's zone: pin it, so the test is the same
+// wherever it runs.
+vi.mock('@/shared/helpers/timeZone', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/shared/helpers/timeZone')>()),
+  getBrowserTimeZone: () => 'Pacific/Auckland',
+}))
+
 // 2:00pm in Auckland (NZDT, UTC+13).
 const afternoon = Date.UTC(2026, 10, 7, 1, 0)
 
