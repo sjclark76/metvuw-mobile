@@ -9,6 +9,7 @@ import {
 import { useIsMounted } from '@/components/Hooks/useIsMounted'
 import { track } from '@/shared/helpers/analytics/track'
 
+import { ClockSetting } from './ClockSetting'
 import { DataSettings } from './DataSettings'
 import { HomePageSetting } from './HomePageSetting'
 import { ThemeSetting } from './ThemeSetting'
@@ -42,6 +43,7 @@ export function SettingsPage() {
         </div>
         <HomePageSetting />
         <ThemeSetting />
+        <ClockSetting />
       </section>
       <section aria-labelledby="settings-footer" className="pt-2">
         <div id="settings-footer">

@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { createStore, Provider } from 'jotai'
 
 import {
+  clockAtom,
   favoritePageAtom,
   pinsAtom,
   savedPagesAtom,
@@ -234,6 +235,24 @@ describe('<SettingsPage />', () => {
       renderPage((store) => store.set(favoritePageAtom, '/'))
 
       expect(select().value).toBe('')
+    })
+  })
+
+  describe('the clock', () => {
+    test('starts on 24-hour, and changes to 12-hour', () => {
+      const { store } = renderPage()
+      expect(screen.getByRole('button', { name: '24-hour' })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      )
+
+      fireEvent.click(screen.getByRole('button', { name: '12-hour' }))
+
+      expect(store.get(clockAtom)).toBe('12h')
+      expect(window.gtag).toHaveBeenCalledWith('event', 'setting_changed', {
+        setting: 'clock',
+        value: '12h',
+      })
     })
   })
 

@@ -261,6 +261,21 @@ test.describe('the theme', () => {
   })
 })
 
+test.describe('the clock', () => {
+  test('is 24-hour until 12-hour is chosen', async ({ page }) => {
+    await page.goto('/regions/nz')
+    const time = (pattern: RegExp) =>
+      page.locator('span.font-display', { hasText: pattern }).first()
+    await expect(time(/^\d{2}:\d{2}$/)).toBeVisible()
+
+    await page.goto('/settings')
+    await page.getByRole('button', { name: '12-hour' }).click()
+    await page.goto('/regions/nz')
+
+    await expect(time(/^\d{1,2}:\d{2}(am|pm)$/)).toBeVisible()
+  })
+})
+
 test.describe('the data on this device', () => {
   test('clears the pins, after asking', async ({ page }) => {
     await page.addInitScript(() => {
