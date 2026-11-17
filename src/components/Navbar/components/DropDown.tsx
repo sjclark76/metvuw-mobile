@@ -17,6 +17,8 @@ import { MenuLink } from '@/components/Navbar/types'
 import { SavedMark } from '@/components/SavedPages/SavedMark'
 import { useSavedPaths } from '@/components/SavedPages/useSavedPaths'
 
+import { navItemClass } from '../navItemClass'
+
 interface DropDownProps {
   heading: string
   links: MenuLink[]
@@ -147,9 +149,6 @@ const DropDown = (props: DropDownProps) => {
     setMobileMenuOpen(false)
   }
 
-  const headerText =
-    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-bar-ink transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-white/10 focus:bg-white/15'
-
   return (
     <div
       ref={wrapperRef}
@@ -160,7 +159,7 @@ const DropDown = (props: DropDownProps) => {
       <button
         ref={buttonRef}
         type="button"
-        className={`${headerText} group lg:w-full lg:justify-between lg:px-3`}
+        className={`${navItemClass} group lg:w-full lg:justify-between lg:px-3`}
         onClick={toggle}
         aria-expanded={wide ? openOnWide : isOpen}
         aria-controls={listId}

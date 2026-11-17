@@ -25,6 +25,7 @@ import { useSavedPageCount, useSavedPaths } from '../SavedPages/useSavedPaths'
 import SetHomePageIcon from '../SetHomePageIcon/SetHomePageIcon'
 import { ThemeMenu } from '../ThemeToggle'
 import DropDown from './components/DropDown'
+import { navItemClass } from './navItemClass'
 import { MenuLink } from './types'
 
 export const mapRegionToMenuLink = (regions: Region[]): MenuLink[] =>
@@ -92,8 +93,7 @@ const Navbar = () => {
 
   // In the side menu a link is a full-width row, left-aligned, with an orange edge
   // when it is the page you are on; in the bar it is as wide as its words.
-  const headerText =
-    'inline-flex items-center justify-center h-10 gap-2 px-5 font-bold tracking-wide text-bar-ink transition duration-300 rounded focus-visible:outline-none whitespace-nowrap hover:bg-white/10 focus:bg-white/15 lg:flex lg:w-full lg:justify-start lg:pr-3 lg:pl-[9px] lg:border-l-[3px] lg:border-transparent lg:has-[[aria-current=page]]:border-[#ff6a00] lg:has-[[aria-current=page]]:bg-white/15'
+  const headerText = `${navItemClass} lg:flex lg:w-full lg:justify-start lg:pr-3 lg:pl-[9px] lg:border-l-[3px] lg:border-transparent lg:has-[[aria-current=page]]:border-[#ff6a00] lg:has-[[aria-current=page]]:bg-white/15`
   // The menu's sections, named, on a wide screen only: the phone menu is already as
   // tall as the screen allows.
   const sectionTitle =
