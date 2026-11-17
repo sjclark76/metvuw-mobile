@@ -46,11 +46,6 @@ export default async function Region(props: Props) {
     return <NoForecast />
   }
 
-  const sortedCharts = rainChartData.sort((a, b) => {
-    return (
-      new Date(a.imageDateUTC).getTime() - new Date(b.imageDateUTC).getTime()
-    )
-  })
-
-  return <RegionPage region={matchedRegion} rainChartData={sortedCharts} />
+  // Already in time order: getRainChartDataForRegion sorts them.
+  return <RegionPage region={matchedRegion} rainChartData={rainChartData} />
 }

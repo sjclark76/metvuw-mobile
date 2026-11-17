@@ -86,20 +86,6 @@ describe('region page', () => {
     expect(page.props.region).toMatchObject({ code: 'nzsi' })
   })
 
-  test('shows the charts oldest first, whatever order they arrive in', async () => {
-    vi.mocked(getRainChartDataForRegion).mockResolvedValue([
-      rain(3),
-      rain(1),
-      rain(2),
-    ])
-
-    const page = await route('nz')
-
-    expect(page.props.rainChartData.map((c: { url: string }) => c.url)).toEqual(
-      ['https://x/1.gif', 'https://x/2.gif', 'https://x/3.gif'],
-    )
-  })
-
   test('titles the page for the region, with a canonical address for it', async () => {
     const metadata = await regionMetadata({
       params: Promise.resolve({ name: 'nzsi' }),
