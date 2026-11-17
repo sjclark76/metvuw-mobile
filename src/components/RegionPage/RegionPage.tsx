@@ -2,18 +2,15 @@
 
 import React, { useMemo } from 'react'
 
-import { AnimationProvider } from '@/components/Animation/Animation'
 import { useInitShowAds } from '@/components/Atoms/AdState'
+import { ChartPage } from '@/components/ChartPage/ChartPage'
 import { FooterControl } from '@/components/FooterControl'
-import { PageTopEnd } from '@/components/FooterControl/PageTopEnd'
 import { useFormatDate } from '@/components/Hooks/useFormatDate'
-import { ImageProgressProvider } from '@/components/ImageProgress/ImageProgress'
 import { RainfallLegendSection } from '@/components/RainfallLegend'
 import { HeavyRainSlot } from '@/components/RainStrip/HeavyRainNote'
 import { RainWatchProvider } from '@/components/RainStrip/RainWatch'
 import SubHeader from '@/components/SubHeader'
 import WeatherChartsWithAnimation from '@/components/WeatherCharts/WeatherChartsWithAnimation'
-import { expectedLoadedImages } from '@/shared/helpers/imageLoading'
 import { SkinnyRainChartData } from '@/shared/types/rainChartData'
 import { Region } from '@/shared/types/region'
 
@@ -32,7 +29,6 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
 
   useInitShowAds()
 
-  // When each chart is for, so the footer can draw a time axis.
   const times = useMemo(
     () => rainChartData.map((chart) => new Date(chart.forecastDate).getTime()),
     [rainChartData],
@@ -44,38 +40,28 @@ export default function RegionPage({ region, rainChartData }: RegionPageProps) {
   )
 
   return (
-    // Only the eagerly loaded charts count towards the progress bar.
-    <ImageProgressProvider
-      expected={expectedLoadedImages(rainChartData.length)}
-    >
-      <AnimationProvider
-        count={rainChartData.length}
-        times={times}
-        intervalMs={500}
-      >
-        {/* This outer div manages the layout for content and the sticky footer.
-          It takes at least the height of the viewport minus the navbar (h-16). */}
+    <ChartPage
+      times={times}
+      intervalMs={500}
+      header={
+        <>
+          <SubHeader
+            eyebrow="Rain and wind forecast"
+            title={region.name}
+            detail={issued}
+          />
+          <HeavyRainSlot />
+        </>
+      }
+      legend={<RainfallLegendSection />}
+      footer={<FooterControl rain={{ region: region.code, chartUrls }} />}
+      within={(layout) => (
         <RainWatchProvider region={region.code} chartUrls={chartUrls}>
-          <div className="flex min-h-[calc(100vh-4rem)] flex-col">
-            {/* This div contains the main page content and grows to fill space */}
-            <div className="flex flex-grow flex-col">
-              <SubHeader
-                eyebrow="Rain and wind forecast"
-                title={region.name}
-                detail={issued}
-              />
-              <HeavyRainSlot />
-              <PageTopEnd />
-              <WeatherChartsWithAnimation
-                region={region}
-                charts={rainChartData}
-              />
-            </div>
-            <RainfallLegendSection />
-            <FooterControl rain={{ region: region.code, chartUrls }} />
-          </div>
+          {layout}
         </RainWatchProvider>
-      </AnimationProvider>
-    </ImageProgressProvider>
+      )}
+    >
+      <WeatherChartsWithAnimation region={region} charts={rainChartData} />
+    </ChartPage>
   )
 }
