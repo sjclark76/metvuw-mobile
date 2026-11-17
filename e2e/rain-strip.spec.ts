@@ -68,7 +68,7 @@ test.describe('the rain strip', () => {
 
     await expect(slider(page)).toHaveAttribute(
       'aria-valuetext',
-      'Chart 3 of 10',
+      /chart 3 of 10$/i,
     )
     await expect(reading(page)).toContainText('5–6 mm in 6 hr')
 
@@ -157,7 +157,7 @@ test.describe('the rain strip', () => {
       await page.keyboard.press('ArrowRight')
       await expect(slider(page)).toHaveAttribute(
         'aria-valuetext',
-        `Chart ${start + step + 1} of 10`,
+        new RegExp(`chart ${start + step + 1} of 10$`, 'i'),
       )
       const box = (await footer.boundingBox())!
       seen.add(`${box.y + box.height}:${box.height}`)

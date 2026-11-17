@@ -74,7 +74,7 @@ test.describe('heavy rain ahead at a pin', () => {
 
     await expect(
       page.getByRole('slider', { name: 'Chart position' }),
-    ).toHaveAttribute('aria-valuetext', 'Chart 4 of 10')
+    ).toHaveAttribute('aria-valuetext', /chart 4 of 10$/i)
   })
 
   test('shows the tapped place in the rain strip, when it shows another', async ({

@@ -121,15 +121,21 @@ describe('<FooterControl />', () => {
       expect(slider().value).toBe('3')
     })
 
-    // A bare range input is announced as a percentage; say which chart it is.
+    // A bare range input is announced as a percentage; say which time and chart it is.
     test('describes the position in words for assistive technology', () => {
       renderFooter()
       open()
-      expect(slider()).toHaveAttribute('aria-valuetext', 'Chart 1 of 5')
+      expect(slider()).toHaveAttribute(
+        'aria-valuetext',
+        expect.stringMatching(/chart 1 of 5$/i),
+      )
 
       fireEvent.click(screen.getByLabelText('Step forward'))
 
-      expect(slider()).toHaveAttribute('aria-valuetext', 'Chart 2 of 5')
+      expect(slider()).toHaveAttribute(
+        'aria-valuetext',
+        expect.stringMatching(/chart 2 of 5$/i),
+      )
     })
 
     test('keeps the chart you were on when you open and close the viewer', () => {
