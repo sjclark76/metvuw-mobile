@@ -269,7 +269,13 @@ test.describe('the clock', () => {
     await expect(time(/^\d{2}:\d{2}$/)).toBeVisible()
 
     await page.goto('/settings')
-    await page.getByRole('button', { name: '12-hour' }).click()
+    const twelveHour = page.getByRole('button', { name: '12-hour' })
+    await twelveHour.click()
+    // Saved before leaving, or the next page reads the old choice.
+    await expect(twelveHour).toHaveAttribute('aria-pressed', 'true')
+    await expect
+      .poll(() => page.evaluate(() => localStorage.getItem('clock')))
+      .toBe('"12h"')
     await page.goto('/regions/nz')
 
     await expect(time(/^\d{1,2}:\d{2}(am|pm)$/)).toBeVisible()

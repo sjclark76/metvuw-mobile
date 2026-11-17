@@ -246,9 +246,16 @@ test.describe('feature events', () => {
     await installed.addInitScript(() =>
       Object.defineProperty(navigator, 'standalone', { value: true }),
     )
+    // The count is sent once the page is running, which can be after it loads.
     await installed.goto('/offline')
-    await installed.goto('/radar/nl')
+    await expect.poll(() => count(installed, 'app_opened_installed')).toBe(1)
 
+    // Not again on the next page, once that is running too: the save button is
+    // only drawn after the page has started.
+    await installed.goto('/radar/nl')
+    await expect(
+      installed.getByRole('button', { name: /save for offline/i }),
+    ).toBeVisible()
     expect(await count(installed, 'app_opened_installed')).toBe(1)
     await installed.close()
   })
