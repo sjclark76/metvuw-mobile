@@ -64,7 +64,7 @@ test.describe('MetService alerts for a pin', () => {
 
     await expect(
       page.getByRole('slider', { name: 'Chart position' }),
-    ).toHaveAttribute('aria-valuetext', 'Chart 10 of 10')
+    ).toHaveAttribute('aria-valuetext', /chart 10 of 10$/i)
   })
 
   test('shows the worse alert first', async ({ page }) => {

@@ -191,7 +191,13 @@ export function TimeAxis({
           value={index}
           onChange={(event) => onSeek(Number(event.target.value))}
           aria-label="Chart position"
-          aria-valuetext={`Chart ${index + 1} of ${max + 1}`}
+          // The time first, as it is what the visitor is choosing; then how far
+          // along it is. A bare range input is announced as a percentage.
+          aria-valuetext={
+            handleLabel
+              ? `${handleLabel}, chart ${index + 1} of ${max + 1}`
+              : `Chart ${index + 1} of ${max + 1}`
+          }
           // Invisible, but it takes every touch and key press. Its thumb is as wide
           // as the two insets and as tall as the axis: iOS only starts dragging a
           // slider that is pressed on its thumb, so a thumb of no size could not be

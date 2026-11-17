@@ -15,7 +15,7 @@ async function openViewer(page: Page) {
   await expect(slider(page)).toBeVisible()
   await slider(page).focus()
   await page.keyboard.press('Home')
-  await expect(slider(page)).toHaveAttribute('aria-valuetext', 'Chart 1 of 4')
+  await expect(slider(page)).toHaveAttribute('aria-valuetext', /chart 1 of 4$/i)
 }
 
 test.describe('animated viewer', () => {
@@ -24,7 +24,10 @@ test.describe('animated viewer', () => {
   }) => {
     await openViewer(page)
 
-    await expect(slider(page)).toHaveAttribute('aria-valuetext', 'Chart 1 of 4')
+    await expect(slider(page)).toHaveAttribute(
+      'aria-valuetext',
+      /chart 1 of 4$/i,
+    )
     await expect(
       page.getByRole('img', { name: /satellite chart for/i }),
     ).toHaveCount(1)
@@ -48,7 +51,7 @@ test.describe('animated viewer', () => {
     await expect(page.getByLabel('Pause animation')).toBeVisible()
     await expect(slider(page)).not.toHaveAttribute(
       'aria-valuetext',
-      'Chart 1 of 4',
+      /chart 1 of 4$/i,
       {
         timeout: 4000,
       },
@@ -67,21 +70,36 @@ test.describe('animated viewer', () => {
     await openViewer(page)
 
     await slider(page).fill('2')
-    await expect(slider(page)).toHaveAttribute('aria-valuetext', 'Chart 3 of 4')
+    await expect(slider(page)).toHaveAttribute(
+      'aria-valuetext',
+      /chart 3 of 4$/i,
+    )
 
     await page.getByLabel('Step forward').click()
-    await expect(slider(page)).toHaveAttribute('aria-valuetext', 'Chart 4 of 4')
+    await expect(slider(page)).toHaveAttribute(
+      'aria-valuetext',
+      /chart 4 of 4$/i,
+    )
 
     // Stepping stops at the last chart rather than wrapping round.
     await page.getByLabel('Step forward').click()
-    await expect(slider(page)).toHaveAttribute('aria-valuetext', 'Chart 4 of 4')
+    await expect(slider(page)).toHaveAttribute(
+      'aria-valuetext',
+      /chart 4 of 4$/i,
+    )
 
     await page.getByLabel('Step backward').click()
-    await expect(slider(page)).toHaveAttribute('aria-valuetext', 'Chart 3 of 4')
+    await expect(slider(page)).toHaveAttribute(
+      'aria-valuetext',
+      /chart 3 of 4$/i,
+    )
 
     await slider(page).fill('0')
     await page.getByLabel('Step backward').click()
-    await expect(slider(page)).toHaveAttribute('aria-valuetext', 'Chart 1 of 4')
+    await expect(slider(page)).toHaveAttribute(
+      'aria-valuetext',
+      /chart 1 of 4$/i,
+    )
   })
 })
 

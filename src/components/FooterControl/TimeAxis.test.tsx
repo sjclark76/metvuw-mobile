@@ -46,9 +46,14 @@ describe('<TimeAxis />', () => {
       expect(slider()).toHaveAttribute('min', '0')
       expect(slider()).toHaveAttribute('max', String(times.length - 1))
       expect(slider()).toHaveValue('2')
+      // The time it shows, then how far along it is: "Sat 14:00, chart 3 of 6".
       expect(slider()).toHaveAttribute(
         'aria-valuetext',
-        `Chart 3 of ${times.length}`,
+        expect.stringMatching(
+          new RegExp(
+            `^[A-Z][a-z]{2} \\d{2}:\\d{2}, chart 3 of ${times.length}$`,
+          ),
+        ),
       )
     })
 
