@@ -111,3 +111,52 @@ test.describe('navigation menu on a phone', () => {
     await expect(menu).toHaveAttribute('aria-expanded', 'false')
   })
 })
+
+// The bar is dark, so a tint alone barely shows where focus is: every row draws an
+// outline in the bar's ink, as the menu button does.
+test.describe('keyboard focus in the menu', () => {
+  test.use({ viewport: { width: 900, height: 900 } })
+
+  const outline = (locator: import('@playwright/test').Locator) =>
+    locator.evaluate((element) => {
+      const style = getComputedStyle(element)
+      return `${style.outlineStyle} ${style.outlineWidth}`
+    })
+
+  test('outlines a group’s button and a single link’s row', async ({
+    page,
+    browserName,
+  }) => {
+    test.skip(browserName === 'webkit', 'WebKit does not Tab to links')
+    await page.goto('/satellite')
+    await page.getByRole('button', { name: 'Menu' }).click()
+
+    const newZealand = page.getByRole('button', {
+      name: 'New Zealand',
+      exact: true,
+    })
+    const settings = page.getByRole('link', { name: 'Settings', exact: true })
+
+    for (
+      let i = 0;
+      i < 40 &&
+      !(await newZealand.evaluate((e) => e === document.activeElement));
+      i++
+    ) {
+      await page.keyboard.press('Tab')
+    }
+    await expect(newZealand).toBeFocused()
+    expect(await outline(newZealand)).toBe('solid 2px')
+
+    for (
+      let i = 0;
+      i < 40 && !(await settings.evaluate((e) => e === document.activeElement));
+      i++
+    ) {
+      await page.keyboard.press('Tab')
+    }
+    await expect(settings).toBeFocused()
+    expect(await outline(settings.locator('..'))).toBe('solid 2px')
+    expect(await outline(settings)).not.toBe('solid 2px')
+  })
+})
