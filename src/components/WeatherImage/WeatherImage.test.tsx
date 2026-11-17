@@ -46,6 +46,11 @@ describe('Weather Image', () => {
 
       expect(image).toHaveAttribute('width', String(width))
       expect(image).toHaveAttribute('height', String(height))
+      // On its box as well: Chromium can draw a lazy image that is still waiting
+      // as 0 by 0, whatever its own aspect ratio says.
+      expect(image.parentElement).toHaveStyle({
+        aspectRatio: `${width} / ${height}`,
+      })
     },
   )
 

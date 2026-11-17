@@ -10,6 +10,7 @@ const DRAG_GAP_MS = 400
 const POLL_MS = 16
 // The list is not on the page for a moment after the viewer closes.
 const GIVE_UP_AFTER_MS = 1500
+const BAND_THRESHOLDS = Array.from({ length: 21 }, (_, i) => i / 20)
 
 const chartElement = (index: number) =>
   document.querySelector<HTMLElement>(`[data-chart-index="${index}"]`)
@@ -78,21 +79,38 @@ export function useChartScrollSync({
         return
       }
 
+      // How much of the band each chart fills, in pixels. The browser reports only
+      // the charts whose share changed, so the rest are remembered here: otherwise
+      // the edge of the next chart coming in would outvote the chart filling it.
+      const inBand = new Map<Element, number>()
       observer = new IntersectionObserver(
         (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              inBand.set(entry.target, entry.intersectionRect.height)
+            } else {
+              inBand.delete(entry.target)
+            }
+          }
           if (Date.now() < ignoreUntil.current) return
-          const mostVisible = entries
-            .filter((entry) => entry.isIntersecting)
-            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
-          if (mostVisible) {
+          let most: Element | undefined
+          let mostHeight = -1
+          for (const [element, height] of inBand) {
+            if (height > mostHeight) {
+              most = element
+              mostHeight = height
+            }
+          }
+          if (most) {
             latest.current.onIndex(
-              Number((mostVisible.target as HTMLElement).dataset.chartIndex),
+              Number((most as HTMLElement).dataset.chartIndex),
             )
           }
         },
         // A thin band across the middle of the screen: the chart in it is "the
-        // chart you are looking at".
-        { rootMargin: '-35% 0px -45% 0px', threshold: [0, 0.5, 1] },
+        // chart you are looking at". Thresholds every 5% keep each chart's share
+        // current as the page scrolls.
+        { rootMargin: '-35% 0px -45% 0px', threshold: BAND_THRESHOLDS },
       )
       elements.forEach((element) => observer!.observe(element))
     }

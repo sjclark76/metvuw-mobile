@@ -6,7 +6,7 @@ type ObserverOptions = { rootMargin?: string; threshold?: number[] }
 type Entry = {
   target: Element
   isIntersecting: boolean
-  intersectionRatio: number
+  intersectionRect: { height: number }
 }
 let observers: {
   callback: (entries: Entry[]) => void
@@ -48,10 +48,16 @@ function Charts({ count }: { count: number }) {
 }
 
 const chartsInPage = (count = 5) => render(<Charts count={count} />)
-const see = (index: number, ratio = 1) => ({
+// `share` is how much of the band across the middle of the screen the chart fills.
+const see = (index: number, share = 1) => ({
   target: document.querySelector(`[data-chart-index="${index}"]`)!,
   isIntersecting: true,
-  intersectionRatio: ratio,
+  intersectionRect: { height: share * 100 },
+})
+const gone = (index: number) => ({
+  ...see(index),
+  isIntersecting: false,
+  intersectionRect: { height: 0 },
 })
 
 describe('useChartScrollSync', () => {
@@ -108,9 +114,47 @@ describe('useChartScrollSync', () => {
       renderHook(() => useChartScrollSync({ enabled: true, index: 0, onIndex }))
       act(() => vi.advanceTimersByTime(50))
 
-      act(() => observers[0].callback([{ ...see(2), isIntersecting: false }]))
+      act(() => observers[0].callback([gone(2)]))
 
       expect(onIndex).not.toHaveBeenCalled()
+    })
+
+    // The browser reports only the charts whose share of the band changed: the
+    // edge of the next chart coming in must not outvote the chart still filling it.
+    test('stays on the chart filling the band while the next one edges in', () => {
+      chartsInPage()
+      const onIndex = vi.fn()
+      renderHook(() => useChartScrollSync({ enabled: true, index: 0, onIndex }))
+      act(() => vi.advanceTimersByTime(50))
+
+      act(() => observers[0].callback([see(0, 0.9)]))
+      act(() => observers[0].callback([see(1, 0.1)]))
+
+      expect(onIndex).toHaveBeenLastCalledWith(0)
+    })
+
+    test('moves on once the next chart fills more of the band', () => {
+      chartsInPage()
+      const onIndex = vi.fn()
+      renderHook(() => useChartScrollSync({ enabled: true, index: 0, onIndex }))
+      act(() => vi.advanceTimersByTime(50))
+
+      act(() => observers[0].callback([see(0, 0.9), see(1, 0.1)]))
+      act(() => observers[0].callback([see(0, 0.4), see(1, 0.6)]))
+      expect(onIndex).toHaveBeenLastCalledWith(1)
+
+      act(() => observers[0].callback([gone(0)]))
+      expect(onIndex).toHaveBeenLastCalledWith(1)
+    })
+
+    test('is told often enough to see the share change as the page scrolls', () => {
+      chartsInPage()
+      renderHook(() =>
+        useChartScrollSync({ enabled: true, index: 0, onIndex: vi.fn() }),
+      )
+      act(() => vi.advanceTimersByTime(50))
+
+      expect(observers[0].options?.threshold?.length).toBeGreaterThanOrEqual(10)
     })
 
     // The viewer shows its own chart, so the list is not on the page and there
@@ -248,7 +292,8 @@ describe('useChartScrollSync', () => {
       expect(onIndex).not.toHaveBeenCalled()
 
       act(() => vi.advanceTimersByTime(1500))
-      act(() => observers[0].callback([see(4)]))
+      // Chart 1 was passed on the way: it has left the band by now.
+      act(() => observers[0].callback([gone(1), see(4)]))
       expect(onIndex).toHaveBeenCalledExactlyOnceWith(4)
     })
   })

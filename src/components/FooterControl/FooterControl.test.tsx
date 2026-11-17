@@ -198,7 +198,7 @@ describe('<FooterControl />', () => {
           {
             target: document.querySelector('[data-chart-index="2"]'),
             isIntersecting: true,
-            intersectionRatio: 1,
+            intersectionRect: { height: 100 },
           },
         ]),
       )

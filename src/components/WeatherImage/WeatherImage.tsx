@@ -160,8 +160,21 @@ const WeatherImage = ({
     },
   }
 
+  // The wrapper holds the chart's room too. Chromium can lay out a lazy image that
+  // is still waiting for its address as 0 by 0 despite its aspect ratio, and the
+  // page then grows under the visitor as each chart below arrives; a div keeps it.
   return (
-    <div data-testid="weather-image" className="w-full">
+    <div
+      data-testid="weather-image"
+      className="w-full"
+      style={
+        hasSize(otherAttributes)
+          ? {
+              aspectRatio: `${otherAttributes.width} / ${otherAttributes.height}`,
+            }
+          : undefined
+      }
+    >
       <img
         ref={imgRef}
         alt={imageAlt}
