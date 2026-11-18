@@ -3,7 +3,6 @@ import path from 'node:path'
 
 import { render, screen } from '@testing-library/react'
 import { useAtom } from 'jotai'
-import * as m from 'motion/react-m'
 
 import { isMenuOpenAtom } from '@/components/Atoms/GlobalState'
 
@@ -23,32 +22,6 @@ describe('<Providers />', () => {
     )
 
     expect(screen.getByText('closed')).toBeInTheDocument()
-  })
-
-  test('lets lazy `m` components render without the full motion bundle', () => {
-    render(
-      <Providers>
-        <m.p animate={{ opacity: 1 }}>animated</m.p>
-      </Providers>,
-    )
-
-    expect(screen.getByText('animated')).toBeInTheDocument()
-  })
-
-  // `strict` makes the full `motion` component throw, so nobody can quietly add
-  // it back and pull the whole feature set into every page's bundle.
-  test('rejects the full `motion` component', async () => {
-    const { motion } = await import('motion/react')
-    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-    expect(() =>
-      render(
-        <Providers>
-          <motion.p animate={{ opacity: 1 }}>heavy</motion.p>
-        </Providers>,
-      ),
-    ).toThrow(/LazyMotion/)
-    consoleError.mockRestore()
   })
 })
 

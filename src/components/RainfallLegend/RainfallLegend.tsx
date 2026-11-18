@@ -1,9 +1,8 @@
 'use client'
 
-import { AnimatePresence } from 'motion/react'
-import * as m from 'motion/react-m'
 import { useState } from 'react'
 
+import { usePresence } from '@/components/Hooks/usePresence'
 import { track } from '@/shared/helpers/analytics/track'
 import { RAIN_BANDS } from '@/shared/helpers/rainBands'
 
@@ -37,8 +36,12 @@ function RainfallLegend() {
   )
 }
 
+// As long as the closing key's animation (animate-pop-out in globals.css).
+const KEY_EXIT_MS = 180
+
 export function RainfallLegendSection() {
   const [isOpen, setIsOpen] = useState(false)
+  const presence = usePresence(isOpen, KEY_EXIT_MS)
 
   return (
     // Fixed above the footer, not sticky, for the same reason the footer is: on an
@@ -46,20 +49,13 @@ export function RainfallLegendSection() {
     // room the button takes at the end of the page.
     <section className="h-12 print:hidden">
       <div className="fixed right-2 bottom-[calc(var(--footer-height,5rem)+0.25rem)] z-30 flex items-end gap-2">
-        <AnimatePresence initial={false}>
-          {isOpen && (
-            <m.div
-              key="rainfall-legend-panel"
-              initial={{ opacity: 0, x: 8, scale: 0.98 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: 8, scale: 0.98 }}
-              transition={{ duration: 0.18, ease: 'easeOut' }}
-              className="w-max max-w-[80vw]"
-            >
-              <RainfallLegend />
-            </m.div>
-          )}
-        </AnimatePresence>
+        {presence !== 'gone' && (
+          <div
+            className={`w-max max-w-[80vw] ${presence === 'shown' ? 'animate-pop-in' : 'animate-pop-out'}`}
+          >
+            <RainfallLegend />
+          </div>
+        )}
         <button
           type="button"
           onClick={() => {

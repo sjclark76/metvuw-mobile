@@ -1,13 +1,12 @@
 'use client'
 import { useAtomValue } from 'jotai'
-import { AnimatePresence } from 'motion/react'
-import * as m from 'motion/react-m'
 import React from 'react'
 
 import { AdCard } from '@/components/AdCard'
 import { AnimatedWeatherChart } from '@/components/AnimatedWeatherChart/AnimatedWeatherChart'
 import { useAnimation } from '@/components/Animation/Animation'
 import { showAdsAtom } from '@/components/Atoms/AdState'
+import { usePresence } from '@/components/Hooks/usePresence'
 import { fadeInProps } from '@/shared/helpers/fadeIn'
 import { chartAspectRatio } from '@/shared/helpers/imageCompression/imageDimensions'
 import { imageLoadingFor } from '@/shared/helpers/imageLoading'
@@ -21,69 +20,56 @@ interface WeatherChartsProps {
   charts: SkinnyRainChartData[]
 }
 
-// Variants for the fade transition when switching between static and animated views
-const viewSwitchVariants = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1, transition: { duration: 0.5 } },
-  exit: { opacity: 0, transition: { duration: 0.3 } },
-}
+// As long as the viewer's fade out (animate-fade-out in globals.css).
+const VIEWER_EXIT_MS = 300
 
 const AD_POSITION = 2
 
 const WeatherChartsWithAnimation = (props: WeatherChartsProps) => {
   const { displayAnimated: displayAnimatedChart } = useAnimation()
   const showAds = useAtomValue(showAdsAtom)
+  // The viewer fades in; going back, it fades out before the list comes back.
+  const viewer = usePresence(displayAnimatedChart, VIEWER_EXIT_MS)
   return (
     <>
       <div className="relative flex h-full flex-1 flex-col gap-2">
-        {/* AnimatePresence handles the transition between the two views */}
-        <AnimatePresence mode="wait">
-          {displayAnimatedChart ? (
-            <m.div
-              key="animated-view" // Unique key is crucial for AnimatePresence
-              variants={viewSwitchVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="mx-auto flex w-full max-w-176 flex-grow flex-col items-center justify-center"
-            >
-              <AnimatedWeatherChart
-                region={props.region}
-                charts={props.charts}
-              />
-            </m.div>
-          ) : (
-            <ul
-              key="static-list"
-              className="mx-auto flex w-full max-w-176 flex-col items-center pt-2"
-            >
-              {props.charts.map((chart, index) => (
-                <React.Fragment key={chart.forecastDate}>
-                  {showAds && index === AD_POSITION && (
-                    <li key="ad-card" className="w-full">
-                      <AdCard />
-                    </li>
-                  )}
-                  <li
-                    {...fadeInProps(
-                      index,
-                      'w-full scroll-mt-20',
-                      chartAspectRatio('Rain'),
-                    )}
-                    data-chart-index={index}
-                  >
-                    <WeatherChart
-                      chart={chart}
-                      region={props.region}
-                      index={index}
-                      loading={imageLoadingFor(index)}
-                    />
+        {viewer !== 'gone' ? (
+          <div
+            className={`mx-auto flex w-full max-w-176 flex-grow flex-col items-center justify-center ${viewer === 'shown' ? 'animate-fade-in' : 'animate-fade-out'}`}
+          >
+            <AnimatedWeatherChart region={props.region} charts={props.charts} />
+          </div>
+        ) : (
+          <ul
+            key="static-list"
+            className="mx-auto flex w-full max-w-176 flex-col items-center pt-2"
+          >
+            {props.charts.map((chart, index) => (
+              <React.Fragment key={chart.forecastDate}>
+                {showAds && index === AD_POSITION && (
+                  <li key="ad-card" className="w-full">
+                    <AdCard />
                   </li>
-                </React.Fragment>
-              ))}
-            </ul>
-          )}
-        </AnimatePresence>
+                )}
+                <li
+                  {...fadeInProps(
+                    index,
+                    'w-full scroll-mt-20',
+                    chartAspectRatio('Rain'),
+                  )}
+                  data-chart-index={index}
+                >
+                  <WeatherChart
+                    chart={chart}
+                    region={props.region}
+                    index={index}
+                    loading={imageLoadingFor(index)}
+                  />
+                </li>
+              </React.Fragment>
+            ))}
+          </ul>
+        )}
       </div>
     </>
   )
