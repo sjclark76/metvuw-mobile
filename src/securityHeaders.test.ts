@@ -1,4 +1,8 @@
-import { contentSecurityPolicy, securityHeaders } from './securityHeaders'
+import {
+  contentSecurityPolicy,
+  CSP_REPORT_PATH,
+  securityHeaders,
+} from './securityHeaders'
 
 const header = (name: string) =>
   securityHeaders.find((h) => h.key.toLowerCase() === name.toLowerCase())
@@ -35,12 +39,18 @@ describe('security headers', () => {
     expect(policy).toContain('geolocation=(self)')
   })
 
-  test('sends exactly one Content-Security-Policy header', () => {
-    const names = securityHeaders.map((h) => h.key.toLowerCase())
+  test('cannot be shown in a frame on another site, in any browser', () => {
+    expect(header('Content-Security-Policy')?.value).toBe(
+      "frame-ancestors 'none'",
+    )
+    expect(header('X-Frame-Options')?.value).toBe('DENY')
+  })
 
-    expect(
-      names.filter((n) => n.startsWith('content-security-policy')),
-    ).toHaveLength(1)
+  test('reports what the full policy would block, without blocking it yet', () => {
+    const policy = header('Content-Security-Policy-Report-Only')?.value ?? ''
+
+    expect(policy.startsWith(contentSecurityPolicy)).toBe(true)
+    expect(policy).toContain(`report-uri ${CSP_REPORT_PATH}`)
   })
 
   describe('Content-Security-Policy', () => {
@@ -48,8 +58,9 @@ describe('security headers', () => {
       expect(directive('default-src')).toEqual(["'self'"])
     })
 
-    test('cannot be framed, and cannot be given a <base> or plugins', () => {
-      expect(directive('frame-ancestors')).toEqual(["'none'"])
+    // Browsers ignore frame-ancestors in a report-only policy, so it is sent
+    // in the enforced one (above) for now.
+    test('cannot be given a <base> or plugins', () => {
       expect(directive('object-src')).toEqual(["'none'"])
       expect(directive('base-uri')).toEqual(["'self'"])
     })

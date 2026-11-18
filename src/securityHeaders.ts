@@ -45,14 +45,29 @@ export const contentSecurityPolicy = [
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
-  "frame-ancestors 'none'",
 ].join('; ')
 
+// Where browsers send what the policy would have blocked (see api/csp-report).
+// report-uri only: every browser sends it at once. Given report-to as well,
+// Chrome and Safari use that instead, and in testing their reports never came.
+export const CSP_REPORT_PATH = '/api/csp-report'
+const reporting = `report-uri ${CSP_REPORT_PATH}`
+
+// No other site may show this one in a frame (clickjacking). Enforced on its own
+// while the rest of the policy is only reported: browsers ignore frame-ancestors
+// in a report-only policy. X-Frame-Options says the same to older browsers.
+export const framingPolicy = "frame-ancestors 'none'"
+
 export const securityHeaders = [
-  // Report-Only until it has been checked against live ads and analytics: the
-  // browser console lists anything it would have blocked, and nothing breaks.
-  // Rename the key to 'Content-Security-Policy' to enforce it.
-  { key: 'Content-Security-Policy-Report-Only', value: contentSecurityPolicy },
+  { key: 'Content-Security-Policy', value: framingPolicy },
+  { key: 'X-Frame-Options', value: 'DENY' },
+  // Report-Only until the reports from real visitors, who see ads and analytics
+  // (they are not shown in NZ), show nothing it would wrongly block. Then it is
+  // enforced: joined to the framing policy above, with the reporting kept.
+  {
+    key: 'Content-Security-Policy-Report-Only',
+    value: `${contentSecurityPolicy}; ${reporting}`,
+  },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   {
