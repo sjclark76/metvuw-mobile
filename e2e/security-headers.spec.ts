@@ -12,12 +12,33 @@ test.describe('security headers', () => {
         'strict-origin-when-cross-origin',
       )
       expect(headers['permissions-policy'], path).toContain('camera=()')
-      expect(
-        headers['content-security-policy'] ??
-          headers['content-security-policy-report-only'],
-        path,
-      ).toContain("frame-ancestors 'none'")
+      expect(headers['content-security-policy'], path).toBe(
+        "frame-ancestors 'none'",
+      )
+      expect(headers['x-frame-options'], path).toBe('DENY')
+      expect(headers['content-security-policy-report-only'], path).toContain(
+        'report-uri /api/csp-report',
+      )
     }
+  })
+
+  // Browsers post what the report-only policy would block here; the reports are
+  // logged for the Vercel logs (see api/csp-report).
+  test("takes a browser's report of what the policy would block", async ({
+    request,
+  }) => {
+    const response = await request.post('/api/csp-report', {
+      headers: { 'content-type': 'application/csp-report' },
+      data: JSON.stringify({
+        'csp-report': {
+          'document-uri': 'http://localhost:3002/settings',
+          'effective-directive': 'img-src',
+          'blocked-uri': 'http://example.com/pixel.png',
+        },
+      }),
+    })
+
+    expect(response.status()).toBe(204)
   })
 
   // The policy lists Google's origins for ads and analytics, which these tests
