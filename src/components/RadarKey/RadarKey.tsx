@@ -1,9 +1,8 @@
 'use client'
 
-import { AnimatePresence } from 'motion/react'
-import * as m from 'motion/react-m'
 import { useState } from 'react'
 
+import { usePresence } from '@/components/Hooks/usePresence'
 import { track } from '@/shared/helpers/analytics/track'
 import { RADAR_BANDS, type RadarGroup } from '@/shared/helpers/radarBands'
 
@@ -81,6 +80,9 @@ function RadarKeyPanel() {
   )
 }
 
+// As long as the closing key's animation (animate-pop-out in globals.css).
+const KEY_EXIT_MS = 180
+
 /**
  * The key to the radar's colours: the strength of the echo in dBZ down one side and
  * light, medium and heavy rain down the other, as metvuw shows them. A button above
@@ -88,26 +90,20 @@ function RadarKeyPanel() {
  */
 export function RadarKeySection() {
   const [isOpen, setIsOpen] = useState(false)
+  const presence = usePresence(isOpen, KEY_EXIT_MS)
 
   return (
     // Fixed above the footer, like the rainfall key: on an iPhone a sticky element
     // flashes when the page jumps. The section keeps the room the button takes.
     <section className="h-12 print:hidden">
       <div className="fixed right-2 bottom-[calc(var(--footer-height,5rem)+0.25rem)] z-30 flex items-end gap-2">
-        <AnimatePresence initial={false}>
-          {isOpen && (
-            <m.div
-              key="radar-key-panel"
-              initial={{ opacity: 0, x: 8, scale: 0.98 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: 8, scale: 0.98 }}
-              transition={{ duration: 0.18, ease: 'easeOut' }}
-              className="w-max max-w-[80vw]"
-            >
-              <RadarKeyPanel />
-            </m.div>
-          )}
-        </AnimatePresence>
+        {presence !== 'gone' && (
+          <div
+            className={`w-max max-w-[80vw] ${presence === 'shown' ? 'animate-pop-in' : 'animate-pop-out'}`}
+          >
+            <RadarKeyPanel />
+          </div>
+        )}
         <button
           type="button"
           onClick={() => {
